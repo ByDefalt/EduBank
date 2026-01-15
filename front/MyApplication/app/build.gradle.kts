@@ -3,9 +3,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.compose) // Gère automatiquement le compilateur Compose
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -45,17 +46,16 @@ android {
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeBom.get()
-    }
+    // Suppression de composeOptions { kotlinCompilerExtensionVersion }
+    // car géré par le plugin kotlin.compose (Kotlin 2.0+)
 }
 
 dependencies {
-
     /* ---------------- CORE ---------------- */
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlin.stdlib)
 
     /* ---------------- COMPOSE ---------------- */
     implementation(platform(libs.androidx.compose.bom))
@@ -74,10 +74,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     /* ---------------- COROUTINES ---------------- */
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    /* ---------------- NETWORK (OpenAPI / Retrofit / JSON) ---------------- */
+    /* ---------------- NETWORK (Retrofit 3 / JSON) ---------------- */
     implementation(libs.retrofit)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
@@ -108,19 +109,25 @@ dependencies {
 
     /* ---------------- TESTS ---------------- */
     testImplementation(libs.junit)
+    testImplementation(libs.kotlintest.runner)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     compilerOptions {
-        freeCompilerArgs.addAll(
-            listOf(
-                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-            )
-        )
         jvmTarget.set(JvmTarget.JVM_11)
+        freeCompilerArgs.addAll(
+            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+        )
+    }
+}
+
+// Configuration Spotless (Optionnel, si vous voulez le configurer ici)
+spotless {
+    kotlin {
+        ktfmt()
     }
 }

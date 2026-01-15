@@ -1,43 +1,40 @@
 [versions]
 agp = "8.13.2"
-converterScalars = "2.11.0"
-kotlin = "2.0.21"
-ksp = "2.0.21-1.0.26"
+# Versions alignées sur ton build.gradle
+kotlin = "2.1.0"
+retrofit = "3.0.0"
+converterScalars = "3.0.0"
+coroutines = "1.10.2"
+kotlinxSerialization = "1.9.0"
+okhttp = "5.1.0"
+spotless = "7.2.1"
 
+# Le reste de tes versions conservées
+ksp = "2.1.0-1.0.29"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-
 lifecycle = "2.8.6"
 activityCompose = "1.9.2"
 composeBom = "2025.12.01"
-
 navigation = "2.8.3"
-coroutines = "1.9.0"
-
-retrofit = "2.11.0"
-okhttp = "4.12.0"
-kotlinxSerialization = "1.6.0"
-
 room = "2.8.4"
 datastore = "1.2.0"
-
 koin = "4.1.1"
 coil = "2.7.0"
 accompanist = "0.36.0"
-
 splashscreen = "1.0.1"
+kotlinTest = "3.4.2"
 
 [libraries]
-
 # ---------------- CORE ----------------
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 
 # ---------------- ACTIVITY / COMPOSE ----------------
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -56,16 +53,18 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 # ---------------- COROUTINES ----------------
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # ---------------- NETWORK ----------------
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "converterScalars" }
+converter-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "converterScalars" }
+# Retrofit 3 intègre son propre convertisseur kotlinx-serialization
+retrofit-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 
 # ---------------- JSON ----------------
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
-retrofit-kotlinx-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version = "0.8.0" }
 
 # ---------------- DATABASE ----------------
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -93,6 +92,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+kotlintest-runner = { group = "io.kotlintest", name = "kotlintest-runner-junit5", version.ref = "kotlinTest" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -100,3 +100,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
