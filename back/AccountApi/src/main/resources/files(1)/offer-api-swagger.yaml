@@ -1,0 +1,360 @@
+openapi: 3.0.3
+info:
+  title: Offer API
+  description: API pour la gestion des offres promotionnelles et commerciales
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: https://api.example.com/v1
+    description: Serveur de production
+  - url: https://api-dev.example.com/v1
+    description: Serveur de développement
+
+tags:
+  - name: Offer
+    description: Gestion des offres commerciales
+
+paths:
+  /offers:
+    get:
+      tags:
+        - Offer
+      summary: Récupérer la liste des offres
+      description: "Use Case: Visualiser les offres (Visiteur/Client), Voir la liste des offres (Administrateur)"
+      parameters:
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum: [active, inactive, expired]
+          description: Filtrer par état
+        - name: active_only
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Afficher uniquement les offres actives (pour visiteur/client)
+      responses:
+        '200':
+          description: Liste récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Offer
+      summary: Créer une nouvelle offre
+      description: "Use Case 17: Créer une offre (Administrateur)"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                picturePath:
+                  type: string
+                  example: "/images/offers/promo-2026.jpg"
+                title:
+                  type: string
+                  example: "Offre Spéciale Janvier 2026"
+                description:
+                  type: string
+                  example: "Profitez de notre offre exceptionnelle sur les comptes épargne"
+                state:
+                  type: string
+                  enum: [active, inactive, expired]
+                  example: active
+                start_date:
+                  type: string
+                  format: date
+                  example: "2026-01-01"
+                end_date:
+                  type: string
+                  format: date
+                  example: "2026-01-31"
+              required:
+                - title
+                - description
+                - state
+                - start_date
+                - end_date
+      responses:
+        '201':
+          description: Offre créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /offers/{id}:
+    get:
+      tags:
+        - Offer
+      summary: Récupérer une offre par ID
+      description: "Use Case 9: Voir une offre spécifique avec ses détails (Administrateur)"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Identifiant de l'offre
+      responses:
+        '200':
+          description: Offre récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+        - Offer
+      summary: Mettre à jour une offre
+      description: "Use Case 18: Mettre à jour une offre (Administrateur)"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                picturePath:
+                  type: string
+                  example: "/images/offers/promo-2026.jpg"
+                title:
+                  type: string
+                  example: "Offre Spéciale Janvier 2026"
+                description:
+                  type: string
+                  example: "Profitez de notre offre exceptionnelle sur les comptes épargne"
+                state:
+                  type: string
+                  enum: [active, inactive, expired]
+                  example: active
+                start_date:
+                  type: string
+                  format: date
+                  example: "2026-01-01"
+                end_date:
+                  type: string
+                  format: date
+                  example: "2026-01-31"
+      responses:
+        '200':
+          description: Offre mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+    delete:
+      tags:
+        - Offer
+      summary: Supprimer une offre
+      description: "Use Case 19: Supprimer une offre (Administrateur)"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Offre supprimée avec succès
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /offers/{id}/state:
+    patch:
+      tags:
+        - Offer
+      summary: Changer l'état d'une offre
+      description: "Use Case 12: Changer l'état d'une offre (Administrateur)"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: [active, inactive, expired]
+                  example: inactive
+              required:
+                - state
+      responses:
+        '200':
+          description: État modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /offers/active:
+    get:
+      tags:
+        - Offer
+      summary: Récupérer uniquement les offres actives
+      description: Offres disponibles pour les visiteurs et clients
+      responses:
+        '200':
+          description: Liste des offres actives
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Offer'
+
+components:
+  schemas:
+    Offer:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifiant de l'offre
+          example: 1
+        picturePath:
+          type: string
+          description: Chemin vers l'image de l'offre
+          example: "/images/offers/promo-2026.jpg"
+        title:
+          type: string
+          description: Titre de l'offre
+          example: "Offre Spéciale Janvier 2026"
+        description:
+          type: string
+          description: Description détaillée de l'offre
+          example: "Profitez de notre offre exceptionnelle sur les comptes épargne"
+        state:
+          type: string
+          description: État de l'offre
+          enum: [active, inactive, expired]
+          example: active
+        start_date:
+          type: string
+          format: date
+          description: Date de début de l'offre
+          example: "2026-01-01"
+        end_date:
+          type: string
+          format: date
+          description: Date de fin de l'offre
+          example: "2026-01-31"
+      required:
+        - id
+        - title
+        - description
+        - state
+        - start_date
+        - end_date
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Requête invalide"
+        details:
+          type: string
+          example: "Le champ 'title' est requis"
+
+  responses:
+    UnauthorizedError:
+      description: Non autorisé - Token d'authentification manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    BadRequestError:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    ForbiddenError:
+      description: Accès interdit - Permissions insuffisantes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
