@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Account API
+  description: API de gestion des comptes, rôles et informations personnelles basée sur le schéma SQL.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Serveur de gestion des comptes
+
+paths:
+
+  /personal-information:
+    get:
+      summary: Liste toutes les informations personnelles
+      tags: [PersonalInformation]
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonalInformation'
+    post:
+      summary: Créer une fiche d'information personnelle
+      tags: [PersonalInformation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalInformationRegister'
+      responses:
+        '201':
+          description: Créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalInformation'
+
+  /personal-information/{id}:
+    get:
+      summary: Récupérer une info personnelle par ID
+      tags: [PersonalInformation]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalInformation'
+
+  /accounts:
+    get:
+      summary: Liste tous les comptes
+      tags: [Account]
+      responses:
+        '200':
+          description: Succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+    post:
+      summary: Créer un nouveau compte
+      description: Nécessite un role_id et un personal_info_id existants.
+      tags: [Account]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRegister'
+      responses:
+        '201':
+          description: Compte créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+
+  /accounts/{id}:
+    get:
+      summary: Récupérer un compte par ID
+      tags: [Account]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Compte trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+    delete:
+      summary: Supprimer un compte
+      tags: [Account]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Compte supprimé avec succès
+
+components:
+  schemas:
+    PersonalInformation:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        phone_number:
+          type: string
+
+    PersonalInformationRegister:
+      type: object
+      required:
+        - firstname
+        - lastname
+        - email
+      properties:
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        phone_number:
+          type: string
+
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+        personal_info_id:
+          type: integer
+          description: ID faisant référence à PersonalInformation
+        role_id:
+          type: integer
+          description: ID faisant référence à Role
+        state:
+          type: string
+
+    AccountRegister:
+      type: object
+      required:
+        - personal_info
+        - role_id
+        - password
+      properties:
+        personal_info:
+          $ref: '#/components/schemas/PersonalInformationRegister'
+        role_id:
+          type: integer
+          description: "ID du rôle existant (ex: 1 pour Admin, 2 pour User)"
+        password:
+          type: string
+          format: password
+          writeOnly: true
+        state:
+          type: string
+
+    SignInRequest:
+      type: object
+      required:
+        - id_bank_account
+        - password
+      properties:
+        id_bank_account:
+          type: string
+          example: "123456789123"
+        password:
+          type: string
+          format: password
+          example: "123456"
+
+    TokenRequest:
+      type: object
+      required:
+        - jwt
+      properties:
+        jwt:
+          type: string
+          description: "Token à valider"
+          example: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbGljZS5kdXBvbnRAZXhhbXBsZS5jb20ifQ..."
