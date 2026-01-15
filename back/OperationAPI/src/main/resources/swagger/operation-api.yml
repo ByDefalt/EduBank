@@ -1,0 +1,344 @@
+openapi: 3.0.3
+info:
+  title: Operation API
+  description: API pour la gestion des opérations bancaires (virements, paiements, etc.)
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: "http://localhost:8081/api/v1"
+
+tags:
+  - name: Operation
+    description: Gestion des opérations bancaires
+
+paths:
+  /operations:
+    get:
+      tags:
+        - Operation
+      summary: Récupérer la liste des opérations
+      description: "Use Case 5 (Administrateur): Voir la liste des opérations"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bank_account_source_id
+          in: query
+          schema:
+            type: integer
+          description: Filtrer par compte source
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum: [pending, completed, failed, cancelled]
+          description: Filtrer par état
+        - name: date_from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Date de début
+        - name: date_to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Date de fin
+      responses:
+        '200':
+          description: Liste récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Operation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Operation
+      summary: Créer une nouvelle opération
+      description: "Use Case 10 (Client): Effectuer un virement"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bank_account_source_id:
+                  type: integer
+                  description: ID du compte bancaire source
+                  example: 1
+                label:
+                  type: string
+                  description: Libellé de l'opération
+                  example: "Virement pour loyer"
+                  maxLength: 255
+                iban_target:
+                  type: string
+                  description: IBAN du compte destinataire
+                  example: "FR7698765432109876543210987"
+                  pattern: '^[A-Z]{2}[0-9]{2}[A-Z0-9]+$'
+                amount:
+                  type: number
+                  format: double
+                  description: Montant de l'opération (positif)
+                  example: 850.00
+                  minimum: 0.01
+              required:
+                - bank_account_source_id
+                - label
+                - iban_target
+                - amount
+      responses:
+        '201':
+          description: Opération créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Solde insuffisant ou limite de découvert dépassée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /operations/{id}:
+    get:
+      tags:
+        - Operation
+      summary: Récupérer une opération par ID
+      description: "Use Case 8 (Administrateur): Voir une opération spécifique avec ses détails"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Identifiant de l'opération
+      responses:
+        '200':
+          description: Opération récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /operations/{id}/state:
+    patch:
+      tags:
+        - Operation
+      summary: Changer l'état d'une opération
+      description: "Use Case 13 (Administrateur): Changer l'état d'une opération / Use Case 21 (Administrateur): Mettre à jour l'état d'une opération"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  enum: [pending, completed, failed, cancelled]
+                  example: cancelled
+              required:
+                - state
+      responses:
+        '200':
+          description: État modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /operations/{id}/cancel:
+    post:
+      tags:
+        - Operation
+      summary: Créer une opération d'annulation
+      description: "Use Case 20 (Administrateur): Créer une opération d'annulation"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'opération à annuler
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Raison de l'annulation
+                  example: "Fraude détectée"
+      responses:
+        '201':
+          description: Opération d'annulation créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  original_operation:
+                    $ref: '#/components/schemas/Operation'
+                  cancellation_operation:
+                    $ref: '#/components/schemas/Operation'
+        '400':
+          description: L'opération ne peut pas être annulée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+components:
+  schemas:
+    Operation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifiant de l'opération
+          example: 1
+        bank_account_source_id:
+          type: integer
+          description: ID du compte bancaire source
+          example: 1
+        label:
+          type: string
+          description: Libellé de l'opération
+          example: "Virement pour loyer"
+        state:
+          type: string
+          description: État de l'opération
+          enum: [pending, completed, failed, cancelled]
+          example: completed
+        iban_target:
+          type: string
+          description: IBAN du compte destinataire
+          example: "FR7698765432109876543210987"
+        amount:
+          type: number
+          format: double
+          description: Montant de l'opération
+          example: 850.00
+        date:
+          type: string
+          format: date-time
+          description: Date et heure de l'opération
+          example: "2026-01-15T14:30:00Z"
+        created_at:
+          type: string
+          format: date-time
+          description: Date de création
+          example: "2026-01-15T14:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Date de dernière modification
+          example: "2026-01-15T14:30:00Z"
+      required:
+        - id
+        - bank_account_source_id
+        - label
+        - state
+        - iban_target
+        - amount
+        - date
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Requête invalide"
+        details:
+          type: string
+          example: "Le champ 'amount' doit être supérieur à 0"
+
+  responses:
+    UnauthorizedError:
+      description: Non autorisé - Token d'authentification manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ForbiddenError:
+      description: Accès interdit - Permissions insuffisantes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
