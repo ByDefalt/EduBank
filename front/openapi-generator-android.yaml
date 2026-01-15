@@ -1,0 +1,27 @@
+# openapi-config.yaml
+generatorName: kotlin
+inputSpec: accountApi.yml
+outputDir: generated-android
+
+packageName: com.example.api
+apiPackage: com.example.api.service
+modelPackage: com.example.api.model
+
+library: jvm-retrofit2
+serializationLibrary: kotlinx_serialization
+
+additionalProperties:
+  useCoroutines: true
+  enumPropertyNaming: UPPERCASE
+  collectionType: list
+  jvmTarget: "11"
+  dateLibrary: java8
+  # Si tu veux des classes immuables / defaults :
+  encodeDefaults: true
+  ignoreUnknownKeys: true
+
+generateApiTests: true
+generateModelTests: true
+generateApiDocumentation: true
+generateModelDocumentation: true
+skipValidateSpec: true
