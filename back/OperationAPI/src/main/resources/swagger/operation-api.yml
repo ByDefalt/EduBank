@@ -236,6 +236,145 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+  /beneficiaries:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer la liste des bénéficiaires
+      description: "Use Case 8 (Client): Voir la liste des bénéficiaires"
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: account_source_id
+          in: query
+          schema:
+            type: integer
+          description: Filtrer par compte source
+      responses:
+        '200':
+          description: Liste récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Beneficiary
+      summary: Créer un nouveau bénéficiaire
+      description: "Use Case 6 (Client): Ajouter un bénéficiaire"
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iban_target:
+                  type: string
+                  example: "FR7698765432109876543210987"
+                name:
+                  type: string
+                  example: "Marie Martin"
+              required:
+                - account_source_id
+                - iban_target
+                - name
+      responses:
+        '201':
+          description: Bénéficiaire créé avec succès
+
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /beneficiaries/{id}:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer un bénéficiaire par ID
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Bénéficiaire récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+        - Beneficiary
+      summary: Mettre à jour un bénéficiaire
+      description: "Use Case 7 (Client): Modifier un bénéficiaire"
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iban_target:
+                  type: string
+                  example: "FR7698765432109876543210987"
+                name:
+                  type: string
+                  example: "Marie Martin"
+      responses:
+        '200':
+          description: Bénéficiaire mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Beneficiary
+      summary: Supprimer un bénéficiaire
+      description: "Use Case 9 (Client): Supprimer un bénéficiaire"
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Bénéficiaire supprimé avec succès
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 
 components:
   schemas:
@@ -291,6 +430,31 @@ components:
         - iban_target
         - amount
         - date
+
+    Beneficiary:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifiant du bénéficiaire
+          example: 1
+        account_source_id:
+          type: integer
+          description: ID du compte source
+          example: 1
+        iban_target:
+          type: string
+          description: IBAN du bénéficiaire
+          example: "FR7698765432109876543210987"
+        name:
+          type: string
+          description: Nom du bénéficiaire
+          example: "Marie Martin"
+      required:
+        - id
+        - account_source_id
+        - iban_target
+        - name
 
     Error:
       type: object
