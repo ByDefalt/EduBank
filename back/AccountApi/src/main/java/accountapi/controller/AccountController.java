@@ -85,7 +85,7 @@ public class AccountController {
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.noContent().build();
+        return Response.ok(deleted).build();
     }
 
     @GET
@@ -108,5 +108,27 @@ public class AccountController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(PersonalInformationMapper.toDto(personalInformationEntity)).build();
+    }
+
+    @PUT
+    @Path("/deactivate/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deactivateAccount(@PathParam("id") String id) {
+        boolean updatedAccount = accountBusiness.deactivateAccount(id);
+        if (!updatedAccount) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(updatedAccount).build();
+    }
+
+    @PUT
+    @Path("/activate/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response activateAccount(@PathParam("id") String id) {
+        boolean updatedAccount = accountBusiness.activateAccount(id);
+        if (!updatedAccount) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(updatedAccount).build();
     }
 }

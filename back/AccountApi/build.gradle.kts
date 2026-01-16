@@ -42,11 +42,8 @@ dependencies{
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
-    // Spring Data JPA
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    // https://mvnrepository.com/artifact/com.h2database/h2
     implementation("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -56,6 +53,8 @@ dependencies{
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
     implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
+
+    runtimeOnly ("org.mariadb.jdbc:mariadb-java-client")
 }
 
 tasks.withType<Test> {

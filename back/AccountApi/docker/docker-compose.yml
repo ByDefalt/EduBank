@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api-spring:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: account-api
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: 8081
+
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/accountapi
+      SPRING_DATASOURCE_USERNAME: accountuser
+      SPRING_DATASOURCE_PASSWORD: accountpassword
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-accountapi
+    restart: always
+    environment:
+      MYSQL_DATABASE: accountapi
+      MYSQL_USER: accountuser
+      MYSQL_PASSWORD: accountpassword
+      MYSQL_ROOT_PASSWORD: accountrootpassword
+    ports:
+      # hote:conteneur_interne
+      - "3381:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./data.sql:/docker-entrypoint-initdb.d/init.sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-account-api
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+
+      PMA_HOST: mariadb
+      # port interne de maridb 3306
+      PMA_PORT: 3306
+    depends_on:
+      - mariadb
+
+volumes:
+  mariadb_data:

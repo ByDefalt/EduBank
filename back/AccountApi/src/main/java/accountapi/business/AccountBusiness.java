@@ -4,6 +4,7 @@ import accountapi.entity.AccountEntity;
 import accountapi.entity.PersonalInformationEntity;
 import accountapi.entity.RoleEntity;
 import accountapi.repository.AccountRepository;
+import accountapi.utils.GenerateID;
 import accountapi.utils.JwtUtils;
 import dto.accountapi.AccountRegister;
 import dto.accountapi.SignInRequest;
@@ -38,7 +39,7 @@ public class AccountBusiness {
     }
 
     public AccountEntity createAccount(AccountRegister account) {
-        String idGenerated = (String.valueOf(this.generateId()));
+        String idGenerated = (String.valueOf(GenerateID.generateId()));
 
         AccountEntity accountEntity = accountRepository.findById(idGenerated);
         if (accountEntity != null) {
@@ -46,7 +47,7 @@ public class AccountBusiness {
                 accountEntity = accountRepository.findById(idGenerated);
                 if (accountEntity == null)
                     break;
-                idGenerated = (String.valueOf(this.generateId()));
+                idGenerated = (String.valueOf(GenerateID.generateId()));
             }
         }
 
@@ -130,7 +131,23 @@ public class AccountBusiness {
         return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 
-    public static long generateId() {
-        return System.currentTimeMillis() / 10;
+    public boolean deactivateAccount(String id) {
+        AccountEntity accountEntity = this.getAccountById(id);
+        if (accountEntity == null) {
+            return false;
+        }
+        accountEntity.setState("INACTIVE");
+        accountRepository.updateState(accountEntity);
+        return true;
+    }
+
+    public boolean activateAccount(String id) {
+        AccountEntity accountEntity = this.getAccountById(id);
+        if (accountEntity == null) {
+            return false;
+        }
+        accountEntity.setState("ACTIVE");
+        accountRepository.updateState(accountEntity);
+        return true;
     }
 }
