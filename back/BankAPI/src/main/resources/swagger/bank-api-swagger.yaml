@@ -1,10 +1,8 @@
 openapi: 3.0.3
 info:
   title: Bank API
-  description: API pour la gestion des comptes bancaires, types, paramètres et bénéficiaires
+  description: API pour la gestion des comptes bancaires, types et paramètres
   version: 1.0.0
-  contact:
-    name: API Support
 
 servers:
   - url: http://localhost:8081/api/v1
@@ -12,20 +10,14 @@ servers:
 
 tags:
   - name: BankAccount
-    description: Gestion des comptes bancaires
   - name: Type
-    description: Gestion des types de comptes (CCP, Livret A, etc.)
   - name: BankAccountParameter
-    description: Gestion des paramètres des comptes bancaires
-
 
 paths:
   /bank-accounts:
     get:
-      tags:
-        - BankAccount
+      tags: [BankAccount]
       summary: Récupérer la liste des comptes bancaires
-      description: "Use Case 5 (Client): Voir la liste des comptes / Use Case 3 (Administrateur): Voir la liste des comptes bancaires"
       security:
         - bearerAuth: []
       parameters:
@@ -33,17 +25,10 @@ paths:
           in: query
           schema:
             type: integer
-          description: Filtrer par ID de compte utilisateur
         - name: type_id
           in: query
           schema:
             type: integer
-          description: Filtrer par type de compte
-        - name: state
-          in: query
-          schema:
-            type: string
-          description: Filtrer par état (via paramètres)
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -52,12 +37,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BankAccountDetails'
+                  $ref: '#/components/schemas/BankAccount'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+
     post:
-      tags:
-        - BankAccount
+      tags: [BankAccount]
       summary: Créer un nouveau compte bancaire
       security:
         - bearerAuth: []
@@ -66,75 +51,19 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                parameter_id:
-                  type: integer
-                  example: 1
-                type_id:
-                  type: integer
-                  example: 1
-                sold:
-                  type: number
-                  format: double
-                  example: 0.00
-                iban:
-                  type: string
-                  example: "FR7612345678901234567890123"
-                account_id:
-                  type: integer
-                  description: ID du compte utilisateur à lier
-                  example: 1
-              required:
-                - parameter_id
-                - type_id
-                - sold
-                - iban
-                - account_id
+              $ref: '#/components/schemas/BankAccount'
       responses:
         '201':
-          description: Compte bancaire créé avec succès
+          description: Compte bancaire créé
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BankAccount'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-
-  /bank-accounts/current:
-    get:
-      tags:
-        - BankAccount
-      summary: Afficher le compte courant de l'utilisateur connecté
-      description: "Use Case 3 (Client): Afficher le compte courant"
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Compte courant récupéré avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BankAccountDetails'
-        '404':
-          description: Aucun compte courant trouvé
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
 
   /bank-accounts/{id}:
     get:
-      tags:
-        - BankAccount
-      summary: Récupérer un compte bancaire par ID
-      description: "Use Case 4 (Client): Voir les détails d'un compte / Use Case 7 (Administrateur): Voir un compte bancaire spécifique avec ses détails"
+      tags: [BankAccount]
+      summary: Récupérer un compte bancaire
       security:
         - bearerAuth: []
       parameters:
@@ -142,24 +71,19 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-          description: Numéro du compte bancaire
+            type: string
       responses:
         '200':
-          description: Compte bancaire récupéré avec succès
+          description: Compte trouvé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BankAccountDetails'
+                $ref: '#/components/schemas/BankAccount'
         '404':
           $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+
     put:
-      tags:
-        - BankAccount
+      tags: [BankAccount]
       summary: Mettre à jour un compte bancaire
       security:
         - bearerAuth: []
@@ -168,38 +92,23 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-
-                type_id:
-                  type: integer
-                  example: 1
-                sold:
-                  type: number
-                  format: double
-                  example: 1500.50
+              $ref: '#/components/schemas/BankAccount'
       responses:
         '200':
-          description: Compte bancaire mis à jour avec succès
+          description: Compte mis à jour
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BankAccount'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+
     delete:
-      tags:
-        - BankAccount
+      tags: [BankAccount]
       summary: Supprimer un compte bancaire
       security:
         - bearerAuth: []
@@ -208,23 +117,15 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '204':
-          description: Compte bancaire supprimé avec succès
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+          description: Compte supprimé
 
   /bank-accounts/{id}/state:
     patch:
-      tags:
-        - BankAccount
-      summary: Changer l'état d'un compte bancaire
-      description: "Use Case 11 (Administrateur): Changer l'état d'un compte bancaire"
+      tags: [BankAccount]
+      summary: Changer l’état d’un compte bancaire
       security:
         - bearerAuth: []
       parameters:
@@ -232,41 +133,33 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [state]
               properties:
                 state:
-                  type: string
-                  enum: [active, inactive, bloqued, closed]
-                  example: inactive
-              required:
-                - state
+                  $ref: '#/components/schemas/State'
       responses:
         '200':
-          description: État modifié avec succès
+          description: État modifié
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BankAccount'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
         '400':
           $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
 
   /bank-accounts/{id}/balance:
     get:
-      tags:
-        - BankAccount
-      summary: Récupérer le solde d'un compte bancaire
+      tags: [BankAccount]
+      summary: Récupérer le solde d’un compte bancaire
       security:
         - bearerAuth: []
       parameters:
@@ -274,10 +167,10 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
-          description: Solde récupéré avec succès
+          description: Solde récupéré
           content:
             application/json:
               schema:
@@ -286,36 +179,28 @@ paths:
                   sold:
                     type: number
                     format: double
-                    example: 1500.50
-
         '404':
           $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
 
   /types:
     get:
-      tags:
-        - Type
-      summary: Récupérer la liste des types de comptes
+      tags: [Type]
+      summary: Récupérer la liste des types
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Liste récupérée avec succès
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Type'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+
     post:
-      tags:
-        - Type
-      summary: Créer un nouveau type de compte
-      description: "Use Case 16 (Administrateur): Créer un nouveau type de compte"
+      tags: [Type]
+      summary: Créer un type
       security:
         - bearerAuth: []
       requestBody:
@@ -323,130 +208,30 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "Compte Épargne"
-              required:
-                - name
+              $ref: '#/components/schemas/Type'
       responses:
         '201':
-          description: Type créé avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Type'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-
-  /types/{id}:
-    get:
-      tags:
-        - Type
-      summary: Récupérer un type de compte par ID
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Type récupéré avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Type'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-    put:
-      tags:
-        - Type
-      summary: Mettre à jour un type de compte
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: "Livret A"
-      responses:
-        '200':
-          description: Type mis à jour avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Type'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-    delete:
-      tags:
-        - Type
-      summary: Supprimer un type de compte
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: Type supprimé avec succès
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+          description: Créé
 
   /parameters:
     get:
-      tags:
-        - BankAccountParameter
-      summary: Récupérer la liste des paramètres de comptes bancaires
+      tags: [BankAccountParameter]
+      summary: Récupérer les paramètres
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: Liste récupérée avec succès
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/BankAccountParameter'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+
     post:
-      tags:
-        - BankAccountParameter
-      summary: Créer de nouveaux paramètres de compte bancaire
+      tags: [BankAccountParameter]
+      summary: Créer des paramètres
       security:
         - bearerAuth: []
       requestBody:
@@ -454,119 +239,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                overdraft_limit:
-                  type: number
-                  format: double
-                  example: 500.00
-                state:
-                  type: string
-                  enum: [active, inactive, bloqued, closed]
-                  example: active
-              required:
-                - overdraft_limit
-                - state
+              $ref: '#/components/schemas/BankAccountParameter'
       responses:
         '201':
-          description: Paramètres créés avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BankAccountParameter'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-
-  /parameters/{id}:
-    get:
-      tags:
-        - BankAccountParameter
-      summary: Récupérer des paramètres par ID
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Paramètres récupérés avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BankAccountParameter'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-    put:
-      tags:
-        - BankAccountParameter
-      summary: Mettre à jour des paramètres de compte bancaire
-      description: "Use Case 15 (Administrateur): Mettre à jour les paramètres d'un compte bancaire"
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                overdraft_limit:
-                  type: number
-                  format: double
-                  example: 750.00
-                state:
-                  type: string
-                  enum: [active, inactive, bloqued, closed]
-                  example: active
-      responses:
-        '200':
-          description: Paramètres mis à jour avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BankAccountParameter'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
-    delete:
-      tags:
-        - BankAccountParameter
-      summary: Supprimer des paramètres de compte bancaire
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '204':
-          description: Paramètres supprimés avec succès
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          $ref: '#/components/responses/ForbiddenError'
+          description: Créé
 
 components:
   schemas:
@@ -574,117 +250,73 @@ components:
       type: object
       properties:
         id:
-          type: integer
-          description: Numéro de compte bancaire
-          example: 1
+          type: string
         parameter_id:
           type: integer
-          description: ID des paramètres du compte
-          example: 1
         type_id:
           type: integer
-          description: ID du type de compte
-          example: 1
         sold:
           type: number
           format: double
-          description: Solde du compte
-          example: 1500.50
         iban:
           type: string
-          description: IBAN du compte
-          example: "FR7612345678901234567890123"
-      required:
-        - id
-        - parameter_id
-        - type_id
-        - sold
-        - iban
-
-    BankAccountDetails:
-      allOf:
-        - $ref: '#/components/schemas/BankAccount'
-        - type: object
-          properties:
-            parameter:
-              $ref: '#/components/schemas/BankAccountParameter'
-            type:
-              $ref: '#/components/schemas/Type'
 
     Type:
       type: object
       properties:
         id:
           type: integer
-          description: Identifiant du type
-          example: 1
         name:
           type: string
-          description: Nom du type
-          example: "CCP"
-      required:
-        - id
-        - name
 
     BankAccountParameter:
       type: object
       properties:
         id:
           type: integer
-          description: Identifiant des paramètres
-          example: 1
         overdraft_limit:
           type: number
           format: double
-          description: Limite de découvert autorisé
-          example: 500.00
         state:
-          type: string
-          description: État des paramètres
-          enum: [active, inactive, bloqued, closed]
-          example: active
-      required:
-        - id
-        - overdraft_limit
-        - state
+          $ref: '#/components/schemas/State'
+
+    State:
+      type: string
+      description: État possible d’un compte bancaire
+      enum:
+        - active
+        - inactive
+        - bloqued
+        - closed
+      example: active
 
     Error:
       type: object
       properties:
         code:
           type: string
-          example: "400"
         message:
           type: string
-          example: "Requête invalide"
         details:
           type: string
-          example: "Le champ 'iban' est requis"
 
   responses:
     UnauthorizedError:
-      description: Non autorisé - Token d'authentification manquant ou invalide
+      description: Non autorisé
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    
+
     NotFoundError:
       description: Ressource non trouvée
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    
+
     BadRequestError:
       description: Requête invalide
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    
-    ForbiddenError:
-      description: Accès interdit - Permissions insuffisantes
       content:
         application/json:
           schema:
