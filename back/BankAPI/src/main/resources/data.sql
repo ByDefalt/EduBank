@@ -1,16 +1,35 @@
-DROP TABLE IF EXISTS account;
-
-CREATE TABLE account (
-                         id INT AUTO_INCREMENT PRIMARY KEY,
-                         username VARCHAR(50) NOT NULL UNIQUE,
-                         password VARCHAR(255) NOT NULL,
-                         nom VARCHAR(100) NOT NULL,
-                         prenom VARCHAR(100) NOT NULL,
-                         email VARCHAR(150) NOT NULL UNIQUE
+DROP TABLE IF EXISTS BankAccountParameter
+DROP TABLE IF EXISTS BankAccount
+DROP TABLE IF EXISTS BankAccountPivot
+DROP TABLE IF EXISTS Types
+-- Table BankAccountParameter
+CREATE TABLE BankAccountParameter (
+                                      id INT AUTO_INCREMENT PRIMARY KEY,
+                                      overdraft_limit DOUBLE NOT NULL DEFAULT 0.00,
+                                      state ENUM('active', 'inactive','bloqued','closed') NOT NULL DEFAULT 'active'
 );
 
-INSERT INTO account (username, password, nom, prenom, email)
-VALUES
-    ('alice', 'passwordAlice', 'Dupont', 'Alice', 'alice.dupont@example.com'),
-    ('bob', 'passwordBob', 'Martin', 'Bob', 'bob.martin@example.com'),
-    ('charlie', 'passwordCharlie', 'Durand', 'Charlie', 'charlie.durand@example.com');
+-- Table BankAccount
+CREATE TABLE BankAccount (
+                             id INT AUTO_INCREMENT PRIMARY KEY,
+                             parameter_id INT NOT NULL,
+                             type_id INT NOT NULL,
+                             sold DOUBLE NOT NULL DEFAULT 0.00,
+                             iban VARCHAR(34) NOT NULL UNIQUE,
+                             FOREIGN KEY (parameter_id) REFERENCES BankAccountParameter(id) ,
+                             FOREIGN KEY (type_id) REFERENCES Types(id)
+);
+
+-- Table BankAccountPivot (relation many-to-many entre Account et BankAccount)
+CREATE TABLE BankAccountPivot (
+                                  bank_account_id INT NOT NULL,
+                                  account_id INT NOT NULL,
+                                  PRIMARY KEY (bank_account_id, account_id),
+                                  FOREIGN KEY (bank_account_id) REFERENCES BankAccount(id)
+
+);
+-- Table Type (types de comptes bancaires)
+CREATE TABLE Types (
+                      id INT AUTO_INCREMENT PRIMARY KEY,
+                      name VARCHAR(100) NOT NULL UNIQUE
+);
