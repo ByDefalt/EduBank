@@ -1,4 +1,4 @@
-package defalt.eduBank.infrastructure
+package defalt.eduBank.repositories.apis.account.infrastructure
 
 
 import okhttp3.Call

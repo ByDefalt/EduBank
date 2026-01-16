@@ -23,18 +23,36 @@ object Serializer {
     val kotlinxSerializationAdapters: SerializersModule by lazy {
         isAdaptersInitialized = true
         SerializersModule {
-            contextual(BigDecimal::class, BigDecimalAdapter)
-            contextual(BigInteger::class, BigIntegerAdapter)
-            contextual(LocalDate::class, LocalDateAdapter)
-            contextual(LocalDateTime::class, LocalDateTimeAdapter)
-            contextual(OffsetDateTime::class, OffsetDateTimeAdapter)
-            contextual(UUID::class, UUIDAdapter)
-            contextual(AtomicInteger::class, AtomicIntegerAdapter)
-            contextual(AtomicLong::class, AtomicLongAdapter)
-            contextual(AtomicBoolean::class, AtomicBooleanAdapter)
-            contextual(URI::class, URIAdapter)
-            contextual(URL::class, URLAdapter)
-            contextual(StringBuilder::class, StringBuilderAdapter)
+            contextual(BigDecimal::class,
+                _root_ide_package_.com.example.api.infrastructure.BigDecimalAdapter
+            )
+            contextual(BigInteger::class,
+                _root_ide_package_.com.example.api.infrastructure.BigIntegerAdapter
+            )
+            contextual(LocalDate::class,
+                _root_ide_package_.com.example.api.infrastructure.LocalDateAdapter
+            )
+            contextual(LocalDateTime::class,
+                _root_ide_package_.com.example.api.infrastructure.LocalDateTimeAdapter
+            )
+            contextual(OffsetDateTime::class,
+                _root_ide_package_.com.example.api.infrastructure.OffsetDateTimeAdapter
+            )
+            contextual(UUID::class, _root_ide_package_.com.example.api.infrastructure.UUIDAdapter)
+            contextual(AtomicInteger::class,
+                _root_ide_package_.com.example.api.infrastructure.AtomicIntegerAdapter
+            )
+            contextual(AtomicLong::class,
+                _root_ide_package_.com.example.api.infrastructure.AtomicLongAdapter
+            )
+            contextual(AtomicBoolean::class,
+                _root_ide_package_.com.example.api.infrastructure.AtomicBooleanAdapter
+            )
+            contextual(URI::class, _root_ide_package_.com.example.api.infrastructure.URIAdapter)
+            contextual(URL::class, _root_ide_package_.com.example.api.infrastructure.URLAdapter)
+            contextual(StringBuilder::class,
+                _root_ide_package_.com.example.api.infrastructure.StringBuilderAdapter
+            )
 
             apply(kotlinxSerializationAdaptersConfiguration)
         }

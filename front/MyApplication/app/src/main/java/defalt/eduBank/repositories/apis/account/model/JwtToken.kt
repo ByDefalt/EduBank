@@ -30,7 +30,7 @@ import kotlinx.serialization.Contextual
 data class JwtToken (
 
     @SerialName(value = "token")
-    val token: kotlin.String
+    val token: String
 
 ) {
 

@@ -35,22 +35,22 @@ import kotlinx.serialization.Contextual
 data class Account (
 
     @SerialName(value = "username")
-    val username: kotlin.String,
+    val username: String,
 
     @SerialName(value = "password")
-    val password: kotlin.String,
+    val password: String,
 
     @SerialName(value = "nom")
-    val nom: kotlin.String,
+    val nom: String,
 
     @SerialName(value = "prenom")
-    val prenom: kotlin.String,
+    val prenom: String,
 
     @SerialName(value = "email")
-    val email: kotlin.String,
+    val email: String,
 
     @SerialName(value = "id")
-    val id: kotlin.Int? = null
+    val id: Int? = null
 
 ) {
 

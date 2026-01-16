@@ -1,4 +1,4 @@
-package defalt.eduBank.service
+package defalt.eduBank.repositories.apis.account.service
 
 import retrofit2.http.*
 import retrofit2.Response

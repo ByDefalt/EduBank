@@ -31,10 +31,10 @@ import kotlinx.serialization.Contextual
 data class Error (
 
     @SerialName(value = "code")
-    val code: kotlin.Int? = null,
+    val code: Int? = null,
 
     @SerialName(value = "message")
-    val message: kotlin.String? = null
+    val message: String? = null
 
 ) {
 
