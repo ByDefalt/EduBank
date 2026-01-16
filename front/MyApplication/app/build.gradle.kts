@@ -51,6 +51,14 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":core"))
+    implementation(project(":feature-account"))
+    implementation(project(":feature-offer"))
+    implementation(project(":feature-bank"))
+    implementation(project(":feature-operation"))
+
+
     /* ---------------- CORE ---------------- */
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

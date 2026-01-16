@@ -26,6 +26,8 @@ coil = "2.7.0"
 accompanist = "0.36.0"
 splashscreen = "1.0.1"
 kotlinTest = "3.4.2"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 [libraries]
 # ---------------- CORE ----------------
@@ -93,6 +95,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 kotlintest-runner = { group = "io.kotlintest", name = "kotlintest-runner-junit5", version.ref = "kotlinTest" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -101,3 +105,4 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+android-library = { id = "com.android.library", version.ref = "agp" }
