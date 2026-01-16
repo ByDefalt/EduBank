@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    namespace = "defalt.mylibrary"
+    namespace = "defalt.feature_offer"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        minSdk = 24
 
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }

@@ -10,7 +10,6 @@ android {
     }
 
     defaultConfig {
-        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -31,6 +30,34 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+
+    val API_GATEWAY = "\"https://api.example.com/\""
+    val API_GATEWAY_NAME = "\"GATEWAY_CLIENT\""
+
+
+
+    defaultConfig {
+        minSdk = 26
+
+        buildConfigField("String", "GATEWAY_URL", API_GATEWAY)
+        buildConfigField("String", "GATEWAY_NAME", API_GATEWAY_NAME)
+        buildConfigField("int", "TIMEOUT", "30")
+    }
+
+    buildTypes {
+        getByName("debug") {
+            buildConfigField("String", "GATEWAY_URL", API_GATEWAY)
+            buildConfigField("String", "GATEWAY_NAME", API_GATEWAY_NAME)
+
+        }
+        getByName("release") {
+            buildConfigField("String", "GATEWAY_URL", API_GATEWAY)
+            buildConfigField("String", "GATEWAY_NAME", API_GATEWAY_NAME)
+        }
     }
 }
 
