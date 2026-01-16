@@ -1,14 +1,13 @@
-package com.example.clientAPI.controller;
+package com.operationapi.controller;
 
 
-import com.example.clientAPI.business.AccountBusiness;
+import com.operationapi.business.AccountBusiness;
 import dto.accountApi.Account;
 import dto.accountApi.JwtToken;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @Path("/account")

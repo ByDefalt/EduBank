@@ -1,13 +1,12 @@
-package com.example.clientAPI.business;
+package com.operationapi.business;
 
 
-import com.example.clientAPI.entity.AccountEntity;
-import com.example.clientAPI.mapper.AccountMapper;
-import com.example.clientAPI.repository.AccountRepository;
-import com.example.clientAPI.utils.JwtUtils;
+import com.operationapi.entity.AccountEntity;
+import com.operationapi.mapper.AccountMapper;
+import com.operationapi.repository.AccountRepository;
+import com.operationapi.utils.JwtUtils;
 import dto.accountApi.Account;
 import dto.accountApi.JwtToken;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Service;
 
 @Service

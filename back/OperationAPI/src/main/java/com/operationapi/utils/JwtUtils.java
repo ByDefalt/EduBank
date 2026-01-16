@@ -1,4 +1,4 @@
-package com.example.clientAPI.utils;
+package com.operationapi.utils;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;

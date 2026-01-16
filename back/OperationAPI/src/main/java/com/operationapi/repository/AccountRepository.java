@@ -1,6 +1,6 @@
-package com.example.clientAPI.repository;
+package com.operationapi.repository;
 
-import com.example.clientAPI.entity.AccountEntity;
+import com.operationapi.entity.AccountEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 

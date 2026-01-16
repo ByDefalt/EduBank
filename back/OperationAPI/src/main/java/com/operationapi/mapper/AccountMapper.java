@@ -1,6 +1,6 @@
-package com.example.clientAPI.mapper;
+package com.operationapi.mapper;
 
-import com.example.clientAPI.entity.AccountEntity;
+import com.operationapi.entity.AccountEntity;
 import dto.accountApi.Account;
 
 public class AccountMapper {

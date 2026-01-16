@@ -1,4 +1,4 @@
-package com.example.clientAPI.entity;
+package com.operationapi.entity;
 
 public class AccountEntity {
 
