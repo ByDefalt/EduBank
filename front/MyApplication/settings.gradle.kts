@@ -11,9 +11,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    // Version 0.8.0 minimum recommandée pour Gradle 9
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -22,7 +25,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "My Application"
+rootProject.name = "EduBank"
+
 include(
     ":app",
     ":core",
@@ -31,4 +35,3 @@ include(
     ":feature-bank",
     ":feature-operation"
 )
-

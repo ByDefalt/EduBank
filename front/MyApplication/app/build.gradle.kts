@@ -1,139 +1,108 @@
+import com.android.build.api.dsl.ApplicationExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose) // Gère automatiquement le compilateur Compose
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.spotless)
+    // Ne PAS remettre spotless ici s'il est déjà au niveau root
 }
 
+// 1. CONFIGURATION KOTLIN (DOIT ÊTRE EN PREMIER ET HORS DU BLOC ANDROID)
+kotlin {
+    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
+}
+
+// 2. CONFIGURATION ANDROID
 android {
     namespace = "defalt.eduBank"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "defalt.eduBank"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        targetSdk = 35
+        // ...
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
+    // Dans AGP 9+ avec Kotlin 2.x, on ne met PLUS de kotlinOptions { ... }
+    // à l'intérieur du bloc android. C'est géré par le bloc kotlin { } ci-dessus.
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlin {
-        jvmToolchain(11)
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
-
-    // Suppression de composeOptions { kotlinCompilerExtensionVersion }
-    // car géré par le plugin kotlin.compose (Kotlin 2.0+)
 }
 
 dependencies {
-
+    // Projets locaux
     implementation(project(":core"))
     implementation(project(":feature-account"))
     implementation(project(":feature-offer"))
     implementation(project(":feature-bank"))
     implementation(project(":feature-operation"))
 
-
-    /* ---------------- CORE ---------------- */
+    /* ---------------- CORE & COMPOSE ---------------- */
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.kotlin.stdlib)
 
-    /* ---------------- COMPOSE ---------------- */
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    /* ---------------- NAVIGATION ---------------- */
+    /* ---------------- ARCHITECTURE ---------------- */
     implementation(libs.androidx.navigation.compose)
-
-    /* ---------------- VIEWMODEL ---------------- */
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    /* ---------------- COROUTINES ---------------- */
+    /* ---------------- ASYNC & NETWORK ---------------- */
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    /* ---------------- NETWORK (Retrofit 3 / JSON) ---------------- */
     implementation(libs.retrofit)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.converter.scalars)
 
-    /* ---------------- DATABASE ---------------- */
+    /* ---------------- DATABASE & DI ---------------- */
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
-
-    /* ---------------- DATASTORE ---------------- */
     implementation(libs.androidx.datastore.preferences)
-
-    /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
-    implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
 
-    /* ---------------- IMAGES ---------------- */
+    /* ---------------- UI EXTRAS ---------------- */
     implementation(libs.coil.compose)
-
-    /* ---------------- PERMISSIONS ---------------- */
     implementation(libs.accompanist.permissions)
-
-    /* ---------------- SPLASHSCREEN ---------------- */
     implementation(libs.androidx.core.splashscreen)
 
     /* ---------------- TESTS ---------------- */
     testImplementation(libs.junit)
     testImplementation(libs.kotlintest.runner)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
-        freeCompilerArgs.addAll(
-            "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-        )
-    }
-}
-
-// Configuration Spotless (Optionnel, si vous voulez le configurer ici)
 spotless {
     kotlin {
         ktfmt()

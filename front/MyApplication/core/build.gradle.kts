@@ -26,12 +26,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
+    android.buildFeatures.buildConfig = true
+    defaultConfig { buildConfigField("String", "API_BASE_URL", "\"https://api.mybank.com/\"") }
+    buildTypes {
+        debug { buildConfigField("String", "API_BASE_URL", "\"https://api-dev.mybank.com/\"") }
+        release { buildConfigField("String", "API_BASE_URL", "\"https://api.mybank.com/\"") } }
+
 }
 
 dependencies {
