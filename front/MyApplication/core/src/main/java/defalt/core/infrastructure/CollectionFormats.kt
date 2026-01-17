@@ -1,4 +1,4 @@
-package com.example.api.infrastructure
+package defalt.core.infrastructure
 
 class CollectionFormats {
 
