@@ -1,18 +1,16 @@
 package defalt.core.di
 
+import defalt.core.BuildConfig.GATEWAY_URL
 import defalt.core.infrastructure.ApiClient
 import defalt.core.utils.createService
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import defalt.core.api.account.service.DefaultApi as AccountApi
 
-inline fun <reified S> networkModule(apiBaseUrl: String, apiName: String) = module {
+val networkModule = module {
 
-    single(named(apiName)) {
-        ApiClient(baseUrl = apiBaseUrl)
-            .setLogger { message -> println(message) }
-    }
+    // 1 ApiClient gateway unique
+    single { ApiClient(baseUrl = GATEWAY_URL).setLogger { println(it) } }
 
-    single {
-        get<ApiClient>(named(apiName)).createService<S>()
-    }
+    // Services exposés via le même client
+    single { get<ApiClient>().createService<AccountApi>() }
 }
