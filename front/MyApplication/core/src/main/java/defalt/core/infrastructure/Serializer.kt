@@ -1,6 +1,5 @@
-package com.example.api.infrastructure
+package defalt.core.infrastructure
 
-import defalt.core.infrastructure.LocalDateAdapter
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.modules.SerializersModule
