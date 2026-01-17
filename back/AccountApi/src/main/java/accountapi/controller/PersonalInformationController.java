@@ -1,10 +1,12 @@
 package accountapi.controller;
 
+import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.PersonalInformationBusiness;
 import accountapi.entity.PersonalInformationEntity;
 import accountapi.mapper.PersonalInformationMapper;
 import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;
+import dto.accountapi.RoleEnum;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -23,13 +25,12 @@ public class PersonalInformationController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPersonalInformation() {
-        List<PersonalInformationEntity> entities = personalInformationBusiness.getAllPersonalInformation();
-
-        List<PersonalInformation> dtos = new ArrayList<>();
-        for (PersonalInformationEntity entity : entities) {
-            dtos.add(PersonalInformationMapper.toDto(entity));
+        List<PersonalInformation> dtos = personalInformationBusiness.getAllPersonalInformation();
+        if (dtos.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
         return Response.ok(dtos).build();
     }
@@ -38,20 +39,17 @@ public class PersonalInformationController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonalInformationById(@PathParam("id") Integer id) {
-        PersonalInformationEntity entity = personalInformationBusiness.getPersonalInformationById(id);
-
+        PersonalInformation entity = personalInformationBusiness.getPersonalInformationById(id);
         if (entity == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return Response.ok(PersonalInformationMapper.toDto(entity)).build();
+        return Response.ok(entity).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPersonalInformation(PersonalInformationRegister registerDto) {
-        PersonalInformation personalInformationCreated = personalInformationBusiness.createPersonalInformation(registerDto);
-
-        return Response.status(Response.Status.CREATED).entity(personalInformationCreated).build();
+        return Response.status(Response.Status.CREATED).entity(personalInformationBusiness.createPersonalInformation(registerDto)).build();
     }
 }

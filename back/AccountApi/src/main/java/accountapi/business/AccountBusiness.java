@@ -99,7 +99,7 @@ public class AccountBusiness {
         if (accountEntity == null) {
             return null;
         }
-        return PersonalInformationMapper.toDto(personalInformationBusiness.getPersonalInformationById(accountEntity.getPersonalInfoId()));
+        return personalInformationBusiness.getPersonalInformationById(accountEntity.getPersonalInfoId());
     }
 
     public TokenRequest signIn(SignInRequest signInRequest) {

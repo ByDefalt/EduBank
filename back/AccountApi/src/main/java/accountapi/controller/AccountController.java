@@ -19,6 +19,7 @@ public class AccountController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAccounts() {
         return Response.ok(accountBusiness.getAllAccounts()).build();
@@ -29,7 +30,6 @@ public class AccountController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAccountById(@PathParam("id") String id) {
         Account account = accountBusiness.getAccountById(id);
-
         if (account == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -70,6 +70,7 @@ public class AccountController {
     }
 
     @DELETE
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{id}")
     public Response deleteAccount(@PathParam("id") String id) {
         boolean deleted = accountBusiness.deleteAccount(id);
