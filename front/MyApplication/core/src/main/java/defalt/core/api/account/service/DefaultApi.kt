@@ -1,21 +1,25 @@
 package defalt.core.api.account.service
 
-import retrofit2.http.*
-import retrofit2.Response
-
 import defalt.core.api.account.model.Account
 import defalt.core.api.account.model.JwtToken
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface DefaultApi {
     /**
      * DELETE account/{id}
      * Delete an account by ID
-     * 
+     *
      * Responses:
      *  - 204: Account deleted
      *  - 404: Account not found
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("account/{id}")
@@ -24,12 +28,12 @@ interface DefaultApi {
     /**
      * GET account/{id}
      * Get an account by ID
-     * 
+     *
      * Responses:
      *  - 200: Account found
      *  - 404: Account not found
      *
-     * @param id 
+     * @param id
      * @return [Account]
      */
     @GET("account/{id}")
@@ -38,14 +42,14 @@ interface DefaultApi {
     /**
      * PUT account/{id}
      * Update an account by ID
-     * 
+     *
      * Responses:
      *  - 200: Account updated
      *  - 400: Bad request
      *  - 404: Account not found
      *
-     * @param id 
-     * @param account 
+     * @param id
+     * @param account
      * @return [Account]
      */
     @PUT("account/{id}")
@@ -54,12 +58,12 @@ interface DefaultApi {
     /**
      * POST account
      * Create a new account
-     * 
+     *
      * Responses:
      *  - 201: Account created
      *  - 400: Bad request
      *
-     * @param account 
+     * @param account
      * @return [Account]
      */
     @POST("account")
@@ -68,12 +72,12 @@ interface DefaultApi {
     /**
      * POST account/signin
      * Sign in and get authentication token
-     * 
+     *
      * Responses:
      *  - 200: Authentication successful
      *  - 401: Invalid credentials
      *
-     * @param account 
+     * @param account
      * @return [JwtToken]
      */
     @POST("account/signin")
@@ -82,14 +86,13 @@ interface DefaultApi {
     /**
      * POST account/validate
      * Validate authentication token
-     * 
+     *
      * Responses:
      *  - 200: Token validation result
      *
-     * @param jwtToken 
+     * @param jwtToken
      * @return [Boolean]
      */
     @POST("account/validate")
     suspend fun accountValidatePost(@Body jwtToken: JwtToken): Response<Boolean>
-
 }

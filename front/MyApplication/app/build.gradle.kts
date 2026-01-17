@@ -136,6 +136,12 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 // Configuration Spotless (Optionnel, si vous voulez le configurer ici)
 spotless {
     kotlin {
-        ktfmt()
+        target("**/*.kt")
+        ktlint("0.49.0") // applique le formatage Kotlin avec ktlint
+    }
+    format("misc") {
+        target("**/*.gradle", "**/*.md")
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }

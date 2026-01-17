@@ -1,6 +1,5 @@
 package defalt.core.infrastructure
 
-
 import defalt.core.infrastructure.Serializer.kotlinxSerializationJson
 import okhttp3.Call
 import okhttp3.Interceptor
@@ -17,12 +16,11 @@ class ApiClient(
     private var baseUrl: String = defaultBasePath,
     private val okHttpClientBuilder: OkHttpClient.Builder? = null,
     private val callFactory: Call.Factory? = null,
-    private val callAdapterFactories: List<CallAdapter.Factory> = listOf(
-    ),
+    private val callAdapterFactories: List<CallAdapter.Factory> = listOf(),
     private val converterFactories: List<Converter.Factory> = listOf(
         ScalarsConverterFactory.create(),
         kotlinxSerializationJson.asConverterFactory("application/json".toMediaType()),
-    )
+    ),
 ) {
     private val apiAuthorizations = mutableMapOf<String, Interceptor>()
     var logger: ((String) -> Unit)? = null
@@ -49,8 +47,9 @@ class ApiClient(
     private val defaultClientBuilder: OkHttpClient.Builder by lazy {
         OkHttpClient()
             .newBuilder()
-            .addInterceptor(HttpLoggingInterceptor { message -> logger?.invoke(message) }
-                .apply { level = HttpLoggingInterceptor.Level.BODY }
+            .addInterceptor(
+                HttpLoggingInterceptor { message -> logger?.invoke(message) }
+                    .apply { level = HttpLoggingInterceptor.Level.BODY },
             )
     }
 

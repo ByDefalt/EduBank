@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -85,4 +86,16 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+}
+
+spotless {
+    kotlin {
+        target("**/*.kt")
+        ktlint("0.49.0") // applique le formatage Kotlin avec ktlint
+    }
+    format("misc") {
+        target("**/*.gradle", "**/*.md")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
