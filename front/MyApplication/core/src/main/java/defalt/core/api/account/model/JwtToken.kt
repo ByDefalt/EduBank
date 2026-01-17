@@ -13,12 +13,11 @@
     "UnusedImport"
 )
 
-package com.example.api.model
+package defalt.core.api.account.model
 
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
 
 /**
  * 
@@ -30,7 +29,7 @@ import kotlinx.serialization.Contextual
 data class JwtToken (
 
     @SerialName(value = "token")
-    val token: kotlin.String
+    val token: String
 
 ) {
 

@@ -3,8 +3,8 @@ package defalt.core.api.account.service
 import retrofit2.http.*
 import retrofit2.Response
 
-import com.example.api.model.Account
-import com.example.api.model.JwtToken
+import defalt.core.api.account.model.Account
+import defalt.core.api.account.model.JwtToken
 
 interface DefaultApi {
     /**

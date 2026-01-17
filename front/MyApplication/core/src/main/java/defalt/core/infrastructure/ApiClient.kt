@@ -1,7 +1,7 @@
 package defalt.core.infrastructure
 
 
-import com.example.api.infrastructure.Serializer.kotlinxSerializationJson
+import defalt.core.infrastructure.Serializer.kotlinxSerializationJson
 import okhttp3.Call
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
