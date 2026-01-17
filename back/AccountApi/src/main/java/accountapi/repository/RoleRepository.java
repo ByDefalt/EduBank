@@ -1,10 +1,6 @@
 package accountapi.repository;
 
-import accountapi.entity.AccountEntity;
 import accountapi.entity.RoleEntity;
-import dto.accountapi.AccountRegister;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 

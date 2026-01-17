@@ -12,7 +12,7 @@ public class PersonalInformationMapper {
         }
 
         PersonalInformation dto = new PersonalInformation();
-        // on ne renvoie pas l'id dans le dto
+        dto.setId(entity.getId());
         dto.setFirstname(entity.getFirstname());
         dto.setLastname(entity.getLastname());
         dto.setEmail(entity.getEmail());

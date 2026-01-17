@@ -1,7 +1,10 @@
 package accountapi.business;
 
 import accountapi.entity.PersonalInformationEntity;
+import accountapi.mapper.PersonalInformationMapper;
 import accountapi.repository.PersonalInformationRepository;
+import dto.accountapi.PersonalInformation;
+import dto.accountapi.PersonalInformationRegister;
 import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -20,8 +23,9 @@ public class PersonalInformationBusiness {
         return personalInformationRepository.findById(id);
     }
 
-    public PersonalInformationEntity createPersonalInformation(PersonalInformationEntity personalInfo) {
-        return personalInformationRepository.create(personalInfo);
+    public PersonalInformation createPersonalInformation(PersonalInformationRegister registerDto) {
+        PersonalInformationEntity personalInfo = PersonalInformationMapper.toEntity(registerDto);
+        return PersonalInformationMapper.toDto(personalInformationRepository.create(personalInfo));
     }
 
     public boolean deletePersonalInformation(Integer id) {

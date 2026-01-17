@@ -11,8 +11,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Path("/roles")
@@ -27,24 +25,17 @@ public class RoleController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRoles() {
-        List<RoleEntity> roles = roleBusiness.getAllRoles();
-
-        List<Role> dtos = new ArrayList<>();
-        for (RoleEntity role : roles) {
-            dtos.add(RoleMapper.toDto(role));
-        }
-
-        return Response.ok(dtos).build();
+        return Response.ok(roleBusiness.getAllRoles()).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {
-        RoleEntity role = roleBusiness.getRoleById(id);
+        Role role = roleBusiness.getRoleById(id);
         if (role == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(RoleMapper.toDto(role)).build();
+        return Response.ok(role).build();
     }
 }

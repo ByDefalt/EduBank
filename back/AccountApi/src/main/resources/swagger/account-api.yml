@@ -244,6 +244,12 @@ paths:
 
 components:
   schemas:
+    RoleEnum:
+      type: string
+      enum:
+        - ADMIN
+        - CUSTOMER
+
     Role:
       type: object
       properties:
@@ -344,3 +350,16 @@ components:
           type: string
           description: "Token JWT"
           example: "eyJhbGciOiJIUzI1NiJ9..."
+
+    TokenResponse:
+      type: object
+      description: "Données utilisateur extraites et décodées depuis le token JWT"
+      properties:
+        id:
+          type: string
+          description: "Identifiant unique de l'utilisateur (Subject du token)"
+          example: "123456789123"
+        role:
+          type: string
+          description: "Rôle de l'utilisateur"
+          example: "ADMIN"

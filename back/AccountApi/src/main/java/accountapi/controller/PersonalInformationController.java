@@ -31,7 +31,6 @@ public class PersonalInformationController {
         for (PersonalInformationEntity entity : entities) {
             dtos.add(PersonalInformationMapper.toDto(entity));
         }
-
         return Response.ok(dtos).build();
     }
 
@@ -44,7 +43,6 @@ public class PersonalInformationController {
         if (entity == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
         return Response.ok(PersonalInformationMapper.toDto(entity)).build();
     }
 
@@ -52,11 +50,8 @@ public class PersonalInformationController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPersonalInformation(PersonalInformationRegister registerDto) {
-        PersonalInformationEntity entityToCreate = PersonalInformationMapper.toEntity(registerDto);
-        PersonalInformationEntity createdEntity = personalInformationBusiness.createPersonalInformation(entityToCreate);
+        PersonalInformation personalInformationCreated = personalInformationBusiness.createPersonalInformation(registerDto);
 
-        return Response.status(Response.Status.CREATED)
-                .entity(PersonalInformationMapper.toDto(createdEntity))
-                .build();
+        return Response.status(Response.Status.CREATED).entity(personalInformationCreated).build();
     }
 }
