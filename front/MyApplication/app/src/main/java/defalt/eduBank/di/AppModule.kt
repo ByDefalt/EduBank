@@ -1,4 +1,4 @@
-package defalt.di
+package defalt.eduBank.di
 
 import defalt.core.di.coreModule
 

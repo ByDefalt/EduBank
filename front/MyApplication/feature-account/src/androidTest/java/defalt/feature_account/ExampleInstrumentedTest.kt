@@ -1,4 +1,4 @@
-package defalt.mylibrary
+package defalt.feature_account
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("defalt.mylibrary.test", appContext.packageName)
+        assertEquals("defalt.feature_account.test", appContext.packageName)
     }
 }

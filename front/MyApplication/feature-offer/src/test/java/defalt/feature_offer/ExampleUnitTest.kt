@@ -1,4 +1,4 @@
-package defalt.mylibrary
+package defalt.feature_offer
 
 import org.junit.Test
 

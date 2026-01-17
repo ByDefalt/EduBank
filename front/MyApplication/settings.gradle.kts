@@ -27,8 +27,7 @@ include(
     ":app",
     ":core",
     ":feature-account",
-    ":feature-offer",
     ":feature-bank",
-    ":feature-operation"
+    ":feature-operation",
+    ":feature-offer"
 )
-

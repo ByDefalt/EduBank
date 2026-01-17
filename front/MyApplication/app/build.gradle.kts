@@ -46,8 +46,6 @@ android {
         compose = true
     }
 
-    // Suppression de composeOptions { kotlinCompilerExtensionVersion }
-    // car géré par le plugin kotlin.compose (Kotlin 2.0+)
 }
 
 dependencies {
