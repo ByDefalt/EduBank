@@ -50,7 +50,7 @@ public class AccountController {
         if (createdAccount == null) {
             return Response.status(Response.Status.CONFLICT).build();
         }
-        return Response.status(Response.Status.CREATED).entity(accountBusiness.createAccount(accountDto)).build();
+        return Response.status(Response.Status.CREATED).entity(createdAccount).build();
     }
 
     @POST
