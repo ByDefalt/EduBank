@@ -38,6 +38,7 @@ public class RoleController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {

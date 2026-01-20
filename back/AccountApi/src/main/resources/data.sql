@@ -13,7 +13,7 @@ CREATE TABLE PersonalInformation (
 );
 
 CREATE TABLE Account (
-    id VARCHAR(12) PRIMARY KEY,
+    id VARCHAR(12) PRIMARY KEY UNIQUE,
     personal_info_id INT NOT NULL,
     role_id INT NOT NULL,
     password VARCHAR(255) NOT NULL,

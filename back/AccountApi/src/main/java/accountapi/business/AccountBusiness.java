@@ -1,23 +1,18 @@
 package accountapi.business;
 
 import accountapi.entity.AccountEntity;
-import accountapi.entity.PersonalInformationEntity;
 import accountapi.entity.RoleEntity;
 import accountapi.mapper.AccountMapper;
-import accountapi.mapper.PersonalInformationMapper;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.AccountRepository;
 import accountapi.utils.GenerateID;
 import accountapi.utils.JwtUtils;
 import dto.accountapi.*;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static accountapi.mapper.PersonalInformationMapper.toEntity;
 
 @Service
 public class AccountBusiness {
@@ -61,6 +56,10 @@ public class AccountBusiness {
         }
 
         Integer pif = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo()).getId();
+
+        if (pif == null) {
+            return null;
+        }
 
         AccountEntity accountToRegister = new AccountEntity();
         accountToRegister.setId(idGenerated);

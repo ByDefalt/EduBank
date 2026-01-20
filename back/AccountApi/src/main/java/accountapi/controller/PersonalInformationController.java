@@ -45,11 +45,4 @@ public class PersonalInformationController {
         }
         return Response.ok(entity).build();
     }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createPersonalInformation(PersonalInformationRegister registerDto) {
-        return Response.status(Response.Status.CREATED).entity(personalInformationBusiness.createPersonalInformation(registerDto)).build();
-    }
 }

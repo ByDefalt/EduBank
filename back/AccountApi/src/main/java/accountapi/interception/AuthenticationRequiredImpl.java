@@ -41,10 +41,13 @@ public class AuthenticationRequiredImpl implements ContainerRequestFilter {
         String token = authHeader.substring("Bearer ".length()).trim();
 
         try {
+            // recuperee l'annotation sur la methode
             Method method = resourceInfo.getResourceMethod();
+            // obtenir le role requis depuis l'annotation appelee
             AuthenticationRequired annotation = method.getAnnotation(AuthenticationRequired.class);
 
             if (annotation != null) {
+                // recuperation du role via la value de l'annotation
                 RoleEnum requiredRole = annotation.value();
 
                 TokenRequest tokenRequest = new TokenRequest();
@@ -54,12 +57,24 @@ public class AuthenticationRequiredImpl implements ContainerRequestFilter {
                     containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("token expiree ou invalide").build());
                     return;
                 } else {
+                    // si le role correspond au role requis
                     if (requiredRole.toString().equals(tokenResponse.getRole())) {
                         // autorisee
+                        //System.out.println("Authentification reussi pour : " + tokenResponse.getRole());
                         return;
                     } else {
-                        containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("permission insuffisante").build());
-                        return;
+                    // sinon verifier si admin
+                        if (tokenResponse.getRole().equals(RoleEnum.ADMIN.toString())) {
+                            // autorisee si admin
+                            //System.out.println("Authentification reussi pour admin sur acces client : " + tokenResponse.getRole());
+                            return;
+                        }else{
+                            // sinon refusee
+                            //System.out.println("permission insuffisante pour : " + tokenResponse.getRole());
+                            containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("permission insuffisante").build());
+                            return;
+                        }
+
                     }
                 }
 
