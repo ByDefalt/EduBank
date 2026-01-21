@@ -15,6 +15,7 @@
 
 package defalt.core.api.account.model
 
+import defalt.core.api.account.model.PersonalInformationRegister
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -23,25 +24,24 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id 
- * @param personalInfoId ID faisant référence à PersonalInformation
- * @param roleId ID faisant référence à Role
+ * @param personalInfo 
+ * @param roleId ID du rôle existant (ex: 1 pour Admin, 2 pour User)
+ * @param password 
  * @param state 
  */
 @Serializable
 
-data class Account (
+data class AccountRegister (
 
-    @SerialName(value = "id")
-    val id: kotlin.String? = null,
+    @SerialName(value = "personal_info")
+    val personalInfo: PersonalInformationRegister,
 
-    /* ID faisant référence à PersonalInformation */
-    @SerialName(value = "personal_info_id")
-    val personalInfoId: kotlin.Int? = null,
-
-    /* ID faisant référence à Role */
+    /* ID du rôle existant (ex: 1 pour Admin, 2 pour User) */
     @SerialName(value = "role_id")
-    val roleId: kotlin.Int? = null,
+    val roleId: kotlin.Int,
+
+    @SerialName(value = "password")
+    val password: kotlin.String,
 
     @SerialName(value = "state")
     val state: kotlin.String? = null

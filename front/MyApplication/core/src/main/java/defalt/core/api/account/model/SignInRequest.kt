@@ -10,27 +10,34 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.core.api.account.model
 
-import kotlinx.serialization.SerialName
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
+ * 
  *
- *
- * @param code
- * @param message
+ * @param idBankAccount 
+ * @param password 
  */
 @Serializable
-data class Error(
 
-    @SerialName(value = "code")
-    val code: Int? = null,
+data class SignInRequest (
 
-    @SerialName(value = "message")
-    val message: String? = null,
+    @SerialName(value = "id_bank_account")
+    val idBankAccount: kotlin.String,
 
-)
+    @SerialName(value = "password")
+    val password: kotlin.String
+
+) {
+
+
+}
+

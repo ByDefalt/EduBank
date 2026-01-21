@@ -71,7 +71,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 
     /* ---------------- NETWORK (Retrofit 3 / JSON) ---------------- */
-    implementation(libs.retrofit)
+    api(libs.retrofit)
     implementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlinx.serialization)
