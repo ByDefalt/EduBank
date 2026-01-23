@@ -15,10 +15,8 @@ import defalt.core.api.operation.service.OperationApi
 
 val networkModule = module {
 
-    // 1 ApiClient gateway unique
     single { ApiClient(baseUrl = GATEWAY_URL).setLogger { println(it) } }
 
-    // Services exposés via le même client
     single { get<ApiClient>().createService<AccountApi>() }
     single { get<ApiClient>().createService<PersonalInformationApi>() }
     single { get<ApiClient>().createService<BankAccountApi>() }
