@@ -1,15 +1,14 @@
 package defalt.feature_account.di
 
-import defalt.feature_account.repository.service.AccountRepository
-import defalt.feature_account.repository.impl.AccountRepositoryImpl
-import defalt.feature_account.repository.service.PersonalInformationRepository
-import defalt.feature_account.repository.impl.PersonalInformationRepositoryImpl
-import org.koin.core.module.Module
+import defalt.feature_account.repository.service.IAccountRepository
+import defalt.feature_account.repository.impl.AccountRepository
+import defalt.feature_account.repository.service.IPersonalInformationRepository
+import defalt.feature_account.repository.impl.PersonalInformationRepository
 import org.koin.dsl.module
 
 val repositoryModule =
     module {
-        single<AccountRepository> { AccountRepositoryImpl(get()) }
-        single<PersonalInformationRepository> { PersonalInformationRepositoryImpl(get()) }
+        single<IAccountRepository> { AccountRepository(get()) }
+        single<IPersonalInformationRepository> { PersonalInformationRepository(get()) }
 
     }
