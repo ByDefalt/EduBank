@@ -12,6 +12,7 @@ tags:
   - name: BankAccount
   - name: Type
   - name: BankAccountParameter
+  - name: BankAccountPivot
 
 paths:
   /bank-accounts:
@@ -125,7 +126,7 @@ paths:
   /bank-accounts/{id}/state:
     patch:
       tags: [BankAccount]
-      summary: Changer l’état d’un compte bancaire
+      summary: Changer l'état d'un compte bancaire
       security:
         - bearerAuth: []
       parameters:
@@ -159,7 +160,7 @@ paths:
   /bank-accounts/{id}/balance:
     get:
       tags: [BankAccount]
-      summary: Récupérer le solde d’un compte bancaire
+      summary: Récupérer le solde d'un compte bancaire
       security:
         - bearerAuth: []
       parameters:
@@ -244,6 +245,148 @@ paths:
         '201':
           description: Créé
 
+  # ============== BankAccountPivot Endpoints ==============
+
+  /bank-accounts/{bankAccountId}/link/{accountId}:
+    post:
+      tags: [BankAccountPivot]
+      summary: Lier un compte (Account) à un compte bancaire (BankAccount)
+      description: Crée une relation many-to-many entre un Account et un BankAccount
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID du compte bancaire
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID du compte utilisateur
+      responses:
+        '201':
+          description: Lien créé avec succès
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /bank-accounts/{bankAccountId}/unlink/{accountId}:
+    delete:
+      tags: [BankAccountPivot]
+      summary: Délier un compte d'un compte bancaire
+      description: Supprime la relation entre un Account et un BankAccount
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Lien supprimé avec succès
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /bank-accounts/{bankAccountId}/unlink-all:
+    delete:
+      tags: [BankAccountPivot]
+      summary: Délier tous les comptes d'un compte bancaire
+      description: Supprime toutes les relations d'un BankAccount avec tous les Accounts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Tous les liens supprimés
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /accounts/{accountId}/unlink-all:
+    delete:
+      tags: [BankAccountPivot]
+      summary: Délier tous les comptes bancaires d'un compte
+      description: Supprime toutes les relations d'un Account avec tous les BankAccounts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Tous les liens supprimés
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /bank-accounts/{bankAccountId}/accounts:
+    get:
+      tags: [BankAccountPivot]
+      summary: Récupérer tous les comptes liés à un compte bancaire
+      description: Liste tous les Account IDs associés à un BankAccount
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bankAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des IDs de comptes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /accounts/{accountId}/bank-accounts:
+    get:
+      tags: [BankAccountPivot]
+      summary: Récupérer tous les comptes bancaires liés à un compte
+      description: Liste tous les BankAccount IDs associés à un Account
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Liste des IDs de comptes bancaires
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
 components:
   schemas:
     BankAccount:
@@ -282,7 +425,7 @@ components:
 
     State:
       type: string
-      description: État possible d’un compte bancaire
+      description: État possible d'un compte bancaire
       enum:
         - active
         - inactive

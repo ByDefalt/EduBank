@@ -1,11 +1,14 @@
 package com.example.clientAPI.entity;
 
+import dto.bankapi.State;
 
 public class BankAccountParameterEntity {
 
-    private Integer id = null;
-    private Double overdraftLimit = null;
-    private String value;
+    private Integer id;
+    private Double overdraftLimit;
+    private State state; // active, inactive, bloqued, closed
+
+    // ----------------- Getters & Setters -----------------
 
     public Integer getId() {
         return id;
@@ -23,20 +26,21 @@ public class BankAccountParameterEntity {
         this.overdraftLimit = overdraftLimit;
     }
 
-    public String getValue() {
-        return value;
+    public State getState() {
+        return state;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setState(State state) {
+        this.state = state;
     }
 
+    // ----------------- toString -----------------
     @Override
     public String toString() {
         return "BankAccountParameterEntity{" +
                 "id=" + id +
                 ", overdraftLimit=" + overdraftLimit +
-                ", value='" + value + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 }

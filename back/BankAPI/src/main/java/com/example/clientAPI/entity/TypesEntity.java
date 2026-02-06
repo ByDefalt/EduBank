@@ -1,19 +1,11 @@
 package com.example.clientAPI.entity;
 
-
-
 public class TypesEntity {
 
-    private Integer id = null;
-    private String name = null;
+    private Integer id;
+    private String name;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    // ----------------- Getters & Setters -----------------
 
     public Integer getId() {
         return id;
@@ -23,9 +15,18 @@ public class TypesEntity {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // ----------------- toString -----------------
     @Override
     public String toString() {
-        return "Type{" +
+        return "TypesEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

@@ -1,20 +1,14 @@
 package com.example.clientAPI.entity;
 
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.Serializable;
-import javax.validation.constraints.*;
-import javax.validation.Valid;
-
 public class BankAccountEntity {
 
-    private String id = null;
-    private Integer parameterId = null;
-    private Integer typeId = null;
-    private Double sold = null;
-    private String iban = null;
+    private String id;
+    private Integer parameterId;
+    private Integer typeId;
+    private Double sold;
+    private String iban;
+
+    // ----------------- Getters & Setters -----------------
 
     public String getId() {
         return id;
@@ -56,6 +50,7 @@ public class BankAccountEntity {
         this.iban = iban;
     }
 
+    // ----------------- toString -----------------
     @Override
     public String toString() {
         return "BankAccountEntity{" +
