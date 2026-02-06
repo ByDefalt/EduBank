@@ -83,6 +83,29 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
+  /bank-accounts-detail/{id}:
+    get:
+      tags: [BankAccount]
+      summary: Récupérer les détails complets d'un compte bancaire
+      description: Retourne un compte bancaire avec les objets complets des paramètres et du type
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Détails du compte trouvés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankAccountDetail'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
     put:
       tags: [BankAccount]
       summary: Mettre à jour un compte bancaire
@@ -398,6 +421,21 @@ components:
           type: integer
         type_id:
           type: integer
+        sold:
+          type: number
+          format: double
+        iban:
+          type: string
+
+    BankAccountDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        parameter:
+          $ref: '#/components/schemas/BankAccountParameter'
+        type:
+          $ref: '#/components/schemas/Type'
         sold:
           type: number
           format: double

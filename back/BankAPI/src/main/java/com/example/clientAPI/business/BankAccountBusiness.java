@@ -3,11 +3,13 @@ package com.example.clientAPI.business;
 import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.entity.TypesEntity;
+import com.example.clientAPI.entity.BankAccountDetailEntity;
 import com.example.clientAPI.mapper.BankAccountMapper;
 import com.example.clientAPI.repository.BankAccountRepository;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountParameter;
 import dto.bankapi.Type;
+import dto.bankapi.BankAccountDetail;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,11 @@ public class BankAccountBusiness {
     public BankAccount getBankAccountById(String id) {
         BankAccountEntity entity = bankAccountRepository.getBankAccountById(id);
         return BankAccountMapper.toDto(entity);
+    }
+
+    public BankAccountDetail getBankAccountDetailById(String id) {
+        BankAccountDetailEntity entity = bankAccountRepository.getBankAccountDetailById(id);
+        return BankAccountMapper.toDetailDto(entity);
     }
 
     public List<BankAccount> getAllBankAccounts() {

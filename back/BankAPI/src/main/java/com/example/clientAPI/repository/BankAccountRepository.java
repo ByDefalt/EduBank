@@ -1,9 +1,7 @@
 package com.example.clientAPI.repository;
 
-import com.example.clientAPI.entity.BankAccountEntity;
-import com.example.clientAPI.entity.BankAccountParameterEntity;
-import com.example.clientAPI.entity.BankAccountPivotEntity;
-import com.example.clientAPI.entity.TypesEntity;
+import com.example.clientAPI.entity.*;
+
 import dto.bankapi.State;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -29,6 +27,15 @@ public class BankAccountRepository {
     private static final String SQL_GET_BANK_ACCOUNT_BY_ID =
             "SELECT id, parameter_id, type_id, sold, iban " +
                     "FROM BankAccount WHERE id = :id";
+
+    private static final String SQL_GET_BANK_ACCOUNT_DETAIL_BY_ID =
+            "SELECT ba.id, ba.parameter_id, ba.type_id, ba.sold, ba.iban, " +
+                    "bap.id as param_id, bap.overdraft_limit, bap.state, " +
+                    "t.id as type_id_val, t.name " +
+                    "FROM BankAccount ba " +
+                    "INNER JOIN BankAccountParameter bap ON ba.parameter_id = bap.id " +
+                    "INNER JOIN Types t ON ba.type_id = t.id " +
+                    "WHERE ba.id = :id";
 
     private static final String SQL_GET_ALL_BANK_ACCOUNTS =
             "SELECT id, parameter_id, type_id, sold, iban FROM BankAccount";
@@ -98,7 +105,7 @@ public class BankAccountRepository {
     // ============== BankAccount Methods ==============
 
     public BankAccountEntity createBankAccount(BankAccountEntity bankAccount) {
-        
+
         if (bankAccount.getId() == null || bankAccount.getId().isEmpty()) {
             bankAccount.setId(String.valueOf(System.currentTimeMillis()));
         }
@@ -126,6 +133,33 @@ public class BankAccountRepository {
             ba.setSold(rs.getDouble("sold"));
             ba.setIban(rs.getString("iban"));
             return ba;
+        });
+    }
+
+    public BankAccountDetailEntity getBankAccountDetailById(String id) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+
+        return jdbcTemplate.queryForObject(SQL_GET_BANK_ACCOUNT_DETAIL_BY_ID, params, (rs, rowNum) -> {
+            // Créer l'entité BankAccountParameter
+            BankAccountParameterEntity parameter = new BankAccountParameterEntity();
+            parameter.setId(rs.getInt("param_id"));
+            parameter.setOverdraftLimit(rs.getDouble("overdraft_limit"));
+            parameter.setState(State.fromValue(rs.getString("state")));
+
+            // Créer l'entité Type
+            TypesEntity type = new TypesEntity();
+            type.setId(rs.getInt("type_id_val"));
+            type.setName(rs.getString("name"));
+
+            // Créer et retourner l'entité BankAccountDetail
+            BankAccountDetailEntity detail = new BankAccountDetailEntity();
+            detail.setId(rs.getString("id"));
+            detail.setParameter(parameter);
+            detail.setType(type);
+            detail.setSold(rs.getDouble("sold"));
+            detail.setIban(rs.getString("iban"));
+            return detail;
         });
     }
 

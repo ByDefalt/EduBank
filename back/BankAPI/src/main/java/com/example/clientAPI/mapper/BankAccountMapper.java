@@ -3,9 +3,11 @@ package com.example.clientAPI.mapper;
 import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.entity.TypesEntity;
+import com.example.clientAPI.entity.BankAccountDetailEntity;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountParameter;
 import dto.bankapi.Type;
+import dto.bankapi.BankAccountDetail;
 
 public class BankAccountMapper {
 
@@ -79,6 +81,34 @@ public class BankAccountMapper {
         Type dto = new Type();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
+
+        return dto;
+    }
+
+    // DTO → Entity (BankAccountDetail)
+    public static BankAccountDetailEntity toDetailEntity(BankAccountDetail dto) {
+        if (dto == null) return null;
+
+        BankAccountDetailEntity entity = new BankAccountDetailEntity();
+        entity.setId(dto.getId());
+        entity.setParameter(toParameterEntity(dto.getParameter()));
+        entity.setType(toTypeEntity(dto.getType()));
+        entity.setSold(dto.getSold());
+        entity.setIban(dto.getIban());
+
+        return entity;
+    }
+
+    // Entity → DTO (BankAccountDetail)
+    public static BankAccountDetail toDetailDto(BankAccountDetailEntity entity) {
+        if (entity == null) return null;
+
+        BankAccountDetail dto = new BankAccountDetail();
+        dto.setId(entity.getId());
+        dto.setParameter(toParameterDto(entity.getParameter()));
+        dto.setType(toTypeDto(entity.getType()));
+        dto.setSold(entity.getSold());
+        dto.setIban(entity.getIban());
 
         return dto;
     }

@@ -3,6 +3,7 @@ package com.example.clientAPI.controller;
 import com.example.clientAPI.business.BankAccountBusiness;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountParameter;
+import dto.bankapi.BankAccountDetail;
 import dto.bankapi.Type;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -64,6 +65,21 @@ public class BankAccountController {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
             return Response.ok(account).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Path("/bank-accounts-detail/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBankAccountDetailById(@PathParam("id") String id) {
+        try {
+            BankAccountDetail detail = bankAccountBusiness.getBankAccountDetailById(id);
+            if (detail == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+            return Response.ok(detail).build();
         } catch (Exception e) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
