@@ -1,0 +1,597 @@
+
+
+
+
+
+Cahier des charges
+Auteurs	3
+Annuaire des équipes	4
+Sujet : Application Bancaire	5
+Liste des API	6
+1. Account-API	6
+2. Bank-Account-API	6
+3. Operation-API	6
+4. Commercial-offer-api	6
+5. Gateway	6
+Architecture	7
+Liste des Utilisateurs	8
+Visiteur	8
+Client	8
+Administrateur	8
+Screens	9
+Visiteur	9
+Client	9
+Admin	9
+Acteur : Visiteur	9
+Use Case 1 : Inscription d’un nouveau client	9
+Use Case 2 : Connexion	10
+Use Case 3 : Visualiser les offres	11
+Acteur : Client	11
+Use Case 1 : Visualiser les offres	11
+Use Case 2 : Déconnexion	12
+Use Case 3 : Afficher le compte courant	12
+Use Case 4 : Voir les détails d’un compte	12
+Use Case 5 : Voir la liste des comptes	13
+Use Case 6 : Ajouter un bénéficiaire	13
+Use Case 7 : Modifier un bénéficiaire	14
+Use Case 8 : Voir la liste des bénéficiaires	14
+Use Case 9 : Supprimer un bénéficiaire	15
+Use Case 10 : Effectuer un virement	15
+Acteur : Administrateur	16
+Use Case 1 : Déconnexion	16
+Use Case 2 : Voir la liste des comptes	17
+Use Case 3 : Voir la liste des comptes bancaires	17
+Use Case 4 : Voir la liste des offres	18
+Use Case 5 : Voir la liste des opérations	18
+Use Case 6 : Voir un compte spécifique avec ses détails	19
+Use Case 7 : Voir un compte bancaire spécifique avec ses détails	19
+Use Case 8 : Voir une opération spécifique avec ses détails	20
+Use Case 9 : Voir une offre spécifique avec ses détails	20
+Use Case 10 : Changer l’état d’un compte	20
+Use Case 11 : Changer l’état d’un compte bancaire	21
+Use Case 12 : Changer l’état d’une offre	21
+Use Case 13 : Changer l’état d’une opération	21
+Use Case 14 : Mettre à jour les informations personnelles d’un compte	22
+Use Case 15 : Mettre à jour les paramètres d’un compte bancaire	22
+Use Case 16 : Créer un nouveau type de compte	22
+Use Case 17 : Créer une offre	23
+Use Case 18 : Mettre à jour une offre	24
+Use Case 19 : Supprimer une offre	24
+Use Case 20 : Créer une opération d’annulation	24
+Use Case 21 : Mettre à jour l’état d’une opération	25
+Base de données	26
+
+Auteurs
+Romain ROUSVAL
+Sully MILLET
+Erwan LE BRAS
+Glen LOUIS
+Christian-Esteban Nunez GUAJARDO
+
+
+Annuaire des équipes
+ Nom
+ Romain Rousval
+ Sully Millet
+ Christian-Esteban Nunez Guajardo
+ Erwan Le Bras
+ glenn louis
+
+
+
+
+Sujet : Application Bancaire
+Ce projet est une application bancaire dont l'objectif est de reproduire le fonctionnement d'une banque en ligne, permettant la gestion des utilisateurs, la détention de multiples comptes bancaires, l'exécution de virements et la gestion d'offres commerciales.
+
+
+
+Liste des API
+Account-API
+Bank-Account-API
+Operation-API
+Commercial-offer-api
+Gateway
+
+Architecture
+
+
+
+
+
+
+Liste des Utilisateurs
+Visiteur
+Visualisation des offres.
+Client
+Accès à ses compte, virement.
+Administrateur
+Blocage d’un compte bancaire, annulation d’un virement, injection d’argent.
+
+
+
+
+
+Screens
+Visiteur
+Accueil : affiche les boutons connexion, inscription, offres
+Offre : Affiche les différentes offres disponibles.
+Connexion : Affiche les champs de saisie pour se connecter (code de compte et mot de passe).
+Inscription : Différents champs de saisie pour pouvoir faire une inscription complète.
+Client
+Liste des Comptes possédé : Affiche la liste des comptes que l’on possède sans les détails juste nom et solde.
+Accueil Client : Affiche le solde du compte courant.
+Détails Compte : affiche les détails d’un compte avec la liste des opérations, le découvert autorisé etc …
+Bénéficiaire : CRUD des bénéficiaires.
+Virements : Affiche les options obligatoire pour effectuer un virement (suite d’écran)
+Admin
+Admin Panel Gestion des Comptes : Permet de gérer des comptes (RUD + state)
+Admin Panel gestion des Comptes Bancaire: Permet de gérer des comptes Banquaire (RUD + state)
+Admin Panel gestion des Opérations: Permet de gérer des Opérations (CR + state + annulation)
+Admin Panel gestion des Offres: Permet de gérer des Offres (CRUD + state)
+Admin Panel gestion type de compte bancaire : Permet de gérer les types de compte bancaire (CRUD)
+
+Acteur : Visiteur
+Use Case 1 : Inscription d’un nouveau client
+Acteur : Visiteur
+But : Créer Compte
+Pré-condition : Aucune
+Scénario Nominal :
+Le visiteur demande la création d’un compte.
+Le système demande les informations personnelles du visiteur.
+Le visiteur saisit ses informations personnelles.
+Le visiteur définit un mot de passe.
+Le système vérifie la conformité des informations fournies.
+Le système crée le profil client.
+Le système crée un compte avec l’état INACTIF.
+Le système confirme la création du compte.
+Scénarios d’Échec :
+3a – Champ obligatoire manquant ou invalide
+Le système détecte une information manquante ou incorrecte.
+Le système affiche un message d’erreur.
+Le compte n’est pas créé.
+Use Case 2 : Connexion
+Acteur : Visiteur
+But : Accéder à son espace personnel
+Pré-condition : Le compte existe
+Scénario Nominal :
+Le visiteur saisit son identifiant et son mot de passe.
+Le système vérifie les informations d’authentification.
+Le système ouvre la session du visiteur.
+Scénarios Alternatifs :
+2a – Identifiants incorrects
+Le système rejette l’authentification.
+Le système affiche un message d’erreur.
+Le visiteur saisit à nouveau son identifiant et son mot de passe.
+Le système vérifie les informations d’authentification.
+Le système ouvre la session du visiteur.
+Scénarios d’Échec :
+2a – Identifiants incorrects
+Le système rejette l’authentification.
+Le système affiche un message d’erreur.
+La session n’est pas ouverte.
+2c – Compte inactif
+Le système détecte que le compte est inactif.
+Le système refuse la connexion.
+Un message d’information est affiché.
+Use Case 3 : Visualiser les offres
+Acteur : Visiteur
+But : Consulter les offres bancaires disponibles
+Pré-condition : Aucune
+Scénario Nominal :
+Le visiteur accède à la page des offres.
+Le système affiche la liste des offres disponibles.
+Le visiteur consulte les offres.
+Scénarios d’Échec :
+2b – Aucune offre disponible
+Le système ne dispose d’aucune offre active.
+Le système informe le visiteur.
+
+
+
+Acteur : Client
+Use Case 1 : Visualiser les offres
+Acteur : Client
+But : Consulter les offres bancaires disponibles
+Pré-condition : Le client est connecté
+Scénario Nominal :
+Le client accède à la section « Offres ».
+Le système présente la liste des offres disponibles.
+Scénarios d’Échec :
+2c – Aucune offre disponible
+Le système ne dispose d’aucune offre active.
+Le système informe le client.
+Use Case 2 : Déconnexion
+Acteur : Client
+But : Fermer sa session
+Pré-condition : Le client est connecté
+Scénario Nominal :
+Le client demande la déconnexion.
+Le système met fin à la session.
+Le système redirige le client vers la page d’accueil.
+Use Case 3 : Afficher le compte courant
+Acteur : Client
+But : Consulter les informations de son compte courant
+Pré-condition : Le client possède un compte courant actif
+Scénario Nominal :
+Le client accède à la section « Accueil » (Accueil client qui affiche le solde du compte courant).
+Le système affiche les informations du compte (solde).
+Le client consulte les informations.
+Scénarios d’Échec :
+1b – Compte courant indisponible
+Le système détecte que le compte n’est pas accessible.
+Le système informe le client que les informations ne peuvent pas être affichées.
+Use Case 4 : Voir les détails d’un compte
+Acteur : Client
+But : Consulter les informations détaillées d’un compte
+Pré-condition : Le client est connecté et possède au moins un compte
+Scénario Nominal :
+Le client sélectionne un compte depuis la liste de ses comptes.
+Le système affiche les informations détaillées du compte (solde, type).
+Le client consulte les détails du compte.
+Scénarios d’Échec :
+1b – Compte indisponible
+Le système détecte que le compte n’est pas accessible.
+Le système informe le client.
+Les détails ne sont pas affichés.
+Use Case 5 : Voir la liste des comptes
+Acteur : Client
+But : Visualiser l’ensemble de ses comptes
+Pré-condition : Le client est connecté
+Scénario Nominal :
+Le client accède à la section « Mes comptes ».
+Le système affiche la liste des comptes du client.
+Le client consulte la liste.
+Scénarios d’Échec :
+2b – Aucun compte disponible
+Le système ne trouve aucun compte associé.
+Le système informe le client.
+Use Case 6 : Ajouter un bénéficiaire
+Acteur : Client
+But : Ajouter un bénéficiaire pour effectuer des virements
+Pré-condition : Le client est connecté
+Scénario Nominal :
+Le client demande l’ajout d’un bénéficiaire.
+Le système demande les informations du bénéficiaire.
+Le client saisit les informations.
+Le système vérifie la conformité des informations.
+Le système enregistre le bénéficiaire.
+Le système confirme l’ajout du bénéficiaire.
+Scénarios d’Échec :
+3b – Informations invalides ou incomplètes
+Le système détecte une erreur dans les informations.
+Le système affiche un message d’erreur.
+Le bénéficiaire n’est pas ajouté.
+Use Case 7 : Modifier un bénéficiaire
+Acteur : Client
+But : Mettre à jour les informations d’un bénéficiaire
+Pré-condition : Le bénéficiaire existe
+Scénario Nominal :
+Le client sélectionne un bénéficiaire.
+Le client modifie les informations.
+Le système vérifie les nouvelles informations.
+Le système enregistre les modifications.
+Le système confirme la mise à jour.
+
+
+Scénarios Alternatifs :
+3a – Modification partielle
+Le client modifie uniquement certaines informations.
+Le système met à jour les éléments modifiés.
+Scénarios d’Échec :
+3b – Informations non valides
+Le système détecte une incohérence.
+Le système affiche un message d’erreur.
+La modification n’est pas prise en compte.
+Use Case 8 : Voir la liste des bénéficiaires
+Acteur : Client
+But : Consulter les bénéficiaires enregistrés
+Pré-condition : Le client est connecté
+Scénario Nominal :
+Le client accède à la section « Bénéficiaires ».
+Le système affiche la liste des bénéficiaires.
+Le client consulte la liste.
+Scénarios Alternatifs :
+2a – Consultation des détails d’un bénéficiaire
+Le client sélectionne un bénéficiaire.
+Le système affiche ses informations.
+Scénarios d’Échec :
+2b – Aucun bénéficiaire enregistré
+Le système ne trouve aucun bénéficiaire.
+Le système informe le client.
+Use Case 9 : Supprimer un bénéficiaire
+Acteur : Client
+But : Supprimer un bénéficiaire existant
+Pré-condition : Le bénéficiaire existe
+Scénario Nominal :
+Le client sélectionne un bénéficiaire.
+Le client confirme la suppression.
+Le système supprime le bénéficiaire.
+Le système confirme la suppression.
+Scénarios Alternatifs :
+2a – Annulation de la suppression
+Le client annule l’action.
+Le bénéficiaire est conservé.
+Use Case 10 : Effectuer un virement
+Acteur : Client
+But : Transférer de l’argent depuis un compte
+Pré-condition : Client connecté et compte actif
+Scénario Nominal :
+Le client sélectionne un compte source.
+Le client sélectionne un bénéficiaire.
+Le client saisit le montant.
+Le système vérifie la disponibilité du solde.
+Le système exécute le virement.
+Le système confirme l’opération.
+Scénarios Alternatifs :
+2a – Virement entre comptes du client
+Le client choisit un compte personnel.
+Le système effectue le virement interne.
+Le système confirme l’opération.
+Scénarios d’Échec :
+5c – Solde insuffisant
+Le système détecte un solde insuffisant.
+Le système refuse le virement.
+Le système informe le client.
+
+Acteur : Administrateur
+Use Case 1 : Déconnexion
+Acteur : Administrateur
+But : Mettre fin à la session administrateur
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur demande la déconnexion.
+Le système met fin à la session.
+Le système redirige vers la page d’accueil.
+Use Case 2 : Voir la liste des comptes
+Acteur : Administrateur
+But : Visualiser l’ensemble des comptes clients
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur accède à la liste des comptes.
+Le système affiche tous les comptes clients.
+L’administrateur consulte la liste.
+
+
+Scénarios Alternatifs :
+2a – Filtrer les comptes
+L’administrateur applique des filtres (état, type …).
+Le système affiche les comptes correspondants.
+
+
+Scénarios d’Échec :
+2b – Aucun compte disponible
+Le système ne trouve aucun compte.
+Le système informe l’administrateur.
+Use Case 3 : Voir la liste des comptes bancaires
+Acteur : Administrateur
+But : Consulter tous les comptes bancaires
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur accède à la section « Comptes bancaires ».
+Le système affiche la liste des comptes bancaires.
+L’administrateur consulte la liste.
+Scénarios Alternatifs :
+2a – Tri des comptes bancaires
+L’administrateur choisit un critère de tri.
+Le système affiche la liste triée.
+Scénarios d’Échec :
+2b – Aucun compte bancaire disponible
+Le système ne trouve aucun compte bancaire.
+Le système informe l’administrateur.
+Use Case 4 : Voir la liste des offres
+Acteur : Administrateur
+But : Superviser les offres existantes
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur accède à la liste des offres.
+Le système affiche toutes les offres.
+L’administrateur consulte la liste.
+Scénarios Alternatifs :
+2a – Tri des offres
+L’administrateur choisit un critère de tri.
+Le système affiche la liste triée.
+Scénarios d’Échec :
+2b – Liste des offres indisponible
+Le système ne peut pas afficher les offres.
+Le système informe l’administrateur.
+Use Case 5 : Voir la liste des opérations
+Acteur : Administrateur
+But : Consulter les opérations bancaires
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur accède à la section « Opérations ».
+Le système affiche la liste des opérations.
+L’administrateur consulte les opérations.
+Scénarios Alternatifs :
+2a – Filtrer les opérations
+L’administrateur applique des filtres (date, type …).
+Le système affiche les opérations correspondantes.
+Scénarios d’Échec :
+2b – Aucune opération disponible
+Le système ne trouve aucune opération.
+Le système informe l’administrateur.
+Use Case 6 : Voir un compte spécifique avec ses détails
+Acteur : Administrateur
+But : Consulter le détail d’un compte client
+Pré-condition : Le compte existe
+Scénario Nominal :
+L’administrateur sélectionne un compte.
+Le système affiche les informations détaillées du compte.
+L’administrateur consulte les détails.
+Scénarios Alternatifs :
+2a – Actualisation des informations
+L’administrateur demande une mise à jour.
+Le système actualise les informations.
+Scénarios d’Échec :
+1b – Compte inaccessible
+Le système ne peut pas afficher le compte.
+Le système informe l’administrateur.
+Use Case 7 : Voir un compte bancaire spécifique avec ses détails
+Acteur : Administrateur
+But : Consulter le détail d’un compte bancaire
+Pré-condition : Le compte bancaire existe
+Scénario Nominal :
+L’administrateur sélectionne un compte bancaire.
+Le système affiche les informations détaillées.
+L’administrateur consulte les détails.
+
+
+Use Case 8 : Voir une opération spécifique avec ses détails
+Acteur : Administrateur
+But : Consulter le détail d’une opération
+Pré-condition : L’opération existe
+Scénario Nominal :
+L’administrateur sélectionne une opération.
+Le système affiche les informations détaillées.
+L’administrateur consulte les détails.
+Use Case 9 : Voir une offre spécifique avec ses détails
+Acteur : Administrateur
+But : Consulter le détail d’une offre
+Pré-condition : L’offre existe
+Scénario Nominal :
+L’administrateur sélectionne une offre.
+Le système affiche les informations détaillées de l’offre.
+L’administrateur consulte les détails.
+Use Case 10 : Changer l’état d’un compte
+Acteur : Administrateur
+But : Activer, suspendre ou clôturer un compte
+Pré-condition : Le compte existe
+Scénario Nominal :
+L’administrateur sélectionne un compte.
+L’administrateur choisit un nouvel état.
+Le système applique le changement d’état.
+Le système confirme la modification.
+Use Case 11 : Changer l’état d’un compte bancaire
+Acteur : Administrateur
+But : Activer, suspendre ou clôturer un compte bancaire
+Pré-condition : Le compte bancaire existe
+Scénario Nominal :
+L’administrateur sélectionne un compte bancaire.
+L’administrateur choisit un nouvel état.
+Le système applique le changement d’état.
+Le système confirme la modification.
+Use Case 12 : Changer l’état d’une offre
+Acteur : Administrateur
+But : Activer ou désactiver une offre
+Pré-condition : L’offre existe
+Scénario Nominal :
+L’administrateur sélectionne une offre.
+L’administrateur modifie l’état de l’offre.
+Le système applique le changement.
+Le système confirme la mise à jour.
+
+
+Use Case 13 : Changer l’état d’une opération
+Acteur : Administrateur
+But : Mettre à jour l’état d’une opération
+Pré-condition : L’opération existe
+Scénario Nominal :
+L’administrateur sélectionne une opération.
+L’administrateur choisit un nouvel état.
+Le système applique la modification.
+Le système confirme le changement.
+Use Case 14 : Mettre à jour les informations personnelles d’un compte
+Acteur : Administrateur
+But : Corriger ou actualiser les informations d’un client
+Pré-condition : Le compte existe
+Scénario Nominal :
+L’administrateur sélectionne un compte client.
+L’administrateur modifie les informations personnelles.
+Le système valide les nouvelles informations.
+Le système enregistre les modifications.
+Scénarios d’Échec :
+3b – Informations invalides
+Le système refuse la mise à jour.
+Un message d’erreur est affiché.
+Use Case 15 : Mettre à jour les paramètres d’un compte bancaire
+Acteur : Administrateur
+ But : Ajuster les paramètres d’un compte bancaire
+ Pré-condition : Le compte bancaire existe
+Scénario Nominal :
+L’administrateur sélectionne un compte bancaire.
+L’administrateur modifie les paramètres.
+Le système vérifie la cohérence.
+Le système applique les modifications.
+Scénarios d’Échec :
+3b – Paramètres incohérents
+Le système refuse la modification.
+Le système informe l’administrateur.
+Use Case 16 : Créer un nouveau type de compte
+Acteur : Administrateur
+But : Définir un nouveau type de compte bancaire
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur demande la création d’un type de compte.
+L’administrateur saisit les caractéristiques.
+Le système valide les informations.
+Le système crée le type de compte.
+Scénarios Alternatifs :
+2a – Type similaire existant
+Le système signale une similitude.
+L’administrateur confirme ou modifie.
+Scénarios d’Échec :
+3b – Données invalides
+Le système refuse la création.
+Le système affiche un message d’erreur.
+Use Case 17 : Créer une offre
+Acteur : Administrateur
+But : Proposer une nouvelle offre bancaire
+Pré-condition : Administrateur connecté
+Scénario Nominal :
+L’administrateur crée une nouvelle offre.
+L’administrateur définit les caractéristiques.
+Le système valide les informations.
+Le système enregistre l’offre.
+Scénarios d’Échec :
+3b – Données invalides
+Le système refuse la création.
+Le système affiche un message d’erreur.
+Use Case 18 : Mettre à jour une offre
+Acteur : Administrateur
+But : Modifier une offre existante
+Pré-condition : L’offre existe
+Scénario Nominal :
+L’administrateur sélectionne une offre.
+L’administrateur modifie les informations.
+Le système valide les changements.
+Le système applique la mise à jour.
+Scénarios d’Échec :
+3b – Données invalides
+Le système refuse la création.
+Le système affiche un message d’erreur.
+Le système informe l’administrateur.
+Use Case 19 : Supprimer une offre
+Acteur : Administrateur
+But : Retirer une offre du catalogue
+Pré-condition : L’offre existe
+Scénario Nominal :
+L’administrateur sélectionne une offre.
+L’administrateur demande la suppression.
+Le système confirme l’action.
+Le système supprime l’offre.
+Scénarios Alternatifs :
+3a – Désactivation au lieu de suppression
+Le système propose de désactiver l’offre.
+L’administrateur confirme.
+Use Case 20 : Créer une opération d’annulation
+Acteur : Administrateur
+But : Annuler une opération existante
+Pré-condition : L’opération existe
+Scénario Nominal :
+L’administrateur sélectionne une opération.
+L’administrateur demande l’annulation.
+Le système crée l’opération d’annulation.
+Le système confirme l’annulation.
+Use Case 21 : Mettre à jour l’état d’une opération
+Acteur : Administrateur
+But : Finaliser ou corriger l’état d’une opération
+Pré-condition : L’opération existe
+Scénario Nominal :
+L’administrateur sélectionne une opération.
+L’administrateur modifie son état.
+Le système valide le changement.
+Le système confirme la mise à jour.
+
+
+Base de données
+Voir Annexe 1
