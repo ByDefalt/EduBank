@@ -28,7 +28,7 @@ public class AccountController {
         if (accounts.isEmpty()) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return Response.ok(accountBusiness.getAllAccounts()).build();
+        return Response.ok(accounts).build();
     }
 
     @GET
