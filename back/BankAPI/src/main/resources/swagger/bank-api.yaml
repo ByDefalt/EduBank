@@ -15,24 +15,17 @@ tags:
   - name: BankAccountPivot
 
 paths:
-  /bank-accounts:
+  /admin/bank-accounts:
     get:
       tags: [BankAccount]
-      summary: Récupérer la liste des comptes bancaires
+      summary: "[ADMIN] Récupérer TOUS les comptes bancaires"
+      description: |
+        Endpoint réservé aux ADMIN pour récupérer la liste COMPLÈTE de tous les comptes bancaires du système.
       security:
         - bearerAuth: []
-      parameters:
-        - name: account_id
-          in: query
-          schema:
-            type: integer
-        - name: type_id
-          in: query
-          schema:
-            type: integer
       responses:
         '200':
-          description: Liste récupérée avec succès
+          description: Liste de tous les comptes récupérée avec succès
           content:
             application/json:
               schema:
@@ -41,7 +34,119 @@ paths:
                   $ref: '#/components/schemas/BankAccount'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
 
+  /admin/bank-accounts/by-account/{account_id}:
+    get:
+      tags: [BankAccount]
+      summary: "[ADMIN] Récupérer les comptes bancaires d'un utilisateur"
+      description: |
+        Endpoint réservé aux ADMIN pour récupérer tous les comptes bancaires liés à un utilisateur spécifique.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: "ID de l'utilisateur/compte"
+      responses:
+        '200':
+          description: Liste des comptes de l'utilisateur récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /admin/bank-accounts/by-type/{type_id}:
+    get:
+      tags: [BankAccount]
+      summary: "[ADMIN] Récupérer les comptes bancaires d'un type"
+      description: |
+        Endpoint réservé aux ADMIN pour récupérer tous les comptes bancaires d'un type spécifique.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: type_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: "ID du type de compte"
+      responses:
+        '200':
+          description: Liste des comptes du type récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /my-bank-accounts:
+    get:
+      tags: [BankAccount]
+      summary: "[CUSTOMER] Récupérer mes comptes bancaires actifs"
+      description: |
+        Endpoint pour les CUSTOMER pour voir SEULEMENT leurs propres comptes bancaires ACTIFS.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Liste de mes comptes actifs récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /my-bank-accounts/by-type/{type_id}:
+    get:
+      tags: [BankAccount]
+      summary: "[CUSTOMER] Récupérer mes comptes actifs d'un type"
+      description: |
+        Endpoint pour les CUSTOMER pour voir SEULEMENT leurs propres comptes bancaires ACTIFS d'un type spécifique.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: type_id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: "ID du type de compte"
+      responses:
+        '200':
+          description: Liste de mes comptes actifs du type récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BankAccount'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /bank-accounts:
     post:
       tags: [BankAccount]
       summary: Créer un nouveau compte bancaire
@@ -484,6 +589,13 @@ components:
   responses:
     UnauthorizedError:
       description: Non autorisé
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ForbiddenError:
+      description: Interdit (Permission insuffisante)
       content:
         application/json:
           schema:

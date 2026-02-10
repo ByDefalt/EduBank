@@ -50,6 +50,20 @@ public class BankAccountRepository {
             "SELECT id, parameter_id, type_id, sold, iban " +
                     "FROM BankAccount WHERE type_id = :type_id";
 
+    private static final String SQL_GET_ACTIVE_BANK_ACCOUNTS_BY_USER_ID =
+            "SELECT ba.id, ba.parameter_id, ba.type_id, ba.sold, ba.iban " +
+                    "FROM BankAccount ba " +
+                    "INNER JOIN BankAccountPivot pivot ON ba.id = pivot.bank_account_id " +
+                    "INNER JOIN BankAccountParameter bap ON ba.parameter_id = bap.id " +
+                    "WHERE pivot.account_id = :account_id AND bap.state = 'active'";
+
+    private static final String SQL_GET_ACTIVE_BANK_ACCOUNTS_BY_USER_ID_AND_TYPE_ID =
+            "SELECT ba.id, ba.parameter_id, ba.type_id, ba.sold, ba.iban " +
+                    "FROM BankAccount ba " +
+                    "INNER JOIN BankAccountPivot pivot ON ba.id = pivot.bank_account_id " +
+                    "INNER JOIN BankAccountParameter bap ON ba.parameter_id = bap.id " +
+                    "WHERE pivot.account_id = :account_id AND ba.type_id = :type_id AND bap.state = 'active'";
+
     private static final String SQL_UPDATE_BANK_ACCOUNT =
             "UPDATE BankAccount SET " +
                     "parameter_id = :parameter_id, " +
@@ -195,6 +209,37 @@ public class BankAccountRepository {
         params.put("type_id", typeId);
 
         return jdbcTemplate.query(SQL_GET_BANK_ACCOUNTS_BY_TYPE_ID, params, (rs, rowNum) -> {
+            BankAccountEntity ba = new BankAccountEntity();
+            ba.setId(rs.getString("id"));
+            ba.setParameterId(rs.getInt("parameter_id"));
+            ba.setTypeId(rs.getInt("type_id"));
+            ba.setSold(rs.getDouble("sold"));
+            ba.setIban(rs.getString("iban"));
+            return ba;
+        });
+    }
+
+    public List<BankAccountEntity> getActiveBankAccountsByUserId(Integer accountId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("account_id", accountId);
+
+        return jdbcTemplate.query(SQL_GET_ACTIVE_BANK_ACCOUNTS_BY_USER_ID, params, (rs, rowNum) -> {
+            BankAccountEntity ba = new BankAccountEntity();
+            ba.setId(rs.getString("id"));
+            ba.setParameterId(rs.getInt("parameter_id"));
+            ba.setTypeId(rs.getInt("type_id"));
+            ba.setSold(rs.getDouble("sold"));
+            ba.setIban(rs.getString("iban"));
+            return ba;
+        });
+    }
+
+    public List<BankAccountEntity> getActiveBankAccountsByUserIdAndTypeId(Integer accountId, Integer typeId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("account_id", accountId);
+        params.put("type_id", typeId);
+
+        return jdbcTemplate.query(SQL_GET_ACTIVE_BANK_ACCOUNTS_BY_USER_ID_AND_TYPE_ID, params, (rs, rowNum) -> {
             BankAccountEntity ba = new BankAccountEntity();
             ba.setId(rs.getString("id"));
             ba.setParameterId(rs.getInt("parameter_id"));

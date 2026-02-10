@@ -63,6 +63,20 @@ public class BankAccountBusiness {
                 .collect(Collectors.toList());
     }
 
+    public List<BankAccount> getActiveBankAccountsByUserId(Integer userId) {
+        List<BankAccountEntity> entities = bankAccountRepository.getActiveBankAccountsByUserId(userId);
+        return entities.stream()
+                .map(BankAccountMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<BankAccount> getActiveBankAccountsByUserIdAndTypeId(Integer userId, Integer typeId) {
+        List<BankAccountEntity> entities = bankAccountRepository.getActiveBankAccountsByUserIdAndTypeId(userId, typeId);
+        return entities.stream()
+                .map(BankAccountMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public BankAccount updateBankAccount(String id, BankAccount dto) {
         BankAccountEntity entity = BankAccountMapper.toEntity(dto);
         bankAccountRepository.updateBankAccount(id, entity);
