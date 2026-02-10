@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static accountapi.mapper.AccountMapper.toDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,7 +46,7 @@ class AccountBusinessTest {
 
         when(accountRepository.findAll()).thenReturn(java.util.Collections.singletonList(accountEntity));
 
-        var accounts = accountBusiness.getAllAccounts();
+        List<Account> accounts = accountBusiness.getAllAccounts();
 
         assertEquals(1, accounts.size());
         assertEquals(accountEntity.getId(), accounts.get(0).getId());
@@ -65,8 +67,8 @@ class AccountBusinessTest {
 
         Account accountResponse = accountBusiness.getAccountById("ACC123456789");
 
-        assertEquals(accountEntity.getId(), accountResponse.getId());
-        assertEquals(accountEntity.getState(), accountResponse.getState());
+        assertEquals(account.getId(), accountResponse.getId());
+        assertEquals(account.getState(), accountResponse.getState());
     }
 
     @Test
@@ -98,8 +100,7 @@ class AccountBusinessTest {
 
         Account account = toDto(savedEntity);
 
-        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class)))
-                .thenReturn(createdPersonalInfo);
+        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
         when(accountRepository.register(any(AccountEntity.class))).thenReturn(savedEntity);
 

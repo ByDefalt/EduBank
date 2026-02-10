@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static accountapi.mapper.RoleMapper.toDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -37,11 +39,11 @@ class RoleBusinessTest {
 
         when(roleRepository.findAll()).thenReturn(java.util.Arrays.asList(adminEntity, customerEntity));
 
-        var roles = roleBusiness.getAllRoles();
+        List<Role> roles = roleBusiness.getAllRoles();
 
         assertEquals(2, roles.size());
-        assertEquals(adminEntity.getName(), roles.get(0).getName());
-        assertEquals(customerEntity.getName(), roles.get(1).getName());
+        assertEquals(adminRole.getName(), roles.get(0).getName());
+        assertEquals(customerRole.getName(), roles.get(1).getName());
     }
 
     @Test
@@ -56,6 +58,6 @@ class RoleBusinessTest {
 
         Role roleResponse = roleBusiness.getRoleById(2);
 
-        assertEquals(roleEntity.getName(), roleResponse.getName());
+        assertEquals(role.getName(), roleResponse.getName());
     }
 }

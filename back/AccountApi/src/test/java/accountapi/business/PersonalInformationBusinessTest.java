@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static accountapi.mapper.PersonalInformationMapper.toDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +41,7 @@ class PersonalInformationBusinessTest {
 
         when(personalInformationRepository.findAll()).thenReturn(java.util.Collections.singletonList(entity));
 
-        var results = personalInformationBusiness.getAllPersonalInformation();
+        List<PersonalInformation> results = personalInformationBusiness.getAllPersonalInformation();
 
         assertEquals(1, results.size());
         assertEquals(entity.getFirstname(), results.get(0).getFirstname());
@@ -88,8 +90,8 @@ class PersonalInformationBusinessTest {
 
         PersonalInformation result = personalInformationBusiness.createPersonalInformation(registerDto);
 
-        assertEquals(savedEntity.getFirstname(), result.getFirstname());
-        assertEquals(savedEntity.getLastname(), result.getLastname());
+        assertEquals(personalInfo.getFirstname(), result.getFirstname());
+        assertEquals(personalInfo.getLastname(), result.getLastname());
     }
 
     @Test
