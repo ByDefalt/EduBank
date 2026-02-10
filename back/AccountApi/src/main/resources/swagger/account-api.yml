@@ -370,15 +370,20 @@ components:
       properties:
         firstname:
           type: string
+          exemple: "John"
         lastname:
           type: string
+          exemple: "Doe"
         email:
           type: string
+          exemple: "john.doe@localhost.com"
           format: email
         address:
           type: string
+          exemple: "123 Main St, Anytown"
         phone_number:
           type: string
+          exemple: "0123456789"
 
     Account:
       type: object
@@ -405,9 +410,11 @@ components:
           $ref: '#/components/schemas/PersonalInformationRegister'
         role_id:
           type: integer
+          exemple: 1
           description: "ID du rôle existant (ex: 1 pour Admin, 2 pour User)"
         password:
           type: string
+          exemple: "123456789"
           format: password
           writeOnly: true
         state:
@@ -425,7 +432,7 @@ components:
         password:
           type: string
           format: password
-          example: "123456"
+          example: "123456789"
 
     TokenRequest:
       type: object

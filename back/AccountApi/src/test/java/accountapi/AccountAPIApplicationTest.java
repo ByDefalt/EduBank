@@ -1,10 +1,10 @@
-package com.example.apim2;
+package accountapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Apim2ApplicationTests {
+class AccountAPIApplicationTest {
 
   @Test
   void contextLoads() {

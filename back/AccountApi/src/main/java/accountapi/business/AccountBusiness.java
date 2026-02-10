@@ -43,7 +43,7 @@ public class AccountBusiness {
     }
 
     public Account createAccount(AccountRegister account) {
-        String idGenerated = (String.valueOf(GenerateID.generateId()));
+        String idGenerated = GenerateID.generateId();
 
         AccountEntity accountEntity = accountRepository.findById(idGenerated);
         if (accountEntity != null) {
@@ -51,7 +51,7 @@ public class AccountBusiness {
                 accountEntity = accountRepository.findById(idGenerated);
                 if (accountEntity == null)
                     break;
-                idGenerated = (String.valueOf(GenerateID.generateId()));
+                idGenerated = GenerateID.generateId();
             }
         }
 

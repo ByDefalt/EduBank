@@ -2,7 +2,7 @@ package accountapi.utils;
 
 public class GenerateID {
 
-    public static long generateId() {
-        return System.currentTimeMillis() / 10;
+    public static String generateId() {
+        return String.valueOf(System.currentTimeMillis());
     }
 }
