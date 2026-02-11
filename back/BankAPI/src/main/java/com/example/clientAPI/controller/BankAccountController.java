@@ -204,99 +204,13 @@ public class BankAccountController {
 
     // ============== Type Endpoints ==============
 
-    @GET
-    @Path("/types")
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.CUSTOMER)
-    public Response getTypes() {
-        List<Type> types = bankAccountBusiness.getAllTypes();
-        return Response.ok(types).build();
-    }
 
-    @POST
-    @Path("/types")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response createType(Type dto) {
-        Type created = bankAccountBusiness.createType(dto);
-        return Response.status(Response.Status.CREATED).entity(created).build();
-    }
 
     // ============== BankAccountParameter Endpoints ==============
 
-    @GET
-    @Path("/parameters")
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.CUSTOMER)
-    public Response getParameters() {
-        List<BankAccountParameter> parameters = bankAccountBusiness.getAllParameters();
-        return Response.ok(parameters).build();
-    }
 
-    @POST
-    @Path("/parameters")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response createParameter(BankAccountParameter dto) {
-        BankAccountParameter created = bankAccountBusiness.createParameter(dto);
-        return Response.status(Response.Status.CREATED).entity(created).build();
-    }
 
     // ============== BankAccountPivot Endpoints ==============
 
-    @POST
-    @Path("/bank-accounts/{bankAccountId}/link/{accountId}")
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response linkAccountToBankAccount(
-            @PathParam("bankAccountId") String bankAccountId,
-            @PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.linkAccountToBankAccount(bankAccountId, accountId);
-        return Response.status(Response.Status.CREATED).build();
-    }
 
-    @DELETE
-    @Path("/bank-accounts/{bankAccountId}/unlink/{accountId}")
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response unlinkAccountFromBankAccount(
-            @PathParam("bankAccountId") String bankAccountId,
-            @PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.unlinkAccountFromBankAccount(bankAccountId, accountId);
-        return Response.noContent().build();
-    }
-
-    @DELETE
-    @Path("/bank-accounts/{bankAccountId}/unlink-all")
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response unlinkAllAccountsFromBankAccount(@PathParam("bankAccountId") String bankAccountId) {
-        bankAccountBusiness.unlinkAllAccountsFromBankAccount(bankAccountId);
-        return Response.noContent().build();
-    }
-
-    @DELETE
-    @Path("/accounts/{accountId}/unlink-all")
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response unlinkAllBankAccountsFromAccount(@PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.unlinkAllBankAccountsFromAccount(accountId);
-        return Response.noContent().build();
-    }
-
-    @GET
-    @Path("/bank-accounts/{bankAccountId}/accounts")
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    public Response getAccountsLinkedToBankAccount(@PathParam("bankAccountId") String bankAccountId) {
-        List<Integer> accountIds = bankAccountBusiness.getAccountsLinkedToBankAccount(bankAccountId);
-        return Response.ok(accountIds).build();
-    }
-
-    @GET
-    @Path("/accounts/{accountId}/bank-accounts")
-    @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.CUSTOMER)
-    public Response getBankAccountsLinkedToAccount(@PathParam("accountId") Integer accountId) {
-        List<String> bankAccountIds = bankAccountBusiness.getBankAccountsLinkedToAccount(accountId);
-        return Response.ok(bankAccountIds).build();
-    }
 }
