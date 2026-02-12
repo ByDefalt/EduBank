@@ -1,10 +1,8 @@
 package defalt.core.api.offer.model
 
-data class OffersIdStatePatchRequestEntity (
-    val state: OffersIdStatePatchRequest.State
+data class OffersIdStatePatchRequestEntity(
+    val state: OffersIdStatePatchRequest.State,
 
 ) {
-    enum class State(val value: String) {
-    }
-
+    enum class State(val value: String)
 }

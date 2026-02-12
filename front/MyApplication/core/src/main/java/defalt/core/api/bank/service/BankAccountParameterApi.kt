@@ -1,22 +1,21 @@
 package defalt.core.api.bank.service
 
-import defalt.core.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.core.api.bank.model.BankAccountParameter
-import defalt.core.api.bank.model.Error
 import defalt.core.api.bank.model.ParametersIdPutRequest
 import defalt.core.api.bank.model.ParametersPostRequest
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface BankAccountParameterApi {
     /**
      * GET parameters
      * Récupérer la liste des paramètres de comptes bancaires
-     * 
+     *
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
@@ -29,14 +28,14 @@ interface BankAccountParameterApi {
     /**
      * DELETE parameters/{id}
      * Supprimer des paramètres de compte bancaire
-     * 
+     *
      * Responses:
      *  - 204: Paramètres supprimés avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("parameters/{id}")
@@ -45,13 +44,13 @@ interface BankAccountParameterApi {
     /**
      * GET parameters/{id}
      * Récupérer des paramètres par ID
-     * 
+     *
      * Responses:
      *  - 200: Paramètres récupérés avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [BankAccountParameter]
      */
     @GET("parameters/{id}")
@@ -67,8 +66,8 @@ interface BankAccountParameterApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param parametersIdPutRequest 
+     * @param id
+     * @param parametersIdPutRequest
      * @return [BankAccountParameter]
      */
     @PUT("parameters/{id}")
@@ -77,17 +76,16 @@ interface BankAccountParameterApi {
     /**
      * POST parameters
      * Créer de nouveaux paramètres de compte bancaire
-     * 
+     *
      * Responses:
      *  - 201: Paramètres créés avec succès
      *  - 400: Requête invalide
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param parametersPostRequest 
+     * @param parametersPostRequest
      * @return [BankAccountParameter]
      */
     @POST("parameters")
     suspend fun parametersPost(@Body parametersPostRequest: ParametersPostRequest): Response<BankAccountParameter>
-
 }

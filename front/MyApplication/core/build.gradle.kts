@@ -139,7 +139,10 @@ dependencies {
 spotless {
     kotlin {
         target("**/*.kt")
-        ktlint("0.49.0")
+        ktlint("0.49.0").editorConfigOverride(mapOf(
+            "ktlint_standard_no-wildcard-imports" to "disabled", // ou "enabled" selon ton choix
+            "ij_kotlin_imports_layout" to "*"
+        ))
     }
     format("misc") {
         target("**/*.gradle", "**/*.md")

@@ -10,18 +10,16 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.operation.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param bankAccountSourceId ID du compte bancaire source
  * @param label Libellé de l'opération
@@ -29,27 +27,22 @@ import kotlinx.serialization.Contextual
  * @param amount Montant de l'opération (positif)
  */
 @Serializable
+data class OperationsPostRequest(
 
-data class OperationsPostRequest (
-
-    /* ID du compte bancaire source */
+    // ID du compte bancaire source
     @SerialName(value = "bank_account_source_id")
     val bankAccountSourceId: kotlin.Int,
 
-    /* Libellé de l'opération */
+    // Libellé de l'opération
     @SerialName(value = "label")
     val label: kotlin.String,
 
-    /* IBAN du compte destinataire */
+    // IBAN du compte destinataire
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
-    /* Montant de l'opération (positif) */
+    // Montant de l'opération (positif)
     @SerialName(value = "amount")
-    val amount: kotlin.Double
+    val amount: kotlin.Double,
 
-) {
-
-
-}
-
+)

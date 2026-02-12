@@ -1,6 +1,11 @@
 package defalt.feature_operation.repository.impl
 
-import defalt.core.api.operation.model.*
+import defalt.core.api.operation.model.Operation
+import defalt.core.api.operation.model.OperationsGet200Response
+import defalt.core.api.operation.model.OperationsIdCancelPost201Response
+import defalt.core.api.operation.model.OperationsIdCancelPostRequest
+import defalt.core.api.operation.model.OperationsIdStatePatchRequest
+import defalt.core.api.operation.model.OperationsPostRequest
 import defalt.core.api.operation.service.OperationApi
 import defalt.core.api.operation.service.OperationApi.StateOperationsGet
 import defalt.core.utils.NetworkResult

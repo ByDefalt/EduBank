@@ -10,30 +10,23 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.bank.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param sold 
+ *
+ * @param sold
  */
 @Serializable
-
-data class BankAccountsIdBalanceGet200Response (
+data class BankAccountsIdBalanceGet200Response(
 
     @SerialName(value = "sold")
-    val sold: kotlin.Double? = null
+    val sold: kotlin.Double? = null,
 
-) {
-
-
-}
-
+)

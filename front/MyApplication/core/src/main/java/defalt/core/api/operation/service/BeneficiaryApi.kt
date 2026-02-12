@@ -1,16 +1,16 @@
 package defalt.core.api.operation.service
 
-import defalt.core.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.core.api.operation.model.BeneficiariesIdPutRequest
 import defalt.core.api.operation.model.BeneficiariesPostRequest
 import defalt.core.api.operation.model.Beneficiary
-import defalt.core.api.operation.model.Error
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BeneficiaryApi {
     /**
@@ -36,7 +36,7 @@ interface BeneficiaryApi {
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("beneficiaries/{id}")
@@ -45,13 +45,13 @@ interface BeneficiaryApi {
     /**
      * GET beneficiaries/{id}
      * Récupérer un bénéficiaire par ID
-     * 
+     *
      * Responses:
      *  - 200: Bénéficiaire récupéré avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [Beneficiary]
      */
     @GET("beneficiaries/{id}")
@@ -66,8 +66,8 @@ interface BeneficiaryApi {
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
-     * @param beneficiariesIdPutRequest 
+     * @param id
+     * @param beneficiariesIdPutRequest
      * @return [Beneficiary]
      */
     @PUT("beneficiaries/{id}")
@@ -82,10 +82,9 @@ interface BeneficiaryApi {
      *  - 400: Requête invalide
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param beneficiariesPostRequest 
+     * @param beneficiariesPostRequest
      * @return [Unit]
      */
     @POST("beneficiaries")
     suspend fun beneficiariesPost(@Body beneficiariesPostRequest: BeneficiariesPostRequest): Response<Unit>
-
 }

@@ -10,33 +10,29 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.account.model
 
-import defalt.core.api.account.model.PersonalInformationRegister
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param personalInfo 
+ *
+ * @param personalInfo
  * @param roleId ID du rôle existant (ex: 1 pour Admin, 2 pour User)
- * @param password 
- * @param state 
+ * @param password
+ * @param state
  */
 @Serializable
-
-data class AccountRegister (
+data class AccountRegister(
 
     @SerialName(value = "personal_info")
     val personalInfo: PersonalInformationRegister,
 
-    /* ID du rôle existant (ex: 1 pour Admin, 2 pour User) */
+    // ID du rôle existant (ex: 1 pour Admin, 2 pour User)
     @SerialName(value = "role_id")
     val roleId: kotlin.Int,
 
@@ -44,10 +40,6 @@ data class AccountRegister (
     val password: kotlin.String,
 
     @SerialName(value = "state")
-    val state: kotlin.String? = null
+    val state: kotlin.String? = null,
 
-) {
-
-
-}
-
+)

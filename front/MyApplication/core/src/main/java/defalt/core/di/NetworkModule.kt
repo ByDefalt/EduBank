@@ -1,9 +1,6 @@
 package defalt.core.di
 
 import defalt.core.BuildConfig.GATEWAY_URL
-import defalt.core.infrastructure.ApiClient
-import defalt.core.utils.createService
-import org.koin.dsl.module
 import defalt.core.api.account.service.AccountApi
 import defalt.core.api.account.service.PersonalInformationApi
 import defalt.core.api.bank.service.BankAccountApi
@@ -12,6 +9,9 @@ import defalt.core.api.bank.service.TypeApi
 import defalt.core.api.offer.service.OfferApi
 import defalt.core.api.operation.service.BeneficiaryApi
 import defalt.core.api.operation.service.OperationApi
+import defalt.core.infrastructure.ApiClient
+import defalt.core.utils.createService
+import org.koin.dsl.module
 
 val networkModule = module {
 

@@ -1,9 +1,7 @@
 package defalt.core.api.operation.model
 
-data class BeneficiariesPostRequestEntity (
+data class BeneficiariesPostRequestEntity(
     val ibanTarget: String,
-    val name: String
+    val name: String,
 
-) {
-
-}
+)

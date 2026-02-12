@@ -1,9 +1,7 @@
 package defalt.core.api.bank.model
 
-data class TypeEntity (
+data class TypeEntity(
     val id: Int,
-    val name: String
+    val name: String,
 
-) {
-
-}
+)

@@ -1,7 +1,14 @@
 package defalt.feature_account.ui.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -34,10 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
-val ArkeaRed = Color(0xFFD31D29)
-val BridgeTeal = Color(0xFF268694)
-val BackgroundGray = Color(0xFFF5F5F5)
+import defalt.core.ui.CustomColor
 
 @Composable
 fun ArkeaAuthApp() {
@@ -68,7 +72,7 @@ fun ArkeaButton(
         onClick = onClick,
         modifier = modifier.fillMaxWidth().height(50.dp),
         shape = RoundedCornerShape(50),
-        colors = ButtonDefaults.buttonColors(containerColor = ArkeaRed),
+        colors = ButtonDefaults.buttonColors(containerColor = CustomColor.ArkeoRed),
         // Force le contenu pour éviter les bugs de scope
         content = {
             Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
@@ -98,9 +102,9 @@ fun ArkeaInput(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = ArkeaRed,
-            focusedLabelColor = ArkeaRed,
-            cursorColor = ArkeaRed,
+            focusedBorderColor = CustomColor.ArkeoRed,
+            focusedLabelColor = CustomColor.ArkeoRed,
+            cursorColor = CustomColor.ArkeoRed,
             unfocusedContainerColor = Color.White,
             focusedContainerColor = Color.White
         )
@@ -116,7 +120,7 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(top = 48.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("ARKEO BANQUE", color = ArkeaRed, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text("ARKEO BANQUE", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             Text("ENTREPRISES & INSTITUTIONNELS", fontSize = 10.sp, fontWeight = FontWeight.Medium)
         }
 
@@ -127,13 +131,13 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .background(BridgeTeal),
+                .background(CustomColor.BridgeTeal),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("DE NOUVEAUX\nLIENS POUR", color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 22.sp)
                 // Label rouge
-                Surface(color = ArkeaRed, modifier = Modifier.padding(vertical = 4.dp)) {
+                Surface(color = CustomColor.ArkeoRed, modifier = Modifier.padding(vertical = 4.dp)) {
                     Text(" ÉCHANGER ", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
                 }
                 Text("INNOVER DEMAIN", color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 22.sp)
@@ -148,7 +152,7 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
             // Lien vers Register
             TextButton(onClick = onNavigateToRegister) {
-                Text("Ouvrir un compte", color = ArkeaRed, fontWeight = FontWeight.SemiBold)
+                Text("Ouvrir un compte", color = CustomColor.ArkeoRed, fontWeight = FontWeight.SemiBold)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -160,10 +164,10 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
 @Composable
 fun RegisterScreen(onBackToLogin: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().background(BackgroundGray)) {
+    Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         // Header Rouge
         Box(
-            modifier = Modifier.fillMaxWidth().background(ArkeaRed).padding(top = 48.dp, bottom = 24.dp),
+            modifier = Modifier.fillMaxWidth().background(CustomColor.ArkeoRed).padding(top = 48.dp, bottom = 24.dp),
             contentAlignment = Alignment.Center
         ) {
             Text("OUVERTURE DE COMPTE", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
@@ -180,7 +184,7 @@ fun RegisterScreen(onBackToLogin: () -> Unit) {
                 modifier = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("VOS COORDONNÉES", color = ArkeaRed, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text("VOS COORDONNÉES", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 14.sp)
 
                 ArkeaInput("", {}, "Raison Sociale", icon = Icons.Outlined.Person)
                 ArkeaInput("", {}, "Email / Identifiant", keyboardType = KeyboardType.Email)
@@ -197,7 +201,7 @@ fun RegisterScreen(onBackToLogin: () -> Unit) {
             onClick = onBackToLogin,
             modifier = Modifier.Companion.align(Alignment.CenterHorizontally).padding(bottom = 24.dp)
         ) {
-            Text("Annuler et retour", color = ArkeaRed)
+            Text("Annuler et retour", color = CustomColor.ArkeoRed)
         }
     }
 }

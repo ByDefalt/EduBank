@@ -5,4 +5,3 @@ class ValidateSessionUseCase {
         // TODO: implement session validation
     }
 }
-

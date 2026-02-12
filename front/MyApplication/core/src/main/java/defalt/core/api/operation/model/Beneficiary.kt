@@ -10,18 +10,16 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.operation.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param id Identifiant du bénéficiaire
  * @param accountSourceId ID du compte source
@@ -29,27 +27,22 @@ import kotlinx.serialization.Contextual
  * @param name Nom du bénéficiaire
  */
 @Serializable
+data class Beneficiary(
 
-data class Beneficiary (
-
-    /* Identifiant du bénéficiaire */
+    // Identifiant du bénéficiaire
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    /* ID du compte source */
+    // ID du compte source
     @SerialName(value = "account_source_id")
     val accountSourceId: kotlin.Int,
 
-    /* IBAN du bénéficiaire */
+    // IBAN du bénéficiaire
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
-    /* Nom du bénéficiaire */
+    // Nom du bénéficiaire
     @SerialName(value = "name")
-    val name: kotlin.String
+    val name: kotlin.String,
 
-) {
-
-
-}
-
+)

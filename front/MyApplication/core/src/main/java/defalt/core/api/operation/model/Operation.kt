@@ -10,18 +10,17 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.operation.model
 
-
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param id Identifiant de l'opération
  * @param bankAccountSourceId ID du compte bancaire source
@@ -34,44 +33,43 @@ import kotlinx.serialization.Contextual
  * @param updatedAt Date de dernière modification
  */
 @Serializable
+data class Operation(
 
-data class Operation (
-
-    /* Identifiant de l'opération */
+    // Identifiant de l'opération
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    /* ID du compte bancaire source */
+    // ID du compte bancaire source
     @SerialName(value = "bank_account_source_id")
     val bankAccountSourceId: kotlin.Int,
 
-    /* Libellé de l'opération */
+    // Libellé de l'opération
     @SerialName(value = "label")
     val label: kotlin.String,
 
-    /* État de l'opération */
+    // État de l'opération
     @SerialName(value = "state")
     val state: Operation.State,
 
-    /* IBAN du compte destinataire */
+    // IBAN du compte destinataire
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
-    /* Montant de l'opération */
+    // Montant de l'opération
     @SerialName(value = "amount")
     val amount: kotlin.Double,
 
-    /* Date et heure de l'opération */
+    // Date et heure de l'opération
     @Contextual @SerialName(value = "date")
     val date: java.time.OffsetDateTime,
 
-    /* Date de création */
+    // Date de création
     @Contextual @SerialName(value = "created_at")
     val createdAt: java.time.OffsetDateTime? = null,
 
-    /* Date de dernière modification */
+    // Date de dernière modification
     @Contextual @SerialName(value = "updated_at")
-    val updatedAt: java.time.OffsetDateTime? = null
+    val updatedAt: java.time.OffsetDateTime? = null,
 
 ) {
 
@@ -82,11 +80,16 @@ data class Operation (
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "pending") PENDING("pending"),
-        @SerialName(value = "completed") COMPLETED("completed"),
-        @SerialName(value = "failed") FAILED("failed"),
-        @SerialName(value = "cancelled") CANCELLED("cancelled");
+        @SerialName(value = "pending")
+        PENDING("pending"),
+
+        @SerialName(value = "completed")
+        COMPLETED("completed"),
+
+        @SerialName(value = "failed")
+        FAILED("failed"),
+
+        @SerialName(value = "cancelled")
+        CANCELLED("cancelled"),
     }
-
 }
-

@@ -1,6 +1,11 @@
 package defalt.feature_bank.repository.impl
 
-import defalt.core.api.bank.model.*
+import defalt.core.api.bank.model.BankAccount
+import defalt.core.api.bank.model.BankAccountDetails
+import defalt.core.api.bank.model.BankAccountsIdBalanceGet200Response
+import defalt.core.api.bank.model.BankAccountsIdPutRequest
+import defalt.core.api.bank.model.BankAccountsIdStatePatchRequest
+import defalt.core.api.bank.model.BankAccountsPostRequest
 import defalt.core.api.bank.service.BankAccountApi
 import defalt.core.utils.NetworkResult
 import defalt.core.utils.safeApiCall

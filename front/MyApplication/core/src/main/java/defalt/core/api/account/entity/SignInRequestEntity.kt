@@ -1,9 +1,7 @@
 package defalt.core.api.account.model
 
-data class SignInRequestEntity (
+data class SignInRequestEntity(
     val idBankAccount: String,
-    val password: String
+    val password: String,
 
-) {
-
-}
+)

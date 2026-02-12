@@ -1,20 +1,18 @@
 package defalt.core.api.account.service
 
-import defalt.core.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.core.api.account.model.PersonalInformation
 import defalt.core.api.account.model.PersonalInformationRegister
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface PersonalInformationApi {
     /**
      * GET personal-information
      * Liste toutes les informations personnelles
-     * 
+     *
      * Responses:
      *  - 200: Succès
      *
@@ -26,11 +24,11 @@ interface PersonalInformationApi {
     /**
      * GET personal-information/{id}
      * Récupérer une info personnelle par ID
-     * 
+     *
      * Responses:
      *  - 200: Trouvé
      *
-     * @param id 
+     * @param id
      * @return [PersonalInformation]
      */
     @GET("personal-information/{id}")
@@ -39,14 +37,13 @@ interface PersonalInformationApi {
     /**
      * POST personal-information
      * Créer une fiche d&#39;information personnelle
-     * 
+     *
      * Responses:
      *  - 201: Créé avec succès
      *
-     * @param personalInformationRegister 
+     * @param personalInformationRegister
      * @return [PersonalInformation]
      */
     @POST("personal-information")
     suspend fun personalInformationPost(@Body personalInformationRegister: PersonalInformationRegister): Response<PersonalInformation>
-
 }

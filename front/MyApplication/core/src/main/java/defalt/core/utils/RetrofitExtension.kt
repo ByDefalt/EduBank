@@ -1,7 +1,7 @@
 package defalt.core.utils
 
 suspend fun <T> safeApiCall(
-    call: suspend () -> retrofit2.Response<T>
+    call: suspend () -> retrofit2.Response<T>,
 ): NetworkResult<T> {
     return try {
         val response = call()
@@ -15,7 +15,7 @@ suspend fun <T> safeApiCall(
         } else {
             NetworkResult.Error(
                 response.code(),
-                response.errorBody()?.string()
+                response.errorBody()?.string(),
             )
         }
     } catch (e: Throwable) {

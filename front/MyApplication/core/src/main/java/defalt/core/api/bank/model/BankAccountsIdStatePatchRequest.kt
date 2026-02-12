@@ -10,42 +10,44 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.core.api.bank.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param state 
+ *
+ * @param state
  */
 @Serializable
-
-data class BankAccountsIdStatePatchRequest (
+data class BankAccountsIdStatePatchRequest(
 
     @SerialName(value = "state")
-    val state: BankAccountsIdStatePatchRequest.State
+    val state: BankAccountsIdStatePatchRequest.State,
 
 ) {
 
     /**
-     * 
+     *
      *
      * Values: ACTIVE,INACTIVE,BLOQUED,CLOSED
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive"),
-        @SerialName(value = "bloqued") BLOQUED("bloqued"),
-        @SerialName(value = "closed") CLOSED("closed");
+        @SerialName(value = "active")
+        ACTIVE("active"),
+
+        @SerialName(value = "inactive")
+        INACTIVE("inactive"),
+
+        @SerialName(value = "bloqued")
+        BLOQUED("bloqued"),
+
+        @SerialName(value = "closed")
+        CLOSED("closed"),
     }
-
 }
-

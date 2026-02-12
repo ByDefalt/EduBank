@@ -1,10 +1,8 @@
 package defalt.core.api.operation.model
 
-data class ErrorEntity (
+data class ErrorEntity(
     val code: String? = null,
     val message: String? = null,
-    val details: String? = null
+    val details: String? = null,
 
-) {
-
-}
+)

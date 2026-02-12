@@ -1,11 +1,9 @@
 package defalt.core.api.bank.model
 
-data class ParametersIdPutRequestEntity (
+data class ParametersIdPutRequestEntity(
     val overdraftLimit: Double? = null,
-    val state: ParametersIdPutRequest.State? = null
+    val state: ParametersIdPutRequest.State? = null,
 
 ) {
-    enum class State(val value: String) {
-    }
-
+    enum class State(val value: String)
 }

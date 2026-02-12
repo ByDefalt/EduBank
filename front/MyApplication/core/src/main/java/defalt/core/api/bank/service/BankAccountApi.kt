@@ -1,19 +1,20 @@
 package defalt.core.api.bank.service
 
-import defalt.core.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.core.api.bank.model.BankAccount
 import defalt.core.api.bank.model.BankAccountDetails
 import defalt.core.api.bank.model.BankAccountsIdBalanceGet200Response
 import defalt.core.api.bank.model.BankAccountsIdPutRequest
 import defalt.core.api.bank.model.BankAccountsIdStatePatchRequest
 import defalt.core.api.bank.model.BankAccountsPostRequest
-import defalt.core.api.bank.model.Error
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface BankAccountApi {
     /**
@@ -49,13 +50,13 @@ interface BankAccountApi {
     /**
      * GET bank-accounts/{id}/balance
      * Récupérer le solde d&#39;un compte bancaire
-     * 
+     *
      * Responses:
      *  - 200: Solde récupéré avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [BankAccountsIdBalanceGet200Response]
      */
     @GET("bank-accounts/{id}/balance")
@@ -64,14 +65,14 @@ interface BankAccountApi {
     /**
      * DELETE bank-accounts/{id}
      * Supprimer un compte bancaire
-     * 
+     *
      * Responses:
      *  - 204: Compte bancaire supprimé avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("bank-accounts/{id}")
@@ -96,15 +97,15 @@ interface BankAccountApi {
     /**
      * PUT bank-accounts/{id}
      * Mettre à jour un compte bancaire
-     * 
+     *
      * Responses:
      *  - 200: Compte bancaire mis à jour avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param bankAccountsIdPutRequest 
+     * @param id
+     * @param bankAccountsIdPutRequest
      * @return [BankAccount]
      */
     @PUT("bank-accounts/{id}")
@@ -121,8 +122,8 @@ interface BankAccountApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param bankAccountsIdStatePatchRequest 
+     * @param id
+     * @param bankAccountsIdStatePatchRequest
      * @return [BankAccount]
      */
     @PATCH("bank-accounts/{id}/state")
@@ -131,17 +132,16 @@ interface BankAccountApi {
     /**
      * POST bank-accounts
      * Créer un nouveau compte bancaire
-     * 
+     *
      * Responses:
      *  - 201: Compte bancaire créé avec succès
      *  - 400: Requête invalide
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param bankAccountsPostRequest 
+     * @param bankAccountsPostRequest
      * @return [BankAccount]
      */
     @POST("bank-accounts")
     suspend fun bankAccountsPost(@Body bankAccountsPostRequest: BankAccountsPostRequest): Response<BankAccount>
-
 }
