@@ -23,10 +23,10 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: bank_account_source_id
+        - name: account_source_id
           in: query
           schema:
-            type: integer
+            type: string
           description: Filtrer par compte source
         - name: state
           in: query
@@ -74,10 +74,10 @@ paths:
             schema:
               type: object
               properties:
-                bank_account_source_id:
-                  type: integer
+                account_source_id:
+                  type: string
                   description: ID du compte bancaire source
-                  example: 1
+                  example: "1"
                 label:
                   type: string
                   description: Libellé de l'opération
@@ -95,7 +95,7 @@ paths:
                   example: 850.00
                   minimum: 0.01
               required:
-                - bank_account_source_id
+                - account_source_id
                 - label
                 - iban_target
                 - amount
@@ -248,7 +248,7 @@ paths:
         - name: account_source_id
           in: query
           schema:
-            type: integer
+            type: string
           description: Filtrer par compte source
       responses:
         '200':
@@ -273,18 +273,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                iban_target:
-                  type: string
-                  example: "FR7698765432109876543210987"
-                name:
-                  type: string
-                  example: "Marie Martin"
-              required:
-                - account_source_id
-                - iban_target
-                - name
+              $ref: '#/components/schemas/Beneficiary'
       responses:
         '201':
           description: Bénéficiaire créé avec succès
@@ -385,10 +374,10 @@ components:
           type: integer
           description: Identifiant de l'opération
           example: 1
-        bank_account_source_id:
-          type: integer
+        account_source_id:
+          type: string
           description: ID du compte bancaire source
-          example: 1
+          example: "1"
         label:
           type: string
           description: Libellé de l'opération
@@ -419,7 +408,7 @@ components:
           example: "2026-01-15T14:00:00Z"
       required:
         - id
-        - bank_account_source_id
+        - account_source_id
         - label
         - state
         - iban_target
@@ -434,9 +423,9 @@ components:
           description: Identifiant du bénéficiaire
           example: 1
         account_source_id:
-          type: integer
+          type: string
           description: ID du compte source
-          example: 1
+          example: "1"
         iban_target:
           type: string
           description: IBAN du bénéficiaire
@@ -446,7 +435,6 @@ components:
           description: Nom du bénéficiaire
           example: "Marie Martin"
       required:
-        - id
         - account_source_id
         - iban_target
         - name

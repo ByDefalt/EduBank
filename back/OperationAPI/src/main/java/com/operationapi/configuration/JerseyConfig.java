@@ -7,8 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ApplicationPath("/api/v1")
 public class JerseyConfig extends ResourceConfig {
-
   public JerseyConfig() {
-    packages("com.example.clientAPI.controller");
+    packages("com.operationapi.controller");
   }
 }
