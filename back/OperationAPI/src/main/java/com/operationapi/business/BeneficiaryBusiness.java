@@ -24,7 +24,12 @@ public class BeneficiaryBusiness {
         return this.beneficiaryRepository.getBeneficiaries();
     }
 
-    public Beneficiary getBeneficiaryById(String id) {
-        return this.beneficiaryRepository.getBeneficiaryById(id);
+    public Beneficiary getBeneficiaryById(String accountId) {
+        return this.beneficiaryRepository.getBeneficiaryById(accountId);
     }
+
+    public Beneficiary deleteBeneficiaryById(String accountId) {
+        return this.beneficiaryRepository.deleteBeneficiaryById(accountId);
+    }
+
 }

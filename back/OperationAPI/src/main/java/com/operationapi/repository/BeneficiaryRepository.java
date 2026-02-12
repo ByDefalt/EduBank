@@ -13,6 +13,7 @@ public class BeneficiaryRepository {
     private static final String SQL_INSERT_BENEFICIARY = "INSERT INTO BENEFICIARY (account_source_id, iban_target, name) VALUES (:account_source_id, :iban_target, :name)";
     private static final String SQL_SELECT_BENEFICIARIES = "SELECT * FROM BENEFICIARY";
     private static final String SQL_SELECT_BENEFICIARY_BY_ID = "SELECT * FROM BENEFICIARY WHERE account_source_id = :account_source_id";
+    private static final String SQL_DELETE_BENEFICIARY_BY_ID = "DELETE FROM BENEFICIARY WHERE account_source_id = :account_source_id";
     public BeneficiaryRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -45,5 +46,12 @@ public class BeneficiaryRepository {
             beneficiary.setName(rs.getString("name"));
             return beneficiary;
         });
+    }
+
+    public Beneficiary deleteBeneficiaryById(String accountId) {
+        Map<String, Object> params = Map.of("account_source_id", accountId);
+        Beneficiary beneficiary = this.getBeneficiaryById(accountId);
+        this.jdbcTemplate.update(SQL_DELETE_BENEFICIARY_BY_ID, params);
+        return beneficiary;
     }
 }

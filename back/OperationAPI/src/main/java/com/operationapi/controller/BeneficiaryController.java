@@ -32,7 +32,7 @@ public class BeneficiaryController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeneficiariesByAccountId() {
-        List<Beneficiary> beneficiaries = beneficiaryBusiness.getBeneficiaries();
+        List<Beneficiary> beneficiaries = this.beneficiaryBusiness.getBeneficiaries();
         return Response.ok(beneficiaries).build();
     }
 
@@ -40,7 +40,17 @@ public class BeneficiaryController {
     @Path("/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeneficiariesByAccountId(@PathParam("accountId") String accountId) {
-        Beneficiary beneficiaries = beneficiaryBusiness.getBeneficiaryById(accountId);
+        Beneficiary beneficiaries = this.beneficiaryBusiness.getBeneficiaryById(accountId);
         return Response.ok(beneficiaries).build();
+    }
+
+    @DELETE
+    @Path("/{accountId}")
+    public Response deleteBeneficiaryById(@PathParam("accountId") String accountId) {
+        Beneficiary beneficiary = this.beneficiaryBusiness.deleteBeneficiaryById(accountId);
+        if(beneficiary == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
