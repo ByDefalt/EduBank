@@ -4,15 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import defalt.core.ui.screen.HomeScreen
 import defalt.eduBank.di.appModule
-import defalt.feature_account.ui.screen.LoginScreen
-import defalt.feature_account.ui.screen.RegisterScreen
+import defalt.eduBank.navigation.ArkeoNavHost
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -26,38 +26,22 @@ class App : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            ArkeaApp()
+            ArkeoApp()
         }
     }
 }
 
 @Composable
-fun ArkeaApp() {
+fun ArkeoApp() {
     val navController = rememberNavController()
 
-    // Le point de départ est maintenant "home"
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(
-                onNavigateToLogin = { navController.navigate("login") },
-                onNavigateToRegister = { navController.navigate("register") }
-            )
-        }
-        composable("login") {
-            LoginScreen(
-                onBackToHome = { navController.popBackStack() }
-            )
-        }
-        composable("register") {
-            RegisterScreen(
-                onBackToHome = { navController.popBackStack() }
-            )
-        }
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        ArkeoNavHost(navController = navController)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewApp() {
-    ArkeaApp()
+    ArkeoApp()
 }
