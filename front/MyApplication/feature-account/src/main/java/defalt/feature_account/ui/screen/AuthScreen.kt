@@ -1,18 +1,23 @@
-package defalt.eduBank
+package defalt.feature_account.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-// --- IMPORTS ICÔNES (C'est OK d'utiliser material.icons avec material3) ---
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
-// --- IMPORT UI (UNIQUEMENT MATERIAL 3) ---
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,14 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-// --- IMPORT NAVIGATION ---
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
-// ==========================================
-// 1. CONFIGURATION NAVIGATION & COULEURS
-// ==========================================
 
 val ArkeaRed = Color(0xFFD31D29)
 val BridgeTeal = Color(0xFF268694)
@@ -57,9 +57,6 @@ fun ArkeaAuthApp() {
     }
 }
 
-// ==========================================
-// 2. UI KIT (COMPOSANTS)
-// ==========================================
 
 @Composable
 fun ArkeaButton(
@@ -78,6 +75,7 @@ fun ArkeaButton(
         }
     )
 }
+
 
 @Composable
 fun ArkeaInput(
@@ -109,9 +107,6 @@ fun ArkeaInput(
     )
 }
 
-// ==========================================
-// 3. ÉCRAN DE CONNEXION
-// ==========================================
 
 @Composable
 fun LoginScreen(onNavigateToRegister: () -> Unit) {
@@ -127,7 +122,7 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
 
         // Zone Image "Pont"
         Box(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .weight(1f)
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -162,9 +157,6 @@ fun LoginScreen(onNavigateToRegister: () -> Unit) {
     }
 }
 
-// ==========================================
-// 4. ÉCRAN D'INSCRIPTION
-// ==========================================
 
 @Composable
 fun RegisterScreen(onBackToLogin: () -> Unit) {
@@ -199,24 +191,17 @@ fun RegisterScreen(onBackToLogin: () -> Unit) {
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.Companion.weight(1f))
 
         TextButton(
             onClick = onBackToLogin,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp)
+            modifier = Modifier.Companion.align(Alignment.CenterHorizontally).padding(bottom = 24.dp)
         ) {
             Text("Annuler et retour", color = ArkeaRed)
         }
     }
 }
 
-@Composable
-fun FooterItem(icon: ImageVector, text: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(icon, contentDescription = null, tint = Color.DarkGray)
-        Text(text, fontSize = 10.sp, textAlign = TextAlign.Center, lineHeight = 12.sp)
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

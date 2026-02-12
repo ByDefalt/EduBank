@@ -1,6 +1,15 @@
 plugins {
+    // 1. D'abord le plugin de bibliothèque Android
     alias(libs.plugins.android.library)
+
+    // 2. Ensuite le plugin Kotlin (obligatoire avant KSP)
     alias(libs.plugins.kotlin.android)
+
+    // 3. Enfin KSP et les autres
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -13,16 +22,11 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
         }
     }
     compileOptions {
@@ -36,31 +40,4 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    /* ---------------- CORE ---------------- */
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.kotlin.stdlib)
-
-    /* ---------------- COMPOSE ---------------- */
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-
-    /* ---------------- NAVIGATION ---------------- */
-    implementation(libs.androidx.navigation.compose)
-
-    /* ---------------- VIEWMODEL ---------------- */
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
 }
