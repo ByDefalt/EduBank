@@ -1,6 +1,14 @@
-plugins {
+plugins {// 1. D'abord le plugin de bibliothèque Android
     alias(libs.plugins.android.library)
+
+    // 2. Ensuite le plugin Kotlin (obligatoire avant KSP)
     alias(libs.plugins.kotlin.android)
+
+    // 3. Enfin KSP et les autres
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -36,15 +44,19 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+}
 
-    /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
+spotless {
+    kotlin {
+        target("**/*.kt")
+        ktlint("0.49.0").editorConfigOverride(mapOf(
+            "ktlint_standard_no-wildcard-imports" to "disabled", // ou "enabled" selon ton choix
+            "ij_kotlin_imports_layout" to "*"
+        ))
+    }
+    format("misc") {
+        target("**/*.gradle", "**/*.md")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }

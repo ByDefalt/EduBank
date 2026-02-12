@@ -1,11 +1,35 @@
-package defalt.feature_account.ui.screen
+package defalt.eduBank
 
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import defalt.core.ui.screen.HomeScreen
+import defalt.eduBank.di.appModule
+import defalt.feature_account.ui.screen.LoginScreen
+import defalt.feature_account.ui.screen.RegisterScreen
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
+
+class App : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        startKoin {
+            androidContext(this@App)
+            modules(*appModule.toTypedArray())
+        }
+        enableEdgeToEdge()
+        setContent {
+            ArkeaApp()
+        }
+    }
+}
 
 @Composable
 fun ArkeaApp() {

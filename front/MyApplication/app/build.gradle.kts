@@ -66,11 +66,13 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     }
 }
 
-// Configuration Spotless (Optionnel, si vous voulez le configurer ici)
 spotless {
     kotlin {
         target("**/*.kt")
-        ktlint("0.49.0") // applique le formatage Kotlin avec ktlint
+        ktlint("0.49.0").editorConfigOverride(mapOf(
+            "ktlint_standard_no-wildcard-imports" to "disabled", // ou "enabled" selon ton choix
+            "ij_kotlin_imports_layout" to "*"
+        ))
     }
     format("misc") {
         target("**/*.gradle", "**/*.md")
