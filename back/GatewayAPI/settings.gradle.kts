@@ -1,1 +1,1 @@
-rootProject.name = "AccountAPI"
+rootProject.name = "GatewayAPI"
