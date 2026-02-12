@@ -372,11 +372,6 @@ components:
           format: date-time
           description: Date et heure de l'opération
           example: "2026-01-15T14:30:00Z"
-        created_at:
-          type: string
-          format: date-time
-          description: Date de création
-          example: "2026-01-15T14:00:00Z"
       required:
         - id
         - account_source_id
