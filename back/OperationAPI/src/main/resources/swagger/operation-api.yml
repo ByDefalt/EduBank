@@ -236,36 +236,27 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+
   /beneficiaries:
     get:
       tags:
         - Beneficiary
-      summary: Récupérer la liste des bénéficiaires
-      description: "Use Case 8 (Client): Voir la liste des bénéficiaires"
+      summary: Récupérer tous les bénéficiaires
       security:
         - bearerAuth: [ ]
-      parameters:
-        - name: account_source_id
-          in: query
-          schema:
-            type: string
-          description: Filtrer par compte source
       responses:
         '200':
-          description: Liste récupérée avec succès
+          description: Liste globale des bénéficiaires
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Beneficiary'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Beneficiary
       summary: Créer un nouveau bénéficiaire
-      description: "Use Case 6 (Client): Ajouter un bénéficiaire"
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -276,44 +267,42 @@ paths:
               $ref: '#/components/schemas/Beneficiary'
       responses:
         '201':
-          description: Bénéficiaire créé avec succès
-
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-  /beneficiaries/{id}:
-    get:
-      tags:
-        - Beneficiary
-      summary: Récupérer un bénéficiaire par ID
-      security:
-        - bearerAuth: [ ]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Bénéficiaire récupéré avec succès
+          description: Bénéficiaire créé
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beneficiary'
+
+  /beneficiaries/{accountId}:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer les bénéficiaires d'un compte
+      description: "Retourne tous les bénéficiaires associés à un compte source spécifique"
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "ID du compte source (ex: 1)"
+      responses:
+        '200':
+          description: Liste des bénéficiaires du compte
+          content:
+            application/json:
+              schema:
+                type: array # Important : ton code retourne une List
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
         '404':
           $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+
+  /beneficiaries/{id}:
     put:
       tags:
         - Beneficiary
       summary: Mettre à jour un bénéficiaire
-      description: "Use Case 7 (Client): Modifier un bénéficiaire"
-      security:
-        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -325,32 +314,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                iban_target:
-                  type: string
-                  example: "FR7698765432109876543210987"
-                name:
-                  type: string
-                  example: "Marie Martin"
+              $ref: '#/components/schemas/Beneficiary'
       responses:
         '200':
-          description: Bénéficiaire mis à jour avec succès
+          description: Bénéficiaire mis à jour
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beneficiary'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
     delete:
       tags:
         - Beneficiary
       summary: Supprimer un bénéficiaire
-      description: "Use Case 9 (Client): Supprimer un bénéficiaire"
-      security:
-        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -359,11 +334,7 @@ paths:
             type: integer
       responses:
         '204':
-          description: Bénéficiaire supprimé avec succès
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          description: Supprimé avec succès
 
 components:
   schemas:

@@ -12,8 +12,9 @@ public class BeneficiaryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final String SQL_INSERT_BENEFICIARY = "INSERT INTO BENEFICIARY (account_source_id, iban_target, name) VALUES (:account_source_id, :iban_target, :name)";
     private static final String SQL_SELECT_BENEFICIARIES = "SELECT * FROM BENEFICIARY";
-    private static final String SQL_SELECT_BENEFICIARY_BY_ID = "SELECT * FROM BENEFICIARY WHERE account_source_id = :account_source_id";
-    private static final String SQL_DELETE_BENEFICIARY_BY_ID = "DELETE FROM BENEFICIARY WHERE account_source_id = :account_source_id";
+    private static final String SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID = "SELECT * FROM BENEFICIARY WHERE account_source_id = :account_source_id";
+    private static final String SQL_UPDATE_BENEFICIARY = "UPDATE BENEFICIARY SET account_source_id = :account_source_id, iban_target = :iban_target, name = :name WHERE id = :id";
+    private static final String SQL_DELETE_BENEFICIARY_BY_ID = "DELETE FROM BENEFICIARY WHERE id = :id";
     public BeneficiaryRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -37,21 +38,30 @@ public class BeneficiaryRepository {
         });
     }
 
-    public Beneficiary getBeneficiaryById(String accountId) {
-        Map<String, Object> params = Map.of("account_source_id", accountId);
-        return jdbcTemplate.queryForObject(SQL_SELECT_BENEFICIARY_BY_ID, params, (rs, rowNum) -> {
-            Beneficiary beneficiary = new Beneficiary();
-            beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
-            beneficiary.setIbanTarget(rs.getString("iban_target"));
-            beneficiary.setName(rs.getString("name"));
-            return beneficiary;
-        });
+    public List<Beneficiary> getBeneficiariesByAccountId(String accountId) {
+        return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID, Map.of(
+                "account_source_id", accountId),
+                (rs, rowNum) -> {
+                    Beneficiary beneficiary = new Beneficiary();
+                    beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
+                    beneficiary.setIbanTarget(rs.getString("iban_target"));
+                    beneficiary.setName(rs.getString("name"));
+                    return beneficiary;
+                });
     }
 
-    public Beneficiary deleteBeneficiaryById(String accountId) {
-        Map<String, Object> params = Map.of("account_source_id", accountId);
-        Beneficiary beneficiary = this.getBeneficiaryById(accountId);
-        this.jdbcTemplate.update(SQL_DELETE_BENEFICIARY_BY_ID, params);
+    public Beneficiary update(Beneficiary beneficiary) {
+        this.jdbcTemplate.update(SQL_UPDATE_BENEFICIARY, Map.of(
+                "id", beneficiary.getId(),
+                "account_source_id", beneficiary.getAccountSourceId(),
+                "iban_target", beneficiary.getIbanTarget(),
+                "name", beneficiary.getName()
+        ));
         return beneficiary;
+    }
+
+    public void deleteBeneficiaryById(Integer id) {
+        Map<String, Object> params = Map.of("id", id);
+        this.jdbcTemplate.update(SQL_DELETE_BENEFICIARY_BY_ID, params);
     }
 }

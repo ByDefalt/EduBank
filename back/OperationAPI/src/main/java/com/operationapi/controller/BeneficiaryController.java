@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-@Path("/account")
+@Path("/beneficiaries")
 public class BeneficiaryController {
 
     private final BeneficiaryBusiness beneficiaryBusiness;
@@ -31,7 +31,7 @@ public class BeneficiaryController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBeneficiariesByAccountId() {
+    public Response getBeneficiaries() {
         List<Beneficiary> beneficiaries = this.beneficiaryBusiness.getBeneficiaries();
         return Response.ok(beneficiaries).build();
     }
@@ -40,17 +40,22 @@ public class BeneficiaryController {
     @Path("/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeneficiariesByAccountId(@PathParam("accountId") String accountId) {
-        Beneficiary beneficiaries = this.beneficiaryBusiness.getBeneficiaryById(accountId);
+        List<Beneficiary> beneficiaries = this.beneficiaryBusiness.getBeneficiariesByAccountId(accountId);
         return Response.ok(beneficiaries).build();
     }
 
+    @PUT
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateBeneficiary(@PathParam("id") Integer id, Beneficiary beneficiary) {
+        Beneficiary updatedBeneficiary = this.beneficiaryBusiness.updateBeneficiary(id, beneficiary);
+        return Response.ok(updatedBeneficiary).build();
+    }
+
     @DELETE
-    @Path("/{accountId}")
-    public Response deleteBeneficiaryById(@PathParam("accountId") String accountId) {
-        Beneficiary beneficiary = this.beneficiaryBusiness.deleteBeneficiaryById(accountId);
-        if(beneficiary == null) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+    @Path("/{id}")
+    public Response deleteBeneficiaryById(@PathParam("id") Integer id) {
+        this.beneficiaryBusiness.deleteBeneficiaryById(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
