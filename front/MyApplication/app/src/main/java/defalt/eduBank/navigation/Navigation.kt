@@ -17,8 +17,8 @@ fun ArkeoNavHost(navController: NavHostController) {
     ) {
         composable<Routes.Home> {
             HomeScreen(
-                onNavigateToLogin = { navController.navigate(Routes.Login) },
-                onNavigateToRegister = { navController.navigate(Routes.Register) }
+                onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
+                onNavigateToRegister = { navController.navigate(Routes.Account.Register) }
             )
         }
         accountGraph(navController)

@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable sealed class Routes {
     @Serializable object Home : Routes()
-    @Serializable object Login : Routes()
-    @Serializable object Register : Routes()
-    @Serializable object AccountGraph : Routes()
+    @Serializable object Account : Routes() {
+        @Serializable object Login : Routes()
+        @Serializable object Register : Routes()
+    }
 }

@@ -9,13 +9,13 @@ import defalt.feature_account.ui.screen.LoginScreen
 import defalt.feature_account.ui.screen.RegisterScreen
 
 fun NavGraphBuilder.accountGraph(navController: NavController) {
-    navigation<Routes.AccountGraph>(
-        startDestination = Routes.Login
+    navigation<Routes.Account>(
+        startDestination = Routes.Account.Login
     ) {
-        composable<Routes.Login> {
+        composable<Routes.Account.Login> {
             LoginScreen(onBackToHome = { navController.popBackStack() })
         }
-        composable<Routes.Register> {
+        composable<Routes.Account.Register> {
             RegisterScreen(onBackToHome = { navController.popBackStack() })
         }
     }
