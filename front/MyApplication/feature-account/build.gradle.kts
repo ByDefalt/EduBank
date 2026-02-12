@@ -36,12 +36,28 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    /* ---------------- CORE ---------------- */
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlin.stdlib)
+
+    /* ---------------- COMPOSE ---------------- */
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+
+    /* ---------------- NAVIGATION ---------------- */
+    implementation(libs.androidx.navigation.compose)
+
+    /* ---------------- VIEWMODEL ---------------- */
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
     implementation(libs.koin.core)
