@@ -1,7 +1,7 @@
 package com.example.clientAPI.controller;
 
 import com.example.clientAPI.annotation.AuthenticationRequired;
-import com.example.clientAPI.business.BankAccountBusiness;
+import com.example.clientAPI.business.TypeBusiness;
 import dto.accountapi.RoleEnum;
 import dto.bankapi.Type;
 import jakarta.ws.rs.*;
@@ -14,10 +14,10 @@ import java.util.List;
 @Controller
 @Path("/")
 public class TypeController {
-    private final BankAccountBusiness bankAccountBusiness;
+    private final TypeBusiness typeBusiness;
 
-    public TypeController(BankAccountBusiness bankAccountBusiness) {
-        this.bankAccountBusiness = bankAccountBusiness;
+    public TypeController(TypeBusiness typeBusiness) {
+        this.typeBusiness = typeBusiness;
     }
 
     @GET
@@ -25,7 +25,7 @@ public class TypeController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.CUSTOMER)
     public Response getTypes() {
-        List<Type> types = bankAccountBusiness.getAllTypes();
+        List<Type> types = typeBusiness.getAllTypes();
         return Response.ok(types).build();
     }
 
@@ -35,7 +35,7 @@ public class TypeController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.ADMIN)
     public Response createType(Type dto) {
-        Type created = bankAccountBusiness.createType(dto);
+        Type created = typeBusiness.createType(dto);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 

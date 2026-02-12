@@ -4,9 +4,7 @@ import com.example.clientAPI.annotation.AuthenticationRequired;
 import com.example.clientAPI.business.BankAccountBusiness;
 import dto.accountapi.RoleEnum;
 import dto.bankapi.BankAccount;
-import dto.bankapi.BankAccountParameter;
 import dto.bankapi.BankAccountDetail;
-import dto.bankapi.Type;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
@@ -201,16 +199,6 @@ public class BankAccountController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
-
-    // ============== Type Endpoints ==============
-
-
-
-    // ============== BankAccountParameter Endpoints ==============
-
-
-
-    // ============== BankAccountPivot Endpoints ==============
 
 
 }

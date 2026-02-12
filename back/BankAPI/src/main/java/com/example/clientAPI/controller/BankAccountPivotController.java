@@ -1,7 +1,7 @@
 package com.example.clientAPI.controller;
 
 import com.example.clientAPI.annotation.AuthenticationRequired;
-import com.example.clientAPI.business.BankAccountBusiness;
+import com.example.clientAPI.business.BankAccountPivotBusiness;
 import dto.accountapi.RoleEnum;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -13,10 +13,10 @@ import java.util.List;
 @Controller
 @Path("/")
 public class BankAccountPivotController {
-    private final BankAccountBusiness bankAccountBusiness;
+    private final BankAccountPivotBusiness bankAccountPivotBusiness;
 
-    public BankAccountPivotController(BankAccountBusiness bankAccountBusiness) {
-        this.bankAccountBusiness = bankAccountBusiness;
+    public BankAccountPivotController(BankAccountPivotBusiness bankAccountPivotBusiness) {
+        this.bankAccountPivotBusiness = bankAccountPivotBusiness;
     }
 
     @POST
@@ -25,7 +25,7 @@ public class BankAccountPivotController {
     public Response linkAccountToBankAccount(
             @PathParam("bankAccountId") String bankAccountId,
             @PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.linkAccountToBankAccount(bankAccountId, accountId);
+        bankAccountPivotBusiness.linkAccountToBankAccount(bankAccountId, accountId);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -35,7 +35,7 @@ public class BankAccountPivotController {
     public Response unlinkAccountFromBankAccount(
             @PathParam("bankAccountId") String bankAccountId,
             @PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.unlinkAccountFromBankAccount(bankAccountId, accountId);
+        bankAccountPivotBusiness.unlinkAccountFromBankAccount(bankAccountId, accountId);
         return Response.noContent().build();
     }
 
@@ -43,7 +43,7 @@ public class BankAccountPivotController {
     @Path("/bank-accounts/{bankAccountId}/unlink-all")
     @AuthenticationRequired(RoleEnum.ADMIN)
     public Response unlinkAllAccountsFromBankAccount(@PathParam("bankAccountId") String bankAccountId) {
-        bankAccountBusiness.unlinkAllAccountsFromBankAccount(bankAccountId);
+        bankAccountPivotBusiness.unlinkAllAccountsFromBankAccount(bankAccountId);
         return Response.noContent().build();
     }
 
@@ -51,7 +51,7 @@ public class BankAccountPivotController {
     @Path("/accounts/{accountId}/unlink-all")
     @AuthenticationRequired(RoleEnum.ADMIN)
     public Response unlinkAllBankAccountsFromAccount(@PathParam("accountId") Integer accountId) {
-        bankAccountBusiness.unlinkAllBankAccountsFromAccount(accountId);
+        bankAccountPivotBusiness.unlinkAllBankAccountsFromAccount(accountId);
         return Response.noContent().build();
     }
 
@@ -60,7 +60,7 @@ public class BankAccountPivotController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.ADMIN)
     public Response getAccountsLinkedToBankAccount(@PathParam("bankAccountId") String bankAccountId) {
-        List<Integer> accountIds = bankAccountBusiness.getAccountsLinkedToBankAccount(bankAccountId);
+        List<Integer> accountIds = bankAccountPivotBusiness.getAccountsLinkedToBankAccount(bankAccountId);
         return Response.ok(accountIds).build();
     }
 
@@ -69,7 +69,7 @@ public class BankAccountPivotController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.CUSTOMER)
     public Response getBankAccountsLinkedToAccount(@PathParam("accountId") Integer accountId) {
-        List<String> bankAccountIds = bankAccountBusiness.getBankAccountsLinkedToAccount(accountId);
+        List<String> bankAccountIds = bankAccountPivotBusiness.getBankAccountsLinkedToAccount(accountId);
         return Response.ok(bankAccountIds).build();
     }
 }

@@ -1,7 +1,7 @@
 package com.example.clientAPI.controller;
 
 import com.example.clientAPI.annotation.AuthenticationRequired;
-import com.example.clientAPI.business.BankAccountBusiness;
+import com.example.clientAPI.business.BankAccountParameterBusiness;
 import dto.accountapi.RoleEnum;
 import dto.bankapi.BankAccountParameter;
 import jakarta.ws.rs.*;
@@ -14,10 +14,10 @@ import java.util.List;
 @Controller
 @Path("/")
 public class BankAccountParameterController {
-    private final BankAccountBusiness bankAccountBusiness;
+    private final BankAccountParameterBusiness bankAccountParameterBusiness;
 
-    public BankAccountParameterController(BankAccountBusiness bankAccountBusiness) {
-        this.bankAccountBusiness = bankAccountBusiness;
+    public BankAccountParameterController(BankAccountParameterBusiness bankAccountParameterBusiness) {
+        this.bankAccountParameterBusiness = bankAccountParameterBusiness;
     }
 
     @GET
@@ -25,7 +25,7 @@ public class BankAccountParameterController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.CUSTOMER)
     public Response getParameters() {
-        List<BankAccountParameter> parameters = bankAccountBusiness.getAllParameters();
+        List<BankAccountParameter> parameters = bankAccountParameterBusiness.getAllParameters();
         return Response.ok(parameters).build();
     }
 
@@ -35,7 +35,7 @@ public class BankAccountParameterController {
     @Produces(MediaType.APPLICATION_JSON)
     @AuthenticationRequired(RoleEnum.ADMIN)
     public Response createParameter(BankAccountParameter dto) {
-        BankAccountParameter created = bankAccountBusiness.createParameter(dto);
+        BankAccountParameter created = bankAccountParameterBusiness.createParameter(dto);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 

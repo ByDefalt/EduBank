@@ -1,7 +1,6 @@
 package com.example.clientAPI.repository;
 
 import com.example.clientAPI.entity.*;
-
 import dto.bankapi.State;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -14,9 +13,18 @@ import java.util.Map;
 public class BankAccountRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final TypeRepository typeRepository;
+    private final BankAccountParameterRepository bankAccountParameterRepository;
+    private final BankAccountPivotRepository bankAccountPivotRepository;
 
-    public BankAccountRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public BankAccountRepository(NamedParameterJdbcTemplate jdbcTemplate,
+                                 TypeRepository typeRepository,
+                                 BankAccountParameterRepository bankAccountParameterRepository,
+                                 BankAccountPivotRepository bankAccountPivotRepository) {
         this.jdbcTemplate = jdbcTemplate;
+        this.typeRepository = typeRepository;
+        this.bankAccountParameterRepository = bankAccountParameterRepository;
+        this.bankAccountPivotRepository = bankAccountPivotRepository;
     }
 
     // ============== BankAccount SQL ==============
@@ -75,51 +83,12 @@ public class BankAccountRepository {
     private static final String SQL_DELETE_BANK_ACCOUNT =
             "DELETE FROM BankAccount WHERE id = :id";
 
-    private static final String SQL_UPDATE_STATE =
-            "UPDATE BankAccountParameter SET state = :state WHERE id = :parameter_id";
-
     private static final String SQL_GET_BALANCE =
             "SELECT sold FROM BankAccount WHERE id = :id";
-
-    // ============== Type SQL ==============
-    private static final String SQL_GET_ALL_TYPES =
-            "SELECT id, name FROM Types";
-
-    private static final String SQL_INSERT_TYPE =
-            "INSERT INTO Types (name) VALUES (:name)";
-
-    // ============== BankAccountParameter SQL ==============
-    private static final String SQL_GET_ALL_PARAMETERS =
-            "SELECT id, overdraft_limit, state FROM BankAccountParameter";
-
-    private static final String SQL_INSERT_PARAMETER =
-            "INSERT INTO BankAccountParameter (overdraft_limit, state) " +
-                    "VALUES (:overdraft_limit, :state)";
-
-    // ============== BankAccountPivot SQL ==============
-    private static final String SQL_INSERT_PIVOT =
-            "INSERT INTO BankAccountPivot (bank_account_id, account_id) " +
-                    "VALUES (:bank_account_id, :account_id)";
-
-    private static final String SQL_DELETE_PIVOT =
-            "DELETE FROM BankAccountPivot WHERE bank_account_id = :bank_account_id AND account_id = :account_id";
-
-    private static final String SQL_DELETE_ALL_PIVOTS_BY_BANK_ACCOUNT =
-            "DELETE FROM BankAccountPivot WHERE bank_account_id = :bank_account_id";
-
-    private static final String SQL_DELETE_ALL_PIVOTS_BY_ACCOUNT =
-            "DELETE FROM BankAccountPivot WHERE account_id = :account_id";
-
-    private static final String SQL_GET_ACCOUNTS_BY_BANK_ACCOUNT =
-            "SELECT account_id FROM BankAccountPivot WHERE bank_account_id = :bank_account_id";
-
-    private static final String SQL_GET_BANK_ACCOUNTS_BY_ACCOUNT =
-            "SELECT bank_account_id FROM BankAccountPivot WHERE account_id = :account_id";
 
     // ============== BankAccount Methods ==============
 
     public BankAccountEntity createBankAccount(BankAccountEntity bankAccount) {
-
         if (bankAccount.getId() == null || bankAccount.getId().isEmpty()) {
             bankAccount.setId(String.valueOf(System.currentTimeMillis()));
         }
@@ -155,18 +124,15 @@ public class BankAccountRepository {
         params.put("id", id);
 
         return jdbcTemplate.queryForObject(SQL_GET_BANK_ACCOUNT_DETAIL_BY_ID, params, (rs, rowNum) -> {
-            // Créer l'entité BankAccountParameter
             BankAccountParameterEntity parameter = new BankAccountParameterEntity();
             parameter.setId(rs.getInt("param_id"));
             parameter.setOverdraftLimit(rs.getDouble("overdraft_limit"));
             parameter.setState(State.fromValue(rs.getString("state")));
 
-            // Créer l'entité Type
             TypesEntity type = new TypesEntity();
             type.setId(rs.getInt("type_id_val"));
             type.setName(rs.getString("name"));
 
-            // Créer et retourner l'entité BankAccountDetail
             BankAccountDetailEntity detail = new BankAccountDetailEntity();
             detail.setId(rs.getString("id"));
             detail.setParameter(parameter);
@@ -268,92 +234,55 @@ public class BankAccountRepository {
         jdbcTemplate.update(SQL_DELETE_BANK_ACCOUNT, params);
     }
 
-    public void updateState(Integer parameterId, String state) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("parameter_id", parameterId);
-        params.put("state", state);
-        jdbcTemplate.update(SQL_UPDATE_STATE, params);
-    }
-
     public Double getBalance(String id) {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbcTemplate.queryForObject(SQL_GET_BALANCE, params, Double.class);
     }
 
-    // ============== Type Methods ==============
+    // ============== Delegated Methods to Other Repositories ==============
+
     public List<TypesEntity> getAllTypes() {
-        return jdbcTemplate.query(SQL_GET_ALL_TYPES, (rs, rowNum) -> {
-            TypesEntity type = new TypesEntity();
-            type.setId(rs.getInt("id"));
-            type.setName(rs.getString("name"));
-            return type;
-        });
+        return typeRepository.getAllTypes();
     }
 
     public TypesEntity createType(TypesEntity type) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", type.getName());
-        jdbcTemplate.update(SQL_INSERT_TYPE, params);
-        return type;
+        return typeRepository.createType(type);
     }
 
-    // ============== BankAccountParameter Methods ==============
     public List<BankAccountParameterEntity> getAllParameters() {
-        return jdbcTemplate.query(SQL_GET_ALL_PARAMETERS, (rs, rowNum) -> {
-            BankAccountParameterEntity param = new BankAccountParameterEntity();
-            param.setId(rs.getInt("id"));
-            param.setOverdraftLimit(rs.getDouble("overdraft_limit"));
-            param.setState(State.fromValue(rs.getString("state")));
-            return param;
-        });
+        return bankAccountParameterRepository.getAllParameters();
     }
 
     public BankAccountParameterEntity createParameter(BankAccountParameterEntity parameter) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("overdraft_limit", parameter.getOverdraftLimit());
-        params.put("state", parameter.getState());
-        jdbcTemplate.update(SQL_INSERT_PARAMETER, params);
-        return parameter;
+        return bankAccountParameterRepository.createParameter(parameter);
     }
 
-    // ============== BankAccountPivot Methods ==============
+    public void updateState(Integer parameterId, String state) {
+        bankAccountParameterRepository.updateState(parameterId, state);
+    }
 
     public void createPivot(String bankAccountId, Integer accountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        params.put("account_id", accountId);
-        jdbcTemplate.update(SQL_INSERT_PIVOT, params);
+        bankAccountPivotRepository.createPivot(bankAccountId, accountId);
     }
 
     public void deletePivot(String bankAccountId, Integer accountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        params.put("account_id", accountId);
-        jdbcTemplate.update(SQL_DELETE_PIVOT, params);
+        bankAccountPivotRepository.deletePivot(bankAccountId, accountId);
     }
 
     public void deleteAllPivotsByBankAccount(String bankAccountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        jdbcTemplate.update(SQL_DELETE_ALL_PIVOTS_BY_BANK_ACCOUNT, params);
+        bankAccountPivotRepository.deleteAllPivotsByBankAccount(bankAccountId);
     }
 
     public void deleteAllPivotsByAccount(Integer accountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("account_id", accountId);
-        jdbcTemplate.update(SQL_DELETE_ALL_PIVOTS_BY_ACCOUNT, params);
+        bankAccountPivotRepository.deleteAllPivotsByAccount(accountId);
     }
 
     public List<Integer> getAccountsByBankAccount(String bankAccountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        return jdbcTemplate.queryForList(SQL_GET_ACCOUNTS_BY_BANK_ACCOUNT, params, Integer.class);
+        return bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
     }
 
     public List<String> getBankAccountsByAccount(Integer accountId) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("account_id", accountId);
-        return jdbcTemplate.queryForList(SQL_GET_BANK_ACCOUNTS_BY_ACCOUNT, params, String.class);
+        return bankAccountPivotRepository.getBankAccountsByAccount(accountId);
     }
 }
