@@ -7,7 +7,7 @@ info:
     name: API Support
 
 servers:
-  - url: "http://localhost:8081/api/v1"
+  - url: "http://localhost:8083/api/v1"
 
 tags:
   - name: Operation
