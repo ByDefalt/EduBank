@@ -7,10 +7,11 @@ import defalt.core.ui.utils.Routes
 import defalt.core.ui.screen.HomeScreen
 
 fun NavGraphBuilder.homeGraph(navController: NavController) {
-    composable<Routes.Home> {
+    composable<Routes.Core.Home> {
         HomeScreen(
             onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
             onNavigateToRegister = { navController.navigate(Routes.Account.Register) },
+            onNavigateToOffer = { navController.navigate(Routes.Offer) },
         )
     }
 }

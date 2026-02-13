@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.core.ui.utils.CustomColor
@@ -28,6 +29,7 @@ import defalt.core.ui.component.ArkeoButton
 fun HomeScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToRegister: () -> Unit,
+    onNavigateToOffer: () -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         // En-tête Logo
@@ -64,6 +66,11 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Nouveau bouton vers l'écran Offres
+            ArkeoButton(text = "Voir les offres", onClick = onNavigateToOffer)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             TextButton(onClick = onNavigateToRegister) {
                 Text("Ouvrir un compte", color = CustomColor.ArkeoRed, fontWeight = FontWeight.SemiBold)
             }
@@ -71,3 +78,10 @@ fun HomeScreen(
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(onNavigateToLogin = {}, onNavigateToRegister = {})
+}
+
