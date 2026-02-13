@@ -1,9 +1,9 @@
-package defalt.eduBank.navigation
+package defalt.eduBank.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import defalt.core.ui.Routes
+import defalt.core.ui.utils.Routes
 import defalt.featureAccount.ui.navigation.accountGraph
 
 @Composable

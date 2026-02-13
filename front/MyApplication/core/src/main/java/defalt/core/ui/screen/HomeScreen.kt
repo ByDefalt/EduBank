@@ -21,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.CustomColor
+import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
 
 @Composable

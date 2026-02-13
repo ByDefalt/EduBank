@@ -1,4 +1,4 @@
-package defalt.core.ui
+package defalt.core.ui.utils
 
 import kotlinx.serialization.Serializable
 
@@ -10,4 +10,13 @@ import kotlinx.serialization.Serializable
 
         @Serializable object Register : Routes()
     }
+
+    @Serializable object Bank : Routes() {
+    }
+
+    @Serializable object Offer : Routes() {
+    }
+    @Serializable object Operation : Routes() {
+    }
+
 }

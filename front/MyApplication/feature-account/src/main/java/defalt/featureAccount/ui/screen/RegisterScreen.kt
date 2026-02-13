@@ -27,9 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.CustomColor
+import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
 import defalt.core.ui.component.ArkeoInput
 
@@ -40,18 +41,30 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(CustomColor.BackgroundGray)) {
         // Header Rouge
         Box(
-            modifier = Modifier.fillMaxWidth().background(CustomColor.ArkeoRed).padding(top = 48.dp, bottom = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CustomColor.ArkeoRed)
+                .padding(top = 48.dp, bottom = 24.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text("OUVERTURE DE COMPTE", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(
+                "OUVERTURE DE COMPTE",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
         }
 
         // Carte Formulaire Inscription
         Card(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -60,11 +73,32 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
                 modifier = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text("VOS COORDONNÉES", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(
+                    "VOS COORDONNÉES",
+                    color = CustomColor.ArkeoRed,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
 
-                ArkeoInput(raisonSociale, { raisonSociale = it }, "Raison Sociale", icon = Icons.Outlined.Person)
-                ArkeoInput(email, { email = it }, "Email / Identifiant", keyboardType = KeyboardType.Email)
-                ArkeoInput(password, { password = it }, "Mot de passe", icon = Icons.Outlined.Lock, isPassword = true)
+                ArkeoInput(
+                    raisonSociale,
+                    { raisonSociale = it },
+                    "Raison Sociale",
+                    icon = Icons.Outlined.Person
+                )
+                ArkeoInput(
+                    email,
+                    { email = it },
+                    "Email / Identifiant",
+                    keyboardType = KeyboardType.Email
+                )
+                ArkeoInput(
+                    password,
+                    { password = it },
+                    "Mot de passe",
+                    icon = Icons.Outlined.Lock,
+                    isPassword = true
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
                 ArkeoButton(text = "VALIDER LA DEMANDE", onClick = { })
@@ -75,9 +109,18 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
 
         TextButton(
             onClick = onBackToHome,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 24.dp),
         ) {
             Text("Annuler et retour", color = CustomColor.ArkeoRed)
         }
     }
+}
+
+@Suppress("VisualLintBounds")
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    RegisterScreen(onBackToHome = {})
 }

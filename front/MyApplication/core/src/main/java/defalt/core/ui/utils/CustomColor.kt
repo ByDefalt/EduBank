@@ -1,4 +1,4 @@
-package defalt.core.ui
+package defalt.core.ui.utils
 
 import androidx.compose.ui.graphics.Color
 

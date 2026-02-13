@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import defalt.eduBank.di.appModule
-import defalt.eduBank.navigation.ArkeoNavHost
+import defalt.eduBank.ui.navigation.ArkeoNavHost
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

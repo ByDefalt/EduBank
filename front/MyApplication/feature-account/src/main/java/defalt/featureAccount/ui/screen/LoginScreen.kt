@@ -26,9 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.CustomColor
+import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
 import defalt.core.ui.component.ArkeoInput
 
@@ -38,7 +39,9 @@ fun LoginScreen(onBackToHome: () -> Unit) {
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(CustomColor.BackgroundGray)) {
         // Header Rouge
         Box(
             modifier = Modifier
@@ -47,12 +50,19 @@ fun LoginScreen(onBackToHome: () -> Unit) {
                 .padding(top = 48.dp, bottom = 24.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text("ESPACE CLIENT", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(
+                "ESPACE CLIENT",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
         }
 
         // Carte Formulaire Connexion
         Card(
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = Color.White),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
@@ -61,7 +71,12 @@ fun LoginScreen(onBackToHome: () -> Unit) {
                 modifier = Modifier.padding(24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text("IDENTIFICATION", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(
+                    "IDENTIFICATION",
+                    color = CustomColor.ArkeoRed,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
 
                 ArkeoInput(
                     value = login,
@@ -78,17 +93,11 @@ fun LoginScreen(onBackToHome: () -> Unit) {
                     isPassword = true,
                 )
 
-                // Lien mot de passe oublié
-                Text(
-                    text = "Mot de passe oublié ?",
-                    fontSize = 12.sp,
-                    color = Color.Gray,
-                    modifier = Modifier.align(Alignment.End),
-                )
-
                 Spacer(modifier = Modifier.height(8.dp))
 
-                ArkeoButton(text = "ACCÉDER À MES COMPTES", onClick = { /* TODO: Logique de connexion */ })
+                ArkeoButton(
+                    text = "ACCÉDER À MES COMPTES",
+                    onClick = { /* TODO: Logique de connexion */ })
             }
         }
 
@@ -96,9 +105,18 @@ fun LoginScreen(onBackToHome: () -> Unit) {
 
         TextButton(
             onClick = onBackToHome,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 24.dp),
         ) {
             Text("Retour à l'accueil", color = CustomColor.ArkeoRed)
         }
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(onBackToHome = {})
+}
+

@@ -15,7 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import defalt.core.ui.CustomColor
+import defalt.core.ui.utils.CustomColor
 
 @Composable
 fun ArkeoInput(

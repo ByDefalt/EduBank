@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import defalt.core.ui.Routes
+import defalt.core.ui.utils.Routes
 import defalt.featureAccount.ui.screen.LoginScreen
 import defalt.featureAccount.ui.screen.RegisterScreen
 
