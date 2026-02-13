@@ -16,7 +16,6 @@ import defalt.eduBank.navigation.ArkeoNavHost
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-
 class App : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

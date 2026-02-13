@@ -5,4 +5,3 @@ class ListBankAccountsUseCase {
         // TODO: implement listing bank accounts
     }
 }
-

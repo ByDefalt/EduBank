@@ -24,7 +24,7 @@ fun ArkeoInput(
     label: String,
     icon: ImageVector? = null,
     isPassword: Boolean = false,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     OutlinedTextField(
         value = value,
@@ -42,7 +42,7 @@ fun ArkeoInput(
             focusedLabelColor = CustomColor.ArkeoRed,
             cursorColor = CustomColor.ArkeoRed,
             unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White
-        )
+            focusedContainerColor = Color.White,
+        ),
     )
 }

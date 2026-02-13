@@ -5,4 +5,3 @@ class AddBeneficiaryUseCase {
         // TODO: implement adding beneficiary
     }
 }
-

@@ -5,4 +5,3 @@ class ListBeneficiariesUseCase {
         // TODO: implement listing beneficiaries
     }
 }
-

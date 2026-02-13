@@ -5,4 +5,3 @@ class TransferUseCase {
         // TODO: implement transfer operation
     }
 }
-

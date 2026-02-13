@@ -5,4 +5,3 @@ class DeleteBeneficiaryUseCase {
         // TODO: implement deleting beneficiary
     }
 }
-

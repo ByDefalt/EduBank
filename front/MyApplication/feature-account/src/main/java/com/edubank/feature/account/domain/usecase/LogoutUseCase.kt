@@ -5,4 +5,3 @@ class LogoutUseCase {
         // TODO: implement logout
     }
 }
-

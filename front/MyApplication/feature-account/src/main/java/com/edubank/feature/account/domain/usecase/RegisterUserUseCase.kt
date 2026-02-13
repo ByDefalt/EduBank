@@ -5,4 +5,3 @@ class RegisterUserUseCase {
         // TODO: implement registration
     }
 }
-

@@ -5,4 +5,3 @@ class UpdateOfferUseCase {
         // TODO: implement updating offer
     }
 }
-

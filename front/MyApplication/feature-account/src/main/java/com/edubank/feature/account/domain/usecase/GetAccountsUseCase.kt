@@ -5,4 +5,3 @@ class GetAccountsUseCase {
         // TODO: implement getting list of accounts for client
     }
 }
-

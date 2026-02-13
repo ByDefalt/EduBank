@@ -5,4 +5,3 @@ class GetOperationByIdUseCase {
         // TODO: implement getting operation by id
     }
 }
-

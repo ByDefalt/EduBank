@@ -27,13 +27,13 @@ import defalt.core.ui.component.ArkeoButton
 @Composable
 fun HomeScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         // En-tête Logo
         Column(
             modifier = Modifier.fillMaxWidth().padding(top = 48.dp, bottom = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text("ARKEO BANQUE", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 20.sp)
             Text("ENTREPRISES & INSTITUTIONNELS", fontSize = 10.sp, fontWeight = FontWeight.Medium)
@@ -47,7 +47,7 @@ fun HomeScreen(
                 .padding(horizontal = 24.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .background(CustomColor.BridgeTeal),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("DE NOUVEAUX\nLIENS POUR", color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 22.sp)

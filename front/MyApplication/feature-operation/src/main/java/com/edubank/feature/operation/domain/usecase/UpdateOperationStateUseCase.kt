@@ -5,4 +5,3 @@ class UpdateOperationStateUseCase {
         // TODO: implement updating operation state
     }
 }
-

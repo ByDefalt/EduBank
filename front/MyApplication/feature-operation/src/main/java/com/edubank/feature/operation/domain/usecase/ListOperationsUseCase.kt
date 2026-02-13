@@ -5,4 +5,3 @@ class ListOperationsUseCase {
         // TODO: implement listing operations
     }
 }
-

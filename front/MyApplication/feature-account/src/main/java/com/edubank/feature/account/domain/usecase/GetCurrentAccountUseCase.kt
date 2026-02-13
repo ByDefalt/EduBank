@@ -5,4 +5,3 @@ class GetCurrentAccountUseCase {
         // TODO: implement getting current account
     }
 }
-

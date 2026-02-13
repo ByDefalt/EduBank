@@ -5,4 +5,3 @@ class GetAccountDetailsUseCase {
         // TODO: implement getting account details
     }
 }
-

@@ -5,4 +5,3 @@ class ListOffersUseCase {
         // TODO: implement listing offers (admin)
     }
 }
-

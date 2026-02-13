@@ -12,7 +12,7 @@ plugins {// 1. D'abord le plugin de bibliothèque Android
 }
 
 android {
-    namespace = "defalt.feature_operation"
+    namespace = "defalt.featureOperation"
     compileSdk {
         version = release(36)
     }

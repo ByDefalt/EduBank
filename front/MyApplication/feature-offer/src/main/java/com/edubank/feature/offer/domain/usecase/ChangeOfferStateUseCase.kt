@@ -5,4 +5,3 @@ class ChangeOfferStateUseCase {
         // TODO: implement changing offer state
     }
 }
-

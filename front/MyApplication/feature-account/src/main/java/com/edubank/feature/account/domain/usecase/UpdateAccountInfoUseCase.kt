@@ -5,4 +5,3 @@ class UpdateAccountInfoUseCase {
         // TODO: implement updating account info (admin)
     }
 }
-

@@ -5,4 +5,3 @@ class CreateAccountTypeUseCase {
         // TODO: implement creating account type
     }
 }
-

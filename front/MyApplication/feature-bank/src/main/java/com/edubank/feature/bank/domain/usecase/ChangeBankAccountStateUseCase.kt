@@ -5,4 +5,3 @@ class ChangeBankAccountStateUseCase {
         // TODO: implement changing bank account state
     }
 }
-

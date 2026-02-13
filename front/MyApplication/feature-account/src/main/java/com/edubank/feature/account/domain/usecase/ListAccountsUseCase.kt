@@ -5,4 +5,3 @@ class ListAccountsUseCase {
         // TODO: implement listing accounts (admin)
     }
 }
-

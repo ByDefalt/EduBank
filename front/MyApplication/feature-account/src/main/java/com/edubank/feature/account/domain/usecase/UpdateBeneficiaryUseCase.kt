@@ -5,4 +5,3 @@ class UpdateBeneficiaryUseCase {
         // TODO: implement updating beneficiary
     }
 }
-

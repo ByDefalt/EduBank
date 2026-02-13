@@ -5,4 +5,3 @@ class CreateOfferUseCase {
         // TODO: implement creating offer
     }
 }
-

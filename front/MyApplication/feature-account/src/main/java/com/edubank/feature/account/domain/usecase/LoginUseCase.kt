@@ -5,4 +5,3 @@ class LoginUseCase {
         // TODO: implement login
     }
 }
-

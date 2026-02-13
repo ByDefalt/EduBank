@@ -5,4 +5,3 @@ class ChangeAccountStateUseCase {
         // TODO: implement changing account state (admin)
     }
 }
-

@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "defalt.feature_bank"
+    namespace = "defalt.featureBank"
     compileSdk {
         version = release(36)
     }

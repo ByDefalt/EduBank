@@ -5,4 +5,3 @@ class GetOfferByIdUseCase {
         // TODO: implement getting offer by id
     }
 }
-

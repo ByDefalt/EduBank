@@ -5,4 +5,3 @@ class UpdateBankAccountParamsUseCase {
         // TODO: implement updating bank account parameters
     }
 }
-

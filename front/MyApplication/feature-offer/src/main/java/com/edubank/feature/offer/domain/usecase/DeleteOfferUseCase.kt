@@ -5,4 +5,3 @@ class DeleteOfferUseCase {
         // TODO: implement deleting offer
     }
 }
-

@@ -5,4 +5,3 @@ class CreateCancellationOperationUseCase {
         // TODO: implement creating cancellation operation
     }
 }
-

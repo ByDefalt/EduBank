@@ -18,7 +18,7 @@ import defalt.core.ui.CustomColor
 fun ArkeoButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
@@ -27,6 +27,6 @@ fun ArkeoButton(
         colors = ButtonDefaults.buttonColors(containerColor = CustomColor.ArkeoRed),
         content = {
             Text(text = text, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
-        }
+        },
     )
 }
