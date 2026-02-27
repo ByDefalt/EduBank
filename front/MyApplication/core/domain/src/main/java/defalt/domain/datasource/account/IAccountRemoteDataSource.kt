@@ -4,7 +4,6 @@ import defalt.domain.entity.account.entity.AccountEntity
 import defalt.domain.entity.account.entity.AccountRegisterEntity
 import defalt.utils.NetworkResult
 
-// defalt.domain.account.datasource.IAccountRemoteDataSource.kt
 interface IAccountRemoteDataSource {
     suspend fun getAccounts(): NetworkResult<List<AccountEntity>>
     suspend fun getAccountById(id: String): NetworkResult<AccountEntity>
