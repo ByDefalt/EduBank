@@ -16,13 +16,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.core.api.bank.model.BankAccountEntity
 import defalt.ui.utils.CustomColor
+import defalt.ui.component.BottomNavBar
 import java.util.Locale
 
 private val ArkeoRed = CustomColor.ArkeoRed
@@ -111,7 +108,7 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
             }
 
             // ── Bottom Navigation ────────────────────────────────────────────
-            BottomNavBar()
+            BottomNavBar(selectedRoute = "Comptes")
         }
     }
 }
@@ -170,55 +167,6 @@ private fun AccountCard(
                 tint = ArkeoRed,
                 modifier = Modifier.size(24.dp),
             )
-        }
-    }
-}
-
-@Composable
-private fun BottomNavBar() {
-    data class NavItem(
-        val label: String,
-        val icon: androidx.compose.ui.graphics.vector.ImageVector,
-        val selected: Boolean = false,
-    )
-
-    val items = listOf(
-        NavItem("Accueil", Icons.Default.Home),
-        NavItem("Comptes", Icons.AutoMirrored.Filled.List, selected = true),
-        NavItem("Virements", Icons.Default.SwapHoriz),
-    )
-
-    Column {
-        HorizontalDivider(Modifier, thickness = 1.dp, color = Color(0xFFE0E0E0))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
-        ) {
-            items.forEach { item ->
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.label,
-                        tint = if (item.selected) ArkeoRed else TextSecondary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = item.label,
-                        fontSize = 10.sp,
-                        color = if (item.selected) ArkeoRed else TextSecondary,
-                        fontWeight = if (item.selected) FontWeight.Bold else FontWeight.Normal,
-                    )
-                }
-            }
         }
     }
 }

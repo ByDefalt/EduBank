@@ -11,8 +11,8 @@ fun NavGraphBuilder.bankGraph(
     onNavigateToAccounts: () -> Unit,
     onBack: () -> Unit,
 ) {
-    navigation<Routes.Account>(
-        startDestination = Routes.Account.Login,
+    navigation<Routes.Bank>(
+        startDestination = Routes.Bank.Home,
     ) {
         composable<Routes.Bank.Home> {
             HomeAccountScreen(

@@ -73,11 +73,14 @@ dependencies {
     api(libs.kotlinx.coroutines.android)
 
     /* ---------------- TESTS ---------------- */
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.mockk.android)
-    androidTestImplementation(libs.androidx.junit.ktx)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    testApi(libs.junit)
+    androidTestApi(libs.mockk.android)
+    androidTestApi(libs.androidx.junit.ktx)
+    androidTestApi(libs.androidx.junit)
+    androidTestApi(libs.androidx.espresso.core)
+    androidTestApi(platform(libs.androidx.compose.bom))
+    androidTestApi(libs.androidx.compose.ui.test.junit4)
+
+
+    api(libs.androidx.junit.ktx)
 }
