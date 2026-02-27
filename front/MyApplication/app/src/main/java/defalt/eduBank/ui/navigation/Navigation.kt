@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import defalt.featureAccount.ui.navigation.accountGraph
+import defalt.featureBank.ui.navigation.bankGraph
 import defalt.featureOffer.ui.navigation.offerGraph
 import defalt.ui.utils.Routes
 
@@ -19,10 +20,14 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToOffer = { navController.navigate(Routes.Offer) },
         )
         accountGraph(
-            onBackToHome = { navController.popBackStack() }
+            onBackToHome = { navController.popBackStack() },
         )
         offerGraph(
-            onBack = { navController.popBackStack() }
+            onBack = { navController.popBackStack() },
+        )
+        bankGraph(
+            onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
+            onBack = { navController.popBackStack() },
         )
     }
 }

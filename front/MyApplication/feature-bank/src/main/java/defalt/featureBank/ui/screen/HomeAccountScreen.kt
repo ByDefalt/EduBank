@@ -318,7 +318,10 @@ private fun HomeBottomNavBar(
                                 .height(3.dp)
                                 .background(
                                     color = ArkeoRed,
-                                    shape = RoundedCornerShape(bottomStart = 3.dp, bottomEnd = 3.dp),
+                                    shape = RoundedCornerShape(
+                                        bottomStart = 3.dp,
+                                        bottomEnd = 3.dp,
+                                    ),
                                 ),
                         )
                     }

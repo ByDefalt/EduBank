@@ -8,7 +8,7 @@ import defalt.featureAccount.ui.screen.RegisterScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.accountGraph(
-    onBackToHome: () -> Unit
+    onBackToHome: () -> Unit,
 ) {
     navigation<Routes.Account>(
         startDestination = Routes.Account.Login,

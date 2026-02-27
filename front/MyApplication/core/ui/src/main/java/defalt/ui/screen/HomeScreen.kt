@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.ui.component.ArkeoButton
+import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 
 @Composable
@@ -105,7 +106,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(onClick = onNavigateToRegister) {
+            TextButton(onClick = safeClick(onNavigateToRegister)) {
                 Text(
                     "Ouvrir un compte",
                     color = CustomColor.ArkeoRed,

@@ -7,7 +7,7 @@ import defalt.featureOffer.ui.screen.OffersScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.offerGraph(
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     navigation<Routes.Offer>(
         startDestination = Routes.Offer.List,

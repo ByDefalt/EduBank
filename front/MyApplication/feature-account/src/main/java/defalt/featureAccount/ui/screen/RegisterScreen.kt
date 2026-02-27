@@ -32,10 +32,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
+import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 
 @Composable
-fun RegisterScreen(onBackToHome: () -> Unit) {
+fun RegisterScreen(
+    onBackToHome: () -> Unit,
+    onRegisterSuccess: () -> Unit = {},
+) {
     // État local (optionnel pour la démo)
     var raisonSociale by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -112,7 +116,7 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
         Spacer(modifier = Modifier.weight(1f))
 
         TextButton(
-            onClick = onBackToHome,
+            onClick = safeClick(onBackToHome),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 24.dp),
@@ -126,5 +130,8 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(onBackToHome = {})
+    RegisterScreen(
+        onBackToHome = {},
+        onRegisterSuccess = {},
+    )
 }
