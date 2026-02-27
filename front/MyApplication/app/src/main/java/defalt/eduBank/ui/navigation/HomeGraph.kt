@@ -6,12 +6,16 @@ import androidx.navigation.compose.composable
 import defalt.ui.screen.HomeScreen
 import defalt.ui.utils.Routes
 
-fun NavGraphBuilder.homeGraph(navController: NavController) {
+fun NavGraphBuilder.homeGraph(
+    onNavigateToLogin: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    onNavigateToOffer: () -> Unit,
+) {
     composable<Routes.Core.Home> {
         HomeScreen(
-            onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
-            onNavigateToRegister = { navController.navigate(Routes.Account.Register) },
-            onNavigateToOffer = { navController.navigate(Routes.Offer) },
+            onNavigateToLogin = onNavigateToLogin,
+            onNavigateToRegister = onNavigateToRegister,
+            onNavigateToOffer = onNavigateToOffer,
         )
     }
 }

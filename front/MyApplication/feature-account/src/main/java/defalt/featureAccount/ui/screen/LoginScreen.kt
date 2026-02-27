@@ -34,7 +34,10 @@ import defalt.ui.component.ArkeoInput
 import defalt.ui.utils.CustomColor
 
 @Composable
-fun LoginScreen(onBackToHome: () -> Unit) {
+fun LoginScreen(
+    onBackToHome: () -> Unit,
+    onLoginSuccess: () -> Unit = {},
+) {
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 

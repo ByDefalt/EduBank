@@ -13,8 +13,16 @@ fun ArkeoNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = Routes.Core.Home,
     ) {
-        homeGraph(navController)
-        accountGraph(navController)
-        offerGraph(navController)
+        homeGraph(
+            onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
+            onNavigateToRegister = { navController.navigate(Routes.Account.Register) },
+            onNavigateToOffer = { navController.navigate(Routes.Offer) },
+        )
+        accountGraph(
+            onBackToHome = { navController.popBackStack() }
+        )
+        offerGraph(
+            onBack = { navController.popBackStack() }
+        )
     }
 }
