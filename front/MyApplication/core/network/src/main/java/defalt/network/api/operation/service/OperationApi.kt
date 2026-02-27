@@ -1,31 +1,36 @@
 package defalt.network.api.operation.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationsGet200Response
 import defalt.network.api.operation.model.OperationsIdCancelPost201Response
 import defalt.network.api.operation.model.OperationsIdCancelPostRequest
 import defalt.network.api.operation.model.OperationsIdStatePatchRequest
 import defalt.network.api.operation.model.OperationsPostRequest
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OperationApi {
 
     /**
-    * enum for parameter state
-    */
+     * enum for parameter state
+     */
     @Serializable
     enum class StateOperationsGet(val value: kotlin.String) {
-        @SerialName(value = "pending") PENDING("pending"),
-        @SerialName(value = "completed") COMPLETED("completed"),
-        @SerialName(value = "failed") FAILED("failed"),
-        @SerialName(value = "cancelled") CANCELLED("cancelled")
+        @SerialName(value = "pending")
+        PENDING("pending"),
+        @SerialName(value = "completed")
+        COMPLETED("completed"),
+        @SerialName(value = "failed")
+        FAILED("failed"),
+        @SerialName(value = "cancelled")
+        CANCELLED("cancelled")
     }
 
     /**
@@ -43,7 +48,12 @@ interface OperationApi {
      * @return [OperationsGet200Response]
      */
     @GET("operations")
-    suspend fun operationsGet(@Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationsGet200Response>
+    suspend fun operationsGet(
+        @Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null,
+        @Query("state") state: StateOperationsGet? = null,
+        @Query("date_from") dateFrom: java.time.OffsetDateTime? = null,
+        @Query("date_to") dateTo: java.time.OffsetDateTime? = null
+    ): Response<OperationsGet200Response>
 
     /**
      * POST operations/{id}/cancel
@@ -61,7 +71,10 @@ interface OperationApi {
      * @return [OperationsIdCancelPost201Response]
      */
     @POST("operations/{id}/cancel")
-    suspend fun operationsIdCancelPost(@Path("id") id: kotlin.Int, @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null): Response<OperationsIdCancelPost201Response>
+    suspend fun operationsIdCancelPost(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null
+    ): Response<OperationsIdCancelPost201Response>
 
     /**
      * GET operations/{id}
@@ -89,12 +102,15 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param operationsIdStatePatchRequest 
+     * @param id
+     * @param operationsIdStatePatchRequest
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
-    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest): Response<Operation>
+    suspend fun operationsIdStatePatch(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest
+    ): Response<Operation>
 
     /**
      * POST operations
@@ -106,7 +122,7 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operationsPostRequest 
+     * @param operationsPostRequest
      * @return [Operation]
      */
     @POST("operations")

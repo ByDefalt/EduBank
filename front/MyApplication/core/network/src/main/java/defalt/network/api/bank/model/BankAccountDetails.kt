@@ -15,12 +15,8 @@
 
 package defalt.network.api.bank.model
 
-import defalt.network.api.bank.model.BankAccountParameter
-import defalt.network.api.bank.model.Type
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -30,12 +26,12 @@ import kotlinx.serialization.Contextual
  * @param typeId ID du type de compte
  * @param sold Solde du compte
  * @param iban IBAN du compte
- * @param parameter 
- * @param type 
+ * @param parameter
+ * @param type
  */
 @Serializable
 
-data class BankAccountDetails (
+data class BankAccountDetails(
 
     /* Numéro de compte bancaire */
     @SerialName(value = "id")

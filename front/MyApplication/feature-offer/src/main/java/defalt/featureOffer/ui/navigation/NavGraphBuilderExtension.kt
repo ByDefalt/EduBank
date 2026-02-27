@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import defalt.core.ui.utils.Routes
 import defalt.featureOffer.ui.screen.OffersScreen
+import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.offerGraph(navController: NavController) {
     navigation<Routes.Offer>(

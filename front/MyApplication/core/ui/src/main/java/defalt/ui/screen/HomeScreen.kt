@@ -31,9 +31,11 @@ fun HomeScreen(
     onNavigateToRegister: () -> Unit,
     onNavigateToOffer: () -> Unit = {},
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         // En-tête Logo
         Column(
             modifier = Modifier

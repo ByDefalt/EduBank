@@ -1,16 +1,15 @@
 package defalt.network.api.bank.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-import defalt.network.api.bank.model.Error
 import defalt.network.api.bank.model.Type
 import defalt.network.api.bank.model.TypesIdPutRequest
 import defalt.network.api.bank.model.TypesPostRequest
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface TypeApi {
     /**
@@ -36,7 +35,7 @@ interface TypeApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("types/{id}")
@@ -51,7 +50,7 @@ interface TypeApi {
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [Type]
      */
     @GET("types/{id}")
@@ -67,12 +66,15 @@ interface TypeApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param typesIdPutRequest 
+     * @param id
+     * @param typesIdPutRequest
      * @return [Type]
      */
     @PUT("types/{id}")
-    suspend fun typesIdPut(@Path("id") id: kotlin.Int, @Body typesIdPutRequest: TypesIdPutRequest): Response<Type>
+    suspend fun typesIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body typesIdPutRequest: TypesIdPutRequest
+    ): Response<Type>
 
     /**
      * POST types
@@ -84,7 +86,7 @@ interface TypeApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param typesPostRequest 
+     * @param typesPostRequest
      * @return [Type]
      */
     @POST("types")

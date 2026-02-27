@@ -15,21 +15,18 @@
 
 package defalt.network.api.operation.model
 
-import defalt.network.api.operation.model.Operation
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param originalOperation 
- * @param cancellationOperation 
+ * @param originalOperation
+ * @param cancellationOperation
  */
 @Serializable
 
-data class OperationsIdCancelPost201Response (
+data class OperationsIdCancelPost201Response(
 
     @SerialName(value = "original_operation")
     val originalOperation: Operation? = null,

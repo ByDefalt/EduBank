@@ -1,16 +1,15 @@
 package defalt.network.api.bank.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.network.api.bank.model.BankAccountParameter
-import defalt.network.api.bank.model.Error
 import defalt.network.api.bank.model.ParametersIdPutRequest
 import defalt.network.api.bank.model.ParametersPostRequest
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface BankAccountParameterApi {
     /**
@@ -36,7 +35,7 @@ interface BankAccountParameterApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("parameters/{id}")
@@ -51,7 +50,7 @@ interface BankAccountParameterApi {
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id 
+     * @param id
      * @return [BankAccountParameter]
      */
     @GET("parameters/{id}")
@@ -67,12 +66,15 @@ interface BankAccountParameterApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param parametersIdPutRequest 
+     * @param id
+     * @param parametersIdPutRequest
      * @return [BankAccountParameter]
      */
     @PUT("parameters/{id}")
-    suspend fun parametersIdPut(@Path("id") id: kotlin.Int, @Body parametersIdPutRequest: ParametersIdPutRequest): Response<BankAccountParameter>
+    suspend fun parametersIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body parametersIdPutRequest: ParametersIdPutRequest
+    ): Response<BankAccountParameter>
 
     /**
      * POST parameters
@@ -84,7 +86,7 @@ interface BankAccountParameterApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param parametersPostRequest 
+     * @param parametersPostRequest
      * @return [BankAccountParameter]
      */
     @POST("parameters")

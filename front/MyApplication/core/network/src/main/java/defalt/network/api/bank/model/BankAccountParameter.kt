@@ -16,9 +16,8 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -29,7 +28,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class BankAccountParameter (
+data class BankAccountParameter(
 
     /* Identifiant des paramètres */
     @SerialName(value = "id")
@@ -52,8 +51,10 @@ data class BankAccountParameter (
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive");
+        @SerialName(value = "active")
+        ACTIVE("active"),
+        @SerialName(value = "inactive")
+        INACTIVE("inactive");
     }
 
 }

@@ -20,6 +20,7 @@ class AccountRemoteDataSource(
 
     override suspend fun createAccount(accountRegister: AccountRegisterEntity) =
         safeApiCall { api.accountsPost(accountRegister.toDto()) }.map { it.toDomain() }
+
     override suspend fun deleteAccount(id: Int) =
         safeApiCall { api.accountsIdDelete(id) }
 }

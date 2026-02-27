@@ -16,18 +16,17 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param name 
+ * @param name
  */
 @Serializable
 
-data class TypesIdPutRequest (
+data class TypesIdPutRequest(
 
     @SerialName(value = "name")
     val name: kotlin.String? = null

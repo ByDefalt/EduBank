@@ -22,4 +22,7 @@ dependencies {
     testApi(libs.junit)
     testApi(libs.kotlintest.runner)
     testApi(libs.kotlinx.coroutines.test)
+
+
+    api(libs.kotlinx.serialization.json)
 }

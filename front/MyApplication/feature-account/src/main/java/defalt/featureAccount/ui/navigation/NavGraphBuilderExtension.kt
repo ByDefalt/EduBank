@@ -4,9 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import defalt.core.ui.utils.Routes
 import defalt.featureAccount.ui.screen.LoginScreen
 import defalt.featureAccount.ui.screen.RegisterScreen
+import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.accountGraph(navController: NavController) {
     navigation<Routes.Account>(

@@ -44,10 +44,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.util.Locale
 
-private val ArkeoRed    = Color(0xFFCC0000)
-private val LightGray   = Color(0xFFE5E5E5)
+private val ArkeoRed = Color(0xFFCC0000)
+private val LightGray = Color(0xFFE5E5E5)
 private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
+
 @Composable
 fun HomeAccountScreen(
     onNavigateToAccounts: () -> Unit = {},
@@ -120,7 +121,7 @@ private fun MainAccountCard() {
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-            ){
+            ) {
                 Text(
                     text = "XXXXX XXXXXXX",
                 )
@@ -185,7 +186,7 @@ private fun MainAccountCard() {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                QuickAction(icon = Icons.Default.Receipt,     label = "Relevés")
+                QuickAction(icon = Icons.Default.Receipt, label = "Relevés")
                 QuickAction(icon = Icons.Default.AccountBalance, label = "RIB")
             }
         }
@@ -267,9 +268,9 @@ private fun HomeBottomNavBar(
     )
 
     val items = listOf(
-        NavItem("Accueil",   Icons.Default.Home,                    selected = true),
-        NavItem("Comptes",   Icons.AutoMirrored.Filled.List,        onClick = onNavigateToAccounts),
-        NavItem("Virement",  Icons.Default.SwapHoriz,               onClick = onNavigateToTransfer),
+        NavItem("Accueil", Icons.Default.Home, selected = true),
+        NavItem("Comptes", Icons.AutoMirrored.Filled.List, onClick = onNavigateToAccounts),
+        NavItem("Virement", Icons.Default.SwapHoriz, onClick = onNavigateToTransfer),
     )
 
     Row(

@@ -47,7 +47,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
-
     /* ---------------- DATABASE ---------------- */
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

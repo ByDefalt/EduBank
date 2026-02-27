@@ -29,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.api.offer.entity.OfferEntity
-import defalt.core.ui.component.ArkeoButton
-import defalt.core.ui.utils.CustomColor
+import defalt.domain.entity.offer.entity.OfferEntity
+import defalt.ui.component.ArkeoButton
+import defalt.ui.utils.CustomColor
 import java.time.LocalDate
 
 @Composable

@@ -16,9 +16,9 @@
 package defalt.network.api.operation.model
 
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -35,7 +35,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class Operation (
+data class Operation(
 
     /* Identifiant de l'opération */
     @SerialName(value = "id")
@@ -82,10 +82,14 @@ data class Operation (
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "pending") PENDING("pending"),
-        @SerialName(value = "completed") COMPLETED("completed"),
-        @SerialName(value = "failed") FAILED("failed"),
-        @SerialName(value = "cancelled") CANCELLED("cancelled");
+        @SerialName(value = "pending")
+        PENDING("pending"),
+        @SerialName(value = "completed")
+        COMPLETED("completed"),
+        @SerialName(value = "failed")
+        FAILED("failed"),
+        @SerialName(value = "cancelled")
+        CANCELLED("cancelled");
     }
 
 }

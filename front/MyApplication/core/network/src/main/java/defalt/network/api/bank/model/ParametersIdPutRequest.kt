@@ -16,19 +16,18 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param overdraftLimit 
- * @param state 
+ * @param overdraftLimit
+ * @param state
  */
 @Serializable
 
-data class ParametersIdPutRequest (
+data class ParametersIdPutRequest(
 
     @SerialName(value = "overdraft_limit")
     val overdraftLimit: kotlin.Double? = null,
@@ -45,8 +44,10 @@ data class ParametersIdPutRequest (
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive");
+        @SerialName(value = "active")
+        ACTIVE("active"),
+        @SerialName(value = "inactive")
+        INACTIVE("inactive");
     }
 
 }

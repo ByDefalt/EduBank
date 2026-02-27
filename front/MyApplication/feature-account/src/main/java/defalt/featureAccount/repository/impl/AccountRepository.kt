@@ -10,6 +10,8 @@ class AccountRepository(
 
     override suspend fun getAccounts() = remoteDataSource.getAccounts()
     override suspend fun getAccountById(id: String) = remoteDataSource.getAccountById(id)
-    override suspend fun createAccount(accountRegister: AccountRegisterEntity) = remoteDataSource.createAccount(accountRegister)
+    override suspend fun createAccount(accountRegister: AccountRegisterEntity) =
+        remoteDataSource.createAccount(accountRegister)
+
     override suspend fun deleteAccount(id: Int) = remoteDataSource.deleteAccount(id)
 }

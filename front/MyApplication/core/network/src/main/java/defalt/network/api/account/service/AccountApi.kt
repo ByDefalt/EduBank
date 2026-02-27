@@ -1,14 +1,13 @@
 package defalt.network.api.account.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.network.api.account.model.Account
 import defalt.network.api.account.model.AccountRegister
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AccountApi {
     /**
@@ -30,7 +29,7 @@ interface AccountApi {
      * Responses:
      *  - 204: Compte supprimé avec succès
      *
-     * @param id 
+     * @param id
      * @return [Unit]
      */
     @DELETE("accounts/{id}")
@@ -43,7 +42,7 @@ interface AccountApi {
      * Responses:
      *  - 200: Compte trouvé
      *
-     * @param id 
+     * @param id
      * @return [Account]
      */
     @GET("accounts/{id}")
@@ -56,7 +55,7 @@ interface AccountApi {
      * Responses:
      *  - 201: Compte créé
      *
-     * @param accountRegister 
+     * @param accountRegister
      * @return [Account]
      */
     @POST("accounts")

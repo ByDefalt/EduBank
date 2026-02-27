@@ -1,9 +1,13 @@
 package defalt.network.datasource
 
 import defalt.domain.datasource.account.IAccountRemoteDataSource
-import defalt.network.api.account.model.AccountRegister
+import defalt.domain.entity.account.entity.AccountRegisterEntity
+import defalt.network.api.account.mapper.toDomain
+import defalt.network.api.account.mapper.toDto
 import defalt.network.api.account.service.AccountApi
 import defalt.network.utils.safeApiCall
+import defalt.utils.map
+
 
 class AccountRemoteDataSource(
     private val api: AccountApi,
@@ -15,7 +19,7 @@ class AccountRemoteDataSource(
     override suspend fun getAccountById(id: String) = safeApiCall { api.accountsIdGet(id) }
         .map { it.toDomain() }
 
-    override suspend fun createAccount(accountRegister: AccountRegister) = safeApiCall {
+    override suspend fun createAccount(accountRegister: AccountRegisterEntity) = safeApiCall {
         api.accountsPost(accountRegister.toDto())
     }.map { it.toDomain() }
 

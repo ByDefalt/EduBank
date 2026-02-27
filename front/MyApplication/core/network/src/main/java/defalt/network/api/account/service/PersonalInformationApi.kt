@@ -1,14 +1,12 @@
 package defalt.network.api.account.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.network.api.account.model.PersonalInformation
 import defalt.network.api.account.model.PersonalInformationRegister
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface PersonalInformationApi {
     /**
@@ -30,7 +28,7 @@ interface PersonalInformationApi {
      * Responses:
      *  - 200: Trouvé
      *
-     * @param id 
+     * @param id
      * @return [PersonalInformation]
      */
     @GET("personal-information/{id}")
@@ -43,7 +41,7 @@ interface PersonalInformationApi {
      * Responses:
      *  - 201: Créé avec succès
      *
-     * @param personalInformationRegister 
+     * @param personalInformationRegister
      * @return [PersonalInformation]
      */
     @POST("personal-information")

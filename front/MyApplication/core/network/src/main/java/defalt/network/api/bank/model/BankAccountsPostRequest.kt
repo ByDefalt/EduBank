@@ -16,22 +16,21 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param parameterId 
- * @param typeId 
- * @param sold 
- * @param iban 
+ * @param parameterId
+ * @param typeId
+ * @param sold
+ * @param iban
  * @param accountId ID du compte utilisateur à lier
  */
 @Serializable
 
-data class BankAccountsPostRequest (
+data class BankAccountsPostRequest(
 
     @SerialName(value = "parameter_id")
     val parameterId: kotlin.Int,

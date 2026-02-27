@@ -16,9 +16,9 @@
 package defalt.network.api.offer.model
 
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -33,7 +33,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class Offer (
+data class Offer(
 
     /* Identifiant de l'offre */
     @SerialName(value = "id")
@@ -72,9 +72,12 @@ data class Offer (
      */
     @Serializable
     enum class State(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive"),
-        @SerialName(value = "expired") EXPIRED("expired");
+        @SerialName(value = "active")
+        ACTIVE("active"),
+        @SerialName(value = "inactive")
+        INACTIVE("inactive"),
+        @SerialName(value = "expired")
+        EXPIRED("expired");
     }
 
 }

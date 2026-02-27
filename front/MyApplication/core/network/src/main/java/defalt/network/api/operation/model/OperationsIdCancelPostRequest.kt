@@ -16,9 +16,8 @@
 package defalt.network.api.operation.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -27,7 +26,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class OperationsIdCancelPostRequest (
+data class OperationsIdCancelPostRequest(
 
     /* Raison de l'annulation */
     @SerialName(value = "reason")

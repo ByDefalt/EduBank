@@ -16,9 +16,8 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
@@ -28,7 +27,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class Type (
+data class Type(
 
     /* Identifiant du type */
     @SerialName(value = "id")

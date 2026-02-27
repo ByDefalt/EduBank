@@ -16,20 +16,19 @@
 package defalt.network.api.bank.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param code 
- * @param message 
- * @param details 
+ * @param code
+ * @param message
+ * @param details
  */
 @Serializable
 
-data class Error (
+data class Error(
 
     @SerialName(value = "code")
     val code: kotlin.String? = null,

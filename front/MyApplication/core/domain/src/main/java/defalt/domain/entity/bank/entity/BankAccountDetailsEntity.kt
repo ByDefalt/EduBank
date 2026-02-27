@@ -1,8 +1,5 @@
 package defalt.domain.entity.bank.entity
 
-import defalt.core.api.bank.model.BankAccountParameterEntity
-import defalt.core.api.bank.model.TypeEntity
-
 
 data class BankAccountDetailsEntity(
     val id: Int,

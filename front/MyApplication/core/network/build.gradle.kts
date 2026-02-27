@@ -15,7 +15,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -32,7 +35,6 @@ dependencies {
     /* ---------------- NETWORK ---------------- */
     implementation(libs.retrofit)
     implementation(libs.okhttp.logging)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.converter.scalars)
 

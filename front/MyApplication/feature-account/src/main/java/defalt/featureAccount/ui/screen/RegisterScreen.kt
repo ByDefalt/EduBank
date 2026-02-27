@@ -30,9 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.component.ArkeoButton
-import defalt.core.ui.component.ArkeoInput
-import defalt.core.ui.utils.CustomColor
+import defalt.ui.component.ArkeoButton
+import defalt.ui.component.ArkeoInput
+import defalt.ui.utils.CustomColor
 
 @Composable
 fun RegisterScreen(onBackToHome: () -> Unit) {

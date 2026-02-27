@@ -16,21 +16,20 @@
 package defalt.network.api.account.model
 
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * 
  *
- * @param id 
+ * @param id
  * @param personalInfoId ID faisant référence à PersonalInformation
  * @param roleId ID faisant référence à Role
- * @param state 
+ * @param state
  */
 @Serializable
 
-data class Account (
+data class Account(
 
     @SerialName(value = "id")
     val id: kotlin.String? = null,
