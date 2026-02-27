@@ -50,7 +50,11 @@ android {
 
 dependencies {
 
-    implementation(project(":core"))
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:domain"))
     implementation(project(":feature-account"))
     implementation(project(":feature-offer"))
     implementation(project(":feature-bank"))

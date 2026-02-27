@@ -43,7 +43,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+
+    implementation(project(":core:utils"))
+    implementation(project(":core:ui"))
 }
 
 spotless {

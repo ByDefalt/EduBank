@@ -31,3 +31,10 @@ include(
     ":feature-operation",
     ":feature-offer"
 )
+include(":core:network")
+include(":core:ui")
+include(":core:domain")
+include(":core:utils")
+
+include(":core:database")
+include(":core:testing")

@@ -1,12 +1,13 @@
 package defalt.featureAccount.repository.service
 
-import defalt.core.api.account.model.Account
-import defalt.core.api.account.model.AccountRegister
-import defalt.core.utils.NetworkResult
+import defalt.domain.entity.account.entity.AccountEntity
+import defalt.domain.entity.account.entity.AccountRegisterEntity
+import defalt.utils.NetworkResult
+
 
 interface IAccountRepository {
-    suspend fun getAccounts(): NetworkResult<List<Account>>
-    suspend fun getAccountById(id: String): NetworkResult<Account>
-    suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account>
+    suspend fun getAccounts(): NetworkResult<List<AccountEntity>>
+    suspend fun getAccountById(id: String): NetworkResult<AccountEntity>
+    suspend fun createAccount(accountRegister: AccountRegisterEntity): NetworkResult<AccountEntity>
     suspend fun deleteAccount(id: Int): NetworkResult<Unit>
 }

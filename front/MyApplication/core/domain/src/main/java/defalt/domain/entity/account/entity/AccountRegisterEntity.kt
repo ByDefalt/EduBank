@@ -1,0 +1,9 @@
+package defalt.domain.entity.account.entity
+
+data class AccountRegisterEntity(
+    val personalInfo: PersonalInformationRegisterEntity,
+    val roleId: Int,
+    val password: String,
+    val state: String? = null,
+
+    )

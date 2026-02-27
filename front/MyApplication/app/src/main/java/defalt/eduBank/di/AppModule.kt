@@ -1,9 +1,9 @@
 package defalt.eduBank.di
 
-import defalt.core.di.coreModule
 import defalt.featureAccount.di.accountModule
 import defalt.featureBank.di.bankModule
 import defalt.featureOffer.di.offerModule
 import defalt.featureOperation.di.operationModule
+import defalt.network.di.networkModule
 
-val appModule = coreModule + accountModule + offerModule + bankModule + operationModule
+val appModule = networkModule + accountModule + offerModule + bankModule + operationModule
