@@ -8,7 +8,6 @@ import defalt.network.api.account.service.AccountApi
 import defalt.network.utils.safeApiCall
 import defalt.utils.map
 
-
 class AccountRemoteDataSource(
     private val api: AccountApi,
 ) : IAccountRemoteDataSource {

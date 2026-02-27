@@ -4,4 +4,4 @@ data class BeneficiariesPostRequestEntity(
     val ibanTarget: String,
     val name: String,
 
-    )
+)

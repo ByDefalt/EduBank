@@ -29,7 +29,6 @@ interface OfferApi {
     @GET("offers/active")
     suspend fun offersActiveGet(): Response<kotlin.collections.List<Offer>>
 
-
     /**
      * enum for parameter state
      */
@@ -37,10 +36,12 @@ interface OfferApi {
     enum class StateOffersGet(val value: kotlin.String) {
         @SerialName(value = "active")
         ACTIVE("active"),
+
         @SerialName(value = "inactive")
         INACTIVE("inactive"),
+
         @SerialName(value = "expired")
-        EXPIRED("expired")
+        EXPIRED("expired"),
     }
 
     /**
@@ -58,7 +59,7 @@ interface OfferApi {
     @GET("offers")
     suspend fun offersGet(
         @Query("state") state: StateOffersGet? = null,
-        @Query("active_only") activeOnly: kotlin.Boolean? = true
+        @Query("active_only") activeOnly: kotlin.Boolean? = true,
     ): Response<kotlin.collections.List<Offer>>
 
     /**
@@ -110,7 +111,7 @@ interface OfferApi {
     @PUT("offers/{id}")
     suspend fun offersIdPut(
         @Path("id") id: kotlin.Int,
-        @Body offersIdPutRequest: OffersIdPutRequest
+        @Body offersIdPutRequest: OffersIdPutRequest,
     ): Response<Offer>
 
     /**
@@ -131,7 +132,7 @@ interface OfferApi {
     @PATCH("offers/{id}/state")
     suspend fun offersIdStatePatch(
         @Path("id") id: kotlin.Int,
-        @Body offersIdStatePatchRequest: OffersIdStatePatchRequest
+        @Body offersIdStatePatchRequest: OffersIdStatePatchRequest,
     ): Response<Offer>
 
     /**
@@ -149,5 +150,4 @@ interface OfferApi {
      */
     @POST("offers")
     suspend fun offersPost(@Body offersPostRequest: OffersPostRequest): Response<Offer>
-
 }

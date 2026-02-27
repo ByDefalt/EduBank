@@ -4,4 +4,4 @@ data class TypeEntity(
     val id: Int,
     val name: String,
 
-    )
+)

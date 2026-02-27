@@ -10,7 +10,7 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.bank.model
@@ -19,7 +19,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param id Numéro de compte bancaire
  * @param parameterId ID des paramètres du compte
@@ -30,26 +30,25 @@ import kotlinx.serialization.Serializable
  * @param type
  */
 @Serializable
-
 data class BankAccountDetails(
 
-    /* Numéro de compte bancaire */
+    // Numéro de compte bancaire
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    /* ID des paramètres du compte */
+    // ID des paramètres du compte
     @SerialName(value = "parameter_id")
     val parameterId: kotlin.Int,
 
-    /* ID du type de compte */
+    // ID du type de compte
     @SerialName(value = "type_id")
     val typeId: kotlin.Int,
 
-    /* Solde du compte */
+    // Solde du compte
     @SerialName(value = "sold")
     val sold: kotlin.Double,
 
-    /* IBAN du compte */
+    // IBAN du compte
     @SerialName(value = "iban")
     val iban: kotlin.String,
 
@@ -57,10 +56,6 @@ data class BankAccountDetails(
     val parameter: BankAccountParameter? = null,
 
     @SerialName(value = "type")
-    val type: Type? = null
+    val type: Type? = null,
 
-) {
-
-
-}
-
+)

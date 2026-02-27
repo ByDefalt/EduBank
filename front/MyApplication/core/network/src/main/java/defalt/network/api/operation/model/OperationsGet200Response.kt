@@ -10,7 +10,7 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
@@ -19,19 +19,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param `data`
  */
 @Serializable
-
 data class OperationsGet200Response(
 
     @SerialName(value = "data")
-    val `data`: kotlin.collections.List<Operation>? = null
+    val `data`: kotlin.collections.List<Operation>? = null,
 
-) {
-
-
-}
-
+)

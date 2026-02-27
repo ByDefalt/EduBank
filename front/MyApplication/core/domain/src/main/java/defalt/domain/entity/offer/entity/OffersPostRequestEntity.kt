@@ -8,6 +8,6 @@ data class OffersPostRequestEntity(
     val endDate: java.time.LocalDate,
     val picturePath: String? = null,
 
-    ) {
+) {
     enum class State(val value: String)
 }

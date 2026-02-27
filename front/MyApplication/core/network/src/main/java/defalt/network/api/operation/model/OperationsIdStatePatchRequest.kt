@@ -10,31 +10,29 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param state
  */
 @Serializable
-
 data class OperationsIdStatePatchRequest(
 
     @SerialName(value = "state")
-    val state: OperationsIdStatePatchRequest.State
+    val state: OperationsIdStatePatchRequest.State,
 
 ) {
 
     /**
-     * 
+     *
      *
      * Values: PENDING,COMPLETED,FAILED,CANCELLED
      */
@@ -42,13 +40,14 @@ data class OperationsIdStatePatchRequest(
     enum class State(val value: kotlin.String) {
         @SerialName(value = "pending")
         PENDING("pending"),
+
         @SerialName(value = "completed")
         COMPLETED("completed"),
+
         @SerialName(value = "failed")
         FAILED("failed"),
+
         @SerialName(value = "cancelled")
-        CANCELLED("cancelled");
+        CANCELLED("cancelled"),
     }
-
 }
-

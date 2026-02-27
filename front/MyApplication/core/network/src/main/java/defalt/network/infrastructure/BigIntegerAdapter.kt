@@ -1,12 +1,12 @@
 package defalt.network.infrastructure
 
+import java.math.BigInteger
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.math.BigInteger
 
 object BigIntegerAdapter : KSerializer<BigInteger> {
     override val descriptor: SerialDescriptor =

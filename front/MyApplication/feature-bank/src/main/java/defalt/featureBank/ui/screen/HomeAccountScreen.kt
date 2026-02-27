@@ -57,15 +57,14 @@ fun HomeAccountScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightGray)
+            .background(LightGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 item {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -73,7 +72,7 @@ fun HomeAccountScreen(
                         text = "Bonjour X.XXXXXX",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = TextPrimary
+                        color = TextPrimary,
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
@@ -85,7 +84,7 @@ fun HomeAccountScreen(
                 item {
                     SectionRowCard(
                         title = "TOUTE MON ÉPARGNE",
-                        onClick = {}
+                        onClick = {},
                     )
                 }
                 item { Spacer(modifier = Modifier.height(8.dp)) }
@@ -93,7 +92,7 @@ fun HomeAccountScreen(
 
             HomeBottomNavBar(
                 onNavigateToAccounts = onNavigateToAccounts,
-                onNavigateToTransfer = onNavigateToTransfer
+                onNavigateToTransfer = onNavigateToTransfer,
             )
         }
     }
@@ -105,22 +104,21 @@ private fun MainAccountCard() {
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-
             Text(
                 text = "COMPTE CHÈQUES 1",
                 color = ArkeoRed,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(2.dp))
             Box(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
             ) {
                 Text(
                     text = "XXXXX XXXXXXX",
@@ -131,20 +129,20 @@ private fun MainAccountCard() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = formatAmount(478.27),
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp,
-                    color = TextPrimary
+                    color = TextPrimary,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = null,
                     tint = ArkeoRed,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
             }
 
@@ -155,25 +153,25 @@ private fun MainAccountCard() {
                     .fillMaxWidth()
                     .clickable { },
                 shape = RoundedCornerShape(20.dp),
-                color = Color(0xFFF5F5F5)
+                color = Color(0xFFF5F5F5),
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "À venir :  ${formatAmount(0.0)}",
                         fontSize = 13.sp,
-                        color = TextSecondary
+                        color = TextSecondary,
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,
                         contentDescription = null,
                         tint = TextSecondary,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(18.dp),
                     )
                 }
             }
@@ -184,7 +182,7 @@ private fun MainAccountCard() {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceAround,
             ) {
                 QuickAction(icon = Icons.Default.Receipt, label = "Relevés")
                 QuickAction(icon = Icons.Default.AccountBalance, label = "RIB")
@@ -197,25 +195,24 @@ private fun MainAccountCard() {
 private fun QuickAction(icon: ImageVector, label: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { }
+        modifier = Modifier.clickable { },
     ) {
         Icon(
             imageVector = icon,
             contentDescription = label,
             tint = TextPrimary,
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(28.dp),
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(text = label, fontSize = 11.sp, color = TextSecondary)
     }
 }
 
-
 @Composable
 private fun SectionRowCard(
     title: String,
     subtitle: String? = null,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -223,21 +220,21 @@ private fun SectionRowCard(
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column {
                 Text(
                     text = title,
                     color = ArkeoRed,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
                 if (subtitle != null) {
                     Spacer(modifier = Modifier.height(2.dp))
@@ -248,23 +245,22 @@ private fun SectionRowCard(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
                 tint = ArkeoRed,
-                modifier = Modifier.size(22.dp)
+                modifier = Modifier.size(22.dp),
             )
         }
     }
 }
 
-
 @Composable
 private fun HomeBottomNavBar(
     onNavigateToAccounts: () -> Unit,
-    onNavigateToTransfer: () -> Unit
+    onNavigateToTransfer: () -> Unit,
 ) {
     data class NavItem(
         val label: String,
         val icon: ImageVector,
         val selected: Boolean = false,
-        val onClick: () -> Unit = {}
+        val onClick: () -> Unit = {},
     )
 
     val items = listOf(
@@ -283,30 +279,30 @@ private fun HomeBottomNavBar(
                 color = Color.White,
             )
             .windowInsetsPadding(WindowInsets.navigationBars),
-        horizontalArrangement = Arrangement.SpaceAround
+        horizontalArrangement = Arrangement.SpaceAround,
     ) {
         items.forEach { item ->
             Box(
                 modifier = Modifier
                     .clickable(onClick = item.onClick)
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 8.dp),
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.label,
                         tint = if (item.selected) ArkeoRed else TextSecondary,
-                        modifier = Modifier.size(22.dp)
+                        modifier = Modifier.size(22.dp),
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = item.label,
                         fontSize = 10.sp,
                         color = if (item.selected) ArkeoRed else TextSecondary,
-                        fontWeight = if (item.selected) FontWeight.Bold else FontWeight.Normal
+                        fontWeight = if (item.selected) FontWeight.Bold else FontWeight.Normal,
                     )
                 }
 
@@ -314,7 +310,7 @@ private fun HomeBottomNavBar(
                     Box(
                         modifier = Modifier
                             .matchParentSize(),
-                        contentAlignment = Alignment.TopCenter
+                        contentAlignment = Alignment.TopCenter,
                     ) {
                         Box(
                             modifier = Modifier
@@ -322,8 +318,8 @@ private fun HomeBottomNavBar(
                                 .height(3.dp)
                                 .background(
                                     color = ArkeoRed,
-                                    shape = RoundedCornerShape(bottomStart = 3.dp, bottomEnd = 3.dp)
-                                )
+                                    shape = RoundedCornerShape(bottomStart = 3.dp, bottomEnd = 3.dp),
+                                ),
                         )
                     }
                 }

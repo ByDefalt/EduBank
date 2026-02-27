@@ -43,13 +43,13 @@ fun ArkeoApp() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(CustomColor.ArkeoRed)
+            .background(CustomColor.ArkeoRed),
     ) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars),
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
         ) {
             ArkeoNavHost(navController = navController)
         }

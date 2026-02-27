@@ -15,7 +15,7 @@ interface BankAccountParameterApi {
     /**
      * GET parameters
      * Récupérer la liste des paramètres de comptes bancaires
-     * 
+     *
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
@@ -28,7 +28,7 @@ interface BankAccountParameterApi {
     /**
      * DELETE parameters/{id}
      * Supprimer des paramètres de compte bancaire
-     * 
+     *
      * Responses:
      *  - 204: Paramètres supprimés avec succès
      *  - 404: Ressource non trouvée
@@ -44,7 +44,7 @@ interface BankAccountParameterApi {
     /**
      * GET parameters/{id}
      * Récupérer des paramètres par ID
-     * 
+     *
      * Responses:
      *  - 200: Paramètres récupérés avec succès
      *  - 404: Ressource non trouvée
@@ -73,13 +73,13 @@ interface BankAccountParameterApi {
     @PUT("parameters/{id}")
     suspend fun parametersIdPut(
         @Path("id") id: kotlin.Int,
-        @Body parametersIdPutRequest: ParametersIdPutRequest
+        @Body parametersIdPutRequest: ParametersIdPutRequest,
     ): Response<BankAccountParameter>
 
     /**
      * POST parameters
      * Créer de nouveaux paramètres de compte bancaire
-     * 
+     *
      * Responses:
      *  - 201: Paramètres créés avec succès
      *  - 400: Requête invalide
@@ -91,5 +91,4 @@ interface BankAccountParameterApi {
      */
     @POST("parameters")
     suspend fun parametersPost(@Body parametersPostRequest: ParametersPostRequest): Response<BankAccountParameter>
-
 }

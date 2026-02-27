@@ -10,29 +10,23 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.bank.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param name
  */
 @Serializable
-
 data class TypesIdPutRequest(
 
     @SerialName(value = "name")
-    val name: kotlin.String? = null
+    val name: kotlin.String? = null,
 
-) {
-
-
-}
-
+)

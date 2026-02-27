@@ -7,4 +7,4 @@ data class BankAccountsPostRequestEntity(
     val iban: String,
     val accountId: Int,
 
-    )
+)

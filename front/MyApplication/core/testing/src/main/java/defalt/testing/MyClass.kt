@@ -1,4 +1,3 @@
 package defalt.testing
 
-class MyClass {
-}
+class MyClass

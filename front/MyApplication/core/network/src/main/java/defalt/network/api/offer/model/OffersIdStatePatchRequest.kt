@@ -10,31 +10,29 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.offer.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param state
  */
 @Serializable
-
 data class OffersIdStatePatchRequest(
 
     @SerialName(value = "state")
-    val state: OffersIdStatePatchRequest.State
+    val state: OffersIdStatePatchRequest.State,
 
 ) {
 
     /**
-     * 
+     *
      *
      * Values: ACTIVE,INACTIVE,EXPIRED
      */
@@ -42,11 +40,11 @@ data class OffersIdStatePatchRequest(
     enum class State(val value: kotlin.String) {
         @SerialName(value = "active")
         ACTIVE("active"),
+
         @SerialName(value = "inactive")
         INACTIVE("inactive"),
+
         @SerialName(value = "expired")
-        EXPIRED("expired");
+        EXPIRED("expired"),
     }
-
 }
-

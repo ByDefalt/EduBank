@@ -4,4 +4,4 @@ data class SignInRequestEntity(
     val idBankAccount: String,
     val password: String,
 
-    )
+)

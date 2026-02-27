@@ -10,7 +10,7 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
@@ -19,23 +19,18 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param originalOperation
  * @param cancellationOperation
  */
 @Serializable
-
 data class OperationsIdCancelPost201Response(
 
     @SerialName(value = "original_operation")
     val originalOperation: Operation? = null,
 
     @SerialName(value = "cancellation_operation")
-    val cancellationOperation: Operation? = null
+    val cancellationOperation: Operation? = null,
 
-) {
-
-
-}
-
+)

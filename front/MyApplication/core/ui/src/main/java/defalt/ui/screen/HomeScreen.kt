@@ -34,7 +34,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(Color.White),
     ) {
         // En-tête Logo
         Column(
@@ -47,7 +47,7 @@ fun HomeScreen(
                 "ARKEO BANQUE",
                 color = CustomColor.ArkeoRed,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
             Text("ENTREPRISES & INSTITUTIONNELS", fontSize = 10.sp, fontWeight = FontWeight.Medium)
         }
@@ -68,17 +68,17 @@ fun HomeScreen(
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,
                 )
                 Surface(
                     color = CustomColor.ArkeoRed,
-                    modifier = Modifier.padding(vertical = 4.dp)
+                    modifier = Modifier.padding(vertical = 4.dp),
                 ) {
                     Text(
                         " ÉCHANGER ",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
                     )
                 }
                 Text(
@@ -86,7 +86,7 @@ fun HomeScreen(
                     color = Color.White,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,
                 )
             }
         }
@@ -94,7 +94,7 @@ fun HomeScreen(
         // Zone Actions
         Column(
             modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ArkeoButton(text = "Se connecter", onClick = onNavigateToLogin)
 
@@ -109,7 +109,7 @@ fun HomeScreen(
                 Text(
                     "Ouvrir un compte",
                     color = CustomColor.ArkeoRed,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -122,4 +122,3 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     HomeScreen(onNavigateToLogin = {}, onNavigateToRegister = {})
 }
-

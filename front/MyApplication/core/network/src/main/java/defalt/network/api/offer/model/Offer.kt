@@ -10,18 +10,17 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.offer.model
-
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param id Identifiant de l'offre
  * @param title Titre de l'offre
@@ -32,36 +31,35 @@ import kotlinx.serialization.Serializable
  * @param picturePath Chemin vers l'image de l'offre
  */
 @Serializable
-
 data class Offer(
 
-    /* Identifiant de l'offre */
+    // Identifiant de l'offre
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    /* Titre de l'offre */
+    // Titre de l'offre
     @SerialName(value = "title")
     val title: kotlin.String,
 
-    /* Description détaillée de l'offre */
+    // Description détaillée de l'offre
     @SerialName(value = "description")
     val description: kotlin.String,
 
-    /* État de l'offre */
+    // État de l'offre
     @SerialName(value = "state")
     val state: Offer.State,
 
-    /* Date de début de l'offre */
+    // Date de début de l'offre
     @Contextual @SerialName(value = "start_date")
     val startDate: java.time.LocalDate,
 
-    /* Date de fin de l'offre */
+    // Date de fin de l'offre
     @Contextual @SerialName(value = "end_date")
     val endDate: java.time.LocalDate,
 
-    /* Chemin vers l'image de l'offre */
+    // Chemin vers l'image de l'offre
     @SerialName(value = "picturePath")
-    val picturePath: kotlin.String? = null
+    val picturePath: kotlin.String? = null,
 
 ) {
 
@@ -74,11 +72,11 @@ data class Offer(
     enum class State(val value: kotlin.String) {
         @SerialName(value = "active")
         ACTIVE("active"),
+
         @SerialName(value = "inactive")
         INACTIVE("inactive"),
+
         @SerialName(value = "expired")
-        EXPIRED("expired");
+        EXPIRED("expired"),
     }
-
 }
-

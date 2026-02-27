@@ -42,7 +42,7 @@ fun OffersScreen(onBack: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(CustomColor.BackgroundGray)
+            .background(CustomColor.BackgroundGray),
     ) {
         // Header
         Box(
@@ -56,14 +56,14 @@ fun OffersScreen(onBack: () -> Unit) {
                 "OFFRES",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
         }
 
         // Liste d'offres
         LazyColumn(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             items(offers) { offer ->
                 Card(
@@ -76,7 +76,7 @@ fun OffersScreen(onBack: () -> Unit) {
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         // Image placeholder si picturePath present sinon carré coloré
                         if (offer.picturePath != null) {
@@ -85,13 +85,13 @@ fun OffersScreen(onBack: () -> Unit) {
                                 painter = painterResource(id = android.R.drawable.ic_menu_gallery),
                                 contentDescription = "offer image",
                                 modifier = Modifier.size(64.dp),
-                                contentScale = ContentScale.Crop
+                                contentScale = ContentScale.Crop,
                             )
                         } else {
                             Box(
                                 modifier = Modifier
                                     .size(64.dp)
-                                    .background(CustomColor.BridgeTeal)
+                                    .background(CustomColor.BridgeTeal),
                             )
                         }
 
@@ -104,13 +104,13 @@ fun OffersScreen(onBack: () -> Unit) {
                             Spacer(modifier = Modifier.height(8.dp))
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             ) {
                                 Text("Du ${offer.startDate} au ${offer.endDate}", fontSize = 11.sp)
                                 Text(
                                     offer.state.name,
                                     color = CustomColor.ArkeoRed,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.SemiBold,
                                 )
                             }
                         }
@@ -152,4 +152,3 @@ private fun sampleOffers(): List<OfferEntity> = listOf(
 fun OffersScreenPreview() {
     OffersScreen(onBack = {})
 }
-

@@ -10,18 +10,17 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.offer.model
-
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param picturePath
  * @param title
@@ -31,7 +30,6 @@ import kotlinx.serialization.Serializable
  * @param endDate
  */
 @Serializable
-
 data class OffersIdPutRequest(
 
     @SerialName(value = "picturePath")
@@ -50,12 +48,12 @@ data class OffersIdPutRequest(
     val startDate: java.time.LocalDate? = null,
 
     @Contextual @SerialName(value = "end_date")
-    val endDate: java.time.LocalDate? = null
+    val endDate: java.time.LocalDate? = null,
 
 ) {
 
     /**
-     * 
+     *
      *
      * Values: ACTIVE,INACTIVE,EXPIRED
      */
@@ -63,11 +61,11 @@ data class OffersIdPutRequest(
     enum class State(val value: kotlin.String) {
         @SerialName(value = "active")
         ACTIVE("active"),
+
         @SerialName(value = "inactive")
         INACTIVE("inactive"),
+
         @SerialName(value = "expired")
-        EXPIRED("expired");
+        EXPIRED("expired"),
     }
-
 }
-

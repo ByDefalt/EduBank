@@ -13,7 +13,7 @@ interface AccountApi {
     /**
      * GET accounts
      * Liste tous les comptes
-     * 
+     *
      * Responses:
      *  - 200: Succès
      *
@@ -25,7 +25,7 @@ interface AccountApi {
     /**
      * DELETE accounts/{id}
      * Supprimer un compte
-     * 
+     *
      * Responses:
      *  - 204: Compte supprimé avec succès
      *
@@ -38,7 +38,7 @@ interface AccountApi {
     /**
      * GET accounts/{id}
      * Récupérer un compte par ID
-     * 
+     *
      * Responses:
      *  - 200: Compte trouvé
      *
@@ -60,5 +60,4 @@ interface AccountApi {
      */
     @POST("accounts")
     suspend fun accountsPost(@Body accountRegister: AccountRegister): Response<Account>
-
 }

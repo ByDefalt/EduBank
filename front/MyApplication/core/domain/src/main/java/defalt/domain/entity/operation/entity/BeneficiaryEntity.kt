@@ -6,4 +6,4 @@ data class BeneficiaryEntity(
     val ibanTarget: String,
     val name: String,
 
-    )
+)

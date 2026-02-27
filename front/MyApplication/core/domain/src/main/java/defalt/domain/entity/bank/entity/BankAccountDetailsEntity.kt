@@ -1,6 +1,5 @@
 package defalt.domain.entity.bank.entity
 
-
 data class BankAccountDetailsEntity(
     val id: Int,
     val parameterId: Int,
@@ -10,4 +9,4 @@ data class BankAccountDetailsEntity(
     val parameter: defalt.core.api.bank.model.BankAccountParameterEntity? = null,
     val type: defalt.core.api.bank.model.TypeEntity? = null,
 
-    )
+)

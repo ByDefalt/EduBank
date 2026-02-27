@@ -5,6 +5,6 @@ data class BankAccountParameterEntity(
     val overdraftLimit: Double,
     val state: BankAccountParameterEntity.State,
 
-    ) {
+) {
     enum class State(val value: String)
 }

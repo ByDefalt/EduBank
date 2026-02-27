@@ -10,17 +10,16 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.bank.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param parameterId
  * @param typeId
@@ -29,7 +28,6 @@ import kotlinx.serialization.Serializable
  * @param accountId ID du compte utilisateur à lier
  */
 @Serializable
-
 data class BankAccountsPostRequest(
 
     @SerialName(value = "parameter_id")
@@ -44,12 +42,8 @@ data class BankAccountsPostRequest(
     @SerialName(value = "iban")
     val iban: kotlin.String,
 
-    /* ID du compte utilisateur à lier */
+    // ID du compte utilisateur à lier
     @SerialName(value = "account_id")
-    val accountId: kotlin.Int
+    val accountId: kotlin.Int,
 
-) {
-
-
-}
-
+)

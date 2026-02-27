@@ -48,13 +48,13 @@ interface BankAccountApi {
     suspend fun bankAccountsGet(
         @Query("account_id") accountId: kotlin.Int? = null,
         @Query("type_id") typeId: kotlin.Int? = null,
-        @Query("state") state: kotlin.String? = null
+        @Query("state") state: kotlin.String? = null,
     ): Response<kotlin.collections.List<BankAccountDetails>>
 
     /**
      * GET bank-accounts/{id}/balance
      * Récupérer le solde d&#39;un compte bancaire
-     * 
+     *
      * Responses:
      *  - 200: Solde récupéré avec succès
      *  - 404: Ressource non trouvée
@@ -69,7 +69,7 @@ interface BankAccountApi {
     /**
      * DELETE bank-accounts/{id}
      * Supprimer un compte bancaire
-     * 
+     *
      * Responses:
      *  - 204: Compte bancaire supprimé avec succès
      *  - 404: Ressource non trouvée
@@ -101,7 +101,7 @@ interface BankAccountApi {
     /**
      * PUT bank-accounts/{id}
      * Mettre à jour un compte bancaire
-     * 
+     *
      * Responses:
      *  - 200: Compte bancaire mis à jour avec succès
      *  - 404: Ressource non trouvée
@@ -115,7 +115,7 @@ interface BankAccountApi {
     @PUT("bank-accounts/{id}")
     suspend fun bankAccountsIdPut(
         @Path("id") id: kotlin.Int,
-        @Body bankAccountsIdPutRequest: BankAccountsIdPutRequest
+        @Body bankAccountsIdPutRequest: BankAccountsIdPutRequest,
     ): Response<BankAccount>
 
     /**
@@ -136,13 +136,13 @@ interface BankAccountApi {
     @PATCH("bank-accounts/{id}/state")
     suspend fun bankAccountsIdStatePatch(
         @Path("id") id: kotlin.Int,
-        @Body bankAccountsIdStatePatchRequest: BankAccountsIdStatePatchRequest
+        @Body bankAccountsIdStatePatchRequest: BankAccountsIdStatePatchRequest,
     ): Response<BankAccount>
 
     /**
      * POST bank-accounts
      * Créer un nouveau compte bancaire
-     * 
+     *
      * Responses:
      *  - 201: Compte bancaire créé avec succès
      *  - 400: Requête invalide
@@ -154,5 +154,4 @@ interface BankAccountApi {
      */
     @POST("bank-accounts")
     suspend fun bankAccountsPost(@Body bankAccountsPostRequest: BankAccountsPostRequest): Response<BankAccount>
-
 }

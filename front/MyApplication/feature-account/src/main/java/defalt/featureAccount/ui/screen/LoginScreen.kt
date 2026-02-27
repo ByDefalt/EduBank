@@ -41,27 +41,26 @@ fun LoginScreen(onBackToHome: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(CustomColor.BackgroundGray)
+            .background(CustomColor.BackgroundGray),
     ) {
-
         Card(
             modifier = Modifier
                 .fillMaxWidth(),
             shape = RoundedCornerShape(0.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite)
+            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     "ESPACE CLIENT",
                     color = CustomColor.TextPrimary,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
             }
         }
@@ -82,7 +81,7 @@ fun LoginScreen(onBackToHome: () -> Unit) {
                     "IDENTIFICATION",
                     color = CustomColor.ArkeoRed,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
 
                 ArkeoInput(
@@ -104,7 +103,8 @@ fun LoginScreen(onBackToHome: () -> Unit) {
 
                 ArkeoButton(
                     text = "ACCÉDER À MES COMPTES",
-                    onClick = { /* TODO: Logique de connexion */ })
+                    onClick = { /* TODO: Logique de connexion */ },
+                )
             }
         }
 
@@ -126,4 +126,3 @@ fun LoginScreen(onBackToHome: () -> Unit) {
 fun LoginScreenPreview() {
     LoginScreen(onBackToHome = {})
 }
-

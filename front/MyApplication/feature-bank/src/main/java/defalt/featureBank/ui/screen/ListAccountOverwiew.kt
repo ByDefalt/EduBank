@@ -49,7 +49,7 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES 1",
         2 to "COMPTE ÉPARGNE",
-        3 to "COMPTE PROFESSIONNEL"
+        3 to "COMPTE PROFESSIONNEL",
     )
 
     val totalSold = accounts.sumOf { it.sold }
@@ -57,11 +57,9 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(LightGray)
+            .background(LightGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
-
             // ── Header ───────────────────────────────────────────────────────
             Row(
                 modifier = Modifier
@@ -69,13 +67,13 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
                     .background(Color.White)
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = "Mes Comptes au quotidien",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = TextPrimary
+                    color = TextPrimary,
                 )
             }
 
@@ -83,14 +81,14 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Total ${formatMoney(totalSold)}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
-                    color = TextPrimary
+                    color = TextPrimary,
                 )
             }
 
@@ -100,13 +98,13 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 12.dp),
             ) {
                 items(accounts) { account ->
                     AccountCard(
                         account = account,
                         label = typeNames[account.typeId] ?: "COMPTE",
-                        onClick = { /* navigation */ }
+                        onClick = { /* navigation */ },
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                 }
@@ -122,7 +120,7 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
 private fun AccountCard(
     account: BankAccountEntity,
     label: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -130,13 +128,13 @@ private fun AccountCard(
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -144,33 +142,33 @@ private fun AccountCard(
                     color = ArkeoRed,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
-                    letterSpacing = 0.3.sp
+                    letterSpacing = 0.3.sp,
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "N° ${maskAccountNumber(account.iban)}",
                     color = TextSecondary,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = formatMoney(account.sold),
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
-                    color = TextPrimary
+                    color = TextPrimary,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "À venir : ${formatMoney(0.0)}",
                     color = TextSecondary,
-                    fontSize = 12.sp
+                    fontSize = 12.sp,
                 )
             }
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = "Voir détails",
                 tint = ArkeoRed,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
     }
@@ -181,7 +179,7 @@ private fun BottomNavBar() {
     data class NavItem(
         val label: String,
         val icon: androidx.compose.ui.graphics.vector.ImageVector,
-        val selected: Boolean = false
+        val selected: Boolean = false,
     )
 
     val items = listOf(
@@ -197,27 +195,27 @@ private fun BottomNavBar() {
                 .fillMaxWidth()
                 .background(Color.White)
                 .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
         ) {
             items.forEach { item ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clickable { }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
                 ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.label,
                         tint = if (item.selected) ArkeoRed else TextSecondary,
-                        modifier = Modifier.size(22.dp)
+                        modifier = Modifier.size(22.dp),
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = item.label,
                         fontSize = 10.sp,
                         color = if (item.selected) ArkeoRed else TextSecondary,
-                        fontWeight = if (item.selected) FontWeight.Bold else FontWeight.Normal
+                        fontWeight = if (item.selected) FontWeight.Bold else FontWeight.Normal,
                     )
                 }
             }
@@ -231,35 +229,35 @@ private fun sampleAccounts(): List<BankAccountEntity> = listOf(
         parameterId = 0,
         typeId = 1,
         sold = 1679138.00,
-        iban = "FR7630006000011234567890140"
+        iban = "FR7630006000011234567890140",
     ),
     BankAccountEntity(
         id = 2,
         parameterId = 0,
         typeId = 1,
         sold = 459393.44,
-        iban = "FR7630006000019876543210140"
+        iban = "FR7630006000019876543210140",
     ),
     BankAccountEntity(
         id = 3,
         parameterId = 0,
         typeId = 1,
         sold = 5866841.38,
-        iban = "FR7630006000015555555555540"
+        iban = "FR7630006000015555555555540",
     ),
     BankAccountEntity(
         id = 4,
         parameterId = 0,
         typeId = 2,
         sold = 775854.79,
-        iban = "FR7630006000013333333333340"
+        iban = "FR7630006000013333333333340",
     ),
     BankAccountEntity(
         id = 5,
         parameterId = 0,
         typeId = 3,
         sold = 1080899.08,
-        iban = "FR7630006000014444444444440"
+        iban = "FR7630006000014444444444440",
     ),
 )
 

@@ -44,7 +44,7 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(CustomColor.BackgroundGray)
+            .background(CustomColor.BackgroundGray),
     ) {
         // Header Rouge
 
@@ -53,19 +53,19 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
                 .fillMaxWidth(),
             shape = RoundedCornerShape(0.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite)
+            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 24.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     "OUVERTURE DE COMPTE",
                     color = CustomColor.TextPrimary,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
             }
         }
@@ -87,21 +87,21 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
                     "VOS COORDONNÉES",
                     color = CustomColor.ArkeoRed,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
                 )
                 ArkeoInput(
                     email,
                     { email = it },
                     "Identifiant",
                     keyboardType = KeyboardType.Email,
-                    icon = Icons.Outlined.Person
+                    icon = Icons.Outlined.Person,
                 )
                 ArkeoInput(
                     password,
                     { password = it },
                     "Mot de passe",
                     icon = Icons.Outlined.Lock,
-                    isPassword = true
+                    isPassword = true,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))

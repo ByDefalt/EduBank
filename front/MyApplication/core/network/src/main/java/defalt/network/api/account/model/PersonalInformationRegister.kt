@@ -10,17 +10,16 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.account.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param firstname
  * @param lastname
@@ -29,7 +28,6 @@ import kotlinx.serialization.Serializable
  * @param phoneNumber
  */
 @Serializable
-
 data class PersonalInformationRegister(
 
     @SerialName(value = "firstname")
@@ -45,10 +43,6 @@ data class PersonalInformationRegister(
     val address: kotlin.String? = null,
 
     @SerialName(value = "phone_number")
-    val phoneNumber: kotlin.String? = null
+    val phoneNumber: kotlin.String? = null,
 
-) {
-
-
-}
-
+)

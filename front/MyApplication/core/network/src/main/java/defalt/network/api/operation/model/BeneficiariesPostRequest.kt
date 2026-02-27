@@ -10,33 +10,27 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param ibanTarget
  * @param name
  */
 @Serializable
-
 data class BeneficiariesPostRequest(
 
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
     @SerialName(value = "name")
-    val name: kotlin.String
+    val name: kotlin.String,
 
-) {
-
-
-}
-
+)

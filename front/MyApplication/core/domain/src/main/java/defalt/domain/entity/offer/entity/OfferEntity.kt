@@ -11,11 +11,10 @@ data class OfferEntity(
     val endDate: LocalDate,
     val picturePath: String? = null,
 
-    ) {
+) {
     enum class State(val value: String) {
         ACTIVE("active"),
         INACTIVE("inactive"),
         EXPIRED("expired"),
     }
 }
-

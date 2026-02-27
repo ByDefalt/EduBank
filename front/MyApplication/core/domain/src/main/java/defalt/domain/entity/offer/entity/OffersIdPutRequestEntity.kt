@@ -8,6 +8,6 @@ data class OffersIdPutRequestEntity(
     val startDate: java.time.LocalDate? = null,
     val endDate: java.time.LocalDate? = null,
 
-    ) {
+) {
     enum class State(val value: String)
 }

@@ -45,7 +45,7 @@ interface BeneficiaryApi {
     /**
      * GET beneficiaries/{id}
      * Récupérer un bénéficiaire par ID
-     * 
+     *
      * Responses:
      *  - 200: Bénéficiaire récupéré avec succès
      *  - 404: Ressource non trouvée
@@ -73,7 +73,7 @@ interface BeneficiaryApi {
     @PUT("beneficiaries/{id}")
     suspend fun beneficiariesIdPut(
         @Path("id") id: kotlin.Int,
-        @Body beneficiariesIdPutRequest: BeneficiariesIdPutRequest
+        @Body beneficiariesIdPutRequest: BeneficiariesIdPutRequest,
     ): Response<Beneficiary>
 
     /**
@@ -90,5 +90,4 @@ interface BeneficiaryApi {
      */
     @POST("beneficiaries")
     suspend fun beneficiariesPost(@Body beneficiariesPostRequest: BeneficiariesPostRequest): Response<Unit>
-
 }

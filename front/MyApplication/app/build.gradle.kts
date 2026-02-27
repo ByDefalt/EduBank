@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.spotless)
 }
 
 android {
@@ -44,9 +43,18 @@ android {
         compose = true
     }
 
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
+
 }
 
 dependencies {
+    implementation(project(":core:testing"))
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:ui"))
@@ -64,22 +72,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         freeCompilerArgs.addAll(
             "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
-    }
-}
-
-spotless {
-    kotlin {
-        target("**/*.kt")
-        ktlint("0.49.0").editorConfigOverride(
-            mapOf(
-                "ktlint_standard_no-wildcard-imports" to "disabled", // ou "enabled" selon ton choix
-                "ij_kotlin_imports_layout" to "*"
-            )
-        )
-    }
-    format("misc") {
-        target("**/*.gradle", "**/*.md")
-        trimTrailingWhitespace()
-        endWithNewline()
     }
 }

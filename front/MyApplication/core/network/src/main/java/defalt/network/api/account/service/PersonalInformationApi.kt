@@ -12,7 +12,7 @@ interface PersonalInformationApi {
     /**
      * GET personal-information
      * Liste toutes les informations personnelles
-     * 
+     *
      * Responses:
      *  - 200: Succès
      *
@@ -24,7 +24,7 @@ interface PersonalInformationApi {
     /**
      * GET personal-information/{id}
      * Récupérer une info personnelle par ID
-     * 
+     *
      * Responses:
      *  - 200: Trouvé
      *
@@ -37,7 +37,7 @@ interface PersonalInformationApi {
     /**
      * POST personal-information
      * Créer une fiche d&#39;information personnelle
-     * 
+     *
      * Responses:
      *  - 201: Créé avec succès
      *
@@ -46,5 +46,4 @@ interface PersonalInformationApi {
      */
     @POST("personal-information")
     suspend fun personalInformationPost(@Body personalInformationRegister: PersonalInformationRegister): Response<PersonalInformation>
-
 }

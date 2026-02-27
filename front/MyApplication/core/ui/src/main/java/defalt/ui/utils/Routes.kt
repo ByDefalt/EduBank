@@ -12,7 +12,6 @@ sealed class Routes {
         object Home : Routes()
     }
 
-
     @Serializable
     object Account : Routes() {
         @Serializable
@@ -38,7 +37,5 @@ sealed class Routes {
     }
 
     @Serializable
-    object Operation : Routes() {
-    }
-
+    object Operation : Routes()
 }

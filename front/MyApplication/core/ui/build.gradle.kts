@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:testing"))
     implementation(project(":core:domain"))
     implementation(project(":core:utils"))
 

@@ -25,12 +25,15 @@ interface OperationApi {
     enum class StateOperationsGet(val value: kotlin.String) {
         @SerialName(value = "pending")
         PENDING("pending"),
+
         @SerialName(value = "completed")
         COMPLETED("completed"),
+
         @SerialName(value = "failed")
         FAILED("failed"),
+
         @SerialName(value = "cancelled")
-        CANCELLED("cancelled")
+        CANCELLED("cancelled"),
     }
 
     /**
@@ -52,7 +55,7 @@ interface OperationApi {
         @Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null,
         @Query("state") state: StateOperationsGet? = null,
         @Query("date_from") dateFrom: java.time.OffsetDateTime? = null,
-        @Query("date_to") dateTo: java.time.OffsetDateTime? = null
+        @Query("date_to") dateTo: java.time.OffsetDateTime? = null,
     ): Response<OperationsGet200Response>
 
     /**
@@ -73,7 +76,7 @@ interface OperationApi {
     @POST("operations/{id}/cancel")
     suspend fun operationsIdCancelPost(
         @Path("id") id: kotlin.Int,
-        @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null
+        @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null,
     ): Response<OperationsIdCancelPost201Response>
 
     /**
@@ -109,7 +112,7 @@ interface OperationApi {
     @PATCH("operations/{id}/state")
     suspend fun operationsIdStatePatch(
         @Path("id") id: kotlin.Int,
-        @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest
+        @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest,
     ): Response<Operation>
 
     /**
@@ -127,5 +130,4 @@ interface OperationApi {
      */
     @POST("operations")
     suspend fun operationsPost(@Body operationsPostRequest: OperationsPostRequest): Response<Operation>
-
 }

@@ -16,7 +16,7 @@ fun NavGraphBuilder.bankGraph(navController: NavController) {
             HomeAccountScreen(
                 onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
 
-                )
+            )
         }
         composable<Routes.Bank.ListAccount> {
             ListAccountOverviewScreen(onBack = { navController.popBackStack() })

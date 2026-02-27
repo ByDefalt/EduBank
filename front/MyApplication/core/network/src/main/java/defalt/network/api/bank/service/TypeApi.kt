@@ -15,7 +15,7 @@ interface TypeApi {
     /**
      * GET types
      * Récupérer la liste des types de comptes
-     * 
+     *
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
@@ -28,7 +28,7 @@ interface TypeApi {
     /**
      * DELETE types/{id}
      * Supprimer un type de compte
-     * 
+     *
      * Responses:
      *  - 204: Type supprimé avec succès
      *  - 404: Ressource non trouvée
@@ -44,7 +44,7 @@ interface TypeApi {
     /**
      * GET types/{id}
      * Récupérer un type de compte par ID
-     * 
+     *
      * Responses:
      *  - 200: Type récupéré avec succès
      *  - 404: Ressource non trouvée
@@ -59,7 +59,7 @@ interface TypeApi {
     /**
      * PUT types/{id}
      * Mettre à jour un type de compte
-     * 
+     *
      * Responses:
      *  - 200: Type mis à jour avec succès
      *  - 404: Ressource non trouvée
@@ -73,7 +73,7 @@ interface TypeApi {
     @PUT("types/{id}")
     suspend fun typesIdPut(
         @Path("id") id: kotlin.Int,
-        @Body typesIdPutRequest: TypesIdPutRequest
+        @Body typesIdPutRequest: TypesIdPutRequest,
     ): Response<Type>
 
     /**
@@ -91,5 +91,4 @@ interface TypeApi {
      */
     @POST("types")
     suspend fun typesPost(@Body typesPostRequest: TypesPostRequest): Response<Type>
-
 }

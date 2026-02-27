@@ -1,6 +1,5 @@
 package defalt.network.di
 
-
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.bank.service.BankAccountApi

@@ -10,24 +10,22 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
-
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param code
  * @param message
  * @param details
  */
 @Serializable
-
 data class Error(
 
     @SerialName(value = "code")
@@ -37,10 +35,6 @@ data class Error(
     val message: kotlin.String? = null,
 
     @SerialName(value = "details")
-    val details: kotlin.String? = null
+    val details: kotlin.String? = null,
 
-) {
-
-
-}
-
+)
