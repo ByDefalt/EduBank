@@ -24,6 +24,11 @@ sealed class Routes {
 
     @Serializable
     object Bank : Routes() {
+        @Serializable
+        object Home : Routes()
+
+        @Serializable
+        object ListAccount : Routes()
     }
 
     @Serializable
