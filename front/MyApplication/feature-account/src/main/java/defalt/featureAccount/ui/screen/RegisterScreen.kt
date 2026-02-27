@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Mail
-import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -32,9 +30,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
 import defalt.core.ui.component.ArkeoInput
+import defalt.core.ui.utils.CustomColor
 
 @Composable
 fun RegisterScreen(onBackToHome: () -> Unit) {
@@ -43,23 +41,33 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(CustomColor.BackgroundGray)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CustomColor.BackgroundGray)
+    ) {
         // Header Rouge
-        Box(
+
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(CustomColor.ArkeoRed)
-                .padding(top = 48.dp, bottom = 24.dp),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite)
         ) {
-            Text(
-                "OUVERTURE DE COMPTE",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "OUVERTURE DE COMPTE",
+                    color = CustomColor.TextPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
         }
 
         // Carte Formulaire Inscription

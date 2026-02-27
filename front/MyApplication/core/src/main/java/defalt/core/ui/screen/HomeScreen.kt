@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
+import defalt.core.ui.utils.CustomColor
 
 @Composable
 fun HomeScreen(
@@ -31,13 +31,22 @@ fun HomeScreen(
     onNavigateToRegister: () -> Unit,
     onNavigateToOffer: () -> Unit = {},
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)) {
         // En-tête Logo
         Column(
-            modifier = Modifier.fillMaxWidth().padding(top = 48.dp, bottom = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 48.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("ARKEO BANQUE", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+            Text(
+                "ARKEO BANQUE",
+                color = CustomColor.ArkeoRed,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
             Text("ENTREPRISES & INSTITUTIONNELS", fontSize = 10.sp, fontWeight = FontWeight.Medium)
         }
 
@@ -52,16 +61,39 @@ fun HomeScreen(
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("DE NOUVEAUX\nLIENS POUR", color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 22.sp)
-                Surface(color = CustomColor.ArkeoRed, modifier = Modifier.padding(vertical = 4.dp)) {
-                    Text(" ÉCHANGER ", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 24.sp)
+                Text(
+                    "DE NOUVEAUX\nLIENS POUR",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp
+                )
+                Surface(
+                    color = CustomColor.ArkeoRed,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                ) {
+                    Text(
+                        " ÉCHANGER ",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp
+                    )
                 }
-                Text("INNOVER DEMAIN", color = Color.White, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+                Text(
+                    "INNOVER DEMAIN",
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp
+                )
             }
         }
 
         // Zone Actions
-        Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             ArkeoButton(text = "Se connecter", onClick = onNavigateToLogin)
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -72,7 +104,11 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             TextButton(onClick = onNavigateToRegister) {
-                Text("Ouvrir un compte", color = CustomColor.ArkeoRed, fontWeight = FontWeight.SemiBold)
+                Text(
+                    "Ouvrir un compte",
+                    color = CustomColor.ArkeoRed,
+                    fontWeight = FontWeight.SemiBold
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
         }

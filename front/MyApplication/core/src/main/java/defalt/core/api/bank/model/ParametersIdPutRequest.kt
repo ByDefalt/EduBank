@@ -33,7 +33,7 @@ data class ParametersIdPutRequest(
     @SerialName(value = "state")
     val state: ParametersIdPutRequest.State? = null,
 
-) {
+    ) {
 
     /**
      *

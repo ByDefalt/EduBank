@@ -29,7 +29,7 @@ data class OperationsIdStatePatchRequest(
     @SerialName(value = "state")
     val state: OperationsIdStatePatchRequest.State,
 
-) {
+    ) {
 
     /**
      *

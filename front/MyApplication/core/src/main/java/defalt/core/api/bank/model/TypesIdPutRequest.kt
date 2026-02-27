@@ -29,4 +29,4 @@ data class TypesIdPutRequest(
     @SerialName(value = "name")
     val name: kotlin.String? = null,
 
-)
+    )

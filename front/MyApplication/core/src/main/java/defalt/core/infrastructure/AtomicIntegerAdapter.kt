@@ -15,5 +15,6 @@ object AtomicIntegerAdapter : KSerializer<AtomicInteger> {
 
     override fun deserialize(decoder: Decoder): AtomicInteger = AtomicInteger(decoder.decodeInt())
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AtomicInteger", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("AtomicInteger", PrimitiveKind.INT)
 }

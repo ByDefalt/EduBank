@@ -15,5 +15,6 @@ object AtomicLongAdapter : KSerializer<AtomicLong> {
 
     override fun deserialize(decoder: Decoder): AtomicLong = AtomicLong(decoder.decodeLong())
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AtomicLong", PrimitiveKind.LONG)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("AtomicLong", PrimitiveKind.LONG)
 }

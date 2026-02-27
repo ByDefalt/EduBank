@@ -40,7 +40,7 @@ data class BankAccountParameter(
     @SerialName(value = "state")
     val state: BankAccountParameter.State,
 
-) {
+    ) {
 
     /**
      * État des paramètres

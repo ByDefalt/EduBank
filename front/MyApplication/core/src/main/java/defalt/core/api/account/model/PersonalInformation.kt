@@ -49,4 +49,4 @@ data class PersonalInformation(
     @SerialName(value = "phone_number")
     val phoneNumber: kotlin.String? = null,
 
-)
+    )

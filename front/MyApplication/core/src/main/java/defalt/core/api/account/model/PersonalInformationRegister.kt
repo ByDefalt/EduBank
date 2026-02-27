@@ -45,4 +45,4 @@ data class PersonalInformationRegister(
     @SerialName(value = "phone_number")
     val phoneNumber: kotlin.String? = null,
 
-)
+    )

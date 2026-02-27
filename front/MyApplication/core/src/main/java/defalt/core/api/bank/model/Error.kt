@@ -37,4 +37,4 @@ data class Error(
     @SerialName(value = "details")
     val details: kotlin.String? = null,
 
-)
+    )

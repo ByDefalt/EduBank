@@ -33,4 +33,4 @@ data class BankAccountsIdPutRequest(
     @SerialName(value = "sold")
     val sold: kotlin.Double? = null,
 
-)
+    )

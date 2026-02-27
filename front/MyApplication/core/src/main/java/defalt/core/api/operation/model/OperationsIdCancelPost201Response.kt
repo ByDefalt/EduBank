@@ -33,4 +33,4 @@ data class OperationsIdCancelPost201Response(
     @SerialName(value = "cancellation_operation")
     val cancellationOperation: Operation? = null,
 
-)
+    )

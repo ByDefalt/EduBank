@@ -3,8 +3,8 @@ package defalt.eduBank.ui.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import defalt.core.ui.utils.Routes
 import defalt.core.ui.screen.HomeScreen
+import defalt.core.ui.utils.Routes
 
 fun NavGraphBuilder.homeGraph(navController: NavController) {
     composable<Routes.Core.Home> {

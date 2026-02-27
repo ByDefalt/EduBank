@@ -71,7 +71,10 @@ interface BeneficiaryApi {
      * @return [Beneficiary]
      */
     @PUT("beneficiaries/{id}")
-    suspend fun beneficiariesIdPut(@Path("id") id: kotlin.Int, @Body beneficiariesIdPutRequest: BeneficiariesIdPutRequest): Response<Beneficiary>
+    suspend fun beneficiariesIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body beneficiariesIdPutRequest: BeneficiariesIdPutRequest
+    ): Response<Beneficiary>
 
     /**
      * POST beneficiaries

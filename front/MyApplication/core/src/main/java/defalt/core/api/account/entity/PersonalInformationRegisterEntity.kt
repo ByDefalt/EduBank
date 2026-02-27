@@ -7,4 +7,4 @@ data class PersonalInformationRegisterEntity(
     val address: String? = null,
     val phoneNumber: String? = null,
 
-)
+    )

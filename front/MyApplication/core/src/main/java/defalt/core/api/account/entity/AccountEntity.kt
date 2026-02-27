@@ -6,4 +6,4 @@ data class AccountEntity(
     val roleId: Int? = null,
     val state: String? = null,
 
-)
+    )

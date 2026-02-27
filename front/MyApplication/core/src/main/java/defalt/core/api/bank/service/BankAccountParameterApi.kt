@@ -71,7 +71,10 @@ interface BankAccountParameterApi {
      * @return [BankAccountParameter]
      */
     @PUT("parameters/{id}")
-    suspend fun parametersIdPut(@Path("id") id: kotlin.Int, @Body parametersIdPutRequest: ParametersIdPutRequest): Response<BankAccountParameter>
+    suspend fun parametersIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body parametersIdPutRequest: ParametersIdPutRequest
+    ): Response<BankAccountParameter>
 
     /**
      * POST parameters

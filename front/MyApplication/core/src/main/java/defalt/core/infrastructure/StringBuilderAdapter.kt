@@ -12,7 +12,9 @@ object StringBuilderAdapter : KSerializer<StringBuilder> {
         encoder.encodeString(value.toString())
     }
 
-    override fun deserialize(decoder: Decoder): StringBuilder = StringBuilder(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): StringBuilder =
+        StringBuilder(decoder.decodeString())
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("StringBuilder", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("StringBuilder", PrimitiveKind.STRING)
 }

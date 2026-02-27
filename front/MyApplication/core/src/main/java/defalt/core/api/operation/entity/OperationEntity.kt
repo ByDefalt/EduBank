@@ -11,6 +11,6 @@ data class OperationEntity(
     val createdAt: java.time.OffsetDateTime? = null,
     val updatedAt: java.time.OffsetDateTime? = null,
 
-) {
+    ) {
     enum class State(val value: String)
 }

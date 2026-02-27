@@ -29,4 +29,4 @@ data class BankAccountsIdBalanceGet200Response(
     @SerialName(value = "sold")
     val sold: kotlin.Double? = null,
 
-)
+    )

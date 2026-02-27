@@ -57,7 +57,10 @@ interface OfferApi {
      * @return [kotlin.collections.List<Offer>]
      */
     @GET("offers")
-    suspend fun offersGet(@Query("state") state: StateOffersGet? = null, @Query("active_only") activeOnly: kotlin.Boolean? = true): Response<kotlin.collections.List<Offer>>
+    suspend fun offersGet(
+        @Query("state") state: StateOffersGet? = null,
+        @Query("active_only") activeOnly: kotlin.Boolean? = true
+    ): Response<kotlin.collections.List<Offer>>
 
     /**
      * DELETE offers/{id}
@@ -106,7 +109,10 @@ interface OfferApi {
      * @return [Offer]
      */
     @PUT("offers/{id}")
-    suspend fun offersIdPut(@Path("id") id: kotlin.Int, @Body offersIdPutRequest: OffersIdPutRequest): Response<Offer>
+    suspend fun offersIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body offersIdPutRequest: OffersIdPutRequest
+    ): Response<Offer>
 
     /**
      * PATCH offers/{id}/state
@@ -124,7 +130,10 @@ interface OfferApi {
      * @return [Offer]
      */
     @PATCH("offers/{id}/state")
-    suspend fun offersIdStatePatch(@Path("id") id: kotlin.Int, @Body offersIdStatePatchRequest: OffersIdStatePatchRequest): Response<Offer>
+    suspend fun offersIdStatePatch(
+        @Path("id") id: kotlin.Int,
+        @Body offersIdStatePatchRequest: OffersIdStatePatchRequest
+    ): Response<Offer>
 
     /**
      * POST offers

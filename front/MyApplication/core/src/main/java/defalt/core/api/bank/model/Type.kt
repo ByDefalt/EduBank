@@ -35,4 +35,4 @@ data class Type(
     @SerialName(value = "name")
     val name: kotlin.String,
 
-)
+    )

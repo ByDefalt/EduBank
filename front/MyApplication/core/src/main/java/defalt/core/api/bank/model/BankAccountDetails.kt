@@ -58,4 +58,4 @@ data class BankAccountDetails(
     @SerialName(value = "type")
     val type: Type? = null,
 
-)
+    )

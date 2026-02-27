@@ -50,7 +50,7 @@ data class OffersIdPutRequest(
     @Contextual @SerialName(value = "end_date")
     val endDate: java.time.LocalDate? = null,
 
-) {
+    ) {
 
     /**
      *

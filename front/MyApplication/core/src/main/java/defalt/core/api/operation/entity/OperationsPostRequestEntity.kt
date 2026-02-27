@@ -6,4 +6,4 @@ data class OperationsPostRequestEntity(
     val ibanTarget: String,
     val amount: Double,
 
-)
+    )

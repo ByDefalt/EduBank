@@ -45,4 +45,4 @@ data class Beneficiary(
     @SerialName(value = "name")
     val name: kotlin.String,
 
-)
+    )

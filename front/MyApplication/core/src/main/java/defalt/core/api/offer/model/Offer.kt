@@ -61,7 +61,7 @@ data class Offer(
     @SerialName(value = "picturePath")
     val picturePath: kotlin.String? = null,
 
-) {
+    ) {
 
     /**
      * État de l'offre

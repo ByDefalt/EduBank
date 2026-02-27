@@ -71,7 +71,10 @@ interface TypeApi {
      * @return [Type]
      */
     @PUT("types/{id}")
-    suspend fun typesIdPut(@Path("id") id: kotlin.Int, @Body typesIdPutRequest: TypesIdPutRequest): Response<Type>
+    suspend fun typesIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body typesIdPutRequest: TypesIdPutRequest
+    ): Response<Type>
 
     /**
      * POST types

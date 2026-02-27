@@ -29,7 +29,7 @@ data class BankAccountsIdStatePatchRequest(
     @SerialName(value = "state")
     val state: BankAccountsIdStatePatchRequest.State,
 
-) {
+    ) {
 
     /**
      *

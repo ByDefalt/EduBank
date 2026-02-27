@@ -1,4 +1,7 @@
-package defalt.core.api.bank.model
+package defalt.core.api.bank.entity
+
+import defalt.core.api.bank.model.BankAccountParameter
+import defalt.core.api.bank.model.Type
 
 data class BankAccountDetailsEntity(
     val id: Int,
@@ -9,4 +12,4 @@ data class BankAccountDetailsEntity(
     val parameter: BankAccountParameter? = null,
     val type: Type? = null,
 
-)
+    )

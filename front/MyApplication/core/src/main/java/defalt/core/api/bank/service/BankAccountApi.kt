@@ -45,7 +45,11 @@ interface BankAccountApi {
      * @return [kotlin.collections.List<BankAccountDetails>]
      */
     @GET("bank-accounts")
-    suspend fun bankAccountsGet(@Query("account_id") accountId: kotlin.Int? = null, @Query("type_id") typeId: kotlin.Int? = null, @Query("state") state: kotlin.String? = null): Response<kotlin.collections.List<BankAccountDetails>>
+    suspend fun bankAccountsGet(
+        @Query("account_id") accountId: kotlin.Int? = null,
+        @Query("type_id") typeId: kotlin.Int? = null,
+        @Query("state") state: kotlin.String? = null
+    ): Response<kotlin.collections.List<BankAccountDetails>>
 
     /**
      * GET bank-accounts/{id}/balance
@@ -109,7 +113,10 @@ interface BankAccountApi {
      * @return [BankAccount]
      */
     @PUT("bank-accounts/{id}")
-    suspend fun bankAccountsIdPut(@Path("id") id: kotlin.Int, @Body bankAccountsIdPutRequest: BankAccountsIdPutRequest): Response<BankAccount>
+    suspend fun bankAccountsIdPut(
+        @Path("id") id: kotlin.Int,
+        @Body bankAccountsIdPutRequest: BankAccountsIdPutRequest
+    ): Response<BankAccount>
 
     /**
      * PATCH bank-accounts/{id}/state
@@ -127,7 +134,10 @@ interface BankAccountApi {
      * @return [BankAccount]
      */
     @PATCH("bank-accounts/{id}/state")
-    suspend fun bankAccountsIdStatePatch(@Path("id") id: kotlin.Int, @Body bankAccountsIdStatePatchRequest: BankAccountsIdStatePatchRequest): Response<BankAccount>
+    suspend fun bankAccountsIdStatePatch(
+        @Path("id") id: kotlin.Int,
+        @Body bankAccountsIdStatePatchRequest: BankAccountsIdStatePatchRequest
+    ): Response<BankAccount>
 
     /**
      * POST bank-accounts

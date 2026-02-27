@@ -46,4 +46,4 @@ data class BankAccountsPostRequest(
     @SerialName(value = "account_id")
     val accountId: kotlin.Int,
 
-)
+    )

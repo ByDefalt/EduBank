@@ -29,4 +29,4 @@ data class TypesPostRequest(
     @SerialName(value = "name")
     val name: kotlin.String,
 
-)
+    )

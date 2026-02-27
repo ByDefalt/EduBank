@@ -7,4 +7,4 @@ data class BankAccountEntity(
     val sold: Double,
     val iban: String,
 
-)
+    )

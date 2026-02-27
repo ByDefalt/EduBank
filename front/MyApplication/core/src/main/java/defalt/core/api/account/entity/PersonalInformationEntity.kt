@@ -8,4 +8,4 @@ data class PersonalInformationEntity(
     val address: String? = null,
     val phoneNumber: String? = null,
 
-)
+    )

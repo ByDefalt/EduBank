@@ -33,4 +33,4 @@ data class BeneficiariesIdPutRequest(
     @SerialName(value = "name")
     val name: kotlin.String? = null,
 
-)
+    )

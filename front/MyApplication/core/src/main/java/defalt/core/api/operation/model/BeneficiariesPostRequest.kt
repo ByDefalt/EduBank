@@ -33,4 +33,4 @@ data class BeneficiariesPostRequest(
     @SerialName(value = "name")
     val name: kotlin.String,
 
-)
+    )

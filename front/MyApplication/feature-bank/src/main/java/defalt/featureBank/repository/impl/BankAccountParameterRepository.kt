@@ -24,7 +24,10 @@ class BankAccountParameterRepository(
         return safeApiCall { api.parametersPost(request) }
     }
 
-    override suspend fun updateParameter(id: Int, request: ParametersIdPutRequest): NetworkResult<BankAccountParameter> {
+    override suspend fun updateParameter(
+        id: Int,
+        request: ParametersIdPutRequest
+    ): NetworkResult<BankAccountParameter> {
         return safeApiCall { api.parametersIdPut(id, request) }
     }
 

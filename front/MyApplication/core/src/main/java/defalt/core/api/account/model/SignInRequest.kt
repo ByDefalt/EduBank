@@ -33,4 +33,4 @@ data class SignInRequest(
     @SerialName(value = "password")
     val password: kotlin.String,
 
-)
+    )

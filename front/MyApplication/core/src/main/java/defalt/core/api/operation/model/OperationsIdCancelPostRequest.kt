@@ -30,4 +30,4 @@ data class OperationsIdCancelPostRequest(
     @SerialName(value = "reason")
     val reason: kotlin.String? = null,
 
-)
+    )

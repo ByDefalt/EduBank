@@ -33,7 +33,7 @@ data class ParametersPostRequest(
     @SerialName(value = "state")
     val state: ParametersPostRequest.State,
 
-) {
+    ) {
 
     /**
      *

@@ -29,36 +29,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.ui.utils.CustomColor
 import defalt.core.ui.component.ArkeoButton
 import defalt.core.ui.component.ArkeoInput
+import defalt.core.ui.utils.CustomColor
 
 @Composable
 fun LoginScreen(onBackToHome: () -> Unit) {
-    // État local pour les champs de texte
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(CustomColor.BackgroundGray)) {
-        // Header Rouge
-        Box(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CustomColor.BackgroundGray)
+    ) {
+
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(CustomColor.ArkeoRed)
-                .padding(top = 48.dp, bottom = 24.dp),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite)
         ) {
-            Text(
-                "ESPACE CLIENT",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    "ESPACE CLIENT",
+                    color = CustomColor.TextPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+            }
         }
 
-        // Carte Formulaire Connexion
         Card(
             modifier = Modifier
                 .padding(16.dp)

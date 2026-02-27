@@ -71,7 +71,7 @@ data class Operation(
     @Contextual @SerialName(value = "updated_at")
     val updatedAt: java.time.OffsetDateTime? = null,
 
-) {
+    ) {
 
     /**
      * État de l'opération

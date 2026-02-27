@@ -45,4 +45,4 @@ data class OperationsPostRequest(
     @SerialName(value = "amount")
     val amount: kotlin.Double,
 
-)
+    )

@@ -22,7 +22,9 @@ fun ArkeoButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth().height(50.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(50.dp),
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(containerColor = CustomColor.ArkeoRed),
         content = {

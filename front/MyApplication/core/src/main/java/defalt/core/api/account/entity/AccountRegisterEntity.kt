@@ -6,4 +6,4 @@ data class AccountRegisterEntity(
     val password: String,
     val state: String? = null,
 
-)
+    )

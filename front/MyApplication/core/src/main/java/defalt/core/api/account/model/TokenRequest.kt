@@ -30,4 +30,4 @@ data class TokenRequest(
     @SerialName(value = "jwt")
     val jwt: kotlin.String,
 
-)
+    )

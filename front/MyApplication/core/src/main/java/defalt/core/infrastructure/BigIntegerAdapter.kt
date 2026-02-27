@@ -9,7 +9,9 @@ import kotlinx.serialization.encoding.Encoder
 import java.math.BigInteger
 
 object BigIntegerAdapter : KSerializer<BigInteger> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("BigInteger", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("BigInteger", PrimitiveKind.STRING)
+
     override fun deserialize(decoder: Decoder): BigInteger {
         return BigInteger(decoder.decodeString())
     }

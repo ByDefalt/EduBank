@@ -29,4 +29,4 @@ data class OperationsGet200Response(
     @SerialName(value = "data")
     val `data`: kotlin.collections.List<Operation>? = null,
 
-)
+    )

@@ -24,9 +24,15 @@ interface IBankAccountRepository {
 
     suspend fun createBankAccount(request: BankAccountsPostRequest): NetworkResult<BankAccount>
 
-    suspend fun updateBankAccount(id: Int, request: BankAccountsIdPutRequest): NetworkResult<BankAccount>
+    suspend fun updateBankAccount(
+        id: Int,
+        request: BankAccountsIdPutRequest
+    ): NetworkResult<BankAccount>
 
-    suspend fun changeBankAccountState(id: Int, request: BankAccountsIdStatePatchRequest): NetworkResult<BankAccount>
+    suspend fun changeBankAccountState(
+        id: Int,
+        request: BankAccountsIdStatePatchRequest
+    ): NetworkResult<BankAccount>
 
     suspend fun deleteBankAccount(id: Int): NetworkResult<Unit>
 }

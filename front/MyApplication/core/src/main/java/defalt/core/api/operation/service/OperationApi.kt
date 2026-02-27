@@ -51,7 +51,12 @@ interface OperationApi {
      * @return [OperationsGet200Response]
      */
     @GET("operations")
-    suspend fun operationsGet(@Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationsGet200Response>
+    suspend fun operationsGet(
+        @Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null,
+        @Query("state") state: StateOperationsGet? = null,
+        @Query("date_from") dateFrom: java.time.OffsetDateTime? = null,
+        @Query("date_to") dateTo: java.time.OffsetDateTime? = null
+    ): Response<OperationsGet200Response>
 
     /**
      * POST operations/{id}/cancel
@@ -69,7 +74,10 @@ interface OperationApi {
      * @return [OperationsIdCancelPost201Response]
      */
     @POST("operations/{id}/cancel")
-    suspend fun operationsIdCancelPost(@Path("id") id: kotlin.Int, @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null): Response<OperationsIdCancelPost201Response>
+    suspend fun operationsIdCancelPost(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null
+    ): Response<OperationsIdCancelPost201Response>
 
     /**
      * GET operations/{id}
@@ -102,7 +110,10 @@ interface OperationApi {
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
-    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest): Response<Operation>
+    suspend fun operationsIdStatePatch(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest
+    ): Response<Operation>
 
     /**
      * POST operations

@@ -50,7 +50,7 @@ data class OffersPostRequest(
     @SerialName(value = "picturePath")
     val picturePath: kotlin.String? = null,
 
-) {
+    ) {
 
     /**
      *

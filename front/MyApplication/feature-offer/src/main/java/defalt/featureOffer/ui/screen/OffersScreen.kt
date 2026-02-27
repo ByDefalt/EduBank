@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,9 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import defalt.core.api.offer.entity.OfferEntity
 import defalt.core.ui.component.ArkeoButton
 import defalt.core.ui.utils.CustomColor
-import defalt.core.api.offer.entity.OfferEntity
 import java.time.LocalDate
 
 @Composable
@@ -40,9 +39,11 @@ fun OffersScreen(onBack: () -> Unit) {
     // Pour la démo on utilise une liste statique de Offers
     val offers = remember { sampleOffers() }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(CustomColor.BackgroundGray)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CustomColor.BackgroundGray)
+    ) {
         // Header
         Box(
             modifier = Modifier
@@ -60,8 +61,10 @@ fun OffersScreen(onBack: () -> Unit) {
         }
 
         // Liste d'offres
-        LazyColumn(modifier = Modifier
-            .padding(16.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
             items(offers) { offer ->
                 Card(
                     modifier = Modifier
@@ -71,7 +74,10 @@ fun OffersScreen(onBack: () -> Unit) {
                     shape = RoundedCornerShape(12.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 ) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         // Image placeholder si picturePath present sinon carré coloré
                         if (offer.picturePath != null) {
                             // Pour l'instant on utilise un drawable par défaut si disponible
@@ -82,9 +88,11 @@ fun OffersScreen(onBack: () -> Unit) {
                                 contentScale = ContentScale.Crop
                             )
                         } else {
-                            Box(modifier = Modifier
-                                .size(64.dp)
-                                .background(CustomColor.BridgeTeal))
+                            Box(
+                                modifier = Modifier
+                                    .size(64.dp)
+                                    .background(CustomColor.BridgeTeal)
+                            )
                         }
 
                         Spacer(modifier = Modifier.padding(8.dp))
@@ -94,9 +102,16 @@ fun OffersScreen(onBack: () -> Unit) {
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(offer.description, fontSize = 12.sp)
                             Spacer(modifier = Modifier.height(8.dp))
-                            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
                                 Text("Du ${offer.startDate} au ${offer.endDate}", fontSize = 11.sp)
-                                Text(offer.state.name, color = CustomColor.ArkeoRed, fontWeight = FontWeight.SemiBold)
+                                Text(
+                                    offer.state.name,
+                                    color = CustomColor.ArkeoRed,
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             }
                         }
                     }

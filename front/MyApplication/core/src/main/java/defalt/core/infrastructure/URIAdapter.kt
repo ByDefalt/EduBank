@@ -15,5 +15,6 @@ object URIAdapter : KSerializer<URI> {
 
     override fun deserialize(decoder: Decoder): URI = URI(decoder.decodeString())
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("URI", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("URI", PrimitiveKind.STRING)
 }

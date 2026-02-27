@@ -13,7 +13,10 @@ interface IBankAccountParameterRepository {
 
     suspend fun createParameter(request: ParametersPostRequest): NetworkResult<BankAccountParameter>
 
-    suspend fun updateParameter(id: Int, request: ParametersIdPutRequest): NetworkResult<BankAccountParameter>
+    suspend fun updateParameter(
+        id: Int,
+        request: ParametersIdPutRequest
+    ): NetworkResult<BankAccountParameter>
 
     suspend fun deleteParameter(id: Int): NetworkResult<Unit>
 }

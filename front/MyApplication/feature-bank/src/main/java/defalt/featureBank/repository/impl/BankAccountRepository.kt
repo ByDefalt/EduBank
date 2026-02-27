@@ -39,11 +39,17 @@ class BankAccountRepository(
         return safeApiCall { api.bankAccountsPost(request) }
     }
 
-    override suspend fun updateBankAccount(id: Int, request: BankAccountsIdPutRequest): NetworkResult<BankAccount> {
+    override suspend fun updateBankAccount(
+        id: Int,
+        request: BankAccountsIdPutRequest
+    ): NetworkResult<BankAccount> {
         return safeApiCall { api.bankAccountsIdPut(id, request) }
     }
 
-    override suspend fun changeBankAccountState(id: Int, request: BankAccountsIdStatePatchRequest): NetworkResult<BankAccount> {
+    override suspend fun changeBankAccountState(
+        id: Int,
+        request: BankAccountsIdStatePatchRequest
+    ): NetworkResult<BankAccount> {
         return safeApiCall { api.bankAccountsIdStatePatch(id, request) }
     }
 

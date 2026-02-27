@@ -43,4 +43,4 @@ data class Account(
     @SerialName(value = "state")
     val state: kotlin.String? = null,
 
-)
+    )

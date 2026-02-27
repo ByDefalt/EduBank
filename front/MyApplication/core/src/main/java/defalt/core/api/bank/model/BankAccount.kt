@@ -50,4 +50,4 @@ data class BankAccount(
     @SerialName(value = "iban")
     val iban: kotlin.String,
 
-)
+    )

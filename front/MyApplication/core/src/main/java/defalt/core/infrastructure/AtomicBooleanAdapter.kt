@@ -13,7 +13,9 @@ object AtomicBooleanAdapter : KSerializer<AtomicBoolean> {
         encoder.encodeBoolean(value.get())
     }
 
-    override fun deserialize(decoder: Decoder): AtomicBoolean = AtomicBoolean(decoder.decodeBoolean())
+    override fun deserialize(decoder: Decoder): AtomicBoolean =
+        AtomicBoolean(decoder.decodeBoolean())
 
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AtomicBoolean", PrimitiveKind.BOOLEAN)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("AtomicBoolean", PrimitiveKind.BOOLEAN)
 }
