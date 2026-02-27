@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Mail
+import androidx.compose.material.icons.outlined.PermIdentity
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -79,18 +81,12 @@ fun RegisterScreen(onBackToHome: () -> Unit) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-
-                ArkeoInput(
-                    raisonSociale,
-                    { raisonSociale = it },
-                    "Raison Sociale",
-                    icon = Icons.Outlined.Person
-                )
                 ArkeoInput(
                     email,
                     { email = it },
-                    "Email / Identifiant",
-                    keyboardType = KeyboardType.Email
+                    "Identifiant",
+                    keyboardType = KeyboardType.Email,
+                    icon = Icons.Outlined.Person
                 )
                 ArkeoInput(
                     password,
