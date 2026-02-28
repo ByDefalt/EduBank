@@ -47,18 +47,25 @@ data class BottomNavItem(
     val icon: ImageVector,
     val route: Routes,
     val selected: Boolean = false,
-    val onClick: (() -> Unit)? = null,
+    var onClick: (() -> Unit)? = null,
 )
 
 @Composable
 fun BottomNavBar(
     modifier: Modifier = Modifier,
     selectedRoute: Routes? = null,
-    items: List<BottomNavItem> = defaultItems(),
-    onNavigate: (Routes) -> Unit = {},
+    mapItems: Map<Routes, () -> Unit> = mapOf()
 ) {
     val selectedColor = CustomColor.ArkeoRed
     val unselectedColor = CustomColor.TextSecondary
+    val items = listOf(
+        BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Bank.Home),
+        BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount),
+        BottomNavItem("Virements", Icons.Default.SwapHoriz, route = Routes.Operation),
+    )
+    items.forEach { items ->
+        items.onClick = mapItems[items.route]
+    }
 
     Row(
         modifier = modifier
@@ -76,9 +83,8 @@ fun BottomNavBar(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = true, radius = 40.dp),
-                    ) {
-                        item.onClick?.invoke() ?: onNavigate(item.route)
-                    }
+                        onClick = safeClick { item.onClick?.invoke() }
+                    )
                     .padding(horizontal = 8.dp),
             ) {
                 Column(
@@ -122,7 +128,7 @@ fun BottomNavBar(
 }
 
 private fun defaultItems(): List<BottomNavItem> = listOf(
-    BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Core.Home, selected = true),
+    BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Bank.Home),
     BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount),
     BottomNavItem("Virements", Icons.Default.SwapHoriz, route = Routes.Operation),
 )

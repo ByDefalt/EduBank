@@ -42,7 +42,10 @@ private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
 
 @Composable
-fun ListAccountOverviewScreen(onBack: () -> Unit) {
+fun ListAccountOverviewScreen(
+    onNavigateToHomeBank: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+) {
     val accounts = remember { sampleAccounts() }
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES 1",
@@ -109,7 +112,14 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
             }
 
             // ── Bottom Navigation ────────────────────────────────────────────
-            BottomNavBar(selectedRoute = Routes.Bank.ListAccount)
+            BottomNavBar(
+                selectedRoute = Routes.Bank.ListAccount,
+                mapItems = mapOf(
+                    Routes.Bank.ListAccount to {  },
+                    Routes.Bank.Home to { onNavigateToHomeBank() },
+                    Routes.Operation to { onNavigateToTransfer() },
+                )
+            )
         }
     }
 }
@@ -215,12 +225,12 @@ private fun maskAccountNumber(iban: String): String {
     return "XXXXX$last2"
 }
 
-private fun formatMoney(value: Double): String {
-    return String.format(Locale.FRANCE, "%.2f €", value)
-}
+private fun formatMoney(value: Double): String =
+    String.format(Locale.FRANCE, "%.2f €", value)
 
-@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+
+@Preview(showBackground = true)
 @Composable
 fun ListAccountOverviewPreview() {
-    ListAccountOverviewScreen(onBack = {})
+    ListAccountOverviewScreen()
 }

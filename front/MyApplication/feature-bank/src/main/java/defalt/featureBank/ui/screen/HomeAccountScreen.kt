@@ -90,11 +90,12 @@ fun HomeAccountScreen(
             }
 
             BottomNavBar(
-                items = listOf(
-                    BottomNavItem(label = "Accueil", icon = Icons.Default.Home, route = Routes.Bank.Home, selected = true, onClick = null),
-                    BottomNavItem(label = "Comptes", icon = Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount, onClick = onNavigateToAccounts),
-                    BottomNavItem(label = "Virement", icon = Icons.Default.SwapHoriz, route = Routes.Operation, onClick = onNavigateToTransfer),
-                ),
+                selectedRoute = Routes.Bank.Home,
+                mapItems = mapOf(
+                    Routes.Bank.Home to {  },
+                    Routes.Bank.ListAccount to { onNavigateToAccounts() },
+                    Routes.Operation to { onNavigateToTransfer() },
+                )
             )
         }
     }
@@ -256,7 +257,7 @@ private fun SectionRowCard(
 private fun formatAmount(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-@Preview(showBackground = true, widthDp = 390, heightDp = 844)
+@Preview(showBackground = true)
 @Composable
 fun HomeAccountPreview() {
     HomeAccountScreen()

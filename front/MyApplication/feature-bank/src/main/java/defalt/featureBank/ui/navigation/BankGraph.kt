@@ -9,7 +9,8 @@ import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.bankGraph(
     onNavigateToAccounts: () -> Unit,
-    onBack: () -> Unit,
+    onNavigateToTransfer: () -> Unit,
+    onNavigateToHomeBank: () -> Unit,
 ) {
     navigation<Routes.Bank>(
         startDestination = Routes.Bank.Home,
@@ -17,11 +18,14 @@ fun NavGraphBuilder.bankGraph(
         composable<Routes.Bank.Home> {
             HomeAccountScreen(
                 onNavigateToAccounts = onNavigateToAccounts,
-
+                onNavigateToTransfer = onNavigateToTransfer,
             )
         }
         composable<Routes.Bank.ListAccount> {
-            ListAccountOverviewScreen(onBack = onBack)
+            ListAccountOverviewScreen(
+                onNavigateToHomeBank = onNavigateToHomeBank,
+                onNavigateToTransfer = onNavigateToTransfer,
+            )
         }
     }
 }

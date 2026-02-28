@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import defalt.featureAccount.ui.navigation.accountGraph
 import defalt.featureBank.ui.navigation.bankGraph
 import defalt.featureOffer.ui.navigation.offerGraph
+import defalt.featureOperation.ui.navigation.operationGraph
 import defalt.ui.utils.Routes
 
 @Composable
@@ -27,7 +28,14 @@ fun ArkeoNavHost(navController: NavHostController) {
         )
         bankGraph(
             onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
-            onBack = { navController.popBackStack() },
+            onNavigateToTransfer = { navController.navigate(Routes.Operation) },
+            onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },
+        )
+        operationGraph(
+            onDismiss = { navController.popBackStack() },
+            onVirementClick = { /* navigate vers écran virement */ },
+            onHistoriqueClick = { /* navigate vers historique */ },
+            onBeneficiaireClick = { /* navigate vers bénéficiaires */ },
         )
     }
 }

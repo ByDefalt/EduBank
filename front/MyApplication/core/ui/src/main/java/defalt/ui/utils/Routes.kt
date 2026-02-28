@@ -37,5 +37,8 @@ sealed class Routes {
     }
 
     @Serializable
-    object Operation : Routes()
+    object Operation : Routes() {
+        @Serializable
+        object Transfer : Routes()
+    }
 }
