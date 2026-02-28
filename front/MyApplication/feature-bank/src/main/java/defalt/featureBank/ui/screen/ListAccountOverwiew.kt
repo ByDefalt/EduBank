@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.core.api.bank.model.BankAccountEntity
-import defalt.ui.utils.CustomColor
 import defalt.ui.component.BottomNavBar
+import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
 
@@ -115,10 +115,10 @@ fun ListAccountOverviewScreen(
             BottomNavBar(
                 selectedRoute = Routes.Bank.ListAccount,
                 mapItems = mapOf(
-                    Routes.Bank.ListAccount to {  },
+                    Routes.Bank.ListAccount to { },
                     Routes.Bank.Home to { onNavigateToHomeBank() },
                     Routes.Operation to { onNavigateToTransfer() },
-                )
+                ),
             )
         }
     }
@@ -227,7 +227,6 @@ private fun maskAccountNumber(iban: String): String {
 
 private fun formatMoney(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
-
 
 @Preview(showBackground = true)
 @Composable

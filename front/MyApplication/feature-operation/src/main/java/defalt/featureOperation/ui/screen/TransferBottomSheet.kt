@@ -48,14 +48,14 @@ fun TransferBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 32.dp)
+                .padding(bottom = 32.dp),
         ) {
             // Titre
             Text(
                 text = "Virements",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
             )
 
             HorizontalDivider(color = Color(0xFFEEEEEE))
@@ -64,17 +64,17 @@ fun TransferBottomSheet(
             BottomSheetItem(
                 icon = Icons.Default.SwapHoriz,
                 label = "Faire un virement",
-                onClick = { onVirementClick(); onDismiss() }
+                onClick = { onVirementClick(); onDismiss() },
             )
             BottomSheetItem(
                 icon = Icons.Default.History,
                 label = "Historique des virements",
-                onClick = { onHistoriqueClick(); onDismiss() }
+                onClick = { onHistoriqueClick(); onDismiss() },
             )
             BottomSheetItem(
                 icon = Icons.Default.AccountBalance,
                 label = "Mes bénéficiaires",
-                onClick = { onBeneficiaireClick(); onDismiss() }
+                onClick = { onBeneficiaireClick(); onDismiss() },
             )
         }
     }
@@ -97,23 +97,23 @@ private fun BottomSheetItem(
             imageVector = icon,
             contentDescription = null,
             tint = Color(0xFFCC0000),
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = label,
             fontSize = 15.sp,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
         Icon(
             imageVector = Icons.Default.ChevronRight,
             contentDescription = null,
             tint = Color(0xFF666666),
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(20.dp),
         )
     }
     HorizontalDivider(
         color = Color(0xFFEEEEEE),
-        modifier = Modifier.padding(horizontal = 20.dp)
+        modifier = Modifier.padding(horizontal = 20.dp),
     )
 }

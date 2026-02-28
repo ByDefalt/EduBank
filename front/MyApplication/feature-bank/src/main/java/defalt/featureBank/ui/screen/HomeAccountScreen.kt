@@ -16,12 +16,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Receipt
-import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -39,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.ui.component.BottomNavBar
-import defalt.ui.component.BottomNavItem
 import defalt.ui.utils.Routes
 import java.util.Locale
 
@@ -92,10 +89,10 @@ fun HomeAccountScreen(
             BottomNavBar(
                 selectedRoute = Routes.Bank.Home,
                 mapItems = mapOf(
-                    Routes.Bank.Home to {  },
+                    Routes.Bank.Home to { },
                     Routes.Bank.ListAccount to { onNavigateToAccounts() },
                     Routes.Operation to { onNavigateToTransfer() },
-                )
+                ),
             )
         }
     }

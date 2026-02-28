@@ -54,7 +54,7 @@ data class BottomNavItem(
 fun BottomNavBar(
     modifier: Modifier = Modifier,
     selectedRoute: Routes? = null,
-    mapItems: Map<Routes, () -> Unit> = mapOf()
+    mapItems: Map<Routes, () -> Unit> = mapOf(),
 ) {
     val selectedColor = CustomColor.ArkeoRed
     val unselectedColor = CustomColor.TextSecondary
@@ -83,7 +83,7 @@ fun BottomNavBar(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = ripple(bounded = true, radius = 40.dp),
-                        onClick = safeClick { item.onClick?.invoke() }
+                        onClick = safeClick { item.onClick?.invoke() },
                     )
                     .padding(horizontal = 8.dp),
             ) {
