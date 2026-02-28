@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.BottomNavItem
+import defalt.ui.utils.Routes
 import java.util.Locale
 
 private val ArkeoRed = Color(0xFFCC0000)
@@ -90,9 +91,9 @@ fun HomeAccountScreen(
 
             BottomNavBar(
                 items = listOf(
-                    BottomNavItem(label = "Accueil", icon = Icons.Default.Home, selected = true, onClick = null),
-                    BottomNavItem(label = "Comptes", icon = Icons.AutoMirrored.Filled.List, route = "Comptes", onClick = onNavigateToAccounts),
-                    BottomNavItem(label = "Virement", icon = Icons.Default.SwapHoriz, route = "Virement", onClick = onNavigateToTransfer),
+                    BottomNavItem(label = "Accueil", icon = Icons.Default.Home, route = Routes.Bank.Home, selected = true, onClick = null),
+                    BottomNavItem(label = "Comptes", icon = Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount, onClick = onNavigateToAccounts),
+                    BottomNavItem(label = "Virement", icon = Icons.Default.SwapHoriz, route = Routes.Operation, onClick = onNavigateToTransfer),
                 ),
             )
         }

@@ -2,6 +2,7 @@ package defalt.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,9 +22,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -31,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.ui.utils.CustomColor
+import defalt.ui.utils.Routes
 
 /**
  * Composant réutilisable de Bottom Navigation (style HomeAccountScreen):
@@ -40,7 +45,7 @@ import defalt.ui.utils.CustomColor
 data class BottomNavItem(
     val label: String,
     val icon: ImageVector,
-    val route: String = label,
+    val route: Routes,
     val selected: Boolean = false,
     val onClick: (() -> Unit)? = null,
 )
@@ -48,9 +53,9 @@ data class BottomNavItem(
 @Composable
 fun BottomNavBar(
     modifier: Modifier = Modifier,
-    selectedRoute: String = "",
+    selectedRoute: Routes? = null,
     items: List<BottomNavItem> = defaultItems(),
-    onNavigate: (String) -> Unit = {},
+    onNavigate: (Routes) -> Unit = {},
 ) {
     val selectedColor = CustomColor.ArkeoRed
     val unselectedColor = CustomColor.TextSecondary
@@ -64,10 +69,14 @@ fun BottomNavBar(
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
         items.forEach { item ->
-            val isSelected = item.selected || item.route == selectedRoute
+            val isSelected = item.selected || (selectedRoute != null && item.route == selectedRoute)
             Box(
                 modifier = Modifier
-                    .clickable {
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = ripple(bounded = true, radius = 40.dp),
+                    ) {
                         item.onClick?.invoke() ?: onNavigate(item.route)
                     }
                     .padding(horizontal = 8.dp),
@@ -113,13 +122,13 @@ fun BottomNavBar(
 }
 
 private fun defaultItems(): List<BottomNavItem> = listOf(
-    BottomNavItem("Accueil", Icons.Default.Home, selected = true),
-    BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List),
-    BottomNavItem("Virements", Icons.Default.SwapHoriz),
+    BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Core.Home, selected = true),
+    BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount),
+    BottomNavItem("Virements", Icons.Default.SwapHoriz, route = Routes.Operation),
 )
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 120)
 @Composable
 private fun BottomNavBarPreview() {
-    BottomNavBar(selectedRoute = "Comptes")
+    BottomNavBar(selectedRoute = Routes.Bank.ListAccount)
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import defalt.core.api.bank.model.BankAccountEntity
 import defalt.ui.utils.CustomColor
 import defalt.ui.component.BottomNavBar
+import defalt.ui.utils.Routes
 import java.util.Locale
 
 private val ArkeoRed = CustomColor.ArkeoRed
@@ -108,7 +109,7 @@ fun ListAccountOverviewScreen(onBack: () -> Unit) {
             }
 
             // ── Bottom Navigation ────────────────────────────────────────────
-            BottomNavBar(selectedRoute = "Comptes")
+            BottomNavBar(selectedRoute = Routes.Bank.ListAccount)
         }
     }
 }
