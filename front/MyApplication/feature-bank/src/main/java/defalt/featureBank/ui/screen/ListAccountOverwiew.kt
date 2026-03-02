@@ -2,6 +2,8 @@ package defalt.featureBank.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +24,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +48,7 @@ private val TextSecondary = Color(0xFF666666)
 fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
+    onNavigateToAccountDetails: (Int) -> Unit = {},
 ) {
     val accounts = remember { sampleAccounts() }
     val typeNames = mapOf(
@@ -105,7 +109,7 @@ fun ListAccountOverviewScreen(
                     AccountCard(
                         account = account,
                         label = typeNames[account.typeId] ?: "COMPTE",
-                        onClick = { /* navigation */ },
+                        onClick = { onNavigateToAccountDetails(account.id) },
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                 }
@@ -130,11 +134,19 @@ private fun AccountCard(
     label: String,
     onClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val cardColor = if (isPressed) Color(0xFFF0F0F0) else Color.White
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick,
+            ),
+        colors = CardDefaults.cardColors(containerColor = cardColor),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {

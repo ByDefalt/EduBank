@@ -12,5 +12,9 @@ data class OperationEntity(
     val updatedAt: java.time.OffsetDateTime? = null,
 
 ) {
-    enum class State(val value: String)
+    enum class State(val value: String) {
+        PENDING("pending"),
+        COMPLETED("completed"),
+        CANCELLED("cancelled"),
+    }
 }

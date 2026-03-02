@@ -28,6 +28,9 @@ sealed class Routes {
 
         @Serializable
         object ListAccount : Routes()
+
+        @Serializable
+        data class AccountDetails(val accountId: Int) : Routes()
     }
 
     @Serializable

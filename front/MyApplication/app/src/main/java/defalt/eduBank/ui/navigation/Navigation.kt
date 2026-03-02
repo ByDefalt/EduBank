@@ -30,6 +30,8 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
             onNavigateToTransfer = { navController.navigate(Routes.Operation) },
             onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },
+            onNavigateToAccountDetails = { accountId -> navController.navigate(Routes.Bank.AccountDetails(accountId)) },
+            onNavigateBack = { navController.popBackStack() },
         )
         operationGraph(
             onDismiss = { navController.popBackStack() },
