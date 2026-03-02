@@ -72,6 +72,7 @@ fun BottomNavBar(
             .fillMaxWidth()
             .shadow(elevation = 16.dp)
             .background(color = Color.White)
+            .padding(start = 30.dp, end = 30.dp, bottom = 20.dp)
             .windowInsetsPadding(WindowInsets.navigationBars),
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
@@ -85,22 +86,22 @@ fun BottomNavBar(
                         indication = ripple(bounded = true, radius = 40.dp),
                         onClick = safeClick { item.onClick?.invoke() },
                     )
-                    .padding(horizontal = 8.dp),
+                    .padding(horizontal = 10.dp),
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
+                    modifier = Modifier.padding(top = 8.dp, bottom = 5.dp),
                 ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.label,
                         tint = if (isSelected) selectedColor else unselectedColor,
-                        modifier = Modifier.size(22.dp),
+                        modifier = Modifier.size(28.dp),
                     )
-                    Spacer(modifier = Modifier.height(2.dp))
+                    Spacer(modifier = Modifier.height(3.dp))
                     Text(
                         text = item.label,
-                        fontSize = 10.sp,
+                        fontSize = 12.sp,
                         color = if (isSelected) selectedColor else unselectedColor,
                     )
                 }
