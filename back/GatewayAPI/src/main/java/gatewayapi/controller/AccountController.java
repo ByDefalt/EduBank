@@ -13,8 +13,7 @@ import org.springframework.stereotype.Controller;
 @Path("/accounts")
 public class AccountController {
 
-    @Inject
-    private final AccountClient accountClient;
+    private AccountClient accountClient;
     private final FeignExecutor feignExecutor;
 
     public AccountController(AccountClient accountClient, FeignExecutor feignExecutor) {

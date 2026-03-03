@@ -12,8 +12,7 @@ import org.springframework.stereotype.Controller;
 @Path("/personalInformation")
 public class PersonalInformationController {
 
-    @Inject
-    private final AccountClient accountClient;
+    private AccountClient accountClient;
     private final FeignExecutor feignExecutor;
 
     @Inject
@@ -25,7 +24,7 @@ public class PersonalInformationController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPersonalInformation() {
-        return feignExecutor.wrap(() -> accountClient.getAllPersonalInformation());
+        return feignExecutor.wrap(accountClient::getAllPersonalInformation);
     }
 
     @GET

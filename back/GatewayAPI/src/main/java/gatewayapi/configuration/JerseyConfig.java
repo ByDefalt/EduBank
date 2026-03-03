@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class JerseyConfig extends ResourceConfig {
 
     public JerseyConfig() {
-        packages("accountapi.controller");
-        packages("accountapi.interception");
+        packages("gatewayapi.controller");
+        packages("gatewayapi.client");
+        packages("gatewayapi.wrapper");
     }
 }

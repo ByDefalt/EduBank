@@ -12,14 +12,12 @@ import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@Profile("TEST")
 public class FeignConfig {
 
     private okhttp3.OkHttpClient getOkHttpClient() {

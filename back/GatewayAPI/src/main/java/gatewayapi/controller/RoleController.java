@@ -15,7 +15,7 @@ import org.springframework.stereotype.Controller;
 @Path("/roles")
 public class RoleController {
 
-    private final AccountClient accountClient;
+    private AccountClient accountClient;
     private final FeignExecutor feignExecutor;
 
     @Inject
