@@ -12,7 +12,7 @@ CREATE TABLE operation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     account_source_id INT NOT NULL,
     label VARCHAR(255) NOT NULL,
-    state ENUM('completed', 'failed', 'cancelled') NOT NULL DEFAULT 'pending',
+    state ENUM('completed', 'failed', 'cancelled', 'pending') NOT NULL DEFAULT 'pending',
     iban_target VARCHAR(34) NOT NULL,
     amount DOUBLE NOT NULL,
     date DATETIME NOT NULL,
