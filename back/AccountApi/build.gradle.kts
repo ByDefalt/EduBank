@@ -2,6 +2,23 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    jacoco
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    }
+}
+
+tasks.check {
+    finalizedBy("jacocoTestReport")
 }
 
 apply("gradle/swagger.gradle.kts")
@@ -25,6 +42,7 @@ dependencyManagement{
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
     }
 }
+
 dependencies{
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("io.github.openfeign:feign-jackson")
@@ -42,11 +60,8 @@ dependencies{
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
-    // Spring Data JPA
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    // https://mvnrepository.com/artifact/com.h2database/h2
     implementation("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -56,6 +71,8 @@ dependencies{
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
     implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
+
+    runtimeOnly ("org.mariadb.jdbc:mariadb-java-client")
 }
 
 tasks.withType<Test> {

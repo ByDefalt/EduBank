@@ -24,6 +24,7 @@ public class AccountRepository {
     private static final String SQL_INSERT = "INSERT INTO Account (id, personal_info_id, role_id, password, state) VALUES (:id, :personal_info_id, :role_id, :password, :state)";
     private static final String SQL_DELETE = "DELETE FROM Account WHERE id = :id";
     private static final String SQL_FIND_BY_ID_AND_PASSWORD = "SELECT id, personal_info_id, role_id, password, state FROM Account WHERE id = :id AND password = :password";
+    private static final String SQL_UPDATE_STATE = "UPDATE Account SET state = :state WHERE id = :id";
 
     public List<AccountEntity> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, (rs, rowNum) -> {
@@ -90,5 +91,13 @@ public class AccountRepository {
         params.put("id", id);
 
         return jdbcTemplate.update(SQL_DELETE, params) > 0;
+    }
+
+    public boolean updateState(AccountEntity accountEntity){
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", accountEntity.getId());
+        params.put("state", accountEntity.getState());
+
+        return jdbcTemplate.update(SQL_UPDATE_STATE, params) > 0;
     }
 }

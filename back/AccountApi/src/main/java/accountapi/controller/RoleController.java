@@ -1,9 +1,11 @@
 package accountapi.controller;
 
+import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.RoleBusiness;
 import accountapi.entity.RoleEntity;
 import accountapi.mapper.RoleMapper;
 import dto.accountapi.Role;
+import dto.accountapi.RoleEnum;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -11,7 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Controller
@@ -25,26 +27,25 @@ public class RoleController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRoles() {
-        List<RoleEntity> roles = roleBusiness.getAllRoles();
-
-        List<Role> dtos = new ArrayList<>();
-        for (RoleEntity role : roles) {
-            dtos.add(RoleMapper.toDto(role));
+        List<Role> roles = roleBusiness.getAllRoles();
+        if (roles.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-
-        return Response.ok(dtos).build();
+        return Response.ok(roles).build();
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {
-        RoleEntity role = roleBusiness.getRoleById(id);
+        Role role = roleBusiness.getRoleById(id);
         if (role == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return Response.ok(RoleMapper.toDto(role)).build();
+        return Response.ok(role).build();
     }
 }

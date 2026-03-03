@@ -1,21 +1,13 @@
 package accountapi.controller;
 
+import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.AccountBusiness;
-import accountapi.entity.AccountEntity;
-import accountapi.entity.PersonalInformationEntity;
-import accountapi.entity.RoleEntity;
-import accountapi.mapper.AccountMapper;
-import accountapi.mapper.PersonalInformationMapper;
-import accountapi.mapper.RoleMapper;
-import dto.accountapi.Account;
-import dto.accountapi.AccountRegister;
-import dto.accountapi.SignInRequest;
-import dto.accountapi.TokenRequest;
+import dto.accountapi.*;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Controller
@@ -29,37 +21,36 @@ public class AccountController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAccounts() {
-        List<AccountEntity> accounts = accountBusiness.getAllAccounts();
-
-        List<Account> dtos = new ArrayList<>();
-        for (AccountEntity account : accounts) {
-            dtos.add(AccountMapper.toDto(account));
+        List<Account> accounts = accountBusiness.getAllAccounts();
+        if (accounts.isEmpty()) {
+            return Response.status(Response.Status.NO_CONTENT).build();
         }
-        return Response.ok(dtos).build();
+        return Response.ok(accounts).build();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountById(@PathParam("id") String id) {
-        AccountEntity account = accountBusiness.getAccountById(id);
-
+    public Response getAccountById(@PathParam("idAccount") String id) {
+        Account account = accountBusiness.getAccountById(id);
         if (account == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(AccountMapper.toDto(account)).build();
+        return Response.ok(account).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createAccount(AccountRegister accountDto) {
-        AccountEntity createdEntity = accountBusiness.createAccount(accountDto);
-        return Response.status(Response.Status.CREATED)
-                .entity(AccountMapper.toDto(createdEntity))
-                .build();
+        Account createdAccount = accountBusiness.createAccount(accountDto);
+        if (createdAccount == null) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
+        return Response.status(Response.Status.CREATED).entity(createdAccount).build();
     }
 
     @POST
@@ -67,7 +58,12 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response signIn(SignInRequest signInRequest) {
-        return accountBusiness.signIn(signInRequest);
+        TokenRequest tokenRequest = accountBusiness.signIn(signInRequest);
+        if (tokenRequest == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            return Response.status(Response.Status.OK).entity(tokenRequest).build();
+        }
     }
 
     @POST
@@ -75,38 +71,70 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validateToken(TokenRequest tokenRequest) {
-        return accountBusiness.validateToken(tokenRequest);
+        TokenResponse tokenResponse = accountBusiness.validateToken(tokenRequest);
+        if (tokenResponse == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        } else {
+            return Response.ok(tokenResponse).build();
+        }
     }
 
     @DELETE
-    @Path("/{id}")
-    public Response deleteAccount(@PathParam("id") String id) {
-        boolean deleted = accountBusiness.deleteAccount(id);
+    @AuthenticationRequired(RoleEnum.ADMIN)
+    @Path("/{idAccount}")
+    public Response deleteAccount(@PathParam("idAccount") String id) {
+        boolean deleted = accountBusiness.deactivateAccount(id);;
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.noContent().build();
+        return Response.ok(deleted).build();
     }
 
     @GET
-    @Path("/role/{id}")
+    @AuthenticationRequired(RoleEnum.CUSTOMER)
+    @Path("/role/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRoleByAccountId(@PathParam("id") String id) {
-        RoleEntity roleEntity = accountBusiness.getRoleByAccountId(id);
-        if (roleEntity == null) {
+    public Response getRoleByAccountId(@PathParam("idAccount") String id) {
+        Role role = accountBusiness.getRoleByAccountId(id);
+        if (role == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(RoleMapper.toDto(roleEntity)).build();
+        return Response.ok(role).build();
     }
 
     @GET
-    @Path("/personalInformation/{id}")
+    @AuthenticationRequired(RoleEnum.CUSTOMER)
+    @Path("/personalInformation/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPersonalInformationByAccountId(@PathParam("id") String id) {
-        PersonalInformationEntity personalInformationEntity = accountBusiness.getPersonalInformationByAccountId(id);
-        if (personalInformationEntity == null) {
+    public Response getPersonalInformationByAccountId(@PathParam("idAccount") String id) {
+        PersonalInformation personalInformation = accountBusiness.getPersonalInformationByAccountId(id);
+        if (personalInformation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(PersonalInformationMapper.toDto(personalInformationEntity)).build();
+        return Response.ok(personalInformation).build();
+    }
+
+    @PUT
+    @AuthenticationRequired(RoleEnum.ADMIN)
+    @Path("/deactivate/{idAccount}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deactivateAccount(@PathParam("idAccount") String id) {
+        boolean updatedAccount = accountBusiness.deactivateAccount(id);
+        if (!updatedAccount) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(updatedAccount).build();
+    }
+
+    @PUT
+    @AuthenticationRequired(RoleEnum.ADMIN)
+    @Path("/activate/{idAccount}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response activateAccount(@PathParam("idAccount") String id) {
+        boolean updatedAccount = accountBusiness.activateAccount(id);
+        if (!updatedAccount) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(updatedAccount).build();
     }
 }

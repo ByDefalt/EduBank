@@ -1,5 +1,6 @@
 package accountapi.utils;
 
+import dto.accountapi.TokenResponse;
 import io.jsonwebtoken.Jwts;
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -20,14 +21,17 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String validateToken(String jwt) {
+    public TokenResponse validateToken(String jwt) {
         try {
             var claims = Jwts.parser()
                     .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(jwt)
                     .getPayload();
-            return claims.getSubject();
+            TokenResponse tokenResponse = new TokenResponse();
+            tokenResponse.setId((String) claims.get("id"));
+            tokenResponse.setRole((String) claims.get("role"));
+            return tokenResponse;
         }catch (Exception e){
             System.out.println("Invalid JWT: " + e.getMessage());
             return null;
