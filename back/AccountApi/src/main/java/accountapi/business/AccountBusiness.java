@@ -64,7 +64,7 @@ public class AccountBusiness {
         AccountEntity accountToRegister = new AccountEntity();
         accountToRegister.setId(idGenerated);
         accountToRegister.setRoleId(account.getRoleId());
-        accountToRegister.setState(account.getState());
+        accountToRegister.setState("INACTIVE");
         accountToRegister.setPersonalInfoId(pif);
         accountToRegister.setPassword(account.getPassword());
 

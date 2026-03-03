@@ -83,7 +83,6 @@ class AccountBusinessTest {
         AccountRegister accountRegister = new AccountRegister();
         accountRegister.setPassword("SecureP@ssw0rd123");
         accountRegister.setRoleId(2);
-        accountRegister.setState("ACTIVE");
         accountRegister.setPersonalInfo(personalInfoRegister);
 
         PersonalInformation createdPersonalInfo = new PersonalInformation();
@@ -164,7 +163,6 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
 
         Role role = new Role();
         role.setId(2);
@@ -185,7 +183,6 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
 
         PersonalInformation personalInfo = new PersonalInformation();
         personalInfo.setId(100);
@@ -211,7 +208,6 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -228,7 +224,6 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("INACTIVE");
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
