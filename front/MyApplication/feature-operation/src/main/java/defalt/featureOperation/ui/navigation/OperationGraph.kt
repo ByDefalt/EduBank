@@ -37,7 +37,6 @@ fun NavGraphBuilder.operationGraph(
                 onNavigateToAccounts = onNavigateToAccounts,
                 onNavigateToTransfer = onNavigateToTransfer,
             )
-
         }
     }
 }

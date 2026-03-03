@@ -102,60 +102,19 @@ fun BeneficiariesScreen(
                     .weight(1f),
                 contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
             ) {
-            item {
-                // Search bar (utilise le composant partagé ArkeoInput)
-                ArkeoInput(
-                    value = query,
-                    onValueChange = onQueryChanged,
-                    label = "Rechercher un bénéficiaire",
-                    icon = Icons.Default.Search,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
-            if (grouped.isEmpty()) {
                 item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                    ) {
-                        Column(modifier = Modifier.padding(24.dp)) {
-                            Text("Aucun bénéficiaire", color = TextPrimary)
-                        }
-                    }
+                    // Search bar (utilise le composant partagé ArkeoInput)
+                    ArkeoInput(
+                        value = query,
+                        onValueChange = onQueryChanged,
+                        label = "Rechercher un bénéficiaire",
+                        icon = Icons.Default.Search,
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
-            } else {
-                grouped.forEach { (letter, list) ->
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .padding(top = 8.dp, bottom = 4.dp)
-                                .size(32.dp)
-                                .background(
-                                    color = Color(0xFF3A3A3A),
-                                    shape = RoundedCornerShape(
-                                        topStart = 10.dp,
-                                        topEnd = 0.dp,
-                                        bottomStart = 0.dp,
-                                        bottomEnd = 10.dp,
-                                    ),
-                                ),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = letter.toString(),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color.White,
-                            )
-                        }
-                    }
 
-                    items(list, key = { it.id }) { b ->
+                if (grouped.isEmpty()) {
+                    item {
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -164,26 +123,67 @@ fun BeneficiariesScreen(
                             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White),
                         ) {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                                verticalAlignment = Alignment.CenterVertically,
+                            Column(modifier = Modifier.padding(24.dp)) {
+                                Text("Aucun bénéficiaire", color = TextPrimary)
+                            }
+                        }
+                    }
+                } else {
+                    grouped.forEach { (letter, list) ->
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .padding(top = 8.dp, bottom = 4.dp)
+                                    .size(32.dp)
+                                    .background(
+                                        color = Color(0xFF3A3A3A),
+                                        shape = RoundedCornerShape(
+                                            topStart = 10.dp,
+                                            topEnd = 0.dp,
+                                            bottomStart = 0.dp,
+                                            bottomEnd = 10.dp,
+                                        ),
+                                    ),
+                                contentAlignment = Alignment.Center,
                             ) {
+                                Text(
+                                    text = letter.toString(),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = Color.White,
+                                )
+                            }
+                        }
 
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                    Spacer(modifier = Modifier.height(6.dp))
-                                    Text("Compte: ${b.accountNumber}", fontSize = 12.sp, color = CustomColor.TextSecondary)
-                                    Text(b.bankName, fontSize = 12.sp, color = CustomColor.TextSecondary)
+                        items(list, key = { it.id }) { b ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                        Spacer(modifier = Modifier.height(6.dp))
+                                        Text("Compte: ${b.accountNumber}", fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                        Text(b.bankName, fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                    }
+
+                                    // Optionnel: bouton d'action ou chevron
                                 }
-
-                                // Optionnel: bouton d'action ou chevron
                             }
                         }
                     }
                 }
-                }
-            }  // fin LazyColumn
+            } // fin LazyColumn
 
             BottomNavBar(
                 selectedRoute = Routes.Operation,
@@ -193,7 +193,7 @@ fun BeneficiariesScreen(
                     Routes.Operation to safeNavigateTransfer,
                 ),
             )
-        }  // fin Column
+        } // fin Column
 
         // Bouton flottant au-dessus de la BottomNavBar
         Box(
@@ -210,7 +210,7 @@ fun BeneficiariesScreen(
                 onClick = onAddBeneficiary,
             )
         }
-    }  // fin Box principal
+    } // fin Box principal
 }
 
 @Composable
@@ -241,7 +241,7 @@ private fun BeneficiariesHeader(onNavigateBack: () -> Unit) {
     }
 }
 
-fun defaultData() : List<Beneficiary> {
+fun defaultData(): List<Beneficiary> {
     return listOf(
         Beneficiary("1", "Alice Dupont", "FR76 1234 5678 9012", "Banque A"),
         Beneficiary("2", "Amine Saïd", "FR76 2222 3333 4444", "Banque B"),

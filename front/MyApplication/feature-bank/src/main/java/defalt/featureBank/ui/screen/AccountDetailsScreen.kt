@@ -420,7 +420,10 @@ private fun formatDateHeader(date: LocalDate): String {
 }
 
 private fun sampleAccount() = BankAccountEntity(
-    id = 1, parameterId = 0, typeId = 1, sold = 478.27,
+    id = 1,
+    parameterId = 0,
+    typeId = 1,
+    sold = 478.27,
     iban = "FR7630006000011234567890140",
 )
 
