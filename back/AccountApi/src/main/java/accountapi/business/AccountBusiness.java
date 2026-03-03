@@ -17,14 +17,17 @@ import java.util.List;
 @Service
 public class AccountBusiness {
 
-    @Inject
     private AccountRepository accountRepository;
-
-    @Inject
     private PersonalInformationBusiness personalInformationBusiness;
-
-    @Inject
     private RoleBusiness roleBusiness;
+
+    public AccountBusiness(AccountRepository accountRepository,
+                           PersonalInformationBusiness personalInformationBusiness,
+                           RoleBusiness roleBusiness) {
+        this.accountRepository = accountRepository;
+        this.personalInformationBusiness = personalInformationBusiness;
+        this.roleBusiness = roleBusiness;
+    }
 
     private final JwtUtils keyJWT = new JwtUtils();
 

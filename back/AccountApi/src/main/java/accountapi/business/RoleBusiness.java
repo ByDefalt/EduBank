@@ -13,8 +13,11 @@ import java.util.List;
 @Service
 public class RoleBusiness {
 
-    @Inject
     private RoleRepository roleRepository;
+
+    public RoleBusiness(RoleRepository roleRepository) {
+        this.roleRepository = roleRepository;
+    }
 
     public List<Role> getAllRoles() {
         List<RoleEntity> roles = roleRepository.findAll();

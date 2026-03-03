@@ -14,8 +14,11 @@ import java.util.List;
 @Service
 public class PersonalInformationBusiness {
 
-    @Inject
     private PersonalInformationRepository personalInformationRepository;
+
+    public PersonalInformationBusiness(PersonalInformationRepository personalInformationRepository) {
+        this.personalInformationRepository = personalInformationRepository;
+    }
 
     public List<PersonalInformation> getAllPersonalInformation() {
         List<PersonalInformationEntity> entities = personalInformationRepository.findAll();
