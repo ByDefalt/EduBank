@@ -83,7 +83,7 @@ public class AccountController {
     @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{idAccount}")
     public Response deleteAccount(@PathParam("idAccount") String id) {
-        boolean deleted = accountBusiness.deleteAccount(id);
+        boolean deleted = accountBusiness.deactivateAccount(id);;
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

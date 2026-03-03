@@ -36,6 +36,7 @@ public class PersonalInformationController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonalInformationById(@PathParam("id") Integer id) {
