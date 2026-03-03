@@ -10,7 +10,9 @@ import java.util.Map;
 public class OperationRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
     private static final String SQL_SELECT_OPERATIONS = "SELECT * FROM OPERATION";
+    private static final String SQL_SELECT_OPERATION_BY_ID = "SELECT * FROM OPERATION WHERE id = :id";
     private static final String SQL_SAVE_OPERATION = "INSERT INTO OPERATION (account_source_id, label, state, iban_target, amount, date) " + "VALUES (:account_source_id, :label, :state, :iban_target, :amount, :date)";
+    private static final String SQL_UPDATE_STATE_OPERATION = "UPDATE OPERATION SET state = :state WHERE id = :id";
 
     public OperationRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -18,6 +20,20 @@ public class OperationRepository {
 
     public List<Operation> getOperations() {
         return jdbcTemplate.query(SQL_SELECT_OPERATIONS, (rs, rowNum) -> {
+            Operation operation = new Operation();
+            operation.setId(rs.getInt("id"));
+            operation.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
+            operation.setLabel(rs.getString("label"));
+            operation.setState(Operation.StateEnum.fromValue(rs.getString("state")));
+            operation.setIbanTarget(rs.getString("iban_target"));
+            operation.setAmount(rs.getDouble("amount"));
+            operation.setDate(OffsetDateTime.from(rs.getTimestamp("date").toLocalDateTime()));
+            return operation;
+        });
+    }
+
+    public Operation getOperationById(Integer id) {
+        return jdbcTemplate.queryForObject(SQL_SELECT_OPERATION_BY_ID, Map.of("id", id), (rs, rowNum) -> {
             Operation operation = new Operation();
             operation.setId(rs.getInt("id"));
             operation.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
@@ -40,5 +56,14 @@ public class OperationRepository {
                 "date", operation.getDate()
         ));
         return operation;
+    }
+
+    public boolean updateState(Integer id, Operation.StateEnum state) {
+        int numberRowAffected = this.jdbcTemplate.update(SQL_UPDATE_STATE_OPERATION, Map.of(
+                "id", id,
+                "state", state
+        ));
+
+        return numberRowAffected != 0;
     }
 }

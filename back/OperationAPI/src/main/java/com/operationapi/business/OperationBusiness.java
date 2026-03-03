@@ -16,7 +16,23 @@ public class OperationBusiness {
         return this.operationRepository.getOperations();
     }
 
-    public Operation save(Operation operation) {
-        return this.operationRepository.save(operation);
+    public void save(Operation operation) {
+        this.operationRepository.save(operation);
+    }
+
+    public Operation getOperationById(Integer id) {
+        return this.operationRepository.getOperationById(id);
+    }
+
+    public Operation updateStateOperation(Integer id, Operation.StateEnum state) {
+        boolean isUpdated = this.operationRepository.updateState(id, state);
+        if(isUpdated) {
+            return this.operationRepository.getOperationById(id);
+        }
+        return null;
+    }
+
+    public Operation cancelOperation(Integer id) {
+        return this.updateStateOperation(id, Operation.StateEnum.CANCELLED);
     }
 }
