@@ -74,7 +74,7 @@ fun TransferBottomSheet(
             BottomSheetItem(
                 icon = Icons.Default.AccountBalance,
                 label = "Mes bénéficiaires",
-                onClick = { onBeneficiaireClick(); onDismiss() },
+                onClick = { onBeneficiaireClick() },
             )
         }
     }
