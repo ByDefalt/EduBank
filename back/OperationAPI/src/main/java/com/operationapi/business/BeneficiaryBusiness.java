@@ -30,7 +30,7 @@ public class BeneficiaryBusiness {
 
     public Beneficiary updateBeneficiary(Integer id, Beneficiary beneficiary) {
         beneficiary.setId(id);
-        return this.beneficiaryRepository.save(beneficiary);
+        return this.beneficiaryRepository.update(beneficiary);
     }
 
     public void deleteBeneficiaryById(Integer id) {
