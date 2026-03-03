@@ -70,8 +70,6 @@ private fun initialOf(name: String): Char {
 fun BeneficiariesScreen(
     beneficiaries: List<Beneficiary> = defaultData(),
     query: String = "",
-    onQueryChanged: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
     onItemClick: (Beneficiary) -> Unit = {},
     onBack: () -> Unit = {},
     onAddBeneficiary: () -> Unit = {},
@@ -97,7 +95,7 @@ fun BeneficiariesScreen(
     val safeNavigateTransfer = safeClick(onNavigateToTransfer)
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
@@ -116,7 +114,7 @@ fun BeneficiariesScreen(
                     // Search bar (utilise le composant partagé ArkeoInput)
                     ArkeoInput(
                         value = query,
-                        onValueChange = onQueryChanged,
+                        onValueChange = {},
                         label = "Rechercher un bénéficiaire",
                         icon = Icons.Default.Search,
                     )
@@ -269,6 +267,5 @@ fun PreviewBeneficiariesScreen() {
     BeneficiariesScreen(
         beneficiaries = defaultData(),
         query = query,
-        onQueryChanged = { query = it },
     )
 }
