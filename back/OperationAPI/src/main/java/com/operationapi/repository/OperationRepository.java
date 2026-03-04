@@ -7,6 +7,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -67,7 +69,7 @@ public class OperationRepository {
         ));
     }
 
-    private Operation mapRow(java.sql.ResultSet rs) throws java.sql.SQLException {
+    private Operation mapRow(ResultSet rs) throws SQLException {
         Operation operation = new Operation();
         operation.setId(rs.getInt("id"));
         operation.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));

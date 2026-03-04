@@ -4,6 +4,8 @@ import dto.operationapi.Beneficiary;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -29,25 +31,12 @@ public class BeneficiaryRepository {
     }
 
     public List<Beneficiary> getBeneficiaries() {
-        return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES, (rs, rowNum) -> {
-            Beneficiary beneficiary = new Beneficiary();
-            beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
-            beneficiary.setIbanTarget(rs.getString("iban_target"));
-            beneficiary.setName(rs.getString("name"));
-            return beneficiary;
-        });
+        return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES, (rs, rowNum) -> mapRow(rs));
     }
 
     public List<Beneficiary> getBeneficiariesByAccountId(String accountId) {
         return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID, Map.of(
-                "account_source_id", accountId),
-                (rs, rowNum) -> {
-                    Beneficiary beneficiary = new Beneficiary();
-                    beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
-                    beneficiary.setIbanTarget(rs.getString("iban_target"));
-                    beneficiary.setName(rs.getString("name"));
-                    return beneficiary;
-                });
+                "account_source_id", accountId), (rs, rowNum) -> mapRow(rs));
     }
 
     public Beneficiary update(Beneficiary beneficiary) {
@@ -63,5 +52,14 @@ public class BeneficiaryRepository {
     public void deleteBeneficiaryById(Integer id) {
         Map<String, Object> params = Map.of("id", id);
         this.jdbcTemplate.update(SQL_DELETE_BENEFICIARY_BY_ID, params);
+    }
+
+    private Beneficiary mapRow(ResultSet rs) throws SQLException {
+        Beneficiary beneficiary = new Beneficiary();
+        beneficiary.setId(rs.getInt("id"));
+        beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
+        beneficiary.setIbanTarget(rs.getString("iban_target"));
+        beneficiary.setName(rs.getString("name"));
+        return beneficiary;
     }
 }
