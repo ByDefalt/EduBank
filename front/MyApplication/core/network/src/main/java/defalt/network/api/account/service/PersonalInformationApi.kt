@@ -1,49 +1,55 @@
 package defalt.network.api.account.service
 
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 import defalt.network.api.account.model.PersonalInformation
 import defalt.network.api.account.model.PersonalInformationRegister
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
 
 interface PersonalInformationApi {
     /**
-     * GET personal-information
-     * Liste toutes les informations personnelles
-     *
+     * GET personalInformation
+     * Liste toutes les informations personnelles (Admin uniquement)
+     * 
      * Responses:
      *  - 200: Succès
+     *  - 401: Non autorisé
+     *  - 403: Interdit
      *
      * @return [kotlin.collections.List<PersonalInformation>]
      */
-    @GET("personal-information")
+    @GET("personalInformation")
     suspend fun personalInformationGet(): Response<kotlin.collections.List<PersonalInformation>>
 
     /**
-     * GET personal-information/{id}
+     * GET personalInformation/{id}
      * Récupérer une info personnelle par ID
-     *
+     * 
      * Responses:
      *  - 200: Trouvé
+     *  - 404: Non trouvé
      *
-     * @param id
+     * @param id 
      * @return [PersonalInformation]
      */
-    @GET("personal-information/{id}")
+    @GET("personalInformation/{id}")
     suspend fun personalInformationIdGet(@Path("id") id: kotlin.Int): Response<PersonalInformation>
 
     /**
-     * POST personal-information
+     * POST personalInformation
      * Créer une fiche d&#39;information personnelle
-     *
+     * 
      * Responses:
      *  - 201: Créé avec succès
      *
-     * @param personalInformationRegister
+     * @param personalInformationRegister 
      * @return [PersonalInformation]
      */
-    @POST("personal-information")
+    @POST("personalInformation")
     suspend fun personalInformationPost(@Body personalInformationRegister: PersonalInformationRegister): Response<PersonalInformation>
+
 }

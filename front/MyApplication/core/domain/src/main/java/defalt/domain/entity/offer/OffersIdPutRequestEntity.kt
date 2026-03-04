@@ -1,13 +1,16 @@
-package defalt.core.api.offer.model
+package defalt.domain.entity.offer
 
+import java.time.LocalDate
+
+/**
+ * Domain entity for updating an offer
+ */
 data class OffersIdPutRequestEntity(
     val picturePath: String? = null,
     val title: String? = null,
     val description: String? = null,
-    val state: OffersIdPutRequestEntity.State? = null,
-    val startDate: java.time.LocalDate? = null,
-    val endDate: java.time.LocalDate? = null,
+    val state: OfferState? = null,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null
+)
 
-) {
-    enum class State(val value: String)
-}

@@ -1,8 +1,9 @@
-package defalt.core.api.offer.model
+package defalt.domain.entity.offer
 
+/**
+ * Domain entity for patching the state of an offer
+ */
 data class OffersIdStatePatchRequestEntity(
-    val state: OffersIdStatePatchRequestEntity.State,
+    val state: OfferState
+)
 
-) {
-    enum class State(val value: String)
-}

@@ -1,6 +1,10 @@
 package defalt.domain.entity.account
 
+/**
+ * Domain entity mirroring network TokenRequest DTO
+ */
 data class TokenRequestEntity(
-    val jwt: String,
-
+    val username: String,
+    val password: String
 )
+

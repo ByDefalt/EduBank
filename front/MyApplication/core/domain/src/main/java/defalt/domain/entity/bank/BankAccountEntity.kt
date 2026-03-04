@@ -1,10 +1,13 @@
-package defalt.core.api.bank.model
+package defalt.domain.entity.bank
 
+/**
+ * Domain entity mirroring network BankAccount DTO (summary)
+ */
 data class BankAccountEntity(
-    val id: Int,
-    val parameterId: Int,
-    val typeId: Int,
-    val sold: Double,
-    val iban: String,
-
+    val id: String? = null,
+    val parameterId: Int? = null,
+    val typeId: Int? = null,
+    val sold: Double? = null,
+    val iban: String? = null
 )
+
