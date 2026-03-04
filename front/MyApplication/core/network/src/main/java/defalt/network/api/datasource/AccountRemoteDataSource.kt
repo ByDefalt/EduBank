@@ -1,7 +1,7 @@
 package defalt.network.api.datasource
 
 import defalt.domain.datasource.account.IAccountRemoteDataSource
-import defalt.domain.entity.account.entity.AccountRegisterEntity
+import defalt.domain.entity.account.AccountRegisterEntity
 import defalt.network.api.account.mapper.toDomain
 import defalt.network.api.account.mapper.toDto
 import defalt.network.api.account.service.AccountApi

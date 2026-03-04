@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.domain.entity.offer.entity.OfferEntity
+import defalt.domain.entity.offer.OfferEntity
 import defalt.ui.component.ArkeoButton
 import defalt.ui.utils.CustomColor
 import java.time.LocalDate

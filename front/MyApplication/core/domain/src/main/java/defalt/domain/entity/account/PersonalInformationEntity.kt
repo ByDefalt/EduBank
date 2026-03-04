@@ -1,4 +1,4 @@
-package defalt.domain.entity.account.entity
+package defalt.domain.entity.account
 
 data class PersonalInformationEntity(
     val id: Int? = null,

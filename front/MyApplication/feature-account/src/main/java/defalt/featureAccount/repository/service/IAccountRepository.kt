@@ -1,7 +1,7 @@
 package defalt.featureAccount.repository.service
 
-import defalt.domain.entity.account.entity.AccountEntity
-import defalt.domain.entity.account.entity.AccountRegisterEntity
+import defalt.domain.entity.account.AccountEntity
+import defalt.domain.entity.account.AccountRegisterEntity
 import defalt.utils.NetworkResult
 
 interface IAccountRepository {

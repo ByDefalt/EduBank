@@ -1,7 +1,7 @@
 package defalt.featureAccount.repository.impl
 
 import defalt.domain.datasource.account.IAccountRemoteDataSource
-import defalt.domain.entity.account.entity.AccountRegisterEntity
+import defalt.domain.entity.account.AccountRegisterEntity
 import defalt.featureAccount.repository.service.IAccountRepository
 
 class AccountRepository(

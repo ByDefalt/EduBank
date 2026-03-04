@@ -1,4 +1,4 @@
-package defalt.domain.entity.offer.entity
+package defalt.domain.entity.offer
 
 import java.time.LocalDate
 

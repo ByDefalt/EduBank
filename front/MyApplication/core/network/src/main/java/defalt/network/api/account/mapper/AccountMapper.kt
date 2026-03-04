@@ -1,9 +1,9 @@
 // defalt.network.api.account.mapper.AccountMapper.kt
 package defalt.network.api.account.mapper
 
-import defalt.domain.entity.account.entity.AccountEntity
-import defalt.domain.entity.account.entity.AccountRegisterEntity
-import defalt.domain.entity.account.entity.PersonalInformationRegisterEntity
+import defalt.domain.entity.account.AccountEntity
+import defalt.domain.entity.account.AccountRegisterEntity
+import defalt.domain.entity.account.PersonalInformationRegisterEntity
 import defalt.network.api.account.model.Account
 import defalt.network.api.account.model.AccountRegister
 import defalt.network.api.account.model.PersonalInformationRegister
