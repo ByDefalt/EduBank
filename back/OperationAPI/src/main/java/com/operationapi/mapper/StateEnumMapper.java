@@ -1,23 +1,21 @@
 package com.operationapi.mapper;
 
 import com.operationapi.entity.StateEnumEntity;
-import dto.operationapi.Operation;
+import dto.operationapi.OperationState;
 
 public class StateEnumMapper {
-    private StateEnumMapper() {
+    private StateEnumMapper() {}
 
-    }
-
-    public static Operation.StateEnum toDto(StateEnumEntity stateEnumEntity) {
+    public static OperationState toDto(StateEnumEntity stateEnumEntity) {
         return switch (stateEnumEntity) {
-            case PENDING -> Operation.StateEnum.PENDING;
-            case COMPLETED -> Operation.StateEnum.COMPLETED;
-            case FAILED -> Operation.StateEnum.FAILED;
-            case CANCELLED -> Operation.StateEnum.CANCELLED;
+            case PENDING -> OperationState.PENDING;
+            case COMPLETED -> OperationState.COMPLETED;
+            case FAILED -> OperationState.FAILED;
+            case CANCELLED -> OperationState.CANCELLED;
         };
     }
 
-    public static StateEnumEntity toEntity(Operation.StateEnum stateEnum) {
+    public static StateEnumEntity toEntity(OperationState stateEnum) {
         return switch (stateEnum) {
             case PENDING -> StateEnumEntity.PENDING;
             case COMPLETED -> StateEnumEntity.COMPLETED;

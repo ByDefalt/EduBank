@@ -2,6 +2,7 @@ package com.operationapi.repository;
 
 import com.operationapi.exception.NotFoundException;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationState;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -62,7 +63,7 @@ public class OperationRepository {
         return operation;
     }
 
-    public void updateState(Integer id, Operation.StateEnum state) {
+    public void updateState(Integer id, OperationState state) {
         this.jdbcTemplate.update(SQL_UPDATE_STATE_OPERATION, Map.of(
                 "id", id,
                 "state", state.toString()
@@ -74,7 +75,7 @@ public class OperationRepository {
         operation.setId(rs.getInt("id"));
         operation.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
         operation.setLabel(rs.getString("label"));
-        operation.setState(Operation.StateEnum.fromValue(rs.getString("state")));
+        operation.setState(OperationState.fromValue(rs.getString("state")));
         operation.setIbanTarget(rs.getString("iban_target"));
         operation.setAmount(rs.getDouble("amount"));
         operation.setDate(rs.getTimestamp("date").toLocalDateTime().atOffset(ZoneOffset.UTC));
