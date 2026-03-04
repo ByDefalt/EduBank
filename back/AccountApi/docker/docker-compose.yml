@@ -1,11 +1,10 @@
 version: '3.8'
 
 services:
-  api-spring:
+  account-api-spring:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    container_name: account-api
     ports:
       - "8081:8081"
     environment:
