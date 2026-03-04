@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.domain.entity.offer.OfferEntity
+import defalt.domain.entity.offer.Offer
 import defalt.ui.component.ArkeoButton
 import defalt.ui.utils.CustomColor
 import java.time.LocalDate
@@ -126,21 +126,21 @@ fun OffersScreen(onBack: () -> Unit) {
     }
 }
 
-private fun sampleOffers(): List<OfferEntity> = listOf(
-    OfferEntity(
+private fun sampleOffers(): List<Offer> = listOf(
+    Offer(
         id = 1,
         title = "Offre de bienvenue",
         description = "Taux préférentiel pour les nouveaux clients",
-        state = OfferEntity.State.ACTIVE,
+        state = Offer.State.ACTIVE,
         startDate = LocalDate.now(),
         endDate = LocalDate.now().plusMonths(1),
         picturePath = null,
     ),
-    OfferEntity(
+    Offer(
         id = 2,
         title = "Crédit pro",
         description = "Financement à taux avantageux pour les entreprises",
-        state = OfferEntity.State.ACTIVE,
+        state = Offer.State.ACTIVE,
         startDate = LocalDate.now().minusMonths(2),
         endDate = LocalDate.now().plusMonths(2),
         picturePath = null,

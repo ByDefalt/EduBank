@@ -33,11 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.api.bank.model.BankAccountEntity
 import defalt.ui.component.BottomNavBar
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
+import defalt.domain.entity.bank.BankAccount
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray
@@ -57,7 +57,7 @@ fun ListAccountOverviewScreen(
         3 to "COMPTE PROFESSIONNEL",
     )
 
-    val totalSold = accounts.sumOf { it.sold }
+    val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
     Box(
         modifier = Modifier
@@ -109,7 +109,7 @@ fun ListAccountOverviewScreen(
                     AccountCard(
                         account = account,
                         label = typeNames[account.typeId] ?: "COMPTE",
-                        onClick = { onNavigateToAccountDetails(account.id) },
+                        onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                 }
@@ -130,7 +130,7 @@ fun ListAccountOverviewScreen(
 
 @Composable
 private fun AccountCard(
-    account: BankAccountEntity,
+    account: BankAccount,
     label: String,
     onClick: () -> Unit,
 ) {
@@ -172,7 +172,7 @@ private fun AccountCard(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = formatMoney(account.sold),
+                    text = formatMoney(account.sold ?: 0.0),
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                     color = TextPrimary,
@@ -194,37 +194,37 @@ private fun AccountCard(
     }
 }
 
-private fun sampleAccounts(): List<BankAccountEntity> = listOf(
-    BankAccountEntity(
-        id = 1,
+private fun sampleAccounts(): List<BankAccount> = listOf(
+    BankAccount(
+        id = "1",
         parameterId = 0,
         typeId = 1,
         sold = 1679138.00,
         iban = "FR7630006000011234567890140",
     ),
-    BankAccountEntity(
-        id = 2,
+    BankAccount(
+        id = "2",
         parameterId = 0,
         typeId = 1,
         sold = 459393.44,
         iban = "FR7630006000019876543210140",
     ),
-    BankAccountEntity(
-        id = 3,
+    BankAccount(
+        id = "3",
         parameterId = 0,
         typeId = 1,
         sold = 5866841.38,
         iban = "FR7630006000015555555555540",
     ),
-    BankAccountEntity(
-        id = 4,
+    BankAccount(
+        id = "4",
         parameterId = 0,
         typeId = 2,
         sold = 775854.79,
         iban = "FR7630006000013333333333340",
     ),
-    BankAccountEntity(
-        id = 5,
+    BankAccount(
+        id = "5",
         parameterId = 0,
         typeId = 3,
         sold = 1080899.08,
@@ -232,8 +232,8 @@ private fun sampleAccounts(): List<BankAccountEntity> = listOf(
     ),
 )
 
-private fun maskAccountNumber(iban: String): String {
-    val last2 = iban.takeLast(2)
+private fun maskAccountNumber(iban: String?): String {
+    val last2 = iban?.takeLast(2) ?: "XX"
     return "XXXXX$last2"
 }
 

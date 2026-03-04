@@ -44,8 +44,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import defalt.core.api.bank.model.BankAccountEntity
-import defalt.core.api.operation.model.OperationEntity
+import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.operation.Operation
+import defalt.domain.entity.operation.OperationState
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
@@ -65,7 +66,7 @@ private const val LABEL_MAX_CHARS = 20
 @Composable
 fun AccountDetailsScreen(
     accountId: Int = 1,
-    account: BankAccountEntity = sampleAccount(),
+    account: BankAccount = sampleAccount(),
     accountLabel: String = "COMPTE CHÈQUES 1",
     onNavigateBack: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
@@ -84,9 +85,9 @@ fun AccountDetailsScreen(
 
     val filteredOperations = remember(operations, selectedTab) {
         when (selectedTab) {
-            0 -> operations.filter { it.state == OperationEntity.State.COMPLETED }
+            0 -> operations.filter { it.state == OperationState.COMPLETED }
             else -> operations.filter {
-                it.state == OperationEntity.State.PENDING || it.state == OperationEntity.State.CANCELLED
+                it.state == OperationState.PENDING || it.state == OperationState.CANCELLED
             }
         }
     }
@@ -202,7 +203,7 @@ private fun Header(title: String, onNavigateBack: () -> Unit) {
 }
 
 @Composable
-private fun AccountSummaryCard(account: BankAccountEntity) {
+private fun AccountSummaryCard(account: BankAccount) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -326,7 +327,7 @@ private fun DateSeparator(label: String) {
 }
 
 @Composable
-private fun OperationsGroupCard(operations: List<OperationEntity>, showFullLabel: Boolean) {
+private fun OperationsGroupCard(operations: List<Operation>, showFullLabel: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -348,7 +349,7 @@ private fun OperationsGroupCard(operations: List<OperationEntity>, showFullLabel
 }
 
 @Composable
-private fun OperationRow(operation: OperationEntity, showFullLabel: Boolean) {
+private fun OperationRow(operation: Operation, showFullLabel: Boolean) {
     val isCredit = operation.amount > 0
     val amountColor = if (isCredit) Color(0xFF2E7D32) else Color(0xFFCC0000)
     val displayLabel = if (showFullLabel || operation.label.length <= LABEL_MAX_CHARS) {
@@ -409,7 +410,7 @@ private fun QuickActionDetail(icon: androidx.compose.ui.graphics.vector.ImageVec
     }
 }
 
-private fun formatAmount(value: Double): String =
+private fun formatAmount(value: Double?): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
 private fun formatDateHeader(date: LocalDate): String {
@@ -419,27 +420,27 @@ private fun formatDateHeader(date: LocalDate): String {
         .replaceFirstChar { it.uppercase() }
 }
 
-private fun sampleAccount() = BankAccountEntity(
-    id = 1,
+private fun sampleAccount() = BankAccount(
+    id = "1",
     parameterId = 0,
     typeId = 1,
     sold = 478.27,
     iban = "FR7630006000011234567890140",
 )
 
-private fun sampleOperations(): List<OperationEntity> {
+private fun sampleOperations(): List<Operation> {
     val now = OffsetDateTime.now()
     return listOf(
-        OperationEntity(1, 1, "Virement reçu - Salaire", OperationEntity.State.COMPLETED, "FR76300060000198", 2350.00, now.minusDays(0).withHour(9).withMinute(0)),
-        OperationEntity(2, 1, "Paiement en ligne", OperationEntity.State.COMPLETED, "FR76300060000155", -49.99, now.minusDays(0).withHour(14).withMinute(30)),
-        OperationEntity(3, 1, "Virement vers épargne", OperationEntity.State.COMPLETED, "FR76300060000133", -500.00, now.minusDays(1).withHour(11).withMinute(15)),
-        OperationEntity(4, 1, "Remboursement ami", OperationEntity.State.COMPLETED, "FR76300060000144", 120.00, now.minusDays(1).withHour(18).withMinute(45)),
-        OperationEntity(5, 1, "Abonnement streaming", OperationEntity.State.COMPLETED, "FR76300060000111", -14.99, now.minusDays(3).withHour(8).withMinute(0)),
-        OperationEntity(6, 1, "Courses alimentaires", OperationEntity.State.COMPLETED, "FR76300060000122", -87.50, now.minusDays(3).withHour(17).withMinute(20)),
-        OperationEntity(7, 1, "Loyer", OperationEntity.State.COMPLETED, "FR76300060000166", -900.00, now.minusDays(5).withHour(7).withMinute(0)),
-        OperationEntity(8, 1, "Prélèvement assurance", OperationEntity.State.PENDING, "FR76300060000177", -32.50, now.plusDays(2).withHour(10).withMinute(0)),
-        OperationEntity(9, 1, "Virement programmé", OperationEntity.State.PENDING, "FR76300060000188", -250.00, now.plusDays(2).withHour(12).withMinute(0)),
-        OperationEntity(10, 1, "Remboursement prévu", OperationEntity.State.PENDING, "FR76300060000199", 75.00, now.plusDays(5).withHour(9).withMinute(0)),
+        Operation(1, "1", "Virement reçu - Salaire", OperationState.COMPLETED, "FR76300060000198", 2350.00, now.minusDays(0).withHour(9).withMinute(0)),
+        Operation(2, "1", "Paiement en ligne", OperationState.COMPLETED, "FR76300060000155", -49.99, now.minusDays(0).withHour(14).withMinute(30)),
+        Operation(3, "1", "Virement vers épargne", OperationState.COMPLETED, "FR76300060000133", -500.00, now.minusDays(1).withHour(11).withMinute(15)),
+        Operation(4, "1", "Remboursement ami", OperationState.COMPLETED, "FR76300060000144", 120.00, now.minusDays(1).withHour(18).withMinute(45)),
+        Operation(5, "1", "Abonnement streaming", OperationState.COMPLETED, "FR76300060000111", -14.99, now.minusDays(3).withHour(8).withMinute(0)),
+        Operation(6, "1", "Courses alimentaires", OperationState.COMPLETED, "FR76300060000122", -87.50, now.minusDays(3).withHour(17).withMinute(20)),
+        Operation(7, "1", "Loyer", OperationState.COMPLETED, "FR76300060000166", -900.00, now.minusDays(5).withHour(7).withMinute(0)),
+        Operation(8, "1", "Prélèvement assurance", OperationState.PENDING, "FR76300060000177", -32.50, now.plusDays(2).withHour(10).withMinute(0)),
+        Operation(9, "1", "Virement programmé", OperationState.PENDING, "FR76300060000188", -250.00, now.plusDays(2).withHour(12).withMinute(0)),
+        Operation(10, "1", "Remboursement prévu", OperationState.PENDING, "FR76300060000199", 75.00, now.plusDays(5).withHour(9).withMinute(0)),
     )
 }
 
