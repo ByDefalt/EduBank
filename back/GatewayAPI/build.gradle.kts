@@ -60,9 +60,7 @@ dependencies{
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    implementation("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -72,7 +70,7 @@ dependencies{
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
     implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
 
-    runtimeOnly ("org.mariadb.jdbc:mariadb-java-client")
+
 }
 
 tasks.withType<Test> {

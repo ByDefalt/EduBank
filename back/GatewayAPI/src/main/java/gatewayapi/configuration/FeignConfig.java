@@ -10,6 +10,7 @@ import feign.okhttp.OkHttpClient;
 import gatewayapi.client.AccountClient;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -29,6 +30,9 @@ public class FeignConfig {
 
     @Inject
     private ObjectMapper objectMapper;
+
+    @Value("${accountapi.base-url:http://localhost:8081/api/v1}")
+    private String accountApiBaseUrl;
 
     @Bean
     public RequestInterceptor requestInterceptor() {
@@ -55,6 +59,6 @@ public class FeignConfig {
                 .client(new OkHttpClient(getOkHttpClient()))
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
-                .target(AccountClient.class, "http://localhost:8081/api/v1");
+                .target(AccountClient.class, accountApiBaseUrl);
     }
 }
