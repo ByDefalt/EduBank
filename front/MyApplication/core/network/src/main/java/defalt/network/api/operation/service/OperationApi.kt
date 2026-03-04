@@ -1,27 +1,39 @@
 package defalt.network.api.operation.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
+import defalt.network.api.operation.model.Operation
+import defalt.network.api.operation.model.OperationsGet200Response
+import defalt.network.api.operation.model.OperationsIdCancelPost201Response
+import defalt.network.api.operation.model.OperationsIdCancelPostRequest
+import defalt.network.api.operation.model.OperationsIdStatePatchRequest
+import defalt.network.api.operation.model.OperationsPostRequest
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
-import defalt.network.api.operation.model.Error
-import defalt.network.api.operation.model.Operation
-import defalt.network.api.operation.model.OperationCancelResponse
-import defalt.network.api.operation.model.OperationState
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OperationApi {
 
     /**
-    * enum for parameter state
-    */
+     * enum for parameter state
+     */
     @Serializable
     enum class StateOperationsGet(val value: kotlin.String) {
-        @SerialName(value = "completed") COMPLETED("completed"),
-        @SerialName(value = "failed") FAILED("failed"),
-        @SerialName(value = "cancelled") CANCELLED("cancelled")
+        @SerialName(value = "pending")
+        PENDING("pending"),
+
+        @SerialName(value = "completed")
+        COMPLETED("completed"),
+
+        @SerialName(value = "failed")
+        FAILED("failed"),
+
+        @SerialName(value = "cancelled")
+        CANCELLED("cancelled"),
     }
 
     /**
@@ -32,14 +44,19 @@ interface OperationApi {
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountSourceId Filtrer par compte source (optional)
+     * @param bankAccountSourceId Filtrer par compte source (optional)
      * @param state Filtrer par état (optional)
      * @param dateFrom Date de début (optional)
      * @param dateTo Date de fin (optional)
-     * @return [kotlin.collections.List<Operation>]
+     * @return [OperationsGet200Response]
      */
     @GET("operations")
-    suspend fun operationsGet(@Query("account_source_id") accountSourceId: kotlin.String? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<kotlin.collections.List<Operation>>
+    suspend fun operationsGet(
+        @Query("bank_account_source_id") bankAccountSourceId: kotlin.Int? = null,
+        @Query("state") state: StateOperationsGet? = null,
+        @Query("date_from") dateFrom: java.time.OffsetDateTime? = null,
+        @Query("date_to") dateTo: java.time.OffsetDateTime? = null,
+    ): Response<OperationsGet200Response>
 
     /**
      * POST operations/{id}/cancel
@@ -53,10 +70,14 @@ interface OperationApi {
      *  - 403: Accès interdit - Permissions insuffisantes
      *
      * @param id ID de l&#39;opération à annuler
-     * @return [OperationCancelResponse]
+     * @param operationsIdCancelPostRequest  (optional)
+     * @return [OperationsIdCancelPost201Response]
      */
     @POST("operations/{id}/cancel")
-    suspend fun operationsIdCancelPost(@Path("id") id: kotlin.Int): Response<OperationCancelResponse>
+    suspend fun operationsIdCancelPost(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdCancelPostRequest: OperationsIdCancelPostRequest? = null,
+    ): Response<OperationsIdCancelPost201Response>
 
     /**
      * GET operations/{id}
@@ -84,12 +105,15 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param body 
+     * @param id
+     * @param operationsIdStatePatchRequest
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
-    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body body: kotlin.String): Response<Operation>
+    suspend fun operationsIdStatePatch(
+        @Path("id") id: kotlin.Int,
+        @Body operationsIdStatePatchRequest: OperationsIdStatePatchRequest,
+    ): Response<Operation>
 
     /**
      * POST operations
@@ -101,10 +125,9 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operation 
+     * @param operationsPostRequest
      * @return [Operation]
      */
     @POST("operations")
-    suspend fun operationsPost(@Body operation: Operation): Response<Operation>
-
+    suspend fun operationsPost(@Body operationsPostRequest: OperationsPostRequest): Response<Operation>
 }

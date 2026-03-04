@@ -1,12 +1,9 @@
-package defalt.domain.entity.operation
+package defalt.core.api.operation.model
 
-/**
- * Domain entity mirroring network Beneficiary DTO
- */
 data class BeneficiaryEntity(
-    val accountSourceId: String,
+    val id: Int,
+    val accountSourceId: Int,
     val ibanTarget: String,
     val name: String,
-    val id: Int? = null
-)
 
+)

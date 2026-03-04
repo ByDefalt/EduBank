@@ -1,16 +1,13 @@
-package defalt.domain.entity.offer
+package defalt.core.api.offer.model
 
-import java.time.LocalDate
-
-/**
- * Domain entity for creating an offer
- */
 data class OffersPostRequestEntity(
     val title: String,
     val description: String,
-    val state: OfferState,
-    val startDate: LocalDate,
-    val endDate: LocalDate,
-    val picturePath: String? = null
-)
+    val state: OffersPostRequestEntity.State,
+    val startDate: java.time.LocalDate,
+    val endDate: java.time.LocalDate,
+    val picturePath: String? = null,
 
+) {
+    enum class State(val value: String)
+}

@@ -1,19 +1,10 @@
-package defalt.domain.entity.bank
+package defalt.core.api.bank.model
 
-/**
- * Domain entity mirroring network BankAccountParameter DTO
- */
 data class BankAccountParameterEntity(
-    val id: Int? = null,
-    val overdraftLimit: Double? = null,
-    val state: BankState? = null
-)
+    val id: Int,
+    val overdraftLimit: Double,
+    val state: BankAccountParameterEntity.State,
 
-enum class BankState(val value: String) {
-    ACTIVE("active"),
-    INACTIVE("inactive"),
-    BLOQUED("bloqued"),
-    CLOSED("closed");
-    override fun toString(): String = value
+) {
+    enum class State(val value: String)
 }
-

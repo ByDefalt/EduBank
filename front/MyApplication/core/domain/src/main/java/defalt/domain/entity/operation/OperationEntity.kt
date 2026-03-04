@@ -1,23 +1,20 @@
-package defalt.domain.entity.operation
+package defalt.core.api.operation.model
 
-import java.time.OffsetDateTime
-
-/**
- * Domain entity mirroring network Operation DTO
- */
 data class OperationEntity(
     val id: Int,
-    val accountSourceId: String,
+    val bankAccountSourceId: Int,
     val label: String,
-    val state: OperationState,
+    val state: OperationEntity.State,
     val ibanTarget: String,
     val amount: Double,
-    val date: OffsetDateTime
-)
+    val date: java.time.OffsetDateTime,
+    val createdAt: java.time.OffsetDateTime? = null,
+    val updatedAt: java.time.OffsetDateTime? = null,
 
-enum class OperationState(val value: String) {
-    PENDING("pending"),
-    COMPLETED("completed"),
-    FAILED("failed"),
-    CANCELLED("cancelled")
+) {
+    enum class State(val value: String) {
+        PENDING("pending"),
+        COMPLETED("completed"),
+        CANCELLED("cancelled"),
+    }
 }

@@ -1,10 +1,7 @@
-package defalt.domain.entity.bank
+package defalt.core.api.bank.model
 
-/**
- * Domain entity mirroring network Type DTO
- */
 data class TypeEntity(
-    val id: Int? = null,
-    val name: String? = null
-)
+    val id: Int,
+    val name: String,
 
+)

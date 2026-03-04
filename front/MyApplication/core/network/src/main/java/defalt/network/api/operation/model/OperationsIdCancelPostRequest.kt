@@ -10,30 +10,24 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package defalt.network.api.bank.model
+package defalt.network.api.operation.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param message 
+ *
+ * @param reason Raison de l'annulation
  */
 @Serializable
+data class OperationsIdCancelPostRequest(
 
-data class MessageResponse (
+    // Raison de l'annulation
+    @SerialName(value = "reason")
+    val reason: kotlin.String? = null,
 
-    @SerialName(value = "message")
-    val message: kotlin.String? = null
-
-) {
-
-
-}
-
+)

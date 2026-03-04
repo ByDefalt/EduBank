@@ -10,34 +10,27 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package defalt.network.api.account.model
+package defalt.network.api.operation.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param id 
- * @param name 
+ *
+ * @param ibanTarget
+ * @param name
  */
 @Serializable
+data class BeneficiariesIdPutRequest(
 
-data class Role (
-
-    @SerialName(value = "id")
-    val id: kotlin.Int? = null,
+    @SerialName(value = "iban_target")
+    val ibanTarget: kotlin.String? = null,
 
     @SerialName(value = "name")
-    val name: kotlin.String? = null
+    val name: kotlin.String? = null,
 
-) {
-
-
-}
-
+)
