@@ -15,3 +15,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+accountapi:
+  url: http://localhost:8081/api/v1
+
