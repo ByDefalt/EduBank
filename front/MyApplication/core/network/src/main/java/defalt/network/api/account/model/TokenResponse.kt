@@ -13,33 +13,30 @@
     "UnusedImport"
 )
 
-package defalt.network.api.bank.model
+package defalt.network.api.account.model
 
-import defalt.network.api.bank.model.State
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * 
+ * Données utilisateur extraites et décodées depuis le token JWT
  *
- * @param id 
- * @param overdraftLimit 
- * @param state 
+ * @param id Identifiant unique de l'utilisateur (Subject du token)
+ * @param role Rôle de l'utilisateur
  */
 @Serializable
 
-data class BankAccountParameter (
+data class TokenResponse (
 
+    /* Identifiant unique de l'utilisateur (Subject du token) */
     @SerialName(value = "id")
-    val id: kotlin.Int? = null,
+    val id: kotlin.String? = null,
 
-    @SerialName(value = "overdraft_limit")
-    val overdraftLimit: kotlin.Double? = null,
-
-    @Contextual @SerialName(value = "state")
-    val state: State? = null
+    /* Rôle de l'utilisateur */
+    @SerialName(value = "role")
+    val role: kotlin.String? = null
 
 ) {
 

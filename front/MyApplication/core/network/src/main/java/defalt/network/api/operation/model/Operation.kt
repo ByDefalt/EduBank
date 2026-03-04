@@ -10,86 +10,61 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.operation.model
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
+import defalt.network.api.operation.model.OperationState
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
- *
+ * 
  *
  * @param id Identifiant de l'opération
- * @param bankAccountSourceId ID du compte bancaire source
+ * @param accountSourceId ID du compte bancaire source
  * @param label Libellé de l'opération
- * @param state État de l'opération
+ * @param state 
  * @param ibanTarget IBAN du compte destinataire
  * @param amount Montant de l'opération
  * @param date Date et heure de l'opération
- * @param createdAt Date de création
- * @param updatedAt Date de dernière modification
  */
 @Serializable
-data class Operation(
 
-    // Identifiant de l'opération
+data class Operation (
+
+    /* Identifiant de l'opération */
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    // ID du compte bancaire source
-    @SerialName(value = "bank_account_source_id")
-    val bankAccountSourceId: kotlin.Int,
+    /* ID du compte bancaire source */
+    @SerialName(value = "account_source_id")
+    val accountSourceId: kotlin.String,
 
-    // Libellé de l'opération
+    /* Libellé de l'opération */
     @SerialName(value = "label")
     val label: kotlin.String,
 
-    // État de l'opération
-    @SerialName(value = "state")
-    val state: Operation.State,
+    @Contextual @SerialName(value = "state")
+    val state: OperationState,
 
-    // IBAN du compte destinataire
+    /* IBAN du compte destinataire */
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
-    // Montant de l'opération
+    /* Montant de l'opération */
     @SerialName(value = "amount")
     val amount: kotlin.Double,
 
-    // Date et heure de l'opération
+    /* Date et heure de l'opération */
     @Contextual @SerialName(value = "date")
-    val date: java.time.OffsetDateTime,
-
-    // Date de création
-    @Contextual @SerialName(value = "created_at")
-    val createdAt: java.time.OffsetDateTime? = null,
-
-    // Date de dernière modification
-    @Contextual @SerialName(value = "updated_at")
-    val updatedAt: java.time.OffsetDateTime? = null,
+    val date: java.time.OffsetDateTime
 
 ) {
 
-    /**
-     * État de l'opération
-     *
-     * Values: PENDING,COMPLETED,FAILED,CANCELLED
-     */
-    @Serializable
-    enum class State(val value: kotlin.String) {
-        @SerialName(value = "pending")
-        PENDING("pending"),
 
-        @SerialName(value = "completed")
-        COMPLETED("completed"),
-
-        @SerialName(value = "failed")
-        FAILED("failed"),
-
-        @SerialName(value = "cancelled")
-        CANCELLED("cancelled"),
-    }
 }
+

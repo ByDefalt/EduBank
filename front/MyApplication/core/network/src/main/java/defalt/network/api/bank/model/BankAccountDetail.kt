@@ -15,40 +15,38 @@
 
 package defalt.network.api.bank.model
 
+import defalt.network.api.bank.model.BankAccountParameter
+import defalt.network.api.bank.model.Type
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * Version simple d'un compte bancaire (pour les listes)
+ * Version complète d'un compte bancaire avec tous les détails. Utilisé pour afficher UN seul compte avec Type et Parameter complets. 
  *
  * @param id 
- * @param parameterId ID du paramètre associé
- * @param typeId ID du type de compte
- * @param sold Solde actuel
- * @param iban IBAN du compte
+ * @param parameter 
+ * @param type 
+ * @param sold 
+ * @param iban 
  */
 @Serializable
 
-data class BankAccount (
+data class BankAccountDetail (
 
     @SerialName(value = "id")
     val id: kotlin.String? = null,
 
-    /* ID du paramètre associé */
-    @SerialName(value = "parameter_id")
-    val parameterId: kotlin.Int? = null,
+    @SerialName(value = "parameter")
+    val parameter: BankAccountParameter? = null,
 
-    /* ID du type de compte */
-    @SerialName(value = "type_id")
-    val typeId: kotlin.Int? = null,
+    @SerialName(value = "type")
+    val type: Type? = null,
 
-    /* Solde actuel */
     @SerialName(value = "sold")
     val sold: kotlin.Double? = null,
 
-    /* IBAN du compte */
     @SerialName(value = "iban")
     val iban: kotlin.String? = null
 

@@ -1,93 +1,80 @@
 package defalt.network.api.operation.service
 
-import defalt.network.api.operation.model.BeneficiariesIdPutRequest
-import defalt.network.api.operation.model.BeneficiariesPostRequest
-import defalt.network.api.operation.model.Beneficiary
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+import defalt.network.api.operation.model.Beneficiary
+import defalt.network.api.operation.model.Error
 
 interface BeneficiaryApi {
     /**
-     * GET beneficiaries
-     * Récupérer la liste des bénéficiaires
-     * Use Case 8 (Client): Voir la liste des bénéficiaires
+     * GET beneficiaries/{accountId}
+     * Récupérer les bénéficiaires d&#39;un compte
+     * Retourne tous les bénéficiaires associés à un compte source spécifique
      * Responses:
-     *  - 200: Liste récupérée avec succès
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 200: Liste des bénéficiaires du compte
+     *  - 404: Ressource non trouvée
      *
-     * @param accountSourceId Filtrer par compte source (optional)
+     * @param accountId ID du compte source (ex: 1)
+     * @return [kotlin.collections.List<Beneficiary>]
+     */
+    @GET("beneficiaries/{accountId}")
+    suspend fun beneficiariesAccountIdGet(@Path("accountId") accountId: kotlin.String): Response<kotlin.collections.List<Beneficiary>>
+
+    /**
+     * GET beneficiaries
+     * Récupérer tous les bénéficiaires
+     * 
+     * Responses:
+     *  - 200: Liste globale des bénéficiaires
+     *
      * @return [kotlin.collections.List<Beneficiary>]
      */
     @GET("beneficiaries")
-    suspend fun beneficiariesGet(@Query("account_source_id") accountSourceId: kotlin.Int? = null): Response<kotlin.collections.List<Beneficiary>>
+    suspend fun beneficiariesGet(): Response<kotlin.collections.List<Beneficiary>>
 
     /**
      * DELETE beneficiaries/{id}
      * Supprimer un bénéficiaire
-     * Use Case 9 (Client): Supprimer un bénéficiaire
+     * 
      * Responses:
-     *  - 204: Bénéficiaire supprimé avec succès
-     *  - 404: Ressource non trouvée
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 204: Supprimé avec succès
      *
-     * @param id
+     * @param id 
      * @return [Unit]
      */
     @DELETE("beneficiaries/{id}")
     suspend fun beneficiariesIdDelete(@Path("id") id: kotlin.Int): Response<Unit>
 
     /**
-     * GET beneficiaries/{id}
-     * Récupérer un bénéficiaire par ID
-     *
-     * Responses:
-     *  - 200: Bénéficiaire récupéré avec succès
-     *  - 404: Ressource non trouvée
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
-     *
-     * @param id
-     * @return [Beneficiary]
-     */
-    @GET("beneficiaries/{id}")
-    suspend fun beneficiariesIdGet(@Path("id") id: kotlin.Int): Response<Beneficiary>
-
-    /**
      * PUT beneficiaries/{id}
      * Mettre à jour un bénéficiaire
-     * Use Case 7 (Client): Modifier un bénéficiaire
+     * 
      * Responses:
-     *  - 200: Bénéficiaire mis à jour avec succès
-     *  - 404: Ressource non trouvée
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 200: Bénéficiaire mis à jour
      *
-     * @param id
-     * @param beneficiariesIdPutRequest
+     * @param id 
+     * @param beneficiary 
      * @return [Beneficiary]
      */
     @PUT("beneficiaries/{id}")
-    suspend fun beneficiariesIdPut(
-        @Path("id") id: kotlin.Int,
-        @Body beneficiariesIdPutRequest: BeneficiariesIdPutRequest,
-    ): Response<Beneficiary>
+    suspend fun beneficiariesIdPut(@Path("id") id: kotlin.Int, @Body beneficiary: Beneficiary): Response<Beneficiary>
 
     /**
      * POST beneficiaries
      * Créer un nouveau bénéficiaire
-     * Use Case 6 (Client): Ajouter un bénéficiaire
+     * 
      * Responses:
-     *  - 201: Bénéficiaire créé avec succès
-     *  - 400: Requête invalide
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 201: Bénéficiaire créé
      *
-     * @param beneficiariesPostRequest
-     * @return [Unit]
+     * @param beneficiary 
+     * @return [Beneficiary]
      */
     @POST("beneficiaries")
-    suspend fun beneficiariesPost(@Body beneficiariesPostRequest: BeneficiariesPostRequest): Response<Unit>
+    suspend fun beneficiariesPost(@Body beneficiary: Beneficiary): Response<Beneficiary>
+
 }

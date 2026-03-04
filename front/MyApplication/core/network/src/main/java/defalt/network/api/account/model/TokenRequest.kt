@@ -10,24 +10,31 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.account.model
 
-import kotlinx.serialization.SerialName
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
+ * 
  *
- *
- * @param jwt Token à valider
+ * @param jwt Token JWT
  */
 @Serializable
-data class TokenRequest(
 
-    // Token à valider
+data class TokenRequest (
+
+    /* Token JWT */
     @SerialName(value = "jwt")
-    val jwt: kotlin.String,
+    val jwt: kotlin.String
 
-)
+) {
+
+
+}
+
