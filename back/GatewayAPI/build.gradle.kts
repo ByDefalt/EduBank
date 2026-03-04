@@ -24,11 +24,11 @@ tasks.check {
 apply("gradle/swagger.gradle.kts")
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
-description = "AccountAPI"
+description = "GatewayAPI"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
