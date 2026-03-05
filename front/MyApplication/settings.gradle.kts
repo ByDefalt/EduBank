@@ -25,7 +25,6 @@ dependencyResolutionManagement {
 rootProject.name = "My Application"
 include(
     ":app",
-    ":core",
     ":feature-account",
     ":feature-bank",
     ":feature-operation",
