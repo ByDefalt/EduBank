@@ -24,29 +24,25 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param typeId Type de compte existant
- * @param iban IBAN unique du compte
- * @param sold Solde initial
- * @param overdraftLimit Découvert autorisé
+ * @param typeId 
+ * @param iban 
+ * @param sold 
+ * @param overdraftLimit 
  * @param state 
  */
 @Serializable
 
 data class BankAccountCreateRequest (
 
-    /* Type de compte existant */
     @SerialName(value = "type_id")
     val typeId: kotlin.Int,
 
-    /* IBAN unique du compte */
     @SerialName(value = "iban")
     val iban: kotlin.String,
 
-    /* Solde initial */
     @SerialName(value = "sold")
     val sold: kotlin.Double,
 
-    /* Découvert autorisé */
     @SerialName(value = "overdraft_limit")
     val overdraftLimit: kotlin.Double,
 

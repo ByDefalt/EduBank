@@ -23,7 +23,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * Version complète d'un compte bancaire avec tous les détails. Utilisé pour afficher UN seul compte avec Type et Parameter complets. 
+ * Version complète (avec détails)
  *
  * @param id 
  * @param parameter 

@@ -21,24 +21,20 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * 
+ * Lien compte-utilisateur (co-titulaire)
  *
- * @param code 
- * @param message 
- * @param details 
+ * @param bankAccountId 
+ * @param accountId 
  */
 @Serializable
 
-data class Error (
+data class BankAccountPivot (
 
-    @SerialName(value = "code")
-    val code: kotlin.String? = null,
+    @SerialName(value = "bank_account_id")
+    val bankAccountId: kotlin.String,
 
-    @SerialName(value = "message")
-    val message: kotlin.String? = null,
-
-    @SerialName(value = "details")
-    val details: kotlin.String? = null
+    @SerialName(value = "account_id")
+    val accountId: kotlin.Int
 
 ) {
 

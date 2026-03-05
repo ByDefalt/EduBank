@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package defalt.network.api.bank.model
+package defalt.network.api.account.model
 
 
 import kotlinx.serialization.Serializable
@@ -23,14 +23,22 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
+ * @param code 
  * @param message 
+ * @param details 
  */
 @Serializable
 
-data class MessageResponse (
+data class Error (
+
+    @SerialName(value = "code")
+    val code: kotlin.String? = null,
 
     @SerialName(value = "message")
-    val message: kotlin.String? = null
+    val message: kotlin.String? = null,
+
+    @SerialName(value = "details")
+    val details: kotlin.String? = null
 
 ) {
 

@@ -21,13 +21,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * Version simple d'un compte bancaire (pour les listes)
+ * Version simple (pour listes)
  *
  * @param id 
- * @param parameterId ID du paramètre associé
- * @param typeId ID du type de compte
- * @param sold Solde actuel
- * @param iban IBAN du compte
+ * @param parameterId 
+ * @param typeId 
+ * @param sold 
+ * @param iban 
  */
 @Serializable
 
@@ -36,19 +36,15 @@ data class BankAccount (
     @SerialName(value = "id")
     val id: kotlin.String? = null,
 
-    /* ID du paramètre associé */
     @SerialName(value = "parameter_id")
     val parameterId: kotlin.Int? = null,
 
-    /* ID du type de compte */
     @SerialName(value = "type_id")
     val typeId: kotlin.Int? = null,
 
-    /* Solde actuel */
     @SerialName(value = "sold")
     val sold: kotlin.Double? = null,
 
-    /* IBAN du compte */
     @SerialName(value = "iban")
     val iban: kotlin.String? = null
 

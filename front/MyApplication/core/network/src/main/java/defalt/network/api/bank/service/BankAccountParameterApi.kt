@@ -8,23 +8,23 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 import defalt.network.api.bank.model.BankAccountParameter
-import defalt.network.api.bank.model.MessageResponse
+import defalt.network.api.bank.model.Error
 
 interface BankAccountParameterApi {
     /**
      * PATCH admin/bank-accounts/{bank_account_id}/parameters
-     * [ADMIN] Mettre à jour les paramètres d&#39;un compte
-     * Permet de modifier le découvert autorisé et/ou l&#39;état du compte. On peut modifier un seul paramètre ou les deux en même temps. 
+     * [ADMIN] Mettre à jour les paramètres
+     * 
      * Responses:
      *  - 200: Paramètres mis à jour
-     *  - 400: Données invalides
-     *  - 404: Compte non trouvé
+     *  - 400: Requête invalide
+     *  - 404: Ressource non trouvée
      *
      * @param bankAccountId 
      * @param bankAccountParameter 
-     * @return [MessageResponse]
+     * @return [Unit]
      */
     @PATCH("admin/bank-accounts/{bank_account_id}/parameters")
-    suspend fun adminBankAccountsBankAccountIdParametersPatch(@Path("bank_account_id") bankAccountId: kotlin.String, @Body bankAccountParameter: BankAccountParameter): Response<MessageResponse>
+    suspend fun adminBankAccountsBankAccountIdParametersPatch(@Path("bank_account_id") bankAccountId: kotlin.String, @Body bankAccountParameter: BankAccountParameter): Response<Unit>
 
 }

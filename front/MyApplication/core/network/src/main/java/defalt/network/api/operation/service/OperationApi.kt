@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
-import defalt.network.api.operation.model.OperationCancelResponse
+import defalt.network.api.operation.model.OperationList
 import defalt.network.api.operation.model.OperationState
 
 interface OperationApi {
@@ -36,10 +36,10 @@ interface OperationApi {
      * @param state Filtrer par état (optional)
      * @param dateFrom Date de début (optional)
      * @param dateTo Date de fin (optional)
-     * @return [kotlin.collections.List<Operation>]
+     * @return [OperationList]
      */
     @GET("operations")
-    suspend fun operationsGet(@Query("account_source_id") accountSourceId: kotlin.String? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<kotlin.collections.List<Operation>>
+    suspend fun operationsGet(@Query("account_source_id") accountSourceId: kotlin.String? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationList>
 
     /**
      * POST operations/{id}/cancel
@@ -53,10 +53,10 @@ interface OperationApi {
      *  - 403: Accès interdit - Permissions insuffisantes
      *
      * @param id ID de l&#39;opération à annuler
-     * @return [OperationCancelResponse]
+     * @return [Operation]
      */
     @POST("operations/{id}/cancel")
-    suspend fun operationsIdCancelPost(@Path("id") id: kotlin.Int): Response<OperationCancelResponse>
+    suspend fun operationsIdCancelPost(@Path("id") id: kotlin.Int): Response<Operation>
 
     /**
      * GET operations/{id}

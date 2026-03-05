@@ -8,6 +8,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 import defalt.network.api.operation.model.Beneficiary
+import defalt.network.api.operation.model.BeneficiaryList
 import defalt.network.api.operation.model.Error
 
 interface BeneficiaryApi {
@@ -20,10 +21,10 @@ interface BeneficiaryApi {
      *  - 404: Ressource non trouvée
      *
      * @param accountId ID du compte source (ex: 1)
-     * @return [kotlin.collections.List<Beneficiary>]
+     * @return [BeneficiaryList]
      */
     @GET("beneficiaries/{accountId}")
-    suspend fun beneficiariesAccountIdGet(@Path("accountId") accountId: kotlin.String): Response<kotlin.collections.List<Beneficiary>>
+    suspend fun beneficiariesAccountIdGet(@Path("accountId") accountId: kotlin.String): Response<BeneficiaryList>
 
     /**
      * GET beneficiaries
@@ -32,10 +33,10 @@ interface BeneficiaryApi {
      * Responses:
      *  - 200: Liste globale des bénéficiaires
      *
-     * @return [kotlin.collections.List<Beneficiary>]
+     * @return [BeneficiaryList]
      */
     @GET("beneficiaries")
-    suspend fun beneficiariesGet(): Response<kotlin.collections.List<Beneficiary>>
+    suspend fun beneficiariesGet(): Response<BeneficiaryList>
 
     /**
      * DELETE beneficiaries/{id}

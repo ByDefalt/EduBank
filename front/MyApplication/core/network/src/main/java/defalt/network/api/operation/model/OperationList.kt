@@ -13,8 +13,9 @@
     "UnusedImport"
 )
 
-package defalt.network.api.bank.model
+package defalt.network.api.operation.model
 
+import defalt.network.api.operation.model.Operation
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -23,22 +24,14 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param code 
- * @param message 
- * @param details 
+ * @param `data` 
  */
 @Serializable
 
-data class Error (
+data class OperationList (
 
-    @SerialName(value = "code")
-    val code: kotlin.String? = null,
-
-    @SerialName(value = "message")
-    val message: kotlin.String? = null,
-
-    @SerialName(value = "details")
-    val details: kotlin.String? = null
+    @SerialName(value = "data")
+    val `data`: kotlin.collections.List<Operation>? = null
 
 ) {
 

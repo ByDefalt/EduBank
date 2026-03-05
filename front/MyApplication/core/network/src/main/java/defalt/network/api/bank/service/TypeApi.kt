@@ -7,13 +7,14 @@ import okhttp3.RequestBody
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+import defalt.network.api.bank.model.Error
 import defalt.network.api.bank.model.Type
 
 interface TypeApi {
     /**
      * GET admin/types
-     * [ADMIN] Liste des types de comptes
-     * Récupère tous les types de comptes bancaires disponibles
+     * [ADMIN] Liste des types
+     * 
      * Responses:
      *  - 200: Liste des types
      *
@@ -24,11 +25,11 @@ interface TypeApi {
 
     /**
      * GET admin/types/{id}
-     * [ADMIN] Récupérer un type par son ID
+     * [ADMIN] Récupérer un type
      * 
      * Responses:
      *  - 200: Type trouvé
-     *  - 404: Type non trouvé
+     *  - 404: Ressource non trouvée
      *
      * @param id 
      * @return [Type]
@@ -38,11 +39,11 @@ interface TypeApi {
 
     /**
      * POST admin/types
-     * [ADMIN] Créer un nouveau type
-     * L&#39;ID sera généré automatiquement, seul le &#39;name&#39; est requis
+     * [ADMIN] Créer un type
+     * 
      * Responses:
      *  - 201: Type créé
-     *  - 400: Type déjà existant ou nom invalide
+     *  - 400: Requête invalide
      *
      * @param type 
      * @return [Type]
