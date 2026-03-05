@@ -97,6 +97,25 @@ class PersonalInformationBusinessTest {
     }
 
     @Test
+    void testGetPersonalInformationByIdNotFound() {
+        when(personalInformationRepository.findById(999)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> personalInformationBusiness.getPersonalInformationById(999));
+    }
+
+    @Test
+    void testCreatePersonalInformationFails() {
+        PersonalInformationRegister registerDto = new PersonalInformationRegister();
+        registerDto.setFirstname("Jean");
+        registerDto.setLastname("Martin");
+        registerDto.setEmail("jean.martin@example.com");
+
+        when(personalInformationRepository.create(any(PersonalInformationEntity.class))).thenReturn(null);
+
+        assertThrows(FunctionalException.class, () -> personalInformationBusiness.createPersonalInformation(registerDto));
+    }
+
+    @Test
     void testDeletePersonalInformation() {
         when(personalInformationRepository.delete(100)).thenReturn(true);
 

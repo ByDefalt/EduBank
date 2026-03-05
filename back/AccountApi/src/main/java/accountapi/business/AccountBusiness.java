@@ -88,12 +88,9 @@ public class AccountBusiness {
     public boolean deleteAccount(String id) {
         Account account = this.getAccountById(id);
         AccountEntity accountEntity = AccountMapper.toEntity(account);
-
-        boolean deleted = accountRepository.delete(id);
-        if (deleted){
-            personalInformationBusiness.deletePersonalInformation(accountEntity.getPersonalInfoId());
-        }
-        return deleted;
+        accountEntity.setState("ENCLOSE");
+        accountRepository.updateState(accountEntity);
+        return true;
     }
 
     public Role getRoleByAccountId(String id) {
@@ -133,7 +130,7 @@ public class AccountBusiness {
         String jwt = tokenRequest.getJwt();
         TokenResponse tokenResponse = keyJWT.validateToken(jwt);
 
-        if (tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
+        if (tokenResponse != null && tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
             AccountEntity acc = accountRepository.findById(tokenResponse.getId());
             if (acc != null && acc.getId().equals(tokenResponse.getId())) {
                 return tokenResponse;
@@ -145,6 +142,12 @@ public class AccountBusiness {
     public boolean deactivateAccount(String id) {
         Account account = this.getAccountById(id);
         AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals("ENCLOSE")) {
+            throw new FunctionalException("400", "Impossible de désactiver un compte clôturé");
+        }
+        if (accountEntity.getState().equals("INACTIVE")) {
+            throw new FunctionalException("400", "Le compte est déjà inactif");
+        }
         accountEntity.setState("INACTIVE");
         accountRepository.updateState(accountEntity);
         return true;
@@ -153,6 +156,12 @@ public class AccountBusiness {
     public boolean activateAccount(String id) {
         Account account = this.getAccountById(id);
         AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals("ENCLOSE")) {
+            throw new FunctionalException("400", "Impossible d'activer un compte clôturé");
+        }
+        if (accountEntity.getState().equals("ACTIVE")) {
+            throw new FunctionalException("400", "Le compte est déjà actif");
+        }
         accountEntity.setState("ACTIVE");
         accountRepository.updateState(accountEntity);
         return true;

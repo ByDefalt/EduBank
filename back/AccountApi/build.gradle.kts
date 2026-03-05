@@ -6,7 +6,7 @@ plugins {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.13"
 }
 
 tasks.jacocoTestReport {
@@ -15,6 +15,22 @@ tasks.jacocoTestReport {
         csv.required.set(false)
         html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
     }
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    // swagger
+                    "dto/accountapi/**",
+                    // http
+                    "accountapi/controller/**",
+                    "accountapi/interception/**",
+                    "accountapi/annotation/**",
+                    "accountapi/repository/**",
+                    "accountapi/AccountAPIApplication.class"
+                )
+            }
+        })
+    )
 }
 
 tasks.check {
@@ -66,6 +82,7 @@ dependencies{
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("net.bytebuddy:byte-buddy-agent:1.17.7")
 
 
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
@@ -77,4 +94,8 @@ dependencies{
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs(
+        "-XX:+EnableDynamicAgentLoading",
+        "-Xshare:off"
+    )
 }

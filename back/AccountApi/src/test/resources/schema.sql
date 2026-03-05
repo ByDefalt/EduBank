@@ -23,13 +23,3 @@ CREATE TABLE Account (
                          CONSTRAINT fk_account_personal_info FOREIGN KEY (personal_info_id) REFERENCES PersonalInformation(id),
                          CONSTRAINT uq_account_personal_info UNIQUE (personal_info_id)
 );
-
-INSERT INTO Role (id, name) VALUES
-                                (1, 'ADMIN'),
-                                (2, 'CUSTOMER');
-
-INSERT INTO PersonalInformation (firstname, lastname, email, address, phone_number) VALUES
-    ('John', 'Doe', 'john.doe@localhost.com', '123 Main St', '0644054058');
-
-INSERT INTO Account (id, personal_info_id, role_id, password, state) VALUES
-    ('admin', 1, 1, 'admin', 'ACTIVE');
