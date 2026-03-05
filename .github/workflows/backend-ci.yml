@@ -10,16 +10,20 @@ on:
 
 jobs:
   test-backend-apis:
-    name: Test & Coverage (${{ matrix.service }})
+    name: Test & Coverage (${{ matrix.name }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        service:
-          - back-AccountApi
-          - back-BankAPI
-          - back-OfferAPI
-          - back-OperationAPI
+        include:
+          - service: back/AccountApi
+            name: back-AccountApi
+          - service: back/BankAPI
+            name: back-BankAPI
+          - service: back/OfferAPI
+            name: back-OfferAPI
+          - service: back/OperationAPI
+            name: back-OperationAPI
 
     defaults:
       run:
@@ -46,7 +50,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-reports-${{ matrix.service }}
+          name: test-reports-${{ matrix.name }}
           path: |
             ${{ matrix.service }}/build/reports/tests/
             ${{ matrix.service }}/build/test-results/
@@ -56,7 +60,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-reports-${{ matrix.service }}
+          name: jacoco-reports-${{ matrix.name }}
           path: |
             ${{ matrix.service }}/build/reports/jacoco/test/jacocoTestReport.xml
             ${{ matrix.service }}/build/reports/jacoco/test/html/
@@ -65,8 +69,8 @@ jobs:
       - name: Add JaCoCo link to job summary
         if: always()
         run: |
-          echo "## Coverage report - ${{ matrix.service }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Download artifact: \`jacoco-reports-${{ matrix.service }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "## Coverage report - ${{ matrix.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Download artifact: \`jacoco-reports-${{ matrix.name }}\`" >> $GITHUB_STEP_SUMMARY
           if [ -f build/reports/jacoco/test/jacocoTestReport.xml ]; then
             LINE_RATE=$(sed -n 's/.*<counter type="LINE" missed="\([0-9]\+\)" covered="\([0-9]\+\)".*/\1 \2/p' build/reports/jacoco/test/jacocoTestReport.xml | head -n 1)
             MISSED=$(echo "$LINE_RATE" | awk '{print $1}')
