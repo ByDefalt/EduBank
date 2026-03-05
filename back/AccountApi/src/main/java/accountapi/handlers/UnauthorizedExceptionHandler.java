@@ -1,6 +1,6 @@
 package accountapi.handlers;
 
-import accountapi.exception.FunctionalException;
+import accountapi.exception.UnauthorizedException;
 import dto.accountapi.Error;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -8,13 +8,14 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class FunctionalExceptionHandler implements ExceptionMapper<FunctionalException> {
+public class UnauthorizedExceptionHandler implements ExceptionMapper<UnauthorizedException> {
 
     @Override
-    public Response toResponse(FunctionalException exception) {
+    public Response toResponse(UnauthorizedException exception) {
         Error error = new Error();
         error.setCode(exception.getCode());
         error.setMessage(exception.getMessage());
-        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(error).build();
+        return Response.status(Response.Status.UNAUTHORIZED).type(MediaType.APPLICATION_JSON).entity(error).build();
     }
 }
+

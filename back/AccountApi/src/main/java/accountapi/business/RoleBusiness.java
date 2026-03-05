@@ -1,10 +1,10 @@
 package accountapi.business;
 
 import accountapi.entity.RoleEntity;
+import accountapi.exception.NotFoundException;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.RoleRepository;
 import dto.accountapi.Role;
-import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +30,10 @@ public class RoleBusiness {
     }
 
     public Role getRoleById(Integer id) {
-        return RoleMapper.toDto(roleRepository.findById(id));
+        RoleEntity roleEntity = roleRepository.findById(id);
+        if (roleEntity == null) {
+            throw new NotFoundException("404", "Rôle non trouvé avec l'ID : " + id);
+        }
+        return RoleMapper.toDto(roleEntity);
     }
 }

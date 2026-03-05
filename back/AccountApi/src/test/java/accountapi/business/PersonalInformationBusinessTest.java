@@ -1,6 +1,8 @@
 package accountapi.business;
 
 import accountapi.entity.PersonalInformationEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
 import accountapi.repository.PersonalInformationRepository;
 import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;

@@ -2,7 +2,6 @@ package accountapi.controller;
 
 import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.RoleBusiness;
-import dto.accountapi.Error;
 import dto.accountapi.Role;
 import dto.accountapi.RoleEnum;
 import jakarta.ws.rs.GET;
@@ -38,13 +37,6 @@ public class RoleController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {
         Role role = roleBusiness.getRoleById(id);
-        if (role == null) {
-            Error error = new Error()
-                    .code("404")
-                    .message("Rôle non trouvé")
-                    .details("Aucun rôle trouvé avec l'ID : " + id);
-            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
-        }
         return Response.ok(role).build();
     }
 }
