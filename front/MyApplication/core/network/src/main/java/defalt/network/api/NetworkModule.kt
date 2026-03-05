@@ -9,6 +9,7 @@ import defalt.network.api.bank.service.TypeApi
 import defalt.network.api.offer.service.OfferApi
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
+import defalt.network.BuildConfig
 import defalt.network.infrastructure.ApiClient
 import defalt.network.utils.createService
 import org.koin.dsl.module
@@ -16,8 +17,7 @@ import org.koin.dsl.module
 val networkModule = module {
 
     single {
-        val GATEWAY_URL = ""
-        ApiClient(baseUrl = GATEWAY_URL).setLogger { println(it) }
+        ApiClient(baseUrl = BuildConfig.GATEWAY_URL).setLogger { println(it) }
     }
 
     single { get<ApiClient>().createService<AccountApi>() }
