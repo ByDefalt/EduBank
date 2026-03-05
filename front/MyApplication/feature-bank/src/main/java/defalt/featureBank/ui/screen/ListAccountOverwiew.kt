@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,11 +34,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
+import defalt.featureBank.viewModel.ListAccountUiState
+import defalt.featureBank.viewModel.ListAccountViewModel
 import defalt.ui.component.BottomNavBar
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray
@@ -49,15 +54,15 @@ fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (Int) -> Unit = {},
+    viewModel: ListAccountViewModel = koinViewModel(),
 ) {
-    val accounts = remember { sampleAccounts() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES 1",
         2 to "COMPTE ÉPARGNE",
         3 to "COMPTE PROFESSIONNEL",
     )
-
-    val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
     Box(
         modifier = Modifier
@@ -82,36 +87,65 @@ fun ListAccountOverviewScreen(
                 )
             }
 
-            // ── Total solde ──────────────────────────────────────────────────
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
-            ) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Total ${formatMoney(totalSold)}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = TextPrimary,
-                )
-            }
+            when (val state = uiState) {
+                is ListAccountUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(color = ArkeoRed)
+                    }
+                }
 
-            Spacer(modifier = Modifier.height(8.dp))
+                is ListAccountUiState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(text = state.message, color = ArkeoRed)
+                    }
+                }
 
-            // ── Liste des comptes ────────────────────────────────────────────
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-            ) {
-                items(accounts) { account ->
-                    AccountCard(
-                        account = account,
-                        label = typeNames[account.typeId] ?: "COMPTE",
-                        onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
+                is ListAccountUiState.Success -> {
+                    val accounts = state.accounts
+                    val totalSold = accounts.sumOf { it.sold ?: 0.0 }
+
+                    // ── Total solde ──────────────────────────────────────────────
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                    ) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Total ${formatMoney(totalSold)}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = TextPrimary,
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    // ── Liste des comptes ────────────────────────────────────────
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 12.dp),
+                    ) {
+                        items(accounts) { account ->
+                            AccountCard(
+                                account = account,
+                                label = typeNames[account.typeId] ?: "COMPTE",
+                                onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
+                    }
                 }
             }
 
