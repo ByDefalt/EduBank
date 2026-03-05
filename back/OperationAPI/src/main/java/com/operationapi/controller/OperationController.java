@@ -3,13 +3,13 @@ package com.operationapi.controller;
 import com.operationapi.annotation.AuthenticationRequired;
 import com.operationapi.business.OperationBusiness;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,7 +25,7 @@ public class OperationController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOperations() {
-        List<Operation> operations = this.operationBusiness.getOperations();
+        OperationList operations = this.operationBusiness.getOperations();
         return Response.ok(Map.of("data", operations)).build();
     }
 

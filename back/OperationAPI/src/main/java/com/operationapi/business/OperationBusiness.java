@@ -3,6 +3,7 @@ package com.operationapi.business;
 import com.operationapi.exception.FunctionalException;
 import com.operationapi.repository.OperationRepository;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,10 @@ public class OperationBusiness {
         this.operationRepository = operationRepository;
     }
 
-    public List<Operation> getOperations() {
-        return this.operationRepository.getOperations();
+    public OperationList getOperations() {
+        OperationList operationList = new OperationList();
+        operationList.setData(this.operationRepository.getOperations());
+        return operationList;
     }
 
     public Operation save(Operation operation) {

@@ -50,12 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Operation'
+                $ref: '#/components/schemas/OperationList'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     post:
@@ -164,12 +159,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  original_operation:
-                    $ref: '#/components/schemas/Operation'
-                  cancellation_operation:
-                    $ref: '#/components/schemas/Operation'
+                $ref: '#/components/schemas/Operation'
         '400':
           description: L'opération ne peut pas être annulée
           content:
@@ -194,9 +184,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Beneficiary'
+                $ref: '#/components/schemas/BeneficiaryList'
     post:
       tags:
         - Beneficiary
@@ -234,9 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array # Important : ton code retourne une List
-                items:
-                  $ref: '#/components/schemas/Beneficiary'
+                $ref: '#/components/schemas/BeneficiaryList'
         '404':
           $ref: '#/components/responses/NotFoundError'
 
@@ -326,6 +312,14 @@ components:
         - amount
         - date
 
+    OperationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+
     Beneficiary:
       type: object
       properties:
@@ -349,6 +343,14 @@ components:
         - account_source_id
         - iban_target
         - name
+
+    BeneficiaryList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Beneficiary'
 
     Error:
       type: object

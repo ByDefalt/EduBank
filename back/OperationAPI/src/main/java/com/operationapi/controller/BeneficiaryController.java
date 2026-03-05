@@ -4,6 +4,7 @@ import com.operationapi.annotation.AuthenticationRequired;
 import com.operationapi.business.BeneficiaryBusiness;
 import com.operationapi.mapper.BeneficiaryMapper;
 import dto.operationapi.Beneficiary;
+import dto.operationapi.BeneficiaryList;
 import dto.operationapi.Error;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -34,7 +35,7 @@ public class BeneficiaryController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeneficiaries() {
-        List<Beneficiary> beneficiaries = this.beneficiaryBusiness.getBeneficiaries();
+        BeneficiaryList beneficiaries = this.beneficiaryBusiness.getBeneficiaries();
         return Response.ok(beneficiaries).build();
     }
 
@@ -42,13 +43,7 @@ public class BeneficiaryController {
     @Path("/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBeneficiariesByAccountId(@PathParam("accountId") String accountId) {
-        List<Beneficiary> beneficiaries = this.beneficiaryBusiness.getBeneficiariesByAccountId(accountId);
-        if (beneficiaries.isEmpty()) {
-            Error error = new Error();
-            error.setCode("404");
-            error.setMessage("Aucun bénéficiaire trouvé pour le compte : " + accountId);
-            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
-        }
+        BeneficiaryList beneficiaries = this.beneficiaryBusiness.getBeneficiariesByAccountId(accountId);
         return Response.ok(beneficiaries).build();
     }
 
