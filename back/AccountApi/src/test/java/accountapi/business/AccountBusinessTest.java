@@ -251,7 +251,6 @@ class AccountBusinessTest {
     @Test
     void testGetRoleByAccountIdNotFound() {
         when(accountRepository.findById("UNKNOWN")).thenReturn(null);
-
         assertThrows(NotFoundException.class, () -> accountBusiness.getRoleByAccountId("UNKNOWN"));
     }
 
