@@ -3,6 +3,7 @@ package accountapi.controller;
 import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.AccountBusiness;
 import dto.accountapi.*;
+import dto.accountapi.Error;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -25,9 +26,6 @@ public class AccountController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAccounts() {
         List<Account> accounts = accountBusiness.getAllAccounts();
-        if (accounts.isEmpty()) {
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
         return Response.ok(accounts).build();
     }
 
@@ -37,7 +35,11 @@ public class AccountController {
     public Response getAccountById(@PathParam("idAccount") String id) {
         Account account = accountBusiness.getAccountById(id);
         if (account == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte non trouvé")
+                    .details("Aucun compte trouvé avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(account).build();
     }
@@ -48,7 +50,11 @@ public class AccountController {
     public Response createAccount(AccountRegister accountDto) {
         Account createdAccount = accountBusiness.createAccount(accountDto);
         if (createdAccount == null) {
-            return Response.status(Response.Status.CONFLICT).build();
+            Error error = new Error()
+                    .code("400")
+                    .message("Requête invalide")
+                    .details("Impossible de créer le compte");
+            return Response.status(Response.Status.BAD_REQUEST).entity(error).build();
         }
         return Response.status(Response.Status.CREATED).entity(createdAccount).build();
     }
@@ -60,10 +66,13 @@ public class AccountController {
     public Response signIn(SignInRequest signInRequest) {
         TokenRequest tokenRequest = accountBusiness.signIn(signInRequest);
         if (tokenRequest == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        } else {
-            return Response.status(Response.Status.OK).entity(tokenRequest).build();
+            Error error = new Error()
+                    .code("401")
+                    .message("Mot de passe incorrect")
+                    .details("Les identifiants fournis sont incorrects ou le compte est inactif");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(error).build();
         }
+        return Response.ok(tokenRequest).build();
     }
 
     @POST
@@ -73,43 +82,57 @@ public class AccountController {
     public Response validateToken(TokenRequest tokenRequest) {
         TokenResponse tokenResponse = accountBusiness.validateToken(tokenRequest);
         if (tokenResponse == null) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        } else {
-            return Response.ok(tokenResponse).build();
+            Error error = new Error()
+                    .code("401")
+                    .message("Token invalide ou expiré")
+                    .details("Le token JWT fourni est invalide ou a expiré");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(error).build();
         }
+        return Response.ok(tokenResponse).build();
     }
 
     @DELETE
     @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{idAccount}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAccount(@PathParam("idAccount") String id) {
-        boolean deleted = accountBusiness.deactivateAccount(id);;
+        boolean deleted = accountBusiness.deleteAccount(id);
         if (!deleted) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte non trouvé")
+                    .details("Aucun compte trouvé avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(deleted).build();
     }
 
     @GET
-    @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Path("/role/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleByAccountId(@PathParam("idAccount") String id) {
         Role role = accountBusiness.getRoleByAccountId(id);
         if (role == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte ou Rôle non trouvé")
+                    .details("Aucun rôle trouvé pour le compte avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(role).build();
     }
 
     @GET
-    @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Path("/personalInformation/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonalInformationByAccountId(@PathParam("idAccount") String id) {
         PersonalInformation personalInformation = accountBusiness.getPersonalInformationByAccountId(id);
         if (personalInformation == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte ou Infos non trouvées")
+                    .details("Aucune information personnelle trouvée pour le compte avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(personalInformation).build();
     }
@@ -121,7 +144,11 @@ public class AccountController {
     public Response deactivateAccount(@PathParam("idAccount") String id) {
         boolean updatedAccount = accountBusiness.deactivateAccount(id);
         if (!updatedAccount) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte non trouvé")
+                    .details("Aucun compte trouvé avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(updatedAccount).build();
     }
@@ -133,7 +160,11 @@ public class AccountController {
     public Response activateAccount(@PathParam("idAccount") String id) {
         boolean updatedAccount = accountBusiness.activateAccount(id);
         if (!updatedAccount) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            Error error = new Error()
+                    .code("404")
+                    .message("Compte non trouvé")
+                    .details("Aucun compte trouvé avec l'ID : " + id);
+            return Response.status(Response.Status.NOT_FOUND).entity(error).build();
         }
         return Response.ok(updatedAccount).build();
     }
