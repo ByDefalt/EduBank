@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         service:
-          - back/AccountApi
-          - back/BankAPI
-          - back/OfferAPI
-          - back/OperationAPI
+          - back-AccountApi
+          - back-BankAPI
+          - back-OfferAPI
+          - back-OperationAPI
 
     defaults:
       run:
