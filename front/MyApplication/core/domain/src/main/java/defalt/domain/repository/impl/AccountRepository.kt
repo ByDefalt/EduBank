@@ -35,52 +35,52 @@ class AccountRepository(
     }
 
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.activateAccount(id)
     }
 
     override suspend fun deactivateAccount(id: String): NetworkResult<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.deactivateAccount(id)
     }
 
     // --- AUTHENTIFICATION ---
 
     override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> {
-        TODO("Not yet implemented")
+        return remoteDataSource.signIn(signInRequest)
     }
 
     override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> {
-        TODO("Not yet implemented")
+        return remoteDataSource.validateToken(tokenRequest)
     }
 
     // --- RÔLES ---
 
     override suspend fun getRoles(): NetworkResult<List<Role>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getRoles()
     }
 
     override suspend fun getRoleById(id: Int): NetworkResult<Role> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getRoleById(id)
     }
 
     override suspend fun getAccountRole(accountId: String): NetworkResult<Role> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getAccountRole(accountId)
     }
 
     // --- INFORMATIONS PERSONNELLES ---
 
     override suspend fun getPersonalInformations(): NetworkResult<List<PersonalInformation>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getPersonalInformations()
     }
 
     override suspend fun getPersonalInformationById(id: Int): NetworkResult<PersonalInformation> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getPersonalInformationById(id)
     }
 
     override suspend fun getPersonalInformationByAccountId(accountId: String): NetworkResult<PersonalInformation> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getPersonalInformationByAccountId(accountId)
     }
 
     override suspend fun createPersonalInformation(personalInformationRegister: PersonalInformationRegister): NetworkResult<PersonalInformation> {
-        TODO("Not yet implemented")
+        return remoteDataSource.createPersonalInformation(personalInformationRegister)
     }
 }

@@ -14,41 +14,32 @@ class BankRepository(
 
     // --- ADMIN ---
 
-    override suspend fun adminGetBankAccountsByAccountId(accountId: Int): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminGetBankAccountsByAccountId(accountId: Int): NetworkResult<List<BankAccount>> =
+        remoteDataSource.adminGetBankAccountsByAccountId(accountId)
 
-    override suspend fun adminCreateBankAccount(accountId: Int, request: BankAccountCreateRequest): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminCreateBankAccount(accountId: Int, request: BankAccountCreateRequest): NetworkResult<BankAccountDetail> =
+        remoteDataSource.adminCreateBankAccount(accountId, request)
 
-    override suspend fun adminGetAllBankAccounts(): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminGetAllBankAccounts(): NetworkResult<List<BankAccount>> =
+        remoteDataSource.adminGetAllBankAccounts()
 
-    override suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit> =
+        remoteDataSource.adminDeleteBankAccount(id)
 
-    override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> =
+        remoteDataSource.adminGetBankAccountById(id)
 
-    override suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit> =
+        remoteDataSource.adminUpdateBankAccountParameters(bankAccountId, parameter)
 
     // --- CLIENT ---
 
-    override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =
+        remoteDataSource.getMyBankAccounts(typeId)
 
-    override suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail> =
+        remoteDataSource.getMyBankAccountById(id)
 
-    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> =
+        remoteDataSource.getMyBankAccountCoHolders(id)
 }
