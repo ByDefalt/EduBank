@@ -46,23 +46,13 @@ jobs:
       - name: Run unit tests + JaCoCo report
         run: ./gradlew clean test jacocoTestReport --no-daemon
 
-      - name: Publish test reports artifacts
+      - name: Publish test reports and JaCoCo artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.name }}
           path: |
             ${{ matrix.service }}/build/reports/
-          if-no-files-found: warn
-
-      - name: Publish JaCoCo artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: jacoco-reports-${{ matrix.name }}
-          path: |
-            ${{ matrix.service }}/build/reports/jacoco/test/jacocoTestReport.xml
-            ${{ matrix.service }}/build/reports/jacoco/test/html/
           if-no-files-found: warn
 
       - name: Add JaCoCo link to job summary
