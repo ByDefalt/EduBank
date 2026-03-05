@@ -19,7 +19,7 @@ class AccountRepository(
     // --- COMPTES ---
 
     override suspend fun getAccounts(): NetworkResult<List<Account>> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getAccounts()
     }
 
     override suspend fun getAccountById(id: String): NetworkResult<Account> {

@@ -10,13 +10,16 @@ import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.entity.account.TokenResponse
 import defalt.network.api.account.service.AccountApi
+import defalt.network.mapper.account.toEntity
+import defalt.network.utils.safeApiCall
 import defalt.utils.NetworkResult
+import defalt.utils.map
 
 class AccountRemoteDataSource(
     private val api: AccountApi,
 ) : IAccountRemoteDataSource {
     override suspend fun getAccounts(): NetworkResult<List<Account>> {
-        TODO("Not yet implemented")
+        return safeApiCall { api.accountsGet() }.map { it.toEntity() }
     }
 
     override suspend fun getAccountById(id: String): NetworkResult<Account> {
