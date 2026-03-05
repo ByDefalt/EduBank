@@ -1,12 +1,10 @@
-package defalt.network.datasource
+package defalt.network.datasource.account
 
 import defalt.domain.datasource.account.IAccountRemoteDataSource
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.account.AccountRegister
 import defalt.network.api.account.service.AccountApi
-import defalt.network.utils.safeApiCall
 import defalt.utils.NetworkResult
-import defalt.utils.map
 
 class AccountRemoteDataSource(
     private val api: AccountApi,
