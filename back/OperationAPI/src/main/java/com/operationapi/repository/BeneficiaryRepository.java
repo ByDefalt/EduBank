@@ -57,7 +57,7 @@ public class BeneficiaryRepository {
     private Beneficiary mapRow(ResultSet rs) throws SQLException {
         Beneficiary beneficiary = new Beneficiary();
         beneficiary.setId(rs.getInt("id"));
-        beneficiary.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
+        beneficiary.setAccountSourceId(rs.getString("account_source_id"));
         beneficiary.setIbanTarget(rs.getString("iban_target"));
         beneficiary.setName(rs.getString("name"));
         return beneficiary;

@@ -73,7 +73,7 @@ public class OperationRepository {
     private Operation mapRow(ResultSet rs) throws SQLException {
         Operation operation = new Operation();
         operation.setId(rs.getInt("id"));
-        operation.setAccountSourceId(String.valueOf(rs.getInt("account_source_id")));
+        operation.setAccountSourceId(rs.getString("account_source_id"));
         operation.setLabel(rs.getString("label"));
         operation.setState(OperationState.fromValue(rs.getString("state")));
         operation.setIbanTarget(rs.getString("iban_target"));
