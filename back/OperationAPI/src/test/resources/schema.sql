@@ -17,3 +17,4 @@ CREATE TABLE operation (
     amount DOUBLE NOT NULL,
     date TIMESTAMP NOT NULL
 );
+
