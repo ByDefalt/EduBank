@@ -1,6 +1,8 @@
 package accountapi.business;
 
 import accountapi.entity.PersonalInformationEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
 import accountapi.repository.PersonalInformationRepository;
 import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;
@@ -92,6 +94,25 @@ class PersonalInformationBusinessTest {
 
         assertEquals(personalInfo.getFirstname(), result.getFirstname());
         assertEquals(personalInfo.getLastname(), result.getLastname());
+    }
+
+    @Test
+    void testGetPersonalInformationByIdNotFound() {
+        when(personalInformationRepository.findById(999)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> personalInformationBusiness.getPersonalInformationById(999));
+    }
+
+    @Test
+    void testCreatePersonalInformationFails() {
+        PersonalInformationRegister registerDto = new PersonalInformationRegister();
+        registerDto.setFirstname("Jean");
+        registerDto.setLastname("Martin");
+        registerDto.setEmail("jean.martin@example.com");
+
+        when(personalInformationRepository.create(any(PersonalInformationEntity.class))).thenReturn(null);
+
+        assertThrows(FunctionalException.class, () -> personalInformationBusiness.createPersonalInformation(registerDto));
     }
 
     @Test

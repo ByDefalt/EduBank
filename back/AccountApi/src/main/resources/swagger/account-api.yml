@@ -410,11 +410,11 @@ components:
           $ref: '#/components/schemas/PersonalInformationRegister'
         role_id:
           type: integer
-          exemple: 1
+          example: 1
           description: "ID du rôle existant (ex: 1 pour Admin, 2 pour User)"
         password:
           type: string
-          exemple: "123456789"
+          example: "123456789"
           format: password
           writeOnly: true
 
@@ -454,3 +454,45 @@ components:
           type: string
           description: "Rôle de l'utilisateur"
           example: "ADMIN"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Requête invalide"
+        details:
+          type: string
+          example: "Le champ 'amount' doit être supérieur à 0"
+
+  responses:
+    UnauthorizedError:
+      description: Non autorisé - Token d'authentification manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ForbiddenError:
+      description: Accès interdit - Permissions insuffisantes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

@@ -11,5 +11,6 @@ public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         packages("accountapi.controller");
         packages("accountapi.interception");
+        packages("accountapi.handlers");
     }
 }

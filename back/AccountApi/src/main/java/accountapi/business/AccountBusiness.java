@@ -2,13 +2,15 @@ package accountapi.business;
 
 import accountapi.entity.AccountEntity;
 import accountapi.entity.RoleEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
+import accountapi.exception.UnauthorizedException;
 import accountapi.mapper.AccountMapper;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.AccountRepository;
 import accountapi.utils.GenerateID;
 import accountapi.utils.JwtUtils;
 import dto.accountapi.*;
-import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,7 +44,11 @@ public class AccountBusiness {
     }
 
     public Account getAccountById(String id) {
-        return AccountMapper.toDto(accountRepository.findById(id));
+        AccountEntity accountEntity = accountRepository.findById(id);
+        if (accountEntity == null) {
+            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + id);
+        }
+        return AccountMapper.toDto(accountEntity);
     }
 
     public Account createAccount(AccountRegister account) {
@@ -58,10 +64,11 @@ public class AccountBusiness {
             }
         }
 
-        Integer pif = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo()).getId();
+        PersonalInformation pInfo = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo());
+        Integer pif = pInfo.getId();
 
         if (pif == null) {
-            return null;
+            throw new FunctionalException("400", "Impossible de créer les informations personnelles du compte");
         }
 
         AccountEntity accountToRegister = new AccountEntity();
@@ -71,36 +78,30 @@ public class AccountBusiness {
         accountToRegister.setPersonalInfoId(pif);
         accountToRegister.setPassword(account.getPassword());
 
-        return AccountMapper.toDto(accountRepository.register(accountToRegister));
+        AccountEntity registered = accountRepository.register(accountToRegister);
+        if (registered == null) {
+            throw new FunctionalException("400", "Impossible de créer le compte");
+        }
+        return AccountMapper.toDto(registered);
     }
 
     public boolean deleteAccount(String id) {
-        boolean deleted = false;
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
-        }
-
-        deleted = accountRepository.delete(id);
-        if (deleted){
-            personalInformationBusiness.deletePersonalInformation(accountEntity.getPersonalInfoId());
-        }
-        return deleted;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        accountEntity.setState("ENCLOSE");
+        accountRepository.updateState(accountEntity);
+        return true;
     }
 
     public Role getRoleByAccountId(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return null;
-        }
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
         return roleBusiness.getRoleById(accountEntity.getRoleId());
     }
 
     public PersonalInformation getPersonalInformationByAccountId(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return null;
-        }
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
         return personalInformationBusiness.getPersonalInformationById(accountEntity.getPersonalInfoId());
     }
 
@@ -110,40 +111,42 @@ public class AccountBusiness {
         AccountEntity accountEntity = accountRepository.getAccountByIdAndPassword(signInRequest.getId(), signInRequest.getPassword());
 
         if (accountEntity == null) {
-            return null;
+            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + signInRequest.getId());
         }
         if (accountEntity.getId().equals(signInRequest.getId()) &&
                 accountEntity.getPassword().equals(signInRequest.getPassword()) &&
                     accountEntity.getState().equals("ACTIVE")) {
-            // get le role
             RoleEntity roleEntity = RoleMapper.toEntity(this.getRoleByAccountId(accountEntity.getId()));
-            // genere le token avec l'id et le role
             key = keyJWT.generateKey(accountEntity.getId(), roleEntity.getName());
 
             TokenRequest tokenRequest = new TokenRequest();
             tokenRequest.setJwt(key);
             return tokenRequest;
         }
-        return null;
+        throw new UnauthorizedException("401", "Mot de passe incorrect ou compte inactif");
     }
 
     public TokenResponse validateToken(TokenRequest tokenRequest) {
         String jwt = tokenRequest.getJwt();
         TokenResponse tokenResponse = keyJWT.validateToken(jwt);
 
-        if (tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
+        if (tokenResponse != null && tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
             AccountEntity acc = accountRepository.findById(tokenResponse.getId());
-            if (acc.getId().equals(tokenResponse.getId())) {
+            if (acc != null && acc.getId().equals(tokenResponse.getId())) {
                 return tokenResponse;
             }
         }
-        return null;
+        throw new UnauthorizedException("401", "Token invalide ou expiré");
     }
 
     public boolean deactivateAccount(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals("ENCLOSE")) {
+            throw new FunctionalException("400", "Impossible de désactiver un compte clôturé");
+        }
+        if (accountEntity.getState().equals("INACTIVE")) {
+            throw new FunctionalException("400", "Le compte est déjà inactif");
         }
         accountEntity.setState("INACTIVE");
         accountRepository.updateState(accountEntity);
@@ -151,9 +154,13 @@ public class AccountBusiness {
     }
 
     public boolean activateAccount(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals("ENCLOSE")) {
+            throw new FunctionalException("400", "Impossible d'activer un compte clôturé");
+        }
+        if (accountEntity.getState().equals("ACTIVE")) {
+            throw new FunctionalException("400", "Le compte est déjà actif");
         }
         accountEntity.setState("ACTIVE");
         accountRepository.updateState(accountEntity);

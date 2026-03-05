@@ -1,11 +1,12 @@
 package accountapi.business;
 
 import accountapi.entity.PersonalInformationEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
 import accountapi.mapper.PersonalInformationMapper;
 import accountapi.repository.PersonalInformationRepository;
 import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;
-import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,12 +32,20 @@ public class PersonalInformationBusiness {
     }
 
     public PersonalInformation getPersonalInformationById(Integer id) {
-        return PersonalInformationMapper.toDto(personalInformationRepository.findById(id));
+        PersonalInformationEntity entity = personalInformationRepository.findById(id);
+        if (entity == null) {
+            throw new NotFoundException("404", "Information personnelle non trouvée avec l'ID : " + id);
+        }
+        return PersonalInformationMapper.toDto(entity);
     }
 
     public PersonalInformation createPersonalInformation(PersonalInformationRegister registerDto) {
         PersonalInformationEntity personalInfo = PersonalInformationMapper.toEntity(registerDto);
-        return PersonalInformationMapper.toDto(personalInformationRepository.create(personalInfo));
+        PersonalInformationEntity created = personalInformationRepository.create(personalInfo);
+        if (created == null) {
+            throw new FunctionalException("400", "Impossible de créer les informations personnelles");
+        }
+        return PersonalInformationMapper.toDto(created);
     }
 
     public boolean deletePersonalInformation(Integer id) {

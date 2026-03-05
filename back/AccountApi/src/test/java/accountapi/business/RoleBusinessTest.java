@@ -1,6 +1,7 @@
 package accountapi.business;
 
 import accountapi.entity.RoleEntity;
+import accountapi.exception.NotFoundException;
 import accountapi.repository.RoleRepository;
 import dto.accountapi.Role;
 import org.junit.jupiter.api.Test;
@@ -59,5 +60,12 @@ class RoleBusinessTest {
         Role roleResponse = roleBusiness.getRoleById(2);
 
         assertEquals(role.getName(), roleResponse.getName());
+    }
+
+    @Test
+    void testGetRoleByIdNotFound() {
+        when(roleRepository.findById(999)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> roleBusiness.getRoleById(999));
     }
 }

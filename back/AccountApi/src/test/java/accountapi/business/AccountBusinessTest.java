@@ -1,6 +1,9 @@
 package accountapi.business;
 
 import accountapi.entity.AccountEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
+import accountapi.exception.UnauthorizedException;
 import accountapi.repository.AccountRepository;
 import dto.accountapi.*;
 import org.junit.jupiter.api.Test;
@@ -10,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-
-import static accountapi.mapper.AccountMapper.toDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,14 +43,21 @@ class AccountBusinessTest {
         accountEntity.setPersonalInfoId(100);
         accountEntity.setState("ACTIVE");
 
-        Account account = toDto(accountEntity);
-
         when(accountRepository.findAll()).thenReturn(java.util.Collections.singletonList(accountEntity));
 
         List<Account> accounts = accountBusiness.getAllAccounts();
 
         assertEquals(1, accounts.size());
         assertEquals(accountEntity.getId(), accounts.get(0).getId());
+    }
+
+    @Test
+    void testGetAllAccountsEmpty() {
+        when(accountRepository.findAll()).thenReturn(java.util.Collections.emptyList());
+
+        List<Account> accounts = accountBusiness.getAllAccounts();
+
+        assertTrue(accounts.isEmpty());
     }
 
     @Test
@@ -61,14 +69,19 @@ class AccountBusinessTest {
         accountEntity.setPersonalInfoId(100);
         accountEntity.setState("ACTIVE");
 
-        Account account = toDto(accountEntity);
-
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
         Account accountResponse = accountBusiness.getAccountById("ACC123456789");
 
-        assertEquals(account.getId(), accountResponse.getId());
-        assertEquals(account.getState(), accountResponse.getState());
+        assertEquals(accountEntity.getId(), accountResponse.getId());
+        assertEquals(accountEntity.getState(), accountResponse.getState());
+    }
+
+    @Test
+    void testGetAccountByIdNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.getAccountById("UNKNOWN"));
     }
 
     @Test
@@ -87,17 +100,13 @@ class AccountBusinessTest {
 
         PersonalInformation createdPersonalInfo = new PersonalInformation();
         createdPersonalInfo.setId(100);
-        createdPersonalInfo.setFirstname("Jean");
-        createdPersonalInfo.setLastname("Martin");
 
         AccountEntity savedEntity = new AccountEntity();
         savedEntity.setId("ACC123456789");
         savedEntity.setPassword("SecureP@ssw0rd123");
         savedEntity.setRoleId(2);
         savedEntity.setPersonalInfoId(100);
-        savedEntity.setState("ACTIVE");
-
-        Account account = toDto(savedEntity);
+        savedEntity.setState("INACTIVE");
 
         when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
@@ -107,6 +116,28 @@ class AccountBusinessTest {
 
         assertEquals(savedEntity.getId(), accountResponse.getId());
         assertEquals(savedEntity.getState(), accountResponse.getState());
+    }
+
+    @Test
+    void testCreateAccountRegisterFails() {
+        PersonalInformationRegister personalInfoRegister = new PersonalInformationRegister();
+        personalInfoRegister.setFirstname("Jean");
+        personalInfoRegister.setLastname("Martin");
+        personalInfoRegister.setEmail("jean.martin@example.com");
+
+        AccountRegister accountRegister = new AccountRegister();
+        accountRegister.setPassword("SecureP@ssw0rd123");
+        accountRegister.setRoleId(2);
+        accountRegister.setPersonalInfo(personalInfoRegister);
+
+        PersonalInformation createdPersonalInfo = new PersonalInformation();
+        createdPersonalInfo.setId(100);
+
+        when(personalInformationBusiness.createPersonalInformation(any())).thenReturn(createdPersonalInfo);
+        when(accountRepository.findById(anyString())).thenReturn(null);
+        when(accountRepository.register(any(AccountEntity.class))).thenReturn(null);
+
+        assertThrows(FunctionalException.class, () -> accountBusiness.createAccount(accountRegister));
     }
 
     @Test
@@ -126,6 +157,13 @@ class AccountBusinessTest {
         assertTrue(result);
         verify(accountRepository).delete("ACC123456789");
         verify(personalInformationBusiness).deletePersonalInformation(100);
+    }
+
+    @Test
+    void testDeleteAccountNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.deleteAccount("UNKNOWN"));
     }
 
     @Test
@@ -157,10 +195,47 @@ class AccountBusinessTest {
     }
 
     @Test
-    void testGetRoleByAccountId() {
+    void testSignInAccountNotFound() {
+        SignInRequest signInRequest = new SignInRequest();
+        signInRequest.setId("UNKNOWN");
+        signInRequest.setPassword("pass");
+
+        when(accountRepository.getAccountByIdAndPassword("UNKNOWN", "pass")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.signIn(signInRequest));
+    }
+
+    @Test
+    void testSignInAccountInactive() {
+        SignInRequest signInRequest = new SignInRequest();
+        signInRequest.setId("ACC123456789");
+        signInRequest.setPassword("SecureP@ssw0rd123");
+
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId("ACC123456789");
         accountEntity.setPassword("SecureP@ssw0rd123");
+        accountEntity.setRoleId(2);
+        accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("INACTIVE");
+
+        when(accountRepository.getAccountByIdAndPassword("ACC123456789", "SecureP@ssw0rd123"))
+                .thenReturn(accountEntity);
+
+        assertThrows(UnauthorizedException.class, () -> accountBusiness.signIn(signInRequest));
+    }
+
+    @Test
+    void testValidateTokenInvalid() {
+        TokenRequest tokenRequest = new TokenRequest();
+        tokenRequest.setJwt("token.invalide.xyz");
+
+        assertThrows(UnauthorizedException.class, () -> accountBusiness.validateToken(tokenRequest));
+    }
+
+    @Test
+    void testGetRoleByAccountId() {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
 
@@ -177,10 +252,16 @@ class AccountBusinessTest {
     }
 
     @Test
+    void testGetRoleByAccountIdNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.getRoleByAccountId("UNKNOWN"));
+    }
+
+    @Test
     void testGetPersonalInformationByAccountId() {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId("ACC123456789");
-        accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
 
@@ -202,10 +283,16 @@ class AccountBusinessTest {
     }
 
     @Test
+    void testGetPersonalInformationByAccountIdNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.getPersonalInformationByAccountId("UNKNOWN"));
+    }
+
+    @Test
     void testDeactivateAccount() {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId("ACC123456789");
-        accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
 
@@ -218,10 +305,16 @@ class AccountBusinessTest {
     }
 
     @Test
+    void testDeactivateAccountNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.deactivateAccount("UNKNOWN"));
+    }
+
+    @Test
     void testActivateAccount() {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId("ACC123456789");
-        accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
 
@@ -232,4 +325,12 @@ class AccountBusinessTest {
         assertTrue(result);
         verify(accountRepository).updateState(any(AccountEntity.class));
     }
+
+    @Test
+    void testActivateAccountNotFound() {
+        when(accountRepository.findById("UNKNOWN")).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> accountBusiness.activateAccount("UNKNOWN"));
+    }
 }
+
