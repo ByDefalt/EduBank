@@ -35,7 +35,6 @@ dependencies{
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("io.github.openfeign:feign-mock")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.21.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
     implementation("com.fasterxml.jackson.core:jackson-core:2.21.1")
 
