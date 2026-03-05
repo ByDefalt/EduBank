@@ -150,13 +150,11 @@ class AccountBusinessTest {
         accountEntity.setState("ACTIVE");
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
-        when(accountRepository.delete("ACC123456789")).thenReturn(true);
 
         boolean result = accountBusiness.deleteAccount("ACC123456789");
 
         assertTrue(result);
-        verify(accountRepository).delete("ACC123456789");
-        verify(personalInformationBusiness).deletePersonalInformation(100);
+        verify(accountRepository).updateState(any(AccountEntity.class));
     }
 
     @Test
@@ -295,6 +293,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("ACTIVE");
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -312,11 +311,38 @@ class AccountBusinessTest {
     }
 
     @Test
+    void testDeactivateAccountAlreadyInactive() {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId("ACC123456789");
+        accountEntity.setRoleId(2);
+        accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("INACTIVE");
+
+        when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
+
+        assertThrows(FunctionalException.class, () -> accountBusiness.deactivateAccount("ACC123456789"));
+    }
+
+    @Test
+    void testDeactivateAccountEnclose() {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId("ACC123456789");
+        accountEntity.setRoleId(2);
+        accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("ENCLOSE");
+
+        when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
+
+        assertThrows(FunctionalException.class, () -> accountBusiness.deactivateAccount("ACC123456789"));
+    }
+
+    @Test
     void testActivateAccount() {
         AccountEntity accountEntity = new AccountEntity();
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("INACTIVE");
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -332,5 +358,30 @@ class AccountBusinessTest {
 
         assertThrows(NotFoundException.class, () -> accountBusiness.activateAccount("UNKNOWN"));
     }
-}
 
+    @Test
+    void testActivateAccountAlreadyActive() {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId("ACC123456789");
+        accountEntity.setRoleId(2);
+        accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("ACTIVE");
+
+        when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
+
+        assertThrows(FunctionalException.class, () -> accountBusiness.activateAccount("ACC123456789"));
+    }
+
+    @Test
+    void testActivateAccountEnclose() {
+        AccountEntity accountEntity = new AccountEntity();
+        accountEntity.setId("ACC123456789");
+        accountEntity.setRoleId(2);
+        accountEntity.setPersonalInfoId(100);
+        accountEntity.setState("ENCLOSE");
+
+        when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
+
+        assertThrows(FunctionalException.class, () -> accountBusiness.activateAccount("ACC123456789"));
+    }
+}
