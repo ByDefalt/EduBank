@@ -160,7 +160,6 @@ class AccountBusinessTest {
     @Test
     void testDeleteAccountNotFound() {
         when(accountRepository.findById("UNKNOWN")).thenReturn(null);
-
         assertThrows(NotFoundException.class, () -> accountBusiness.deleteAccount("UNKNOWN"));
     }
 
