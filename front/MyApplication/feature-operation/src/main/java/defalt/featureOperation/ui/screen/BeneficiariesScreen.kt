@@ -116,6 +116,7 @@ internal fun BeneficiariesContent(
 
             UiStateHandler(
                 uiState = uiState,
+                modifier = Modifier.weight(1f),
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
@@ -131,65 +132,26 @@ internal fun BeneficiariesContent(
                         .toSortedMap()
                 }
 
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .weight(1f),
-                    contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
-                ) {
-                    item {
-                        ArkeoInput(
-                            value = query,
-                            onValueChange = {},
-                            label = "Rechercher un bénéficiaire",
-                            icon = Icons.Default.Search,
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                    }
-
-                    if (grouped.isEmpty()) {
+                // Box pour superposer la liste et le bouton flottant
+                Box(modifier = Modifier.weight(1f)) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
+                    ) {
                         item {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                shape = RoundedCornerShape(12.dp),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color.White),
-                            ) {
-                                Column(modifier = Modifier.padding(24.dp)) {
-                                    Text("Aucun bénéficiaire", color = TextPrimary)
-                                }
-                            }
+                            ArkeoInput(
+                                value = query,
+                                onValueChange = {},
+                                label = "Rechercher un bénéficiaire",
+                                icon = Icons.Default.Search,
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
-                    } else {
-                        grouped.forEach { (letter, list) ->
-                            item {
-                                Box(
-                                    modifier = Modifier
-                                        .padding(top = 8.dp, bottom = 4.dp)
-                                        .size(32.dp)
-                                        .background(
-                                            color = Color(0xFF3A3A3A),
-                                            shape = RoundedCornerShape(
-                                                topStart = 10.dp,
-                                                topEnd = 0.dp,
-                                                bottomStart = 0.dp,
-                                                bottomEnd = 10.dp,
-                                            ),
-                                        ),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Text(
-                                        text = letter.toString(),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp,
-                                        color = Color.White,
-                                    )
-                                }
-                            }
 
-                            items(list, key = { it.id ?: it.name }) { b ->
+                        if (grouped.isEmpty()) {
+                            item {
                                 Card(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -198,23 +160,81 @@ internal fun BeneficiariesContent(
                                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                                     colors = CardDefaults.cardColors(containerColor = Color.White),
                                 ) {
-                                    Row(
+                                    Column(modifier = Modifier.padding(24.dp)) {
+                                        Text("Aucun bénéficiaire", color = TextPrimary)
+                                    }
+                                }
+                            }
+                        } else {
+                            grouped.forEach { (letter, list) ->
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(top = 8.dp, bottom = 4.dp)
+                                            .size(32.dp)
+                                            .background(
+                                                color = Color(0xFF3A3A3A),
+                                                shape = RoundedCornerShape(
+                                                    topStart = 10.dp,
+                                                    topEnd = 0.dp,
+                                                    bottomStart = 0.dp,
+                                                    bottomEnd = 10.dp,
+                                                ),
+                                            ),
+                                        contentAlignment = Alignment.Center,
+                                    ) {
+                                        Text(
+                                            text = letter.toString(),
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 14.sp,
+                                            color = Color.White,
+                                        )
+                                    }
+                                }
+
+                                items(list, key = { it.id ?: it.name }) { b ->
+                                    Card(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(16.dp),
-                                        verticalAlignment = Alignment.CenterVertically,
+                                            .padding(vertical = 8.dp),
+                                        shape = RoundedCornerShape(12.dp),
+                                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                                        colors = CardDefaults.cardColors(containerColor = Color.White),
                                     ) {
-                                        Column(modifier = Modifier.weight(1f)) {
-                                            Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                            Spacer(modifier = Modifier.height(6.dp))
-                                            Text("IBAN : ${b.ibanTarget}", fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Column(modifier = Modifier.weight(1f)) {
+                                                Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                                Spacer(modifier = Modifier.height(6.dp))
+                                                Text("IBAN : ${b.ibanTarget}", fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                    } // fin LazyColumn
+
+                    // Bouton flottant au-dessus de la BottomNavBar, visible uniquement en état Success
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .background(Color.Transparent)
+                            .navigationBarsPadding()
+                            .padding(bottom = 8.dp)
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                    ) {
+                        ArkeoButton(
+                            text = "Ajouter un bénéficiaire",
+                            onClick = onAddBeneficiary,
+                        )
                     }
-                } // fin LazyColumn
+                } // fin Box superposition
             } // fin UiStateHandler
 
             BottomNavBar(
@@ -226,22 +246,6 @@ internal fun BeneficiariesContent(
                 ),
             )
         } // fin Column
-
-        // Bouton flottant au-dessus de la BottomNavBar
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(Color.Transparent)
-                .navigationBarsPadding()
-                .padding(bottom = 90.dp)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-        ) {
-            ArkeoButton(
-                text = "Ajouter un bénéficiaire",
-                onClick = onAddBeneficiary,
-            )
-        }
     } // fin Box principal
 }
 

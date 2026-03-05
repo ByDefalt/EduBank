@@ -123,6 +123,7 @@ internal fun AccountDetailsContent(
 
             UiStateHandler(
                 uiState = uiState,
+                modifier = Modifier.weight(1f),
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,

@@ -91,6 +91,7 @@ internal fun HomeAccountContent(
         Column(modifier = Modifier.fillMaxSize()) {
             UiStateHandler(
                 uiState = uiState,
+                modifier = Modifier.weight(1f),
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
