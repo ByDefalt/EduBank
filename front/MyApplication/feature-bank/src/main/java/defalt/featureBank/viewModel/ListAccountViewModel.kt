@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class ListAccountViewModel(
-) : ViewModel() {
+class ListAccountViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<BankAccount>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<BankAccount>>> = _uiState.asStateFlow()

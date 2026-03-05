@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,8 +36,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
 import defalt.featureBank.viewModel.ListAccountViewModel
-import defalt.ui.state.UiState
 import defalt.ui.component.BottomNavBar
+import defalt.ui.component.UiStateHandler
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
@@ -107,41 +107,13 @@ internal fun ListAccountOverviewContent(
                 )
             }
 
-            when (val state = uiState) {
-                is UiState.Loading -> {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(color = ArkeoRed)
-                    }
-                }
-
-                is UiState.Error -> {
-                    Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(text = state.message, color = ArkeoRed)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Réessayer",
-                                color = ArkeoRed,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.clickable(onClick = onRetry),
-                            )
-                        }
-                    }
-                }
-
-                is UiState.Success -> {
-                    val accounts = state.data
-                    val totalSold = accounts.sumOf { it.sold ?: 0.0 }
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { accounts ->
+                val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
                     // ── Total solde ──────────────────────────────────────────────
                     Column(
@@ -175,7 +147,6 @@ internal fun ListAccountOverviewContent(
                             Spacer(modifier = Modifier.height(6.dp))
                         }
                     }
-                }
             }
 
             // ── Bottom Navigation ────────────────────────────────────────────
