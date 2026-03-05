@@ -65,7 +65,6 @@ class RoleBusinessTest {
     @Test
     void testGetRoleByIdNotFound() {
         when(roleRepository.findById(999)).thenReturn(null);
-
         assertThrows(NotFoundException.class, () -> roleBusiness.getRoleById(999));
     }
 }

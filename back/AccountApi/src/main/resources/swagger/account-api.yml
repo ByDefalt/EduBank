@@ -410,8 +410,8 @@ components:
           $ref: '#/components/schemas/PersonalInformationRegister'
         role_id:
           type: integer
-          example: 1
-          description: "ID du rôle existant (ex: 1 pour Admin, 2 pour User)"
+          example: 2
+          description: "ID du rôle existant (ex: 1 pour Admin, 2 pour Customer)"
         password:
           type: string
           example: "123456789"
