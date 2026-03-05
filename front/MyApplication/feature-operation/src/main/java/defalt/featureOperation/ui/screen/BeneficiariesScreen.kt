@@ -37,25 +37,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.operation.Beneficiary
+import defalt.featureOperation.viewModel.BeneficiariesViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
 import defalt.ui.component.BottomNavBar
+import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.text.Normalizer
-
-// Écran "Mes bénéficiaires" aligné au style des autres écrans (header comme AccountDetailsScreen, fond gris, cards arrondies)
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
-
-data class Beneficiary(
-    val id: String,
-    val name: String,
-    val accountNumber: String,
-    val bankName: String,
-)
 
 // utilitaire : normalise la première lettre -> supprime accents et renvoie A..Z ou '#'
 private fun initialOf(name: String): Char {
@@ -66,9 +63,36 @@ private fun initialOf(name: String): Char {
     return if (first in 'A'..'Z') first else '#'
 }
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun BeneficiariesScreen(
-    beneficiaries: List<Beneficiary> = defaultData(),
+    onItemClick: (Beneficiary) -> Unit = {},
+    onBack: () -> Unit = {},
+    onAddBeneficiary: () -> Unit = {},
+    onNavigateToHomeBank: () -> Unit = {},
+    onNavigateToAccounts: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    viewModel: BeneficiariesViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    BeneficiariesContent(
+        uiState = uiState,
+        onRetry = viewModel::retry,
+        onItemClick = onItemClick,
+        onBack = onBack,
+        onAddBeneficiary = onAddBeneficiary,
+        onNavigateToHomeBank = onNavigateToHomeBank,
+        onNavigateToAccounts = onNavigateToAccounts,
+        onNavigateToTransfer = onNavigateToTransfer,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun BeneficiariesContent(
+    uiState: UiState<List<Beneficiary>>,
+    onRetry: () -> Unit = {},
     query: String = "",
     onItemClick: (Beneficiary) -> Unit = {},
     onBack: () -> Unit = {},
@@ -77,18 +101,6 @@ fun BeneficiariesScreen(
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
 ) {
-    // Filtre, tri et groupement
-    val filtered = remember(beneficiaries, query) {
-        beneficiaries
-            .filter { it.name.contains(query, ignoreCase = true) }
-            .sortedBy { it.name.lowercase() }
-    }
-
-    val grouped = remember(filtered) {
-        filtered.groupBy { initialOf(it.name) }
-            .toSortedMap()
-    }
-
     val safeNavigateBack = safeClick(onBack)
     val safeNavigateHome = safeClick(onNavigateToHomeBank)
     val safeNavigateAccounts = safeClick(onNavigateToAccounts)
@@ -100,70 +112,43 @@ fun BeneficiariesScreen(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Header identique à AccountDetailsScreen
             BeneficiariesHeader(onNavigateBack = safeNavigateBack)
 
-            // Zone contenu
-            LazyColumn(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .weight(1f),
-                contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
-            ) {
-                item {
-                    // Search bar (utilise le composant partagé ArkeoInput)
-                    ArkeoInput(
-                        value = query,
-                        onValueChange = {},
-                        label = "Rechercher un bénéficiaire",
-                        icon = Icons.Default.Search,
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { beneficiaries ->
+                val filtered = remember(beneficiaries, query) {
+                    beneficiaries
+                        .filter { it.name.contains(query, ignoreCase = true) }
+                        .sortedBy { it.name.lowercase() }
                 }
 
-                if (grouped.isEmpty()) {
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
-                        ) {
-                            Column(modifier = Modifier.padding(24.dp)) {
-                                Text("Aucun bénéficiaire", color = TextPrimary)
-                            }
-                        }
-                    }
-                } else {
-                    grouped.forEach { (letter, list) ->
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(top = 8.dp, bottom = 4.dp)
-                                    .size(32.dp)
-                                    .background(
-                                        color = Color(0xFF3A3A3A),
-                                        shape = RoundedCornerShape(
-                                            topStart = 10.dp,
-                                            topEnd = 0.dp,
-                                            bottomStart = 0.dp,
-                                            bottomEnd = 10.dp,
-                                        ),
-                                    ),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text = letter.toString(),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    color = Color.White,
-                                )
-                            }
-                        }
+                val grouped = remember(filtered) {
+                    filtered.groupBy { initialOf(it.name) }
+                        .toSortedMap()
+                }
 
-                        items(list, key = { it.id }) { b ->
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .weight(1f),
+                    contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp),
+                ) {
+                    item {
+                        ArkeoInput(
+                            value = query,
+                            onValueChange = {},
+                            label = "Rechercher un bénéficiaire",
+                            icon = Icons.Default.Search,
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
+                    if (grouped.isEmpty()) {
+                        item {
                             Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -172,26 +157,65 @@ fun BeneficiariesScreen(
                                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                                 colors = CardDefaults.cardColors(containerColor = Color.White),
                             ) {
-                                Row(
+                                Column(modifier = Modifier.padding(24.dp)) {
+                                    Text("Aucun bénéficiaire", color = TextPrimary)
+                                }
+                            }
+                        }
+                    } else {
+                        grouped.forEach { (letter, list) ->
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(top = 8.dp, bottom = 4.dp)
+                                        .size(32.dp)
+                                        .background(
+                                            color = Color(0xFF3A3A3A),
+                                            shape = RoundedCornerShape(
+                                                topStart = 10.dp,
+                                                topEnd = 0.dp,
+                                                bottomStart = 0.dp,
+                                                bottomEnd = 10.dp,
+                                            ),
+                                        ),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = letter.toString(),
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color.White,
+                                    )
+                                }
+                            }
+
+                            items(list, key = { it.id ?: it.name }) { b ->
+                                Card(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(16.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
+                                        .padding(vertical = 8.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                                    colors = CardDefaults.cardColors(containerColor = Color.White),
                                 ) {
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                        Spacer(modifier = Modifier.height(6.dp))
-                                        Text("Compte: ${b.accountNumber}", fontSize = 12.sp, color = CustomColor.TextSecondary)
-                                        Text(b.bankName, fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(b.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                            Spacer(modifier = Modifier.height(6.dp))
+                                            Text("IBAN : ${b.ibanTarget}", fontSize = 12.sp, color = CustomColor.TextSecondary)
+                                        }
                                     }
-
-                                    // Optionnel: bouton d'action ou chevron
                                 }
                             }
                         }
                     }
-                }
-            } // fin LazyColumn
+                } // fin LazyColumn
+            } // fin UiStateHandler
 
             BottomNavBar(
                 selectedRoute = Routes.Operation,
@@ -249,23 +273,29 @@ private fun BeneficiariesHeader(onNavigateBack: () -> Unit) {
     }
 }
 
-fun defaultData(): List<Beneficiary> {
-    return listOf(
-        Beneficiary("1", "Alice Dupont", "FR76 1234 5678 9012", "Banque A"),
-        Beneficiary("2", "Amine Saïd", "FR76 2222 3333 4444", "Banque B"),
-        Beneficiary("3", "Bruno Martin", "FR76 5555 6666 7777", "Banque C"),
-        Beneficiary("4", "Claire Noël", "FR76 8888 9999 0000", "Banque A"),
-        Beneficiary("5", "David Petit", "FR76 1111 2222 3333", "Banque B"),
-        Beneficiary("6", "Élodie Faure", "FR76 4444 5555 6666", "Banque C"),
-    )
+private fun defaultData(): List<Beneficiary> = listOf(
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 1234 5678 9012", name = "Alice Dupont", id = 1),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 2222 3333 4444", name = "Amine Saïd", id = 2),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 8888 9999 0000", name = "Claire Noël", id = 4),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 1111 2222 3333", name = "David Petit", id = 5),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 4444 5555 6666", name = "Élodie Faure", id = 6),
+)
+
+@Preview(showBackground = true, name = "State - Success")
+@Composable
+fun BeneficiariesPreviewSuccess() {
+    BeneficiariesContent(uiState = UiState.Success(defaultData()))
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Loading")
 @Composable
-fun PreviewBeneficiariesScreen() {
-    var query by remember { mutableStateOf("") }
-    BeneficiariesScreen(
-        beneficiaries = defaultData(),
-        query = query,
-    )
+fun BeneficiariesPreviewLoading() {
+    BeneficiariesContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun BeneficiariesPreviewError() {
+    BeneficiariesContent(uiState = UiState.Error("Impossible de charger les bénéficiaires"))
 }

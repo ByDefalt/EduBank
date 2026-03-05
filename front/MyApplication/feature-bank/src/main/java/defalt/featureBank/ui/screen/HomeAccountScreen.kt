@@ -39,17 +39,46 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.bank.BankAccount
+import defalt.featureBank.viewModel.HomeAccountViewModel
 import defalt.ui.component.BottomNavBar
+import defalt.ui.component.UiStateHandler
+import defalt.ui.state.UiState
+import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
-private val ArkeoRed = Color(0xFFCC0000)
-private val LightGray = Color(0xFFE5E5E5)
-private val TextPrimary = Color(0xFF1A1A1A)
-private val TextSecondary = Color(0xFF666666)
+private val ArkeoRed = CustomColor.ArkeoRed
+private val LightGray = CustomColor.BackgroundGray
+private val TextPrimary = CustomColor.TextPrimary
+private val TextSecondary = CustomColor.TextSecondary
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun HomeAccountScreen(
+    onNavigateToAccounts: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    onNavigateToAccountDetails: (Int) -> Unit = {},
+    viewModel: HomeAccountViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    HomeAccountContent(
+        uiState = uiState,
+        onRetry = viewModel::retry,
+        onNavigateToAccounts = onNavigateToAccounts,
+        onNavigateToTransfer = onNavigateToTransfer,
+        onNavigateToAccountDetails = onNavigateToAccountDetails,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun HomeAccountContent(
+    uiState: UiState<List<BankAccount>>,
+    onRetry: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (Int) -> Unit = {},
@@ -60,6 +89,14 @@ fun HomeAccountScreen(
             .background(LightGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { accounts ->
+                val mainAccount = accounts.firstOrNull()
+
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
@@ -89,6 +126,7 @@ fun HomeAccountScreen(
                 }
                 item { Spacer(modifier = Modifier.height(8.dp)) }
             }
+            } // fin UiStateHandler
 
             BottomNavBar(
                 selectedRoute = Routes.Bank.Home,
@@ -269,8 +307,30 @@ private fun SectionRowCard(
 private fun formatAmount(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-@Preview(showBackground = true)
+private fun sampleHomeAccounts(): List<BankAccount> = listOf(
+    BankAccount(
+        id = "1",
+        parameterId = 0,
+        typeId = 1,
+        sold = 478.27,
+        iban = "FR7630006000011234567890140",
+    ),
+)
+
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun HomeAccountPreview() {
-    HomeAccountScreen()
+fun HomeAccountPreviewSuccess() {
+    HomeAccountContent(uiState = UiState.Success(sampleHomeAccounts()))
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun HomeAccountPreviewLoading() {
+    HomeAccountContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun HomeAccountPreviewError() {
+    HomeAccountContent(uiState = UiState.Error("Impossible de charger les données"))
 }

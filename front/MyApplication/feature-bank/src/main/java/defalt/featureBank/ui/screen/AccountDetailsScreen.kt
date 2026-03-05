@@ -44,17 +44,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
+import defalt.featureBank.viewModel.AccountDetailsData
+import defalt.featureBank.viewModel.AccountDetailsViewModel
 import defalt.ui.component.BottomNavBar
+import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray
@@ -63,17 +69,41 @@ private val TextSecondary = CustomColor.TextSecondary
 
 private const val LABEL_MAX_CHARS = 20
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun AccountDetailsScreen(
     accountId: Int = 1,
-    account: BankAccount = sampleAccount(),
+    accountLabel: String = "COMPTE CHÈQUES 1",
+    onNavigateBack: () -> Unit = {},
+    onNavigateToHomeBank: () -> Unit = {},
+    onNavigateToAccounts: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    viewModel: AccountDetailsViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    AccountDetailsContent(
+        uiState = uiState,
+        onRetry = viewModel::retry,
+        accountLabel = accountLabel,
+        onNavigateBack = onNavigateBack,
+        onNavigateToHomeBank = onNavigateToHomeBank,
+        onNavigateToAccounts = onNavigateToAccounts,
+        onNavigateToTransfer = onNavigateToTransfer,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun AccountDetailsContent(
+    uiState: UiState<AccountDetailsData>,
+    onRetry: () -> Unit = {},
     accountLabel: String = "COMPTE CHÈQUES 1",
     onNavigateBack: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
 ) {
-    val operations = remember { sampleOperations() }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showFullLabel by rememberSaveable { mutableStateOf(false) }
     val tabs = listOf("Comptabilisées", "À venir")
@@ -83,23 +113,6 @@ fun AccountDetailsScreen(
     val safeNavigateAccounts = safeClick(onNavigateToAccounts)
     val safeNavigateTransfer = safeClick(onNavigateToTransfer)
 
-    val filteredOperations = remember(operations, selectedTab) {
-        when (selectedTab) {
-            0 -> operations.filter { it.state == OperationState.COMPLETED }
-            else -> operations.filter {
-                it.state == OperationState.PENDING || it.state == OperationState.CANCELLED
-            }
-        }
-    }
-
-    val groupedOperations = remember(filteredOperations) {
-        filteredOperations
-            .sortedByDescending { it.date }
-            .groupBy { it.date.toLocalDate() }
-            .entries
-            .sortedByDescending { it.key }
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,59 +121,86 @@ fun AccountDetailsScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             Header(title = accountLabel, onNavigateBack = safeNavigateBack)
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                item { Spacer(modifier = Modifier.height(12.dp)) }
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { data ->
+                val operations = data.operations
+                val account = data.account
 
-                item { AccountSummaryCard(account = account) }
-
-                item {
-                    OperationsTabBar(
-                        tabs = tabs,
-                        selectedIndex = selectedTab,
-                        onTabSelected = { selectedTab = it },
-                    )
+                val filteredOperations = remember(operations, selectedTab) {
+                    when (selectedTab) {
+                        0 -> operations.filter { it.state == OperationState.COMPLETED }
+                        else -> operations.filter {
+                            it.state == OperationState.PENDING || it.state == OperationState.CANCELLED
+                        }
+                    }
                 }
 
-                item {
-                    LabelToggleRow(
-                        checked = showFullLabel,
-                        onCheckedChange = { showFullLabel = it },
-                    )
+                val groupedOperations = remember(filteredOperations) {
+                    filteredOperations
+                        .sortedByDescending { it.date }
+                        .groupBy { it.date.toLocalDate() }
+                        .entries
+                        .sortedByDescending { it.key }
                 }
 
-                if (groupedOperations.isEmpty()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    item { Spacer(modifier = Modifier.height(12.dp)) }
+
+                    item { AccountSummaryCard(account = account) }
+
                     item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 32.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = "Aucune opération",
-                                color = TextSecondary,
-                                fontSize = 14.sp,
-                            )
-                        }
+                        OperationsTabBar(
+                            tabs = tabs,
+                            selectedIndex = selectedTab,
+                            onTabSelected = { selectedTab = it },
+                        )
                     }
-                } else {
-                    groupedOperations.forEach { (date, ops) ->
-                        item(key = "header_${selectedTab}_$date") {
-                            DateSeparator(label = formatDateHeader(date))
-                        }
-                        item(key = "group_${selectedTab}_$date") {
-                            OperationsGroupCard(operations = ops, showFullLabel = showFullLabel)
-                        }
-                    }
-                }
 
-                item { Spacer(modifier = Modifier.height(8.dp)) }
-            }
+                    item {
+                        LabelToggleRow(
+                            checked = showFullLabel,
+                            onCheckedChange = { showFullLabel = it },
+                        )
+                    }
+
+                    if (groupedOperations.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 32.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "Aucune opération",
+                                    color = TextSecondary,
+                                    fontSize = 14.sp,
+                                )
+                            }
+                        }
+                    } else {
+                        groupedOperations.forEach { (date, ops) ->
+                            item(key = "header_${selectedTab}_$date") {
+                                DateSeparator(label = formatDateHeader(date))
+                            }
+                            item(key = "group_${selectedTab}_$date") {
+                                OperationsGroupCard(operations = ops, showFullLabel = showFullLabel)
+                            }
+                        }
+                    }
+
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
+                }
+            } // fin UiStateHandler
 
             BottomNavBar(
                 selectedRoute = Routes.Bank.ListAccount,
@@ -444,8 +484,27 @@ private fun sampleOperations(): List<Operation> {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun AccountDetailsPreview() {
-    AccountDetailsScreen()
+fun AccountDetailsPreviewSuccess() {
+    AccountDetailsContent(
+        uiState = UiState.Success(
+            AccountDetailsData(
+                account = sampleAccount(),
+                operations = sampleOperations(),
+            ),
+        ),
+    )
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun AccountDetailsPreviewLoading() {
+    AccountDetailsContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun AccountDetailsPreviewError() {
+    AccountDetailsContent(uiState = UiState.Error("Impossible de charger le compte"))
 }

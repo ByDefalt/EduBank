@@ -29,13 +29,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureAccount.viewModel.LoginViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun LoginScreen(
     onBackToHome: () -> Unit,
+    onLoginSuccess: () -> Unit = {},
+    viewModel: LoginViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LoginContent(
+        uiState = uiState,
+        onLogin = viewModel::login,
+        onBackToHome = onBackToHome,
+        onLoginSuccess = onLoginSuccess,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun LoginContent(
+    uiState: UiState<Unit> = UiState.Success(Unit),
+    onLogin: (String, String) -> Unit = { _, _ -> },
+    onBackToHome: () -> Unit = {},
     onLoginSuccess: () -> Unit = {},
 ) {
     var login by remember { mutableStateOf("") }
@@ -106,7 +130,7 @@ fun LoginScreen(
 
                 ArkeoButton(
                     text = "ACCÉDER À MES COMPTES",
-                    onClick = { /* TODO: Logique de connexion */ },
+                    onClick = { onLogin(login, password) },
                 )
             }
         }
@@ -127,5 +151,5 @@ fun LoginScreen(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(onBackToHome = {})
+    LoginContent(onBackToHome = {})
 }

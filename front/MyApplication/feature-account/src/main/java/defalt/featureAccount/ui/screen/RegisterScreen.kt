@@ -30,18 +30,40 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureAccount.viewModel.RegisterViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun RegisterScreen(
     onBackToHome: () -> Unit,
     onRegisterSuccess: () -> Unit = {},
+    viewModel: RegisterViewModel = koinViewModel(),
 ) {
-    // État local (optionnel pour la démo)
-    var raisonSociale by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    RegisterContent(
+        uiState = uiState,
+        onRegister = viewModel::register,
+        onBackToHome = onBackToHome,
+        onRegisterSuccess = onRegisterSuccess,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun RegisterContent(
+    uiState: UiState<Unit> = UiState.Success(Unit),
+    onRegister: (String, String) -> Unit = { _, _ -> },
+    onBackToHome: () -> Unit = {},
+    onRegisterSuccess: () -> Unit = {},
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -109,7 +131,10 @@ fun RegisterScreen(
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
-                ArkeoButton(text = "VALIDER LA DEMANDE", onClick = { })
+                ArkeoButton(
+                    text = "VALIDER LA DEMANDE",
+                    onClick = { onRegister(email, password) },
+                )
             }
         }
 
@@ -130,7 +155,7 @@ fun RegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(
+    RegisterContent(
         onBackToHome = {},
         onRegisterSuccess = {},
     )

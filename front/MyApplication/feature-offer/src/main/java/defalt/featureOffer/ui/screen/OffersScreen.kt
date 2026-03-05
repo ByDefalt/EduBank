@@ -19,7 +19,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,16 +29,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.offer.Offer
+import defalt.featureOffer.viewModel.OffersViewModel
 import defalt.ui.component.ArkeoButton
+import defalt.ui.component.UiStateHandler
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import java.time.LocalDate
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
-fun OffersScreen(onBack: () -> Unit) {
-    // Pour la démo on utilise une liste statique de Offers
-    val offers = remember { sampleOffers() }
+fun OffersScreen(
+    onBack: () -> Unit,
+    viewModel: OffersViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    OffersContent(
+        uiState = uiState,
+        onRetry = viewModel::retry,
+        onBack = onBack,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun OffersContent(
+    uiState: UiState<List<Offer>>,
+    onRetry: () -> Unit = {},
+    onBack: () -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,69 +82,75 @@ fun OffersScreen(onBack: () -> Unit) {
             )
         }
 
-        // Liste d'offres
-        LazyColumn(
-            modifier = Modifier
-                .padding(16.dp),
-        ) {
-            items(offers) { offer ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(12.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+        UiStateHandler(
+            uiState = uiState,
+            onRetry = onRetry,
+            loadingColor = CustomColor.ArkeoRed,
+            errorColor = CustomColor.ArkeoRed,
+        ) { offers ->
+            // Liste d'offres
+            LazyColumn(
+                modifier = Modifier
+                    .padding(16.dp),
+            ) {
+                items(offers) { offer ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(12.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                     ) {
-                        // Image placeholder si picturePath present sinon carré coloré
-                        if (offer.picturePath != null) {
-                            // Pour l'instant on utilise un drawable par défaut si disponible
-                            Image(
-                                painter = painterResource(id = android.R.drawable.ic_menu_gallery),
-                                contentDescription = "offer image",
-                                modifier = Modifier.size(64.dp),
-                                contentScale = ContentScale.Crop,
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .size(64.dp)
-                                    .background(CustomColor.BridgeTeal),
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.padding(8.dp))
-
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(offer.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(offer.description, fontSize = 12.sp)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth(),
-                            ) {
-                                Text("Du ${offer.startDate} au ${offer.endDate}", fontSize = 11.sp)
-                                Text(
-                                    offer.state.name,
-                                    color = CustomColor.ArkeoRed,
-                                    fontWeight = FontWeight.SemiBold,
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            // Image placeholder si picturePath present sinon carré coloré
+                            if (offer.picturePath != null) {
+                                Image(
+                                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
+                                    contentDescription = "offer image",
+                                    modifier = Modifier.size(64.dp),
+                                    contentScale = ContentScale.Crop,
                                 )
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .size(64.dp)
+                                        .background(CustomColor.BridgeTeal),
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.padding(8.dp))
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(offer.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(offer.description, fontSize = 12.sp)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text("Du ${offer.startDate} au ${offer.endDate}", fontSize = 11.sp)
+                                    Text(
+                                        offer.state.name,
+                                        color = CustomColor.ArkeoRed,
+                                        fontWeight = FontWeight.SemiBold,
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                ArkeoButton(text = "Retour", onClick = onBack)
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    ArkeoButton(text = "Retour", onClick = onBack)
+                }
             }
-        }
+        } // fin UiStateHandler
     }
 }
 
@@ -147,8 +175,20 @@ private fun sampleOffers(): List<Offer> = listOf(
     ),
 )
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun OffersScreenPreview() {
-    OffersScreen(onBack = {})
+fun OffersScreenPreviewSuccess() {
+    OffersContent(uiState = UiState.Success(sampleOffers()))
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun OffersScreenPreviewLoading() {
+    OffersContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun OffersScreenPreviewError() {
+    OffersContent(uiState = UiState.Error("Impossible de charger les offres"))
 }

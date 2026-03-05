@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.operation.Beneficiary
 import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 import java.util.Locale
@@ -54,7 +55,7 @@ private val TextSecondary = CustomColor.TextSecondary
 @Composable
 fun CreateTransferReceiverScreen(
     accounts: List<BankAccount> = sampleReceiverAccounts(),
-    beneficiaries: List<Beneficiary> = defaultData(),
+    beneficiaries: List<Beneficiary> = defaultReceiverBeneficiaries(),
     onBack: () -> Unit = {},
     onReceiverSelected: (receiverId: String) -> Unit = {},
 ) {
@@ -179,10 +180,10 @@ fun CreateTransferReceiverScreen(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
 
-                    items(beneficiaries, key = { it.id }) { beneficiary ->
+                    items(beneficiaries, key = { it.id ?: it.name }) { beneficiary ->
                         ReceiverBeneficiaryCard(
                             beneficiary = beneficiary,
-                            onClick = { onReceiverSelected(beneficiary.id) },
+                            onClick = { beneficiary.id?.let { onReceiverSelected(it.toString()) } },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }
@@ -290,12 +291,7 @@ private fun ReceiverBeneficiaryCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "IBAN : ${beneficiary.accountNumber}",
-                    color = TextSecondary,
-                    fontSize = 12.sp,
-                )
-                Text(
-                    text = beneficiary.bankName,
+                    text = "IBAN : ${beneficiary.ibanTarget}",
                     color = TextSecondary,
                     fontSize = 12.sp,
                 )
@@ -324,6 +320,12 @@ private fun sampleReceiverAccounts(): List<BankAccount> = listOf(
     BankAccount(id = "1", parameterId = 0, typeId = 1, sold = 1679138.00, iban = "FR7630006000011234567890140"),
     BankAccount(id = "2", parameterId = 0, typeId = 2, sold = 775854.79, iban = "FR7630006000013333333333340"),
     BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1080899.08, iban = "FR7630006000014444444444440"),
+)
+
+private fun defaultReceiverBeneficiaries(): List<Beneficiary> = listOf(
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 1234 5678 9012", name = "Alice Dupont", id = 1),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 2222 3333 4444", name = "Amine Saïd", id = 2),
+    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
 )
 
 @Preview(showBackground = true)

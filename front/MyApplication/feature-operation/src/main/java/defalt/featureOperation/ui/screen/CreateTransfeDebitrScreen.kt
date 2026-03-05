@@ -37,17 +37,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
+import defalt.featureOperation.viewModel.CreateTransferDebitViewModel
+import defalt.ui.component.UiStateHandler
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
 private val TextSecondary = CustomColor.TextSecondary
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun CreateTransferDebitScreen(
-    accounts: List<BankAccount> = sampleTransferAccounts(),
+    onConfirm: (sourceAccountId: String, beneficiaryName: String, amount: String, motif: String) -> Unit = { _, _, _, _ -> },
+    viewModel: CreateTransferDebitViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    CreateTransferDebitContent(
+        uiState = uiState,
+        onRetry = viewModel::retry,
+        onConfirm = onConfirm,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun CreateTransferDebitContent(
+    uiState: UiState<List<BankAccount>>,
+    onRetry: () -> Unit = {},
     onConfirm: (sourceAccountId: String, beneficiaryName: String, amount: String, motif: String) -> Unit = { _, _, _, _ -> },
 ) {
     var selectedAccountId by remember { mutableStateOf<String?>(null) }
@@ -85,6 +107,13 @@ fun CreateTransferDebitScreen(
                 )
             }
 
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { accounts ->
+
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
@@ -114,6 +143,7 @@ fun CreateTransferDebitScreen(
                     Spacer(modifier = Modifier.height(6.dp))
                 }
             }
+            } // fin UiStateHandler
         }
     }
 }
@@ -212,8 +242,20 @@ private fun sampleTransferAccounts(): List<BankAccount> = listOf(
     BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1080899.08, iban = "FR7630006000014444444444440"),
 )
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun CreateTransferScreenPreview() {
-    CreateTransferDebitScreen()
+fun CreateTransferScreenPreviewSuccess() {
+    CreateTransferDebitContent(uiState = UiState.Success(sampleTransferAccounts()))
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun CreateTransferScreenPreviewLoading() {
+    CreateTransferDebitContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun CreateTransferScreenPreviewError() {
+    CreateTransferDebitContent(uiState = UiState.Error("Impossible de charger les comptes"))
 }
