@@ -4,38 +4,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.bank.BankAccount
 import defalt.domain.repository.service.IBankRepository
+import defalt.ui.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-sealed class ListAccountUiState {
-    data object Loading : ListAccountUiState()
-    data class Success(val accounts: List<BankAccount>) : ListAccountUiState()
-    data class Error(val message: String) : ListAccountUiState()
-}
-
 class ListAccountViewModel(
-    private val bankRepository: IBankRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<ListAccountUiState>(ListAccountUiState.Loading)
-    val uiState: StateFlow<ListAccountUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<List<BankAccount>>>(UiState.Loading)
+    val uiState: StateFlow<UiState<List<BankAccount>>> = _uiState.asStateFlow()
 
     init {
         loadAccounts()
     }
 
-    fun loadAccounts() {
+    // Intention UI exposée : appelée depuis l'écran en cas d'erreur
+    fun retry() = loadAccounts()
+
+    private fun loadAccounts() {
         viewModelScope.launch {
-            _uiState.value = ListAccountUiState.Loading
+            _uiState.update { UiState.Loading }
             // TODO : gérer le NetworkResult (success/error) une fois IBankRepository implémenté
-            // val result = bankRepository.getMyBankAccounts()
-            // _uiState.value = when (result) {
-            //     is NetworkResult.Success -> ListAccountUiState.Success(result.data)
-            //     is NetworkResult.Error   -> ListAccountUiState.Error(result.message)
+            // when (val result = bankRepository.getMyBankAccounts()) {
+            //     is NetworkResult.Success -> _uiState.update { UiState.Success(result.data) }
+            //     is NetworkResult.Error   -> _uiState.update { UiState.Error(result.message) }
             // }
         }
     }
 }
+
+
 

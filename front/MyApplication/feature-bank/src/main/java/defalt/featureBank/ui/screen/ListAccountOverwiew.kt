@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
-import defalt.featureBank.viewModel.ListAccountUiState
 import defalt.featureBank.viewModel.ListAccountViewModel
+import defalt.ui.state.UiState
 import defalt.ui.component.BottomNavBar
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
@@ -48,6 +48,13 @@ private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray
 private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
+
+// Constante top-level : ne recrée pas de Map à chaque recomposition
+private val TypeNames = mapOf(
+    1 to "COMPTE CHÈQUES 1",
+    2 to "COMPTE ÉPARGNE",
+    3 to "COMPTE PROFESSIONNEL",
+)
 
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
@@ -61,6 +68,7 @@ fun ListAccountOverviewScreen(
 
     ListAccountOverviewContent(
         uiState = uiState,
+        onRetry = viewModel::retry,
         onNavigateToHomeBank = onNavigateToHomeBank,
         onNavigateToTransfer = onNavigateToTransfer,
         onNavigateToAccountDetails = onNavigateToAccountDetails,
@@ -70,17 +78,12 @@ fun ListAccountOverviewScreen(
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun ListAccountOverviewContent(
-    uiState: ListAccountUiState,
+    uiState: UiState<List<BankAccount>>,
+    onRetry: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (Int) -> Unit = {},
 ) {
-    val typeNames = mapOf(
-        1 to "COMPTE CHÈQUES 1",
-        2 to "COMPTE ÉPARGNE",
-        3 to "COMPTE PROFESSIONNEL",
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -105,7 +108,7 @@ internal fun ListAccountOverviewContent(
             }
 
             when (val state = uiState) {
-                is ListAccountUiState.Loading -> {
+                is UiState.Loading -> {
                     Box(
                         modifier = Modifier
                             .weight(1f)
@@ -116,19 +119,28 @@ internal fun ListAccountOverviewContent(
                     }
                 }
 
-                is ListAccountUiState.Error -> {
+                is UiState.Error -> {
                     Box(
                         modifier = Modifier
                             .weight(1f)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text(text = state.message, color = ArkeoRed)
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = state.message, color = ArkeoRed)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Réessayer",
+                                color = ArkeoRed,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.clickable(onClick = onRetry),
+                            )
+                        }
                     }
                 }
 
-                is ListAccountUiState.Success -> {
-                    val accounts = state.accounts
+                is UiState.Success -> {
+                    val accounts = state.data
                     val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
                     // ── Total solde ──────────────────────────────────────────────
@@ -157,7 +169,7 @@ internal fun ListAccountOverviewContent(
                         items(accounts) { account ->
                             AccountCard(
                                 account = account,
-                                label = typeNames[account.typeId] ?: "COMPTE",
+                                label = TypeNames[account.typeId] ?: "COMPTE",
                                 onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
                             )
                             Spacer(modifier = Modifier.height(6.dp))
@@ -171,8 +183,8 @@ internal fun ListAccountOverviewContent(
                 selectedRoute = Routes.Bank.ListAccount,
                 mapItems = mapOf(
                     Routes.Bank.ListAccount to { },
-                    Routes.Bank.Home to { onNavigateToHomeBank() },
-                    Routes.Operation to { onNavigateToTransfer() },
+                    Routes.Bank.Home to onNavigateToHomeBank,
+                    Routes.Operation to onNavigateToTransfer,
                 ),
             )
         }
@@ -295,7 +307,7 @@ private fun formatMoney(value: Double): String =
 @Composable
 fun ListAccountOverviewPreviewSuccess() {
     ListAccountOverviewContent(
-        uiState = ListAccountUiState.Success(sampleAccounts()),
+        uiState = UiState.Success(sampleAccounts()),
     )
 }
 
@@ -303,7 +315,7 @@ fun ListAccountOverviewPreviewSuccess() {
 @Composable
 fun ListAccountOverviewPreviewLoading() {
     ListAccountOverviewContent(
-        uiState = ListAccountUiState.Loading,
+        uiState = UiState.Loading,
     )
 }
 
@@ -311,6 +323,6 @@ fun ListAccountOverviewPreviewLoading() {
 @Composable
 fun ListAccountOverviewPreviewError() {
     ListAccountOverviewContent(
-        uiState = ListAccountUiState.Error("Impossible de charger les comptes"),
+        uiState = UiState.Error("Impossible de charger les comptes"),
     )
 }
