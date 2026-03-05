@@ -1,5 +1,6 @@
 package defalt.network.api
 
+import defalt.network.BuildConfig
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
@@ -9,7 +10,6 @@ import defalt.network.api.bank.service.TypeApi
 import defalt.network.api.offer.service.OfferApi
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
-import defalt.network.BuildConfig
 import defalt.network.infrastructure.ApiClient
 import defalt.network.utils.createService
 import org.koin.dsl.module
