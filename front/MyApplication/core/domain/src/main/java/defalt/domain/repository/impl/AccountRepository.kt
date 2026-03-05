@@ -23,15 +23,15 @@ class AccountRepository(
     }
 
     override suspend fun getAccountById(id: String): NetworkResult<Account> {
-        TODO("Not yet implemented")
+        return remoteDataSource.getAccountById(id)
     }
 
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> {
-        TODO("Not yet implemented")
+        return remoteDataSource.createAccount(accountRegister)
     }
 
     override suspend fun deleteAccount(id: String): NetworkResult<Boolean> {
-        TODO("Not yet implemented")
+        return remoteDataSource.deleteAccount(id)
     }
 
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> {
