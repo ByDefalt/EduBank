@@ -10,6 +10,7 @@ import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.entity.account.TokenResponse
 import defalt.network.api.account.service.AccountApi
+import defalt.network.mapper.account.toDto
 import defalt.network.mapper.account.toEntity
 import defalt.network.utils.safeApiCall
 import defalt.utils.NetworkResult
@@ -23,15 +24,15 @@ class AccountRemoteDataSource(
     }
 
     override suspend fun getAccountById(id: String): NetworkResult<Account> {
-        TODO("Not yet implemented")
+        return safeApiCall { api.accountsIdGet(id) }.map { it.toEntity() }
     }
 
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> {
-        TODO("Not yet implemented")
+        return safeApiCall { api.accountsPost(accountRegister.toDto()) }.map { it.toEntity() }
     }
 
     override suspend fun deleteAccount(id: String): NetworkResult<Boolean> {
-        TODO("Not yet implemented")
+        return safeApiCall { api.accountsIdDelete(id) }
     }
 
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> {
