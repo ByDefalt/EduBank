@@ -52,8 +52,7 @@ jobs:
         with:
           name: test-reports-${{ matrix.name }}
           path: |
-            ${{ matrix.service }}/build/reports/tests/
-            ${{ matrix.service }}/build/test-results/
+            ${{ matrix.service }}/build/reports/
           if-no-files-found: warn
 
       - name: Publish JaCoCo artifacts
