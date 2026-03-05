@@ -19,21 +19,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,7 +59,6 @@ fun CreateTransferReceiverScreen(
     onReceiverSelected: (receiverId: String) -> Unit = {},
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    var selectedId by remember { mutableStateOf<String?>(null) }
 
     val safeBack = safeClick(onBack)
 
@@ -106,23 +102,20 @@ fun CreateTransferReceiverScreen(
             }
 
             // ── Tabs Compte / Bénéficiaire ────────────────────────────────────
-            TabRow(
+            SecondaryTabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = Color.White,
                 contentColor = ArkeoRed,
-                indicator = { tabPositions ->
+                indicator = {
                     TabRowDefaults.SecondaryIndicator(
-                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                        modifier = Modifier.tabIndicatorOffset(selectedTab),
                         color = ArkeoRed,
                     )
                 },
             ) {
                 Tab(
                     selected = selectedTab == 0,
-                    onClick = {
-                        selectedTab = 0
-                        selectedId = null
-                    },
+                    onClick = { selectedTab = 0 },
                     text = {
                         Text(
                             text = "Compte",
@@ -133,10 +126,7 @@ fun CreateTransferReceiverScreen(
                 )
                 Tab(
                     selected = selectedTab == 1,
-                    onClick = {
-                        selectedTab = 1
-                        selectedId = null
-                    },
+                    onClick = { selectedTab = 1 },
                     text = {
                         Text(
                             text = "Bénéficiaire",
@@ -173,11 +163,7 @@ fun CreateTransferReceiverScreen(
                         ReceiverAccountCard(
                             account = account,
                             label = typeNames[account.typeId] ?: "COMPTE",
-                            isSelected = account.id == selectedId,
-                            onClick = {
-                                selectedId = account.id
-                                account.id?.let { onReceiverSelected(it) }
-                            },
+                            onClick = { account.id?.let { onReceiverSelected(it) } },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }
@@ -197,11 +183,7 @@ fun CreateTransferReceiverScreen(
                     items(beneficiaries, key = { it.id }) { beneficiary ->
                         ReceiverBeneficiaryCard(
                             beneficiary = beneficiary,
-                            isSelected = beneficiary.id == selectedId,
-                            onClick = {
-                                selectedId = beneficiary.id
-                                onReceiverSelected(beneficiary.id)
-                            },
+                            onClick = { onReceiverSelected(beneficiary.id) },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }
@@ -219,7 +201,6 @@ fun CreateTransferReceiverScreen(
 private fun ReceiverAccountCard(
     account: BankAccount,
     label: String,
-    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -230,18 +211,10 @@ private fun ReceiverAccountCard(
             .fillMaxWidth()
             .clickable(interactionSource = interactionSource, indication = null, onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = when {
-                isSelected -> Color(0xFFFFF5F5)
-                isPressed -> Color(0xFFF0F0F0)
-                else -> Color.White
-            },
+            containerColor = if (isPressed) Color(0xFFF0F0F0) else Color.White,
         ),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = androidx.compose.foundation.BorderStroke(
-            width = if (isSelected) 2.dp else 0.dp,
-            color = if (isSelected) ArkeoRed else Color.Transparent,
-        ),
     ) {
         Row(
             modifier = Modifier
@@ -272,9 +245,9 @@ private fun ReceiverAccountCard(
                 )
             }
             Icon(
-                imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Default.ChevronRight,
+                imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = if (isSelected) ArkeoRed else TextSecondary,
+                tint = TextSecondary,
                 modifier = Modifier.size(24.dp),
             )
         }
@@ -286,7 +259,6 @@ private fun ReceiverAccountCard(
 @Composable
 private fun ReceiverBeneficiaryCard(
     beneficiary: Beneficiary,
-    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -297,18 +269,10 @@ private fun ReceiverBeneficiaryCard(
             .fillMaxWidth()
             .clickable(interactionSource = interactionSource, indication = null, onClick = onClick),
         colors = CardDefaults.cardColors(
-            containerColor = when {
-                isSelected -> Color(0xFFFFF5F5)
-                isPressed -> Color(0xFFF0F0F0)
-                else -> Color.White
-            },
+            containerColor = if (isPressed) Color(0xFFF0F0F0) else Color.White,
         ),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = androidx.compose.foundation.BorderStroke(
-            width = if (isSelected) 2.dp else 0.dp,
-            color = if (isSelected) ArkeoRed else Color.Transparent,
-        ),
     ) {
         Row(
             modifier = Modifier
@@ -338,9 +302,9 @@ private fun ReceiverBeneficiaryCard(
                 )
             }
             Icon(
-                imageVector = if (isSelected) Icons.Default.CheckCircle else Icons.Default.ChevronRight,
+                imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = if (isSelected) ArkeoRed else TextSecondary,
+                tint = TextSecondary,
                 modifier = Modifier.size(24.dp),
             )
         }
