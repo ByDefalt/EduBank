@@ -9,6 +9,5 @@ data class Operation(
     val state: OperationState,
     val ibanTarget: String,
     val amount: Double,
-    val date: OffsetDateTime
+    val date: OffsetDateTime,
 )
-

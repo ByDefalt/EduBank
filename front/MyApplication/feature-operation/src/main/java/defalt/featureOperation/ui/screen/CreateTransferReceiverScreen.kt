@@ -74,7 +74,6 @@ fun CreateTransferReceiverScreen(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
             // ── Header avec retour arrière ────────────────────────────────────
             Row(
                 modifier = Modifier

@@ -94,7 +94,6 @@ fun CreateTransferRecapScreen(
             elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
-
                 Text(
                     text = "DÉTAILS DU VIREMENT",
                     color = CustomColor.ArkeoRed,

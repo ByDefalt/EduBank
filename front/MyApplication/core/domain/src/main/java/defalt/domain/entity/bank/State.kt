@@ -4,8 +4,8 @@ enum class State(val value: String) {
     ACTIVE("active"),
     INACTIVE("inactive"),
     BLOQUED("bloqued"),
-    CLOSED("closed");
+    CLOSED("closed"),
+    ;
 
     override fun toString(): String = value
 }
-

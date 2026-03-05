@@ -1,19 +1,15 @@
 package defalt.network.api.account.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.network.api.account.model.Role
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.Response
+import retrofit2.http.*
 
 interface RoleApi {
     /**
      * GET roles
      * Liste tous les rôles (Admin uniquement)
-     * 
+     *
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé (Token manquant ou invalide)
@@ -27,15 +23,14 @@ interface RoleApi {
     /**
      * GET roles/{id}
      * Récupérer un rôle par son ID
-     * 
+     *
      * Responses:
      *  - 200: Rôle trouvé
      *  - 404: Rôle non trouvé
      *
-     * @param id 
+     * @param id
      * @return [Role]
      */
     @GET("roles/{id}")
     suspend fun rolesIdGet(@Path("id") id: kotlin.Int): Response<Role>
-
 }

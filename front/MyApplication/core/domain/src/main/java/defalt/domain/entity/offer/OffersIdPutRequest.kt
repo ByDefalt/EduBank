@@ -8,14 +8,14 @@ data class OffersIdPutRequest(
     val description: String? = null,
     val state: OffersIdPutRequest.State? = null,
     val startDate: LocalDate? = null,
-    val endDate: LocalDate? = null
+    val endDate: LocalDate? = null,
 ) {
     enum class State(val value: String) {
         ACTIVE("active"),
         INACTIVE("inactive"),
-        EXPIRED("expired");
+        EXPIRED("expired"),
+        ;
 
         override fun toString(): String = value
     }
 }
-

@@ -33,11 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import defalt.domain.entity.bank.BankAccount
 import defalt.ui.component.BottomNavBar
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import java.util.Locale
-import defalt.domain.entity.bank.BankAccount
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray

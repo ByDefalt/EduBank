@@ -20,4 +20,3 @@ interface IBankRepository {
     suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail>
     suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>>
 }
-

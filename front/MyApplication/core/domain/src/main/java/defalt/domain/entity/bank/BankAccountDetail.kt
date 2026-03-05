@@ -5,6 +5,5 @@ data class BankAccountDetail(
     val parameter: BankAccountParameter? = null,
     val type: Type? = null,
     val sold: Double? = null,
-    val iban: String? = null
+    val iban: String? = null,
 )
-

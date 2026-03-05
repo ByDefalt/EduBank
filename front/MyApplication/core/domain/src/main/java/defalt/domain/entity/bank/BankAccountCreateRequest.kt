@@ -5,6 +5,5 @@ data class BankAccountCreateRequest(
     val iban: String,
     val sold: Double,
     val overdraftLimit: Double,
-    val state: State? = null
+    val state: State? = null,
 )
-

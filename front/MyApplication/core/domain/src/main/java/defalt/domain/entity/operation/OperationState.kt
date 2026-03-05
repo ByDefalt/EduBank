@@ -4,8 +4,8 @@ enum class OperationState(val value: String) {
     PENDING("pending"),
     COMPLETED("completed"),
     FAILED("failed"),
-    CANCELLED("cancelled");
+    CANCELLED("cancelled"),
+    ;
 
     override fun toString(): String = value
 }
-

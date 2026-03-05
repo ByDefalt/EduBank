@@ -1,27 +1,28 @@
 package defalt.network.api.operation.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationList
-import defalt.network.api.operation.model.OperationState
+import defalt.network.infrastructure.CollectionFormats.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import retrofit2.Response
+import retrofit2.http.*
 
 interface OperationApi {
 
     /**
-    * enum for parameter state
-    */
+     * enum for parameter state
+     */
     @Serializable
     enum class StateOperationsGet(val value: kotlin.String) {
-        @SerialName(value = "completed") COMPLETED("completed"),
-        @SerialName(value = "failed") FAILED("failed"),
-        @SerialName(value = "cancelled") CANCELLED("cancelled")
+        @SerialName(value = "completed")
+        COMPLETED("completed"),
+
+        @SerialName(value = "failed")
+        FAILED("failed"),
+
+        @SerialName(value = "cancelled")
+        CANCELLED("cancelled"),
     }
 
     /**
@@ -84,8 +85,8 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param body 
+     * @param id
+     * @param body
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
@@ -101,10 +102,9 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operation 
+     * @param operation
      * @return [Operation]
      */
     @POST("operations")
     suspend fun operationsPost(@Body operation: Operation): Response<Operation>
-
 }

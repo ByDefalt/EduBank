@@ -77,5 +77,4 @@ class AccountRemoteDataSource(
     override suspend fun createPersonalInformation(personalInformationRegister: PersonalInformationRegister): NetworkResult<PersonalInformation> {
         TODO("Not yet implemented")
     }
-
 }

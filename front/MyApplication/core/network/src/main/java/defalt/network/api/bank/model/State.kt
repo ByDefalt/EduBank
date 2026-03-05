@@ -10,18 +10,16 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.bank.model
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 /**
- * 
+ *
  *
  * Values: ACTIVE,INACTIVE,BLOQUED,CLOSED
  */
@@ -38,7 +36,8 @@ enum class State(val value: kotlin.String) {
     BLOQUED("bloqued"),
 
     @SerialName(value = "closed")
-    CLOSED("closed");
+    CLOSED("closed"),
+    ;
 
     /**
      * Override [toString()] to avoid using the enum variable name as the value, and instead use
@@ -59,12 +58,10 @@ enum class State(val value: kotlin.String) {
          * Returns a valid [State] for [data], null otherwise.
          */
         fun decode(data: kotlin.Any?): State? = data?.let {
-          val normalizedData = "$it".lowercase()
-          values().firstOrNull { value ->
-            it == value || normalizedData == "$value".lowercase()
-          }
+            val normalizedData = "$it".lowercase()
+            values().firstOrNull { value ->
+                it == value || normalizedData == "$value".lowercase()
+            }
         }
     }
 }
-
-

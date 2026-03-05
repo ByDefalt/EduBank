@@ -9,14 +9,14 @@ data class Offer(
     val state: Offer.State,
     val startDate: LocalDate,
     val endDate: LocalDate,
-    val picturePath: String? = null
+    val picturePath: String? = null,
 ) {
     enum class State(val value: String) {
         ACTIVE("active"),
         INACTIVE("inactive"),
-        EXPIRED("expired");
+        EXPIRED("expired"),
+        ;
 
         override fun toString(): String = value
     }
 }
-

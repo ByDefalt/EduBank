@@ -6,6 +6,5 @@ data class PersonalInformation(
     val lastname: String? = null,
     val email: String? = null,
     val address: String? = null,
-    val phoneNumber: String? = null
+    val phoneNumber: String? = null,
 )
-

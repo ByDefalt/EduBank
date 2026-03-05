@@ -4,6 +4,5 @@ data class Beneficiary(
     val accountSourceId: String,
     val ibanTarget: String,
     val name: String,
-    val id: Int? = null
+    val id: Int? = null,
 )
-

@@ -67,7 +67,6 @@ fun CreateTransferDebitScreen(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-
             // ── Header titre seul (sans retour arrière) ──────────────────────
             Row(
                 modifier = Modifier
@@ -92,7 +91,6 @@ fun CreateTransferDebitScreen(
                     .padding(horizontal = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
-
                 // ── Section : sélection du compte à débiter ──────────────────
                 item {
                     Spacer(modifier = Modifier.height(16.dp))

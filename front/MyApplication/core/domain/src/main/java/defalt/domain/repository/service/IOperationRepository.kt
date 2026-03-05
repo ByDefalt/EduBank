@@ -26,4 +26,3 @@ interface IOperationRepository {
     suspend fun updateBeneficiary(id: Int, beneficiary: Beneficiary): NetworkResult<Beneficiary>
     suspend fun deleteBeneficiary(id: Int): NetworkResult<Unit>
 }
-
