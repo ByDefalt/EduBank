@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class JerseyConfig extends ResourceConfig {
     public JerseyConfig() {
         packages("com.operationapi.controller");
-        register(AuthenticationFilter.class);
-        register(FunctionalExceptionHandler.class);
-        register(NotFoundExceptionHandler.class);
+        packages("com.operationapi.handlers");
+        packages("com.operationapi.filters");
     }
 }
