@@ -1,5 +1,6 @@
 package defalt.featureBank.di
 
-val bankModule = listOf(
-    viewModelModule,
-)
+import defalt.featureBank.viewModel.featureBankViewModelModule
+
+/** Module racine de feature-bank */
+val bankModule = listOf(featureBankViewModelModule)

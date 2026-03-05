@@ -1,6 +1,6 @@
 package defalt.featureOperation.di
 
-val operationModule = listOf(
-    repositoryModule,
-    viewModelModule,
-)
+import defalt.featureOperation.viewModel.featureOperationViewModelModule
+
+/** Module racine de feature-operation */
+val operationModule = listOf(featureOperationViewModelModule)

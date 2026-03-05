@@ -1,6 +1,6 @@
 package defalt.featureOffer.di
 
-val offerModule = listOf(
-    repositoryModule,
-    viewModelModule,
-)
+import defalt.featureOffer.viewModel.featureOfferViewModelModule
+
+/** Module racine de feature-offer */
+val offerModule = listOf(featureOfferViewModelModule)
