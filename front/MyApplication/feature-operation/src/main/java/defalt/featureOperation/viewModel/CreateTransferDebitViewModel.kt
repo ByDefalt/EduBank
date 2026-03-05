@@ -37,4 +37,3 @@ private fun sampleAccounts(): List<BankAccount> = listOf(
     BankAccount(id = "2", parameterId = 0, typeId = 2, sold = 775854.79, iban = "FR7630006000013333333333340"),
     BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1080899.08, iban = "FR7630006000014444444444440"),
 )
-

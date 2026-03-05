@@ -56,4 +56,3 @@ private fun sampleBeneficiaries(): List<Beneficiary> = listOf(
     Beneficiary(accountSourceId = "1", ibanTarget = "FR76 2222 3333 4444", name = "Amine Saïd", id = 2),
     Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
 )
-

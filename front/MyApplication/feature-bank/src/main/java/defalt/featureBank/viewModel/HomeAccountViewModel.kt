@@ -41,4 +41,3 @@ private fun sampleAccounts(): List<BankAccount> = listOf(
         iban = "FR7630006000011234567890140",
     ),
 )
-

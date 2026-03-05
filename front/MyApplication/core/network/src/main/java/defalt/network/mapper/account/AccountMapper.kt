@@ -1,30 +1,22 @@
 package defalt.network.mapper.account
 
 import defalt.domain.entity.account.Account as AccountEntity
-import defalt.network.api.account.model.Account as AccountDto
-
 import defalt.domain.entity.account.AccountRegister as AccountRegisterEntity
-import defalt.network.api.account.model.AccountRegister as AccountRegisterDto
-
 import defalt.domain.entity.account.PersonalInformation as PersonalInformationEntity
-import defalt.network.api.account.model.PersonalInformation as PersonalInformationDto
-
 import defalt.domain.entity.account.PersonalInformationRegister as PersonalInformationRegisterEntity
-import defalt.network.api.account.model.PersonalInformationRegister as PersonalInformationRegisterDto
-
 import defalt.domain.entity.account.Role as RoleEntity
-import defalt.network.api.account.model.Role as RoleDto
-
 import defalt.domain.entity.account.RoleEnum as RoleEnumEntity
-import defalt.network.api.account.model.RoleEnum as RoleEnumDto
-
 import defalt.domain.entity.account.SignInRequest as SignInRequestEntity
-import defalt.network.api.account.model.SignInRequest as SignInRequestDto
-
 import defalt.domain.entity.account.TokenRequest as TokenRequestEntity
-import defalt.network.api.account.model.TokenRequest as TokenRequestDto
-
 import defalt.domain.entity.account.TokenResponse as TokenResponseEntity
+import defalt.network.api.account.model.Account as AccountDto
+import defalt.network.api.account.model.AccountRegister as AccountRegisterDto
+import defalt.network.api.account.model.PersonalInformation as PersonalInformationDto
+import defalt.network.api.account.model.PersonalInformationRegister as PersonalInformationRegisterDto
+import defalt.network.api.account.model.Role as RoleDto
+import defalt.network.api.account.model.RoleEnum as RoleEnumDto
+import defalt.network.api.account.model.SignInRequest as SignInRequestDto
+import defalt.network.api.account.model.TokenRequest as TokenRequestDto
 import defalt.network.api.account.model.TokenResponse as TokenResponseDto
 
 // ── Account ───────────────────────────────────────────────────────────────────
@@ -119,12 +111,12 @@ fun List<RoleDto>.toEntity(): List<RoleEntity> = this.map { it.toEntity() }
 // ── RoleEnum ──────────────────────────────────────────────────────────────────
 
 fun RoleEnumDto.toEntity(): RoleEnumEntity = when (this) {
-    RoleEnumDto.ADMIN    -> RoleEnumEntity.ADMIN
+    RoleEnumDto.ADMIN -> RoleEnumEntity.ADMIN
     RoleEnumDto.CUSTOMER -> RoleEnumEntity.CUSTOMER
 }
 
 fun RoleEnumEntity.toDto(): RoleEnumDto = when (this) {
-    RoleEnumEntity.ADMIN    -> RoleEnumDto.ADMIN
+    RoleEnumEntity.ADMIN -> RoleEnumDto.ADMIN
     RoleEnumEntity.CUSTOMER -> RoleEnumDto.CUSTOMER
 }
 
@@ -161,4 +153,3 @@ fun TokenResponseEntity.toDto(): TokenResponseDto = TokenResponseDto(
     id = this.id,
     role = this.role,
 )
-

@@ -1,12 +1,10 @@
 package defalt.network.mapper.operation
 
 import defalt.domain.entity.operation.Beneficiary as BeneficiaryEntity
-import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
-
 import defalt.domain.entity.operation.Operation as OperationEntity
-import defalt.network.api.operation.model.Operation as OperationDto
-
 import defalt.domain.entity.operation.OperationState as OperationStateEntity
+import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
+import defalt.network.api.operation.model.Operation as OperationDto
 import defalt.network.api.operation.model.OperationState as OperationStateDto
 
 // ── Beneficiary ───────────────────────────────────────────────────────────────
@@ -55,16 +53,15 @@ fun List<OperationDto>.toEntity(): List<OperationEntity> = this.map { it.toEntit
 // ── OperationState (enum) ─────────────────────────────────────────────────────
 
 fun OperationStateDto.toEntity(): OperationStateEntity = when (this) {
-    OperationStateDto.PENDING   -> OperationStateEntity.PENDING
+    OperationStateDto.PENDING -> OperationStateEntity.PENDING
     OperationStateDto.COMPLETED -> OperationStateEntity.COMPLETED
-    OperationStateDto.FAILED    -> OperationStateEntity.FAILED
+    OperationStateDto.FAILED -> OperationStateEntity.FAILED
     OperationStateDto.CANCELLED -> OperationStateEntity.CANCELLED
 }
 
 fun OperationStateEntity.toDto(): OperationStateDto = when (this) {
-    OperationStateEntity.PENDING   -> OperationStateDto.PENDING
+    OperationStateEntity.PENDING -> OperationStateDto.PENDING
     OperationStateEntity.COMPLETED -> OperationStateDto.COMPLETED
-    OperationStateEntity.FAILED    -> OperationStateDto.FAILED
+    OperationStateEntity.FAILED -> OperationStateDto.FAILED
     OperationStateEntity.CANCELLED -> OperationStateDto.CANCELLED
 }
-

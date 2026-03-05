@@ -7,52 +7,59 @@ import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
 import defalt.network.api.bank.service.BankAccountApi
 import defalt.network.api.bank.service.BankAccountParameterApi
+import defalt.network.mapper.bank.toDto
+import defalt.network.mapper.bank.toEntity
+import defalt.network.utils.safeApiCall
 import defalt.utils.NetworkResult
+import defalt.utils.map
 
 class BankRemoteDataSource(
     private val bankAccountApi: BankAccountApi,
     private val bankAccountParameterApi: BankAccountParameterApi,
 ) : IBankRemoteDataSource {
 
-    override suspend fun adminGetBankAccountsByAccountId(accountId: Int): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    // --- ADMIN ---
+
+    override suspend fun adminGetBankAccountsByAccountId(accountId: Int): NetworkResult<List<BankAccount>> =
+        safeApiCall { bankAccountApi.adminAccountsAccountIdBankAccountsGet(accountId) }
+            .map { it.toEntity() }
 
     override suspend fun adminCreateBankAccount(
         accountId: Int,
         request: BankAccountCreateRequest,
-    ): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    ): NetworkResult<BankAccountDetail> =
+        safeApiCall { bankAccountApi.adminAccountsAccountIdBankAccountsPost(accountId, request.toDto()) }
+            .map { it.toEntity() }
 
-    override suspend fun adminGetAllBankAccounts(): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminGetAllBankAccounts(): NetworkResult<List<BankAccount>> =
+        safeApiCall { bankAccountApi.adminBankAccountsGet() }
+            .map { it.toEntity() }
 
-    override suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit> =
+        safeApiCall { bankAccountApi.adminBankAccountsIdDelete(id) }
 
-    override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> =
+        safeApiCall { bankAccountApi.adminBankAccountsIdGet(id) }
+            .map { it.toEntity() }
 
     override suspend fun adminUpdateBankAccountParameters(
         bankAccountId: String,
         parameter: BankAccountParameter,
-    ): NetworkResult<Unit> {
-        TODO("Not yet implemented")
-    }
+    ): NetworkResult<Unit> =
+        safeApiCall {
+            bankAccountParameterApi.adminBankAccountsBankAccountIdParametersPatch(bankAccountId, parameter.toDto())
+        }
 
-    override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> {
-        TODO("Not yet implemented")
-    }
+    // --- CLIENT ---
 
-    override suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =
+        safeApiCall { bankAccountApi.myBankAccountsGet(typeId) }
+            .map { it.toEntity() }
 
-    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail> =
+        safeApiCall { bankAccountApi.myBankAccountsIdGet(id) }
+            .map { it.toEntity() }
+
+    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> =
+        safeApiCall { bankAccountApi.myBankAccountsIdCoHoldersGet(id) }
 }

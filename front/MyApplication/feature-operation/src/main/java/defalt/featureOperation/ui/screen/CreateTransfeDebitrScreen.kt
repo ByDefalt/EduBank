@@ -114,35 +114,35 @@ internal fun CreateTransferDebitContent(
                 errorColor = ArkeoRed,
             ) { accounts ->
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp),
-            ) {
-                // ── Section : sélection du compte à débiter ──────────────────
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Compte à débiter",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
-                        color = ArkeoRed,
-                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(0.dp),
+                ) {
+                    // ── Section : sélection du compte à débiter ──────────────────
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Compte à débiter",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp,
+                            color = ArkeoRed,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
 
-                items(accounts) { account ->
-                    TransferAccountCard(
-                        account = account,
-                        label = typeNames[account.typeId] ?: "COMPTE",
-                        isSelected = account.id == selectedAccountId,
-                        onClick = { selectedAccountId = account.id },
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
+                    items(accounts) { account ->
+                        TransferAccountCard(
+                            account = account,
+                            label = typeNames[account.typeId] ?: "COMPTE",
+                            isSelected = account.id == selectedAccountId,
+                            onClick = { selectedAccountId = account.id },
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                    }
                 }
-            }
             } // fin UiStateHandler
         }
     }

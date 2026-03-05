@@ -6,7 +6,11 @@ import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
+import defalt.network.mapper.operation.toDto
+import defalt.network.mapper.operation.toEntity
+import defalt.network.utils.safeApiCall
 import defalt.utils.NetworkResult
+import defalt.utils.map
 import java.time.OffsetDateTime
 
 class OperationRemoteDataSource(
@@ -14,48 +18,61 @@ class OperationRemoteDataSource(
     private val beneficiaryApi: BeneficiaryApi,
 ) : IOperationRemoteDataSource {
 
+    // --- OPÉRATIONS ---
+
     override suspend fun getOperations(
         accountSourceId: String?,
         state: OperationState?,
         dateFrom: OffsetDateTime?,
         dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> {
-        TODO("Not yet implemented")
+        val stateDto = state?.let {
+            when (it) {
+                OperationState.COMPLETED -> OperationApi.StateOperationsGet.COMPLETED
+                OperationState.FAILED -> OperationApi.StateOperationsGet.FAILED
+                OperationState.CANCELLED -> OperationApi.StateOperationsGet.CANCELLED
+                // PENDING n'existe pas côté API filtre, on passe null
+                else -> null
+            }
+        }
+        return safeApiCall { operationApi.operationsGet(accountSourceId, stateDto, dateFrom, dateTo) }
+            .map { it.data?.toEntity() ?: emptyList() }
     }
 
-    override suspend fun getOperationById(id: Int): NetworkResult<Operation> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getOperationById(id: Int): NetworkResult<Operation> =
+        safeApiCall { operationApi.operationsIdGet(id) }
+            .map { it.toEntity() }
 
-    override suspend fun createOperation(operation: Operation): NetworkResult<Operation> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun createOperation(operation: Operation): NetworkResult<Operation> =
+        safeApiCall { operationApi.operationsPost(operation.toDto()) }
+            .map { it.toEntity() }
 
-    override suspend fun cancelOperation(id: Int): NetworkResult<Operation> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun cancelOperation(id: Int): NetworkResult<Operation> =
+        safeApiCall { operationApi.operationsIdCancelPost(id) }
+            .map { it.toEntity() }
 
-    override suspend fun updateOperationState(id: Int, state: String): NetworkResult<Operation> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateOperationState(id: Int, state: String): NetworkResult<Operation> =
+        safeApiCall { operationApi.operationsIdStatePatch(id, "\"$state\"") }
+            .map { it.toEntity() }
 
-    override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> {
-        TODO("Not yet implemented")
-    }
+    // --- BÉNÉFICIAIRES ---
 
-    override suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
+        safeApiCall { beneficiaryApi.beneficiariesGet() }
+            .map { it.data?.toEntity() ?: emptyList() }
 
-    override suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>> =
+        safeApiCall { beneficiaryApi.beneficiariesAccountIdGet(accountId) }
+            .map { it.data?.toEntity() ?: emptyList() }
 
-    override suspend fun updateBeneficiary(id: Int, beneficiary: Beneficiary): NetworkResult<Beneficiary> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary> =
+        safeApiCall { beneficiaryApi.beneficiariesPost(beneficiary.toDto()) }
+            .map { it.toEntity() }
 
-    override suspend fun deleteBeneficiary(id: Int): NetworkResult<Unit> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateBeneficiary(id: Int, beneficiary: Beneficiary): NetworkResult<Beneficiary> =
+        safeApiCall { beneficiaryApi.beneficiariesIdPut(id, beneficiary.toDto()) }
+            .map { it.toEntity() }
+
+    override suspend fun deleteBeneficiary(id: Int): NetworkResult<Unit> =
+        safeApiCall { beneficiaryApi.beneficiariesIdDelete(id) }
 }

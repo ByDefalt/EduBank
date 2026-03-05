@@ -10,4 +10,3 @@ val viewModelModule =
         viewModel { LoginViewModel() }
         viewModel { RegisterViewModel() }
     }
-

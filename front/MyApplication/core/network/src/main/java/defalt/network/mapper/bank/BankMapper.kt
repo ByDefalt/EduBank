@@ -1,21 +1,16 @@
 package defalt.network.mapper.bank
 
 import defalt.domain.entity.bank.BankAccount as BankAccountEntity
-import defalt.network.api.bank.model.BankAccount as BankAccountDto
-
 import defalt.domain.entity.bank.BankAccountCreateRequest as BankAccountCreateRequestEntity
-import defalt.network.api.bank.model.BankAccountCreateRequest as BankAccountCreateRequestDto
-
 import defalt.domain.entity.bank.BankAccountDetail as BankAccountDetailEntity
-import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailDto
-
 import defalt.domain.entity.bank.BankAccountParameter as BankAccountParameterEntity
-import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
-
 import defalt.domain.entity.bank.State as StateEntity
-import defalt.network.api.bank.model.State as StateDto
-
 import defalt.domain.entity.bank.Type as TypeEntity
+import defalt.network.api.bank.model.BankAccount as BankAccountDto
+import defalt.network.api.bank.model.BankAccountCreateRequest as BankAccountCreateRequestDto
+import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailDto
+import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
+import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
 
 // ── BankAccount ───────────────────────────────────────────────────────────────
@@ -92,17 +87,17 @@ fun BankAccountParameterEntity.toDto(): BankAccountParameterDto = BankAccountPar
 // ── State (enum) ──────────────────────────────────────────────────────────────
 
 fun StateDto.toEntity(): StateEntity = when (this) {
-    StateDto.ACTIVE   -> StateEntity.ACTIVE
+    StateDto.ACTIVE -> StateEntity.ACTIVE
     StateDto.INACTIVE -> StateEntity.INACTIVE
-    StateDto.BLOQUED  -> StateEntity.BLOQUED
-    StateDto.CLOSED   -> StateEntity.CLOSED
+    StateDto.BLOQUED -> StateEntity.BLOQUED
+    StateDto.CLOSED -> StateEntity.CLOSED
 }
 
 fun StateEntity.toDto(): StateDto = when (this) {
-    StateEntity.ACTIVE   -> StateDto.ACTIVE
+    StateEntity.ACTIVE -> StateDto.ACTIVE
     StateEntity.INACTIVE -> StateDto.INACTIVE
-    StateEntity.BLOQUED  -> StateDto.BLOQUED
-    StateEntity.CLOSED   -> StateDto.CLOSED
+    StateEntity.BLOQUED -> StateDto.BLOQUED
+    StateEntity.CLOSED -> StateDto.CLOSED
 }
 
 // ── Type ──────────────────────────────────────────────────────────────────────
@@ -116,4 +111,3 @@ fun TypeEntity.toDto(): TypeDto = TypeDto(
     id = this.id,
     name = this.name,
 )
-

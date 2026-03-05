@@ -12,4 +12,3 @@ val viewModelModule =
         viewModel { CreateTransferDebitViewModel() }
         viewModel { CreateTransferReceiverViewModel() }
     }
-

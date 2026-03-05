@@ -53,4 +53,3 @@ private fun sampleOffers(): List<Offer> = listOf(
         picturePath = null,
     ),
 )
-

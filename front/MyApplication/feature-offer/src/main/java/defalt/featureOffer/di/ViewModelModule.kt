@@ -8,4 +8,3 @@ val viewModelModule =
     module {
         viewModel { OffersViewModel() }
     }
-

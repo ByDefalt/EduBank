@@ -116,38 +116,38 @@ internal fun ListAccountOverviewContent(
             ) { accounts ->
                 val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
-                    // ── Total solde ──────────────────────────────────────────────
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                    ) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Total ${formatMoney(totalSold)}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
-                            color = TextPrimary,
-                        )
-                    }
-
+                // ── Total solde ──────────────────────────────────────────────
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                ) {
                     Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Total ${formatMoney(totalSold)}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = TextPrimary,
+                    )
+                }
 
-                    // ── Liste des comptes ────────────────────────────────────────
-                    LazyColumn(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(horizontal = 12.dp),
-                    ) {
-                        items(accounts) { account ->
-                            AccountCard(
-                                account = account,
-                                label = TypeNames[account.typeId] ?: "COMPTE",
-                                onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                        }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // ── Liste des comptes ────────────────────────────────────────
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                ) {
+                    items(accounts) { account ->
+                        AccountCard(
+                            account = account,
+                            label = TypeNames[account.typeId] ?: "COMPTE",
+                            onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
+                }
             }
 
             // ── Bottom Navigation ────────────────────────────────────────────

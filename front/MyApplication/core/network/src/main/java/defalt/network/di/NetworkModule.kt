@@ -2,6 +2,7 @@ package defalt.network.di
 
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
+import defalt.network.api.account.service.RoleApi
 import defalt.network.api.bank.service.BankAccountApi
 import defalt.network.api.bank.service.BankAccountParameterApi
 import defalt.network.api.bank.service.TypeApi
@@ -21,6 +22,7 @@ val networkModule = module {
 
     single { get<ApiClient>().createService<AccountApi>() }
     single { get<ApiClient>().createService<PersonalInformationApi>() }
+    single { get<ApiClient>().createService<RoleApi>() }
     single { get<ApiClient>().createService<BankAccountApi>() }
     single { get<ApiClient>().createService<BankAccountParameterApi>() }
     single { get<ApiClient>().createService<TypeApi>() }

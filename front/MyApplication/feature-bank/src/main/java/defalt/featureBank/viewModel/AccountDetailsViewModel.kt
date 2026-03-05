@@ -75,4 +75,3 @@ private fun sampleOperations(): List<Operation> {
         Operation(10, "1", "Remboursement prévu", OperationState.PENDING, "FR76300060000199", 75.00, now.plusDays(5).withHour(9).withMinute(0)),
     )
 }
-

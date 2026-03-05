@@ -98,35 +98,35 @@ internal fun HomeAccountContent(
             ) { accounts ->
                 val mainAccount = accounts.firstOrNull()
 
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Bonjour X.XXXXXX",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = TextPrimary,
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = "Bonjour X.XXXXXX",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            color = TextPrimary,
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
 
-                item {
-                    MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails)
-                }
+                    item {
+                        MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails)
+                    }
 
-                item {
-                    SectionRowCard(
-                        title = "TOUTE MON ÉPARGNE",
-                        onClick = {},
-                    )
+                    item {
+                        SectionRowCard(
+                            title = "TOUTE MON ÉPARGNE",
+                            onClick = {},
+                        )
+                    }
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
                 }
-                item { Spacer(modifier = Modifier.height(8.dp)) }
-            }
             } // fin UiStateHandler
 
             BottomNavBar(
