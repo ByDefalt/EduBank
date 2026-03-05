@@ -49,6 +49,7 @@ private val LightGray = CustomColor.BackgroundGray
 private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
@@ -58,6 +59,22 @@ fun ListAccountOverviewScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ListAccountOverviewContent(
+        uiState = uiState,
+        onNavigateToHomeBank = onNavigateToHomeBank,
+        onNavigateToTransfer = onNavigateToTransfer,
+        onNavigateToAccountDetails = onNavigateToAccountDetails,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun ListAccountOverviewContent(
+    uiState: ListAccountUiState,
+    onNavigateToHomeBank: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    onNavigateToAccountDetails: (Int) -> Unit = {},
+) {
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES 1",
         2 to "COMPTE ÉPARGNE",
@@ -274,8 +291,26 @@ private fun maskAccountNumber(iban: String?): String {
 private fun formatMoney(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun ListAccountOverviewPreview() {
-    ListAccountOverviewScreen()
+fun ListAccountOverviewPreviewSuccess() {
+    ListAccountOverviewContent(
+        uiState = ListAccountUiState.Success(sampleAccounts()),
+    )
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun ListAccountOverviewPreviewLoading() {
+    ListAccountOverviewContent(
+        uiState = ListAccountUiState.Loading,
+    )
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun ListAccountOverviewPreviewError() {
+    ListAccountOverviewContent(
+        uiState = ListAccountUiState.Error("Impossible de charger les comptes"),
+    )
 }
