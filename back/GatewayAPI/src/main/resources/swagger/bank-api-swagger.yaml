@@ -7,10 +7,8 @@ info:
     name: API Support
 
 servers:
-  - url: https://api.example.com/v1
-    description: Serveur de production
-  - url: https://api-dev.example.com/v1
-    description: Serveur de développement
+  - url: http://localhost:8081/api/v1
+    description: Serveur de Bank API
 
 tags:
   - name: BankAccount
@@ -179,9 +177,7 @@ paths:
             schema:
               type: object
               properties:
-                parameter_id:
-                  type: integer
-                  example: 1
+
                 type_id:
                   type: integer
                   example: 1
@@ -189,9 +185,6 @@ paths:
                   type: number
                   format: double
                   example: 1500.50
-                iban:
-                  type: string
-                  example: "FR7612345678901234567890123"
       responses:
         '200':
           description: Compte bancaire mis à jour avec succès
@@ -250,7 +243,7 @@ paths:
               properties:
                 state:
                   type: string
-                  enum: [active, inactive]
+                  enum: [active, inactive, bloqued, closed]
                   example: inactive
               required:
                 - state
@@ -291,16 +284,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  bank_account_id:
-                    type: integer
-                    example: 1
                   sold:
                     type: number
                     format: double
                     example: 1500.50
-                  iban:
-                    type: string
-                    example: "FR7612345678901234567890123"
+
         '404':
           $ref: '#/components/responses/NotFoundError'
         '401':
@@ -620,9 +608,6 @@ paths:
             schema:
               type: object
               properties:
-                account_source_id:
-                  type: integer
-                  example: 1
                 iban_target:
                   type: string
                   example: "FR7698765432109876543210987"
@@ -636,10 +621,7 @@ paths:
       responses:
         '201':
           description: Bénéficiaire créé avec succès
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Beneficiary'
+
         '400':
           $ref: '#/components/responses/BadRequestError'
         '401':
@@ -689,9 +671,6 @@ paths:
             schema:
               type: object
               properties:
-                account_source_id:
-                  type: integer
-                  example: 1
                 iban_target:
                   type: string
                   example: "FR7698765432109876543210987"

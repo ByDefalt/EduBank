@@ -1,0 +1,10 @@
+services:
+  gateway-api-spring:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    container_name: gateway-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ACCOUNTAPI_BASE_URL=http://account-api:8081/api/v1
