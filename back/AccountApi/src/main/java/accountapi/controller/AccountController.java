@@ -62,7 +62,7 @@ public class AccountController {
         return Response.ok(tokenResponse).build();
     }
 
-    @DELETE
+    @PUT
     @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
