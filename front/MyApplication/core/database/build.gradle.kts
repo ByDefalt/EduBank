@@ -52,6 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
+    implementation(libs.koin.android)
 
     /* ---------------- DATABASE ---------------- */
     implementation(libs.androidx.room.runtime)

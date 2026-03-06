@@ -1,5 +1,6 @@
 package defalt.eduBank.di
 
+import defalt.database.di.databaseModule
 import defalt.domain.di.coreDomainModule
 import defalt.featureAccount.di.accountModule
 import defalt.featureBank.di.bankModule
@@ -12,6 +13,7 @@ val appModule =
     coreNetworkModule +
         coreDomainModule +
         coreUtilsModule +
+        databaseModule +
         accountModule +
         bankModule +
         offerModule +

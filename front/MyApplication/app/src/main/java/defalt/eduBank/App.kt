@@ -16,19 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import defalt.eduBank.di.appModule
 import defalt.eduBank.ui.navigation.ArkeoNavHost
 import defalt.ui.utils.CustomColor
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
 
 class App : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startKoin {
-            androidContext(this@App)
-            modules(*appModule.toTypedArray())
-        }
         enableEdgeToEdge()
         setContent {
             ArkeoApp()
