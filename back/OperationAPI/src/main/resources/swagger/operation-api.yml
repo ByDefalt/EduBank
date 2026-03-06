@@ -7,7 +7,7 @@ info:
     name: API Support
 
 servers:
-  - url: "http://localhost:8081/api/v1"
+  - url: "http://localhost:8083/api/v1"
 
 tags:
   - name: Operation
@@ -20,19 +20,17 @@ paths:
         - Operation
       summary: Récupérer la liste des opérations
       description: "Use Case 5 (Administrateur): Voir la liste des opérations"
-      security:
-        - bearerAuth: []
       parameters:
-        - name: bank_account_source_id
+        - name: account_source_id
           in: query
           schema:
-            type: integer
+            type: string
           description: Filtrer par compte source
         - name: state
           in: query
           schema:
             type: string
-            enum: [pending, completed, failed, cancelled]
+            enum: [completed, failed, cancelled]
           description: Filtrer par état
         - name: date_from
           in: query
@@ -52,12 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Operation'
+                $ref: '#/components/schemas/OperationList'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
     post:
@@ -65,40 +58,12 @@ paths:
         - Operation
       summary: Créer une nouvelle opération
       description: "Use Case 10 (Client): Effectuer un virement"
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                bank_account_source_id:
-                  type: integer
-                  description: ID du compte bancaire source
-                  example: 1
-                label:
-                  type: string
-                  description: Libellé de l'opération
-                  example: "Virement pour loyer"
-                  maxLength: 255
-                iban_target:
-                  type: string
-                  description: IBAN du compte destinataire
-                  example: "FR7698765432109876543210987"
-                  pattern: '^[A-Z]{2}[0-9]{2}[A-Z0-9]+$'
-                amount:
-                  type: number
-                  format: double
-                  description: Montant de l'opération (positif)
-                  example: 850.00
-                  minimum: 0.01
-              required:
-                - bank_account_source_id
-                - label
-                - iban_target
-                - amount
+              $ref: '#/components/schemas/Operation'
       responses:
         '201':
           description: Opération créée avec succès
@@ -123,8 +88,6 @@ paths:
         - Operation
       summary: Récupérer une opération par ID
       description: "Use Case 8 (Administrateur): Voir une opération spécifique avec ses détails"
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -149,8 +112,6 @@ paths:
         - Operation
       summary: Changer l'état d'une opération
       description: "Use Case 13 (Administrateur): Changer l'état d'une opération / Use Case 21 (Administrateur): Mettre à jour l'état d'une opération"
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -162,14 +123,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                state:
-                  type: string
-                  enum: [pending, completed, failed, cancelled]
-                  example: cancelled
-              required:
-                - state
+              $ref: '#/components/schemas/OperationState'
       responses:
         '200':
           description: État modifié avec succès
@@ -192,8 +146,6 @@ paths:
         - Operation
       summary: Créer une opération d'annulation
       description: "Use Case 20 (Administrateur): Créer une opération d'annulation"
-      security:
-        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -201,29 +153,13 @@ paths:
           schema:
             type: integer
           description: ID de l'opération à annuler
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                reason:
-                  type: string
-                  description: Raison de l'annulation
-                  example: "Fraude détectée"
       responses:
         '201':
           description: Opération d'annulation créée avec succès
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  original_operation:
-                    $ref: '#/components/schemas/Operation'
-                  cancellation_operation:
-                    $ref: '#/components/schemas/Operation'
+                $ref: '#/components/schemas/Operation'
         '400':
           description: L'opération ne peut pas être annulée
           content:
@@ -236,95 +172,65 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+
   /beneficiaries:
     get:
       tags:
         - Beneficiary
-      summary: Récupérer la liste des bénéficiaires
-      description: "Use Case 8 (Client): Voir la liste des bénéficiaires"
-      security:
-        - bearerAuth: [ ]
-      parameters:
-        - name: account_source_id
-          in: query
-          schema:
-            type: integer
-          description: Filtrer par compte source
+      summary: Récupérer tous les bénéficiaires
       responses:
         '200':
-          description: Liste récupérée avec succès
+          description: Liste globale des bénéficiaires
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Beneficiary'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+                $ref: '#/components/schemas/BeneficiaryList'
     post:
       tags:
         - Beneficiary
       summary: Créer un nouveau bénéficiaire
-      description: "Use Case 6 (Client): Ajouter un bénéficiaire"
-      security:
-        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                iban_target:
-                  type: string
-                  example: "FR7698765432109876543210987"
-                name:
-                  type: string
-                  example: "Marie Martin"
-              required:
-                - account_source_id
-                - iban_target
-                - name
+              $ref: '#/components/schemas/Beneficiary'
       responses:
         '201':
-          description: Bénéficiaire créé avec succès
-
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-  /beneficiaries/{id}:
-    get:
-      tags:
-        - Beneficiary
-      summary: Récupérer un bénéficiaire par ID
-      security:
-        - bearerAuth: [ ]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Bénéficiaire récupéré avec succès
+          description: Bénéficiaire créé
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beneficiary'
+
+  /beneficiaries/{accountId}:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer les bénéficiaires d'un compte
+      description: "Retourne tous les bénéficiaires associés à un compte source spécifique"
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "ID du compte source (ex: 1)"
+      responses:
+        '200':
+          description: Liste des bénéficiaires du compte
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BeneficiaryList'
         '404':
           $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+
+  /beneficiaries/{id}:
     put:
       tags:
         - Beneficiary
       summary: Mettre à jour un bénéficiaire
-      description: "Use Case 7 (Client): Modifier un bénéficiaire"
-      security:
-        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -336,32 +242,18 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                iban_target:
-                  type: string
-                  example: "FR7698765432109876543210987"
-                name:
-                  type: string
-                  example: "Marie Martin"
+              $ref: '#/components/schemas/Beneficiary'
       responses:
         '200':
-          description: Bénéficiaire mis à jour avec succès
+          description: Bénéficiaire mis à jour
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Beneficiary'
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
     delete:
       tags:
         - Beneficiary
       summary: Supprimer un bénéficiaire
-      description: "Use Case 9 (Client): Supprimer un bénéficiaire"
-      security:
-        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -370,14 +262,16 @@ paths:
             type: integer
       responses:
         '204':
-          description: Bénéficiaire supprimé avec succès
-        '404':
-          $ref: '#/components/responses/NotFoundError'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
+          description: Supprimé avec succès
 
 components:
   schemas:
+    OperationState:
+      type: string
+      description: État de l'opération
+      enum: [pending, completed, failed, cancelled]
+      example: completed
+
     Operation:
       type: object
       properties:
@@ -385,19 +279,16 @@ components:
           type: integer
           description: Identifiant de l'opération
           example: 1
-        bank_account_source_id:
-          type: integer
+        account_source_id:
+          type: string
           description: ID du compte bancaire source
-          example: 1
+          example: "1"
         label:
           type: string
           description: Libellé de l'opération
           example: "Virement pour loyer"
         state:
-          type: string
-          description: État de l'opération
-          enum: [pending, completed, failed, cancelled]
-          example: completed
+          $ref: '#/components/schemas/OperationState'
         iban_target:
           type: string
           description: IBAN du compte destinataire
@@ -412,24 +303,22 @@ components:
           format: date-time
           description: Date et heure de l'opération
           example: "2026-01-15T14:30:00Z"
-        created_at:
-          type: string
-          format: date-time
-          description: Date de création
-          example: "2026-01-15T14:00:00Z"
-        updated_at:
-          type: string
-          format: date-time
-          description: Date de dernière modification
-          example: "2026-01-15T14:30:00Z"
       required:
         - id
-        - bank_account_source_id
+        - account_source_id
         - label
         - state
         - iban_target
         - amount
         - date
+
+    OperationList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
 
     Beneficiary:
       type: object
@@ -439,9 +328,9 @@ components:
           description: Identifiant du bénéficiaire
           example: 1
         account_source_id:
-          type: integer
+          type: string
           description: ID du compte source
-          example: 1
+          example: "1"
         iban_target:
           type: string
           description: IBAN du bénéficiaire
@@ -451,10 +340,17 @@ components:
           description: Nom du bénéficiaire
           example: "Marie Martin"
       required:
-        - id
         - account_source_id
         - iban_target
         - name
+
+    BeneficiaryList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Beneficiary'
 
     Error:
       type: object
