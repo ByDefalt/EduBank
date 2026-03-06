@@ -8,6 +8,7 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import gatewayapi.client.AccountClient;
+import gatewayapi.client.OperationClient;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
@@ -56,5 +57,17 @@ public class FeignConfig {
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
                 .target(AccountClient.class, "http://localhost:8081/api/v1");
+    }
+
+    @Bean
+    public OperationClient getOperationClient(RequestInterceptor requestInterceptor) {
+        return Feign.builder()
+                .encoder(new JacksonEncoder(objectMapper))
+                .decoder(new JacksonDecoder(objectMapper))
+                .requestInterceptor(requestInterceptor)
+                .client(new OkHttpClient(getOkHttpClient()))
+                .logger(new Logger.JavaLogger(FeignConfig.class))
+                .logLevel(Logger.Level.FULL)
+                .target(OperationClient.class, "http://localhost:8083/api/v1");
     }
 }
