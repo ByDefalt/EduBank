@@ -32,23 +32,7 @@ public class FeignConfig {
     private ObjectMapper objectMapper;
 
     @Bean
-    public RequestInterceptor requestInterceptor() {
-        return requestTemplate -> {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attributes != null) {
-                HttpServletRequest request = attributes.getRequest();
-                // recupe header
-                String token = request.getHeader("Authorization");
-                if (token != null) {
-                    // injecte dans requestTemplate
-                    requestTemplate.header("Authorization", token);
-                }
-            }
-        };
-    }
-
-    @Bean
-    public AccountClient getAccountClient(RequestInterceptor requestInterceptor) {
+    public AccountClient getAccountClient() {
         return Feign.builder()
                 .encoder(new JacksonEncoder(objectMapper))
                 .decoder(new JacksonDecoder(objectMapper))
@@ -59,7 +43,7 @@ public class FeignConfig {
     }
 
     @Bean
-    public OperationClient getOperationClient(RequestInterceptor requestInterceptor) {
+    public OperationClient getOperationClient() {
         return Feign.builder()
                 .encoder(new JacksonEncoder(objectMapper))
                 .decoder(new JacksonDecoder(objectMapper))
