@@ -21,7 +21,6 @@ public class AccountController {
     }
 
     @GET
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAccounts() {
         List<Account> accounts = accountBusiness.getAllAccounts();
@@ -63,7 +62,6 @@ public class AccountController {
     }
 
     @PUT
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAccount(@PathParam("idAccount") String id) {
@@ -88,7 +86,6 @@ public class AccountController {
     }
 
     @PUT
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/deactivate/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deactivateAccount(@PathParam("idAccount") String id) {
@@ -97,7 +94,6 @@ public class AccountController {
     }
 
     @PUT
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/activate/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response activateAccount(@PathParam("idAccount") String id) {

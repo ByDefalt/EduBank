@@ -23,7 +23,6 @@ public class PersonalInformationController {
     }
 
     @GET
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPersonalInformation() {
         List<PersonalInformation> dtos = personalInformationBusiness.getAllPersonalInformation();

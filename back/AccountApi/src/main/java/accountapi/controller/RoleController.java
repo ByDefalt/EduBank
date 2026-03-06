@@ -25,7 +25,6 @@ public class RoleController {
     }
 
     @GET
-    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRoles() {
         List<Role> roles = roleBusiness.getAllRoles();
