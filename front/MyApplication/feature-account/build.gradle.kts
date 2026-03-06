@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.spotless)
+    jacoco
 }
 
 android {
@@ -27,6 +28,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+        }
+        debug {
+            enableAndroidTestCoverage = true
+            enableUnitTestCoverage = true
         }
     }
     compileOptions {

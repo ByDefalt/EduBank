@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    jacoco
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_11
