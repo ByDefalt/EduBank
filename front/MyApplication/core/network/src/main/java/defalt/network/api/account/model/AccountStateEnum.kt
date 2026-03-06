@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package defalt.network.api.bank.model
+package defalt.network.api.account.model
 
 
 import kotlinx.serialization.SerialName
@@ -23,22 +23,19 @@ import kotlinx.serialization.Serializable
 /**
  * 
  *
- * Values: ACTIVE,INACTIVE,BLOQUED,CLOSED
+ * Values: ACTIVE,INACTIVE,ENCLOSE
  */
 @Serializable
-enum class State(val value: kotlin.String) {
+enum class AccountStateEnum(val value: kotlin.String) {
 
-    @SerialName(value = "active")
-    ACTIVE("active"),
+    @SerialName(value = "ACTIVE")
+    ACTIVE("ACTIVE"),
 
-    @SerialName(value = "inactive")
-    INACTIVE("inactive"),
+    @SerialName(value = "INACTIVE")
+    INACTIVE("INACTIVE"),
 
-    @SerialName(value = "bloqued")
-    BLOQUED("bloqued"),
-
-    @SerialName(value = "closed")
-    CLOSED("closed");
+    @SerialName(value = "ENCLOSE")
+    ENCLOSE("ENCLOSE");
 
     /**
      * Override [toString()] to avoid using the enum variable name as the value, and instead use
@@ -53,12 +50,12 @@ enum class State(val value: kotlin.String) {
         /**
          * Converts the provided [data] to a [String] on success, null otherwise.
          */
-        fun encode(data: kotlin.Any?): kotlin.String? = if (data is State) "$data" else null
+        fun encode(data: kotlin.Any?): kotlin.String? = if (data is AccountStateEnum) "$data" else null
 
         /**
-         * Returns a valid [State] for [data], null otherwise.
+         * Returns a valid [AccountStateEnum] for [data], null otherwise.
          */
-        fun decode(data: kotlin.Any?): State? = data?.let {
+        fun decode(data: kotlin.Any?): AccountStateEnum? = data?.let {
           val normalizedData = "$it".lowercase()
           values().firstOrNull { value ->
             it == value || normalizedData == "$value".lowercase()

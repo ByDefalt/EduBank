@@ -3,6 +3,7 @@ package defalt.network.fake
 import defalt.domain.datasource.account.IAccountRemoteDataSource
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.account.AccountRegister
+import defalt.domain.entity.account.AccountStateEnum
 import defalt.domain.entity.account.PersonalInformation
 import defalt.domain.entity.account.PersonalInformationRegister
 import defalt.domain.entity.account.Role
@@ -39,22 +40,18 @@ class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
         val newAccount = Account(
             id             = "acc-${(accounts.size + 1).toString().padStart(4, '0')}",
             personalInfoId = newPersonalInfo.id,
-            roleId         = accountRegister.roleId,
-            state          = "inactive",
+            roleId         = FakeData.roles.find { it.name == accountRegister.role.value }?.id,
+            state          = AccountStateEnum.INACTIVE,
         )
         personalInformations.add(newPersonalInfo)
         accounts.add(newAccount)
         return NetworkResult.Success(newAccount)
     }
 
-    override suspend fun deleteAccount(id: String): NetworkResult<Boolean> =
-        if (accounts.removeIf { it.id == id }) NetworkResult.Success(true)
-        else NetworkResult.Error(code = 404, message = "Compte introuvable : $id")
-
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> {
         val index = accounts.indexOfFirst { it.id == id }
         return if (index != -1) {
-            accounts[index] = accounts[index].copy(state = "active")
+            accounts[index] = accounts[index].copy(state = AccountStateEnum.ACTIVE)
             NetworkResult.Success(true)
         } else NetworkResult.Error(code = 404, message = "Compte introuvable : $id")
     }
@@ -62,7 +59,7 @@ class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
     override suspend fun deactivateAccount(id: String): NetworkResult<Boolean> {
         val index = accounts.indexOfFirst { it.id == id }
         return if (index != -1) {
-            accounts[index] = accounts[index].copy(state = "inactive")
+            accounts[index] = accounts[index].copy(state = AccountStateEnum.INACTIVE)
             NetworkResult.Success(true)
         } else NetworkResult.Error(code = 404, message = "Compte introuvable : $id")
     }

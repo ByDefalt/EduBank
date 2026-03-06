@@ -10,24 +10,27 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.bank.model
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
+import defalt.network.api.bank.model.State
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
+ * 
  *
- *
- * @param id
- * @param overdraftLimit
- * @param state
+ * @param id 
+ * @param overdraftLimit 
+ * @param state 
  */
 @Serializable
-data class BankAccountParameter(
+
+data class BankAccountParameter (
 
     @SerialName(value = "id")
     val id: kotlin.Int? = null,
@@ -36,6 +39,10 @@ data class BankAccountParameter(
     val overdraftLimit: kotlin.Double? = null,
 
     @Contextual @SerialName(value = "state")
-    val state: State? = null,
+    val state: State? = null
 
-)
+) {
+
+
+}
+

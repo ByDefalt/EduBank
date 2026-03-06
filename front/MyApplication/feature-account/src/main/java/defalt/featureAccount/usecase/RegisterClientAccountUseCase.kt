@@ -3,6 +3,7 @@ package defalt.featureAccount.usecase
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.account.AccountRegister
 import defalt.domain.entity.account.PersonalInformationRegister
+import defalt.domain.entity.account.RoleEnum
 import defalt.domain.repository.service.IAccountRepository
 import defalt.utils.NetworkResult
 import defalt.utils.logger.Logger
@@ -22,7 +23,7 @@ class RegisterClientAccountUseCase(
         logger.debug("RegisterClientAccountUseCase")
         return repository.createAccount(
             AccountRegister(
-                roleId = 1,
+                role = RoleEnum.CUSTOMER,
                 password = password,
                 personalInfo = PersonalInformationRegister(
                     email = email,

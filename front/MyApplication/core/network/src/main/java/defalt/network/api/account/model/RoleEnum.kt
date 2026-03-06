@@ -10,16 +10,18 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.account.model
 
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
 /**
- *
+ * 
  *
  * Values: ADMIN,CUSTOMER
  */
@@ -30,8 +32,7 @@ enum class RoleEnum(val value: kotlin.String) {
     ADMIN("ADMIN"),
 
     @SerialName(value = "CUSTOMER")
-    CUSTOMER("CUSTOMER"),
-    ;
+    CUSTOMER("CUSTOMER");
 
     /**
      * Override [toString()] to avoid using the enum variable name as the value, and instead use
@@ -52,10 +53,12 @@ enum class RoleEnum(val value: kotlin.String) {
          * Returns a valid [RoleEnum] for [data], null otherwise.
          */
         fun decode(data: kotlin.Any?): RoleEnum? = data?.let {
-            val normalizedData = "$it".lowercase()
-            values().firstOrNull { value ->
-                it == value || normalizedData == "$value".lowercase()
-            }
+          val normalizedData = "$it".lowercase()
+          values().firstOrNull { value ->
+            it == value || normalizedData == "$value".lowercase()
+          }
         }
     }
 }
+
+

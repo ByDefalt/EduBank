@@ -15,7 +15,6 @@ interface IAccountRepository {
     suspend fun getAccounts(): NetworkResult<List<Account>>
     suspend fun getAccountById(id: String): NetworkResult<Account>
     suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account>
-    suspend fun deleteAccount(id: String): NetworkResult<Boolean>
     suspend fun activateAccount(id: String): NetworkResult<Boolean>
     suspend fun deactivateAccount(id: String): NetworkResult<Boolean>
 

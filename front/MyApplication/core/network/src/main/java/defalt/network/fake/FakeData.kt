@@ -1,6 +1,7 @@
 package defalt.network.fake
 
 import defalt.domain.entity.account.Account
+import defalt.domain.entity.account.AccountStateEnum
 import defalt.domain.entity.account.PersonalInformation
 import defalt.domain.entity.account.Role
 import defalt.domain.entity.account.TokenRequest
@@ -116,19 +117,19 @@ object FakeData {
             id             = ACCOUNT_ID_ADMIN,
             personalInfoId = PERSONAL_INFO_ID_ADMIN,
             roleId         = ROLE_ID_ADMIN,
-            state          = "active",
+            state          = AccountStateEnum.ACTIVE,
         ),
         Account(
             id             = ACCOUNT_ID_ALICE,
             personalInfoId = PERSONAL_INFO_ID_ALICE,
             roleId         = ROLE_ID_CUSTOMER,
-            state          = "active",
+            state          = AccountStateEnum.ACTIVE,
         ),
         Account(
             id             = ACCOUNT_ID_BOB,
             personalInfoId = PERSONAL_INFO_ID_BOB,
             roleId         = ROLE_ID_CUSTOMER,
-            state          = "inactive",
+            state          = AccountStateEnum.INACTIVE,
         ),
     )
 

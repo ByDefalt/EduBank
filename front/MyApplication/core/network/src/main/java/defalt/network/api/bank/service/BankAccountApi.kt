@@ -1,21 +1,26 @@
 package defalt.network.api.bank.service
 
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 import defalt.network.api.bank.model.BankAccount
 import defalt.network.api.bank.model.BankAccountCreateRequest
 import defalt.network.api.bank.model.BankAccountDetail
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.Response
-import retrofit2.http.*
+import defalt.network.api.bank.model.Error
 
 interface BankAccountApi {
     /**
      * GET admin/accounts/{account_id}/bank-accounts
      * [ADMIN] Comptes d&#39;un utilisateur
-     *
+     * 
      * Responses:
      *  - 200: Liste des comptes
      *
-     * @param accountId
+     * @param accountId 
      * @return [kotlin.collections.List<BankAccount>]
      */
     @GET("admin/accounts/{account_id}/bank-accounts")
@@ -24,13 +29,13 @@ interface BankAccountApi {
     /**
      * POST admin/accounts/{account_id}/bank-accounts
      * [ADMIN] Créer un compte
-     *
+     * 
      * Responses:
      *  - 201: Compte créé
      *  - 400: Requête invalide
      *
-     * @param accountId
-     * @param bankAccountCreateRequest
+     * @param accountId 
+     * @param bankAccountCreateRequest 
      * @return [BankAccountDetail]
      */
     @POST("admin/accounts/{account_id}/bank-accounts")
@@ -39,7 +44,7 @@ interface BankAccountApi {
     /**
      * GET admin/bank-accounts
      * [ADMIN] Liste tous les comptes
-     *
+     * 
      * Responses:
      *  - 200: Liste récupérée
      *
@@ -51,12 +56,12 @@ interface BankAccountApi {
     /**
      * DELETE admin/bank-accounts/{id}
      * [ADMIN] Supprimer un compte
-     *
+     * 
      * Responses:
      *  - 204: Compte supprimé
      *  - 404: Ressource non trouvée
      *
-     * @param id
+     * @param id 
      * @return [Unit]
      */
     @DELETE("admin/bank-accounts/{id}")
@@ -65,12 +70,12 @@ interface BankAccountApi {
     /**
      * GET admin/bank-accounts/{id}
      * [ADMIN] Détails d&#39;un compte
-     *
+     * 
      * Responses:
      *  - 200: Détails du compte
      *  - 404: Ressource non trouvée
      *
-     * @param id
+     * @param id 
      * @return [BankAccountDetail]
      */
     @GET("admin/bank-accounts/{id}")
@@ -79,7 +84,7 @@ interface BankAccountApi {
     /**
      * GET my-bank-accounts
      * [CLIENT] Mes comptes actifs
-     *
+     * 
      * Responses:
      *  - 200: Liste de mes comptes
      *
@@ -92,11 +97,11 @@ interface BankAccountApi {
     /**
      * GET my-bank-accounts/{id}/co-holders
      * [CLIENT] IDs des co-titulaires
-     *
+     * 
      * Responses:
      *  - 200: Liste des IDs
      *
-     * @param id
+     * @param id 
      * @return [kotlin.collections.List<kotlin.Int>]
      */
     @GET("my-bank-accounts/{id}/co-holders")
@@ -105,15 +110,16 @@ interface BankAccountApi {
     /**
      * GET my-bank-accounts/{id}
      * [CLIENT] Détails d&#39;un de mes comptes
-     *
+     * 
      * Responses:
      *  - 200: Détails du compte
      *  - 403: Accès interdit
      *  - 404: Ressource non trouvée
      *
-     * @param id
+     * @param id 
      * @return [BankAccountDetail]
      */
     @GET("my-bank-accounts/{id}")
     suspend fun myBankAccountsIdGet(@Path("id") id: kotlin.String): Response<BankAccountDetail>
+
 }
