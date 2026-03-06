@@ -1,6 +1,7 @@
 package accountapi.repository;
 
 import accountapi.entity.AccountEntity;
+import dto.accountapi.AccountStateEnum;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -32,7 +33,7 @@ public class AccountRepository {
             account.setId(rs.getString("id"));
             account.setPersonalInfoId(rs.getInt("personal_info_id"));
             account.setRoleId(rs.getInt("role_id"));
-            account.setState(rs.getString("state"));
+            account.setState(AccountStateEnum.valueOf(rs.getString("state")));
             return account;
         });
     }
@@ -47,7 +48,7 @@ public class AccountRepository {
                 account.setId(rs.getString("id"));
                 account.setPersonalInfoId(rs.getInt("personal_info_id"));
                 account.setRoleId(rs.getInt("role_id"));
-                account.setState(rs.getString("state"));
+                account.setState(AccountStateEnum.valueOf(rs.getString("state")));
                 return account;
             });
         }catch (EmptyResultDataAccessException e) {
@@ -81,7 +82,7 @@ public class AccountRepository {
             account.setPersonalInfoId(rs.getInt("personal_info_id"));
             account.setRoleId(rs.getInt("role_id"));
             account.setPassword(rs.getString("password"));
-            account.setState(rs.getString("state"));
+            account.setState(AccountStateEnum.valueOf(rs.getString("state")));
             return account;
         });
     }

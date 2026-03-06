@@ -161,8 +161,8 @@ paths:
                 $ref: '#/components/schemas/Account'
         '404':
           description: Compte non trouvé
-    delete:
-      summary: Supprimer un compte (Admin uniquement)
+    put:
+      summary: Supprimer un compte (Admin uniquement, par le changement d'etat du compte à ENCLOSE)
       tags: [ Account ]
       security:
         - bearerAuth: [ ]
@@ -385,6 +385,13 @@ components:
           type: string
           example: "0123456789"
 
+    AccountStateEnum:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+        - ENCLOSE
+
     Account:
       type: object
       properties:
@@ -397,7 +404,7 @@ components:
           type: integer
           description: ID faisant référence à Role
         state:
-          type: string
+          $ref: '#/components/schemas/AccountStateEnum'
 
     AccountRegister:
       type: object
