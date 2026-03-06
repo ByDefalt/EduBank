@@ -98,6 +98,10 @@ class AccountBusinessTest {
         accountRegister.setRole(RoleEnum.CUSTOMER);
         accountRegister.setPersonalInfo(personalInfoRegister);
 
+        Role role = new Role();
+        role.setId(2);
+        role.setName("CUSTOMER");
+
         PersonalInformation createdPersonalInfo = new PersonalInformation();
         createdPersonalInfo.setId(100);
 
@@ -108,14 +112,15 @@ class AccountBusinessTest {
         savedEntity.setPersonalInfoId(100);
         savedEntity.setState(AccountStateEnum.INACTIVE);
 
-        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
+        when(roleBusiness.getRoleByName("CUSTOMER")).thenReturn(role);
+        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.register(any(AccountEntity.class))).thenReturn(savedEntity);
 
         Account accountResponse = accountBusiness.createAccount(accountRegister);
 
         assertEquals(savedEntity.getId(), accountResponse.getId());
-        assertEquals(savedEntity.getState(), accountResponse.getState());
+        assertEquals(savedEntity.getState().name(), accountResponse.getState().name());
     }
 
     @Test
@@ -130,14 +135,21 @@ class AccountBusinessTest {
         accountRegister.setRole(RoleEnum.CUSTOMER);
         accountRegister.setPersonalInfo(personalInfoRegister);
 
+        Role role = new Role();
+        role.setId(2);
+        role.setName("CUSTOMER");
+
         PersonalInformation createdPersonalInfo = new PersonalInformation();
         createdPersonalInfo.setId(100);
 
-        when(personalInformationBusiness.createPersonalInformation(any())).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
+        when(roleBusiness.getRoleByName("CUSTOMER")).thenReturn(role);
+        when(personalInformationBusiness.createPersonalInformation(any())).thenReturn(createdPersonalInfo);
         when(accountRepository.register(any(AccountEntity.class))).thenReturn(null);
 
         assertThrows(FunctionalException.class, () -> accountBusiness.createAccount(accountRegister));
+
+        verify(personalInformationBusiness).deletePersonalInformation(100);
     }
 
     @Test
