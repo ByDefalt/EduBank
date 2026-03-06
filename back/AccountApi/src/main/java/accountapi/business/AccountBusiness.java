@@ -64,22 +64,31 @@ public class AccountBusiness {
             }
         }
 
-        PersonalInformation pInfo = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo());
-        Integer pif = pInfo.getId();
+        Role roleToRegister = roleBusiness.getRoleByName(account.getRole().name());
 
-        if (pif == null) {
+        if (roleToRegister == null) {
+            throw new FunctionalException("400", "Le Role n'existe pas : " + account.getRole().name());
+        }
+
+        PersonalInformation pInfo = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo());
+
+        if (pInfo == null) {
             throw new FunctionalException("400", "Impossible de créer les informations personnelles du compte");
         }
 
+        Integer pif = pInfo.getId();
+
         AccountEntity accountToRegister = new AccountEntity();
         accountToRegister.setId(idGenerated);
-        accountToRegister.setRoleId(account.getRoleId());
+        accountToRegister.setRoleId(roleToRegister.getId());
         accountToRegister.setState(AccountStateEnum.INACTIVE);
         accountToRegister.setPersonalInfoId(pif);
         accountToRegister.setPassword(account.getPassword());
 
         AccountEntity registered = accountRepository.register(accountToRegister);
         if (registered == null) {
+            // Delete personal information lorsque la création du compte a échoué (évite d'avoir des personal info sauvage)
+            personalInformationBusiness.deletePersonalInformation(pif);
             throw new FunctionalException("400", "Impossible de créer le compte");
         }
         return AccountMapper.toDto(registered);

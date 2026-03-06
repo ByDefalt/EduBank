@@ -36,4 +36,12 @@ public class RoleBusiness {
         }
         return RoleMapper.toDto(roleEntity);
     }
+
+    public Role getRoleByName(String name) {
+        RoleEntity roleEntity = roleRepository.findByName(name);
+        if (roleEntity == null) {
+            throw new NotFoundException("404", "Rôle non trouvé avec l'ID : " + name);
+        }
+        return RoleMapper.toDto(roleEntity);
+    }
 }

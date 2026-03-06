@@ -49,6 +49,27 @@ paths:
         '404':
           description: Rôle non trouvé
 
+  /roles/name/{id}:
+    get:
+      summary: Récupérer le rôle associé à un compte
+      tags: [ Role ]
+      parameters:
+        - name: name
+          in: path
+          description: role du compte
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rôle trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '404':
+          description: Compte ou Rôle non trouvé
+
   /personalInformation:
     get:
       summary: Liste toutes les informations personnelles (Admin uniquement)
@@ -335,6 +356,7 @@ components:
       enum:
         - ADMIN
         - CUSTOMER
+      example: "CUSTOMER"
 
     Role:
       type: object
@@ -410,15 +432,13 @@ components:
       type: object
       required:
         - personal_info
-        - role_id
+        - role
         - password
       properties:
         personal_info:
           $ref: '#/components/schemas/PersonalInformationRegister'
-        role_id:
-          type: integer
-          example: 2
-          description: "ID du rôle existant (ex: 1 pour Admin, 2 pour Customer)"
+        role:
+          $ref: '#/components/schemas/RoleEnum'
         password:
           type: string
           example: "123456789"
