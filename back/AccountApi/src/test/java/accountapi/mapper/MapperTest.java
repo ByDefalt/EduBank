@@ -3,10 +3,7 @@ package accountapi.mapper;
 import accountapi.entity.AccountEntity;
 import accountapi.entity.PersonalInformationEntity;
 import accountapi.entity.RoleEntity;
-import dto.accountapi.Account;
-import dto.accountapi.PersonalInformation;
-import dto.accountapi.PersonalInformationRegister;
-import dto.accountapi.Role;
+import dto.accountapi.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,14 +16,14 @@ class MapperTest {
         entity.setId("ACC123456789");
         entity.setPersonalInfoId(100);
         entity.setRoleId(2);
-        entity.setState("ACTIVE");
+        entity.setState(AccountStateEnum.ACTIVE);
 
         Account dto = AccountMapper.toDto(entity);
 
         assertEquals("ACC123456789", dto.getId());
         assertEquals(100, dto.getPersonalInfoId());
         assertEquals(2, dto.getRoleId());
-        assertEquals("ACTIVE", dto.getState());
+        assertEquals("ACTIVE", dto.getState().name());
     }
 
     @Test
@@ -40,14 +37,14 @@ class MapperTest {
         dto.setId("ACC123456789");
         dto.setPersonalInfoId(100);
         dto.setRoleId(2);
-        dto.setState("INACTIVE");
+        dto.setState(AccountStateEnum.INACTIVE);
 
         AccountEntity entity = AccountMapper.toEntity(dto);
 
         assertEquals("ACC123456789", entity.getId());
         assertEquals(100, entity.getPersonalInfoId());
         assertEquals(2, entity.getRoleId());
-        assertEquals("INACTIVE", entity.getState());
+        assertEquals("INACTIVE", entity.getState().name());
     }
 
     @Test
