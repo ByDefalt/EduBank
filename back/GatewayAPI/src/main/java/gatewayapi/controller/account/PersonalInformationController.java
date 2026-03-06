@@ -1,6 +1,6 @@
 package gatewayapi.controller.account;
 
-import gatewayapi.client.AccountClient;
+import gatewayapi.business.account.PersonalInformationBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -12,25 +12,24 @@ import org.springframework.stereotype.Controller;
 @Path("/personalInformation")
 public class PersonalInformationController {
 
-    private AccountClient accountClient;
+    private final PersonalInformationBusiness personalInformationBusiness;
     private final FeignExecutor feignExecutor;
 
-    @Inject
-    public PersonalInformationController(AccountClient accountClient, FeignExecutor feignExecutor) {
-        this.accountClient = accountClient;
+    public PersonalInformationController(PersonalInformationBusiness personalInformationBusiness, FeignExecutor feignExecutor) {
+        this.personalInformationBusiness = personalInformationBusiness;
         this.feignExecutor = feignExecutor;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPersonalInformation() {
-        return feignExecutor.wrap(accountClient::getAllPersonalInformation);
+        return feignExecutor.wrap(personalInformationBusiness::getAllPersonalInformation);
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonalInformationById(@PathParam("id") Integer id) {
-        return feignExecutor.wrap(() -> accountClient.getPersonalInformationById(id));
+        return feignExecutor.wrap(() -> personalInformationBusiness.getPersonalInformationById(id));
     }
 }

@@ -1,6 +1,6 @@
 package gatewayapi.controller.account;
 
-import gatewayapi.client.AccountClient;
+import gatewayapi.business.account.RoleBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -15,25 +15,24 @@ import org.springframework.stereotype.Controller;
 @Path("/roles")
 public class RoleController {
 
-    private AccountClient accountClient;
+    private final RoleBusiness roleBusiness;
     private final FeignExecutor feignExecutor;
 
-    @Inject
-    public RoleController(AccountClient accountClient, FeignExecutor feignExecutor) {
-        this.accountClient = accountClient;
+    public RoleController(RoleBusiness roleBusiness, FeignExecutor feignExecutor) {
+        this.roleBusiness = roleBusiness;
         this.feignExecutor = feignExecutor;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRoles() {
-        return feignExecutor.wrap(() -> accountClient.getAllRoles());
+        return feignExecutor.wrap(roleBusiness::getAllRoles);
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {
-        return feignExecutor.wrap(() -> accountClient.getRoleById(id));
+        return feignExecutor.wrap(() -> roleBusiness.getRoleById(id));
     }
 }
