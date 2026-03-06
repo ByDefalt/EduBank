@@ -3,7 +3,7 @@ package com.example.clientAPI.entity;
 public class BankAccountPivotEntity {
 
     private String bankAccountId;  // FK vers BankAccount
-    private Integer accountId;      // FK vers Account
+    private String accountId;      // FK vers Account (VARCHAR(50))
 
     // ----------------- Getters & Setters -----------------
 
@@ -15,11 +15,11 @@ public class BankAccountPivotEntity {
         this.bankAccountId = bankAccountId;
     }
 
-    public Integer getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Integer accountId) {
+    public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 
@@ -28,7 +28,7 @@ public class BankAccountPivotEntity {
     public String toString() {
         return "BankAccountPivotEntity{" +
                 "bankAccountId='" + bankAccountId + '\'' +
-                ", accountId=" + accountId +
+                ", accountId='" + accountId + '\'' +
                 '}';
     }
 }

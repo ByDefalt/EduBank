@@ -7,7 +7,7 @@ import feign.RequestLine;
 
 public interface AccountClient {
 
-    @RequestLine("POST /account/validate")
+    @RequestLine("POST /accounts/validate")
     @Headers("Content-Type: application/json")
     TokenResponse validateToken(TokenRequest tokenRequest);
 }

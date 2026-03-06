@@ -1,8 +1,10 @@
 package com.example.clientAPI.repository;
 
-import com.example.clientAPI.entity.BankAccountParameterEntity;
+import dto.bankapi.BankAccountParameter;
 import dto.bankapi.State;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -18,7 +20,6 @@ public class BankAccountParameterRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ============== BankAccountParameter SQL ==============
     private static final String SQL_GET_ALL_PARAMETERS =
             "SELECT id, overdraft_limit, state FROM BankAccountParameter";
 
@@ -29,10 +30,15 @@ public class BankAccountParameterRepository {
     private static final String SQL_UPDATE_STATE =
             "UPDATE BankAccountParameter SET state = :state WHERE id = :parameter_id";
 
-    // ============== BankAccountParameter Methods ==============
-    public List<BankAccountParameterEntity> getAllParameters() {
+    private static final String SQL_UPDATE_OVERDRAFT_LIMIT =
+            "UPDATE BankAccountParameter SET overdraft_limit = :overdraft_limit WHERE id = :parameter_id";
+
+    private static final String SQL_DELETE_PARAMETER =
+            "DELETE FROM BankAccountParameter WHERE id = :parameter_id";
+
+    public List<BankAccountParameter> getAllParameters() {
         return jdbcTemplate.query(SQL_GET_ALL_PARAMETERS, (rs, rowNum) -> {
-            BankAccountParameterEntity param = new BankAccountParameterEntity();
+            BankAccountParameter param = new BankAccountParameter();
             param.setId(rs.getInt("id"));
             param.setOverdraftLimit(rs.getDouble("overdraft_limit"));
             param.setState(State.fromValue(rs.getString("state")));
@@ -40,11 +46,19 @@ public class BankAccountParameterRepository {
         });
     }
 
-    public BankAccountParameterEntity createParameter(BankAccountParameterEntity parameter) {
+    public BankAccountParameter createParameter(BankAccountParameter parameter) {
         Map<String, Object> params = new HashMap<>();
         params.put("overdraft_limit", parameter.getOverdraftLimit());
-        params.put("state", parameter.getState());
-        jdbcTemplate.update(SQL_INSERT_PARAMETER, params);
+        params.put("state", parameter.getState().toString());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(SQL_INSERT_PARAMETER, new org.springframework.jdbc.core.namedparam.MapSqlParameterSource(params), keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            parameter.setId(keyHolder.getKey().intValue());
+        }
+
         return parameter;
     }
 
@@ -54,5 +68,17 @@ public class BankAccountParameterRepository {
         params.put("state", state);
         jdbcTemplate.update(SQL_UPDATE_STATE, params);
     }
-}
 
+    public void updateOverdraftLimit(Integer parameterId, Double overdraftLimit) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("parameter_id", parameterId);
+        params.put("overdraft_limit", overdraftLimit);
+        jdbcTemplate.update(SQL_UPDATE_OVERDRAFT_LIMIT, params);
+    }
+
+    public void deleteParameter(Integer parameterId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("parameter_id", parameterId);
+        jdbcTemplate.update(SQL_DELETE_PARAMETER, params);
+    }
+}

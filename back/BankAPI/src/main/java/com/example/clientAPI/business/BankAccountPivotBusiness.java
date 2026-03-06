@@ -1,6 +1,9 @@
 package com.example.clientAPI.business;
 
+import com.example.clientAPI.entity.BankAccountPivotEntity;
+import com.example.clientAPI.mapper.BankAccountPivotMapper;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
+import dto.bankapi.BankAccountPivot;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,30 +17,31 @@ public class BankAccountPivotBusiness {
         this.bankAccountPivotRepository = bankAccountPivotRepository;
     }
 
-    // ============== BankAccountPivot Business Logic ==============
-
-    public void linkAccountToBankAccount(String bankAccountId, Integer accountId) {
-        bankAccountPivotRepository.createPivot(bankAccountId, accountId);
+    public void createLink(BankAccountPivotEntity entity) {
+        BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
+        bankAccountPivotRepository.createPivot(dto);
     }
 
-    public void unlinkAccountFromBankAccount(String bankAccountId, Integer accountId) {
-        bankAccountPivotRepository.deletePivot(bankAccountId, accountId);
+    public void deleteLink(BankAccountPivotEntity entity) {
+        BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
+        bankAccountPivotRepository.deletePivot(dto);
     }
 
-    public void unlinkAllAccountsFromBankAccount(String bankAccountId) {
+    public void deleteAllByBankAccount(String bankAccountId) {
         bankAccountPivotRepository.deleteAllPivotsByBankAccount(bankAccountId);
     }
 
-    public void unlinkAllBankAccountsFromAccount(Integer accountId) {
+    public void deleteAllByAccount(String accountId) {
         bankAccountPivotRepository.deleteAllPivotsByAccount(accountId);
     }
 
-    public List<Integer> getAccountsLinkedToBankAccount(String bankAccountId) {
-        return bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
+    public List<BankAccountPivotEntity> getLinksByBankAccount(String bankAccountId) {
+        List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
+        return BankAccountPivotMapper.accountIdsToEntities(bankAccountId, accountIds);
     }
 
-    public List<String> getBankAccountsLinkedToAccount(Integer accountId) {
-        return bankAccountPivotRepository.getBankAccountsByAccount(accountId);
+    public List<BankAccountPivotEntity> getLinksByAccount(String accountId) {
+        List<String> bankAccountIds = bankAccountPivotRepository.getBankAccountsByAccount(accountId);
+        return BankAccountPivotMapper.bankAccountIdsToEntities(accountId, bankAccountIds);
     }
 }
-

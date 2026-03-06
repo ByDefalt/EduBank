@@ -13,6 +13,8 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
+
+
 import java.lang.reflect.Method;
 
 @Provider
@@ -24,7 +26,7 @@ public class AuthenticationRequiredImpl implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
-
+    @Autowired
     public AuthenticationRequiredImpl(AccountClient accountClient) {
         this.accountClient = accountClient;
     }
@@ -40,28 +42,28 @@ public class AuthenticationRequiredImpl implements ContainerRequestFilter {
         String token = authHeader.substring("Bearer ".length()).trim();
 
         try {
-            // recuperee l'annotation sur la methode
+
             Method method = resourceInfo.getResourceMethod();
-            // obtenir le role requis depuis l'annotation appelee
+
             AuthenticationRequired annotation = method.getAnnotation(AuthenticationRequired.class);
 
             if (annotation != null) {
-                // recuperation du role via la value de l'annotation
                 RoleEnum requiredRole = annotation.value();
 
                 TokenRequest tokenRequest = new TokenRequest();
                 tokenRequest.setJwt(token);
                 TokenResponse tokenResponse = accountClient.validateToken(tokenRequest);
+
                 if (tokenResponse == null) {
                     containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).entity("token expiree ou invalide").build());
                     return;
                 }
 
-                // Stocker l'ID utilisateur et le rôle dans le contexte
+
                 containerRequestContext.setProperty("userId", tokenResponse.getId());
                 containerRequestContext.setProperty("userRole", tokenResponse.getRole());
 
-                // si le role correspond au role requis
+
                 if (requiredRole.toString().equals(tokenResponse.getRole())) {
                     return;
                 } else if (tokenResponse.getRole().equals(RoleEnum.ADMIN.toString())) {

@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Profile;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@Profile("TEST")
 public class FeignConfig {
 
     private okhttp3.OkHttpClient getOkHttpClient() {

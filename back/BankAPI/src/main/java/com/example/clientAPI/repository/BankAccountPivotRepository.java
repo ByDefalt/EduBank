@@ -1,5 +1,6 @@
 package com.example.clientAPI.repository;
 
+import dto.bankapi.BankAccountPivot;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,6 @@ public class BankAccountPivotRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ============== BankAccountPivot SQL ==============
     private static final String SQL_INSERT_PIVOT =
             "INSERT INTO BankAccountPivot (bank_account_id, account_id) " +
                     "VALUES (:bank_account_id, :account_id)";
@@ -36,19 +36,17 @@ public class BankAccountPivotRepository {
     private static final String SQL_GET_BANK_ACCOUNTS_BY_ACCOUNT =
             "SELECT bank_account_id FROM BankAccountPivot WHERE account_id = :account_id";
 
-    // ============== BankAccountPivot Methods ==============
-
-    public void createPivot(String bankAccountId, Integer accountId) {
+    public void createPivot(BankAccountPivot dto) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        params.put("account_id", accountId);
+        params.put("bank_account_id", dto.getBankAccountId());
+        params.put("account_id", dto.getAccountId());
         jdbcTemplate.update(SQL_INSERT_PIVOT, params);
     }
 
-    public void deletePivot(String bankAccountId, Integer accountId) {
+    public void deletePivot(BankAccountPivot dto) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", bankAccountId);
-        params.put("account_id", accountId);
+        params.put("bank_account_id", dto.getBankAccountId());
+        params.put("account_id", dto.getAccountId());
         jdbcTemplate.update(SQL_DELETE_PIVOT, params);
     }
 
@@ -58,22 +56,21 @@ public class BankAccountPivotRepository {
         jdbcTemplate.update(SQL_DELETE_ALL_PIVOTS_BY_BANK_ACCOUNT, params);
     }
 
-    public void deleteAllPivotsByAccount(Integer accountId) {
+    public void deleteAllPivotsByAccount(String accountId) {
         Map<String, Object> params = new HashMap<>();
         params.put("account_id", accountId);
         jdbcTemplate.update(SQL_DELETE_ALL_PIVOTS_BY_ACCOUNT, params);
     }
 
-    public List<Integer> getAccountsByBankAccount(String bankAccountId) {
+    public List<String> getAccountsByBankAccount(String bankAccountId) {
         Map<String, Object> params = new HashMap<>();
         params.put("bank_account_id", bankAccountId);
-        return jdbcTemplate.queryForList(SQL_GET_ACCOUNTS_BY_BANK_ACCOUNT, params, Integer.class);
+        return jdbcTemplate.queryForList(SQL_GET_ACCOUNTS_BY_BANK_ACCOUNT, params, String.class);
     }
 
-    public List<String> getBankAccountsByAccount(Integer accountId) {
+    public List<String> getBankAccountsByAccount(String accountId) {
         Map<String, Object> params = new HashMap<>();
         params.put("account_id", accountId);
         return jdbcTemplate.queryForList(SQL_GET_BANK_ACCOUNTS_BY_ACCOUNT, params, String.class);
     }
 }
-
