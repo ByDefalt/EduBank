@@ -18,7 +18,7 @@ suspend fun <T> safeApiCall(
         } else {
             NetworkResult.Error(
                 response.code(),
-                response.errorBody()?.string(),
+                response.errorBody()?.string() ?: "Unknown error",
             )
         }
     } catch (e: Throwable) {

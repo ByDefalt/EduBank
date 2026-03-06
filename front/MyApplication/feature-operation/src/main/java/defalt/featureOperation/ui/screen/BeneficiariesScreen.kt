@@ -300,5 +300,5 @@ fun BeneficiariesPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun BeneficiariesPreviewError() {
-    BeneficiariesContent(uiState = UiState.Error("Impossible de charger les bénéficiaires"))
+    BeneficiariesContent(uiState = UiState.Error(message = "Impossible de charger les bénéficiaires"))
 }

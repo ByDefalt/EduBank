@@ -228,5 +228,5 @@ fun CreateTransferDebitScreenPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun CreateTransferDebitScreenPreviewError() {
-    CreateTransferDebitContent(uiState = UiState.Error("Impossible de charger les comptes"))
+    CreateTransferDebitContent(uiState = UiState.Error(message = "Impossible de charger les comptes"))
 }

@@ -295,6 +295,6 @@ fun ListAccountOverviewPreviewLoading() {
 @Composable
 fun ListAccountOverviewPreviewError() {
     ListAccountOverviewContent(
-        uiState = UiState.Error("Impossible de charger les comptes"),
+        uiState = UiState.Error(message = "Impossible de charger les comptes"),
     )
 }

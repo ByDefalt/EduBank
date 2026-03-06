@@ -379,5 +379,5 @@ fun CreateTransferReceiverScreenPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun CreateTransferReceiverScreenPreviewError() {
-    CreateTransferReceiverContent(uiState = UiState.Error("Erreur de chargement"))
+    CreateTransferReceiverContent(uiState = UiState.Error(message = "Erreur de chargement"))
 }

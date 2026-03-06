@@ -37,6 +37,7 @@ fun <T> UiStateHandler(
     onSuccess: @Composable (T) -> Unit,
 ) {
     when (uiState) {
+        is UiState.Idle -> Unit
         is UiState.Loading -> LoadingContent(
             modifier = modifier,
             color = loadingColor,

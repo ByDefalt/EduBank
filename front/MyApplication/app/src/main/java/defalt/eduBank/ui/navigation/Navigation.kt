@@ -13,7 +13,7 @@ import defalt.ui.utils.Routes
 fun ArkeoNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Routes.Bank,
+        startDestination = Routes.Core.Home,
     ) {
         homeGraph(
             onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
@@ -22,6 +22,8 @@ fun ArkeoNavHost(navController: NavHostController) {
         )
         accountGraph(
             onBackToHome = { navController.popBackStack() },
+            onRegisterSuccess = { navController.navigate(Routes.Core.Home) },
+            onLoginSuccess = { navController.navigate(Routes.Bank.Home) },
         )
         offerGraph(
             onBack = { navController.popBackStack() },

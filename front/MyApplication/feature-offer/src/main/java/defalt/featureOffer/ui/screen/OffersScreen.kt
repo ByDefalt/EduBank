@@ -190,5 +190,5 @@ fun OffersScreenPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun OffersScreenPreviewError() {
-    OffersContent(uiState = UiState.Error("Impossible de charger les offres"))
+    OffersContent(uiState = UiState.Error(message = "Impossible de charger les offres"))
 }

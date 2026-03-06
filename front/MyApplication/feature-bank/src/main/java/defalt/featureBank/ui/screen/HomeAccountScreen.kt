@@ -333,5 +333,5 @@ fun HomeAccountPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun HomeAccountPreviewError() {
-    HomeAccountContent(uiState = UiState.Error("Impossible de charger les données"))
+    HomeAccountContent(uiState = UiState.Error(message = "Impossible de charger les données"))
 }

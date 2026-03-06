@@ -507,5 +507,5 @@ fun AccountDetailsPreviewLoading() {
 @Preview(showBackground = true, name = "State - Error")
 @Composable
 fun AccountDetailsPreviewError() {
-    AccountDetailsContent(uiState = UiState.Error("Impossible de charger le compte"))
+    AccountDetailsContent(uiState = UiState.Error(message = "Impossible de charger le compte"))
 }
