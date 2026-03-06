@@ -26,6 +26,11 @@ android {
             "GATEWAY_URL",
             "\"${localProperties.getProperty("GATEWAY_URL", "")}\"",
         )
+        buildConfigField(
+            "Boolean",
+            "FAKE_DATA_IS_ACTIVE",
+            localProperties.getProperty("FAKE_DATA_IS_ACTIVE", ""),
+        )
     }
     buildFeatures {
         buildConfig = true

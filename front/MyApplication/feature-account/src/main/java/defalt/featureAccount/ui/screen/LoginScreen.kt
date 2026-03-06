@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +37,6 @@ import defalt.ui.component.ArkeoInput
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
-
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun LoginScreen(
@@ -46,21 +46,26 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) onLoginSuccess()
+    }
+
     LoginContent(
-        uiState = uiState,
         onLogin = viewModel::login,
+        errorMessage = (uiState as? UiState.Error)?.message,
+        isLoading = uiState is UiState.Loading,
         onBackToHome = onBackToHome,
-        onLoginSuccess = onLoginSuccess,
     )
 }
-
+//alice.dupont@mail.fr
+//Alice1234!
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun LoginContent(
-    uiState: UiState<Unit> = UiState.Success(Unit),
     onLogin: (String, String) -> Unit = { _, _ -> },
     onBackToHome: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {},
+    errorMessage: String? = null,
+    isLoading: Boolean = false,
 ) {
     var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -128,9 +133,18 @@ internal fun LoginContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                if (errorMessage != null) {
+                    Text(
+                        text = errorMessage,
+                        color = CustomColor.ArkeoRed,
+                        fontSize = 13.sp,
+                    )
+                }
+
                 ArkeoButton(
                     text = "ACCÉDER À MES COMPTES",
                     onClick = { onLogin(login, password) },
+                    enabled = !isLoading,
                 )
             }
         }
