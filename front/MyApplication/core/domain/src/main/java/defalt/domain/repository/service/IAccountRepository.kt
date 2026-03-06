@@ -21,6 +21,8 @@ interface IAccountRepository {
 
     // --- AUTHENTIFICATION ---
     suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest>
+    suspend fun signOut(): NetworkResult<Boolean>
+    suspend fun getSavedToken(): NetworkResult<TokenRequest>
     suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse>
 
     // --- RÔLES ---

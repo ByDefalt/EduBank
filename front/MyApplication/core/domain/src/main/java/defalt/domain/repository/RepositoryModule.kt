@@ -1,5 +1,6 @@
 package defalt.domain.repository
 
+import defalt.domain.datasource.account.IAccountLocalDataSource
 import defalt.domain.datasource.account.IAccountRemoteDataSource
 import defalt.domain.datasource.bank.IBankRemoteDataSource
 import defalt.domain.datasource.offer.IOfferRemoteDataSource
@@ -15,7 +16,7 @@ import defalt.domain.repository.service.IOperationRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<IAccountRepository> { AccountRepository(get<IAccountRemoteDataSource>()) }
+    single<IAccountRepository> { AccountRepository(get<IAccountRemoteDataSource>(), get<IAccountLocalDataSource>()) }
     single<IBankRepository> { BankRepository(get<IBankRemoteDataSource>()) }
     single<IOfferRepository> { OfferRepository(get<IOfferRemoteDataSource>()) }
     single<IOperationRepository> { OperationRepository(get<IOperationRemoteDataSource>()) }
