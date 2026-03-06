@@ -11,7 +11,7 @@ public class RoleMapper {
         }
 
         Role dto = new Role();
-        // on ne renvoie pas l'id dans le dto
+        dto.setId(entity.getId());
         dto.setName(entity.getName());
 
         return dto;

@@ -62,7 +62,7 @@ public class AccountRepository {
         params.put("personal_info_id", account.getPersonalInfoId());
         params.put("role_id", account.getRoleId());
         params.put("password", account.getPassword());
-        params.put("state", account.getState());
+        params.put("state", account.getState().name());
 
         jdbcTemplate.update(SQL_INSERT, params);
 
@@ -97,7 +97,7 @@ public class AccountRepository {
     public boolean updateState(AccountEntity accountEntity){
         Map<String, Object> params = new HashMap<>();
         params.put("id", accountEntity.getId());
-        params.put("state", accountEntity.getState());
+        params.put("state", accountEntity.getState().name());
 
         return jdbcTemplate.update(SQL_UPDATE_STATE, params) > 0;
     }

@@ -19,6 +19,7 @@ public class RoleRepository {
 
     private static final String SQL_FIND_ALL = "SELECT id, name FROM Role";
     private static final String SQL_FIND_BY_ID = "SELECT id, name FROM Role WHERE id = :id";
+    private static final String SQL_FIND_BY_NAME = "SELECT id, name FROM Role WHERE name = :name";
 
     public List<RoleEntity> findAll() {
         return jdbcTemplate.query(SQL_FIND_ALL, (rs, rowNum) -> {
@@ -33,6 +34,17 @@ public class RoleRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbcTemplate.queryForObject(SQL_FIND_BY_ID, params, (rs, rowNum) -> {
+            RoleEntity role = new RoleEntity();
+            role.setId(rs.getInt("id"));
+            role.setName(rs.getString("name"));
+            return role;
+        });
+    }
+
+    public RoleEntity findByName(String name) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        return jdbcTemplate.queryForObject(SQL_FIND_BY_NAME, params, (rs, rowNum) -> {
             RoleEntity role = new RoleEntity();
             role.setId(rs.getInt("id"));
             role.setName(rs.getString("name"));

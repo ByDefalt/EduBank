@@ -41,7 +41,7 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         when(accountRepository.findAll()).thenReturn(java.util.Collections.singletonList(accountEntity));
 
@@ -67,7 +67,7 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -95,8 +95,12 @@ class AccountBusinessTest {
 
         AccountRegister accountRegister = new AccountRegister();
         accountRegister.setPassword("SecureP@ssw0rd123");
-        accountRegister.setRoleId(2);
+        accountRegister.setRole(RoleEnum.CUSTOMER);
         accountRegister.setPersonalInfo(personalInfoRegister);
+
+        Role role = new Role();
+        role.setId(2);
+        role.setName("CUSTOMER");
 
         PersonalInformation createdPersonalInfo = new PersonalInformation();
         createdPersonalInfo.setId(100);
@@ -106,16 +110,17 @@ class AccountBusinessTest {
         savedEntity.setPassword("SecureP@ssw0rd123");
         savedEntity.setRoleId(2);
         savedEntity.setPersonalInfoId(100);
-        savedEntity.setState("INACTIVE");
+        savedEntity.setState(AccountStateEnum.INACTIVE);
 
-        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
+        when(roleBusiness.getRoleByName("CUSTOMER")).thenReturn(role);
+        when(personalInformationBusiness.createPersonalInformation(any(PersonalInformationRegister.class))).thenReturn(createdPersonalInfo);
         when(accountRepository.register(any(AccountEntity.class))).thenReturn(savedEntity);
 
         Account accountResponse = accountBusiness.createAccount(accountRegister);
 
         assertEquals(savedEntity.getId(), accountResponse.getId());
-        assertEquals(savedEntity.getState(), accountResponse.getState());
+        assertEquals(savedEntity.getState().name(), accountResponse.getState().name());
     }
 
     @Test
@@ -127,17 +132,24 @@ class AccountBusinessTest {
 
         AccountRegister accountRegister = new AccountRegister();
         accountRegister.setPassword("SecureP@ssw0rd123");
-        accountRegister.setRoleId(2);
+        accountRegister.setRole(RoleEnum.CUSTOMER);
         accountRegister.setPersonalInfo(personalInfoRegister);
+
+        Role role = new Role();
+        role.setId(2);
+        role.setName("CUSTOMER");
 
         PersonalInformation createdPersonalInfo = new PersonalInformation();
         createdPersonalInfo.setId(100);
 
-        when(personalInformationBusiness.createPersonalInformation(any())).thenReturn(createdPersonalInfo);
         when(accountRepository.findById(anyString())).thenReturn(null);
+        when(roleBusiness.getRoleByName("CUSTOMER")).thenReturn(role);
+        when(personalInformationBusiness.createPersonalInformation(any())).thenReturn(createdPersonalInfo);
         when(accountRepository.register(any(AccountEntity.class))).thenReturn(null);
 
         assertThrows(FunctionalException.class, () -> accountBusiness.createAccount(accountRegister));
+
+        verify(personalInformationBusiness).deletePersonalInformation(100);
     }
 
     @Test
@@ -147,7 +159,7 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -174,7 +186,7 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         Role role = new Role();
         role.setId(2);
@@ -213,7 +225,7 @@ class AccountBusinessTest {
         accountEntity.setPassword("SecureP@ssw0rd123");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("INACTIVE");
+        accountEntity.setState(AccountStateEnum.INACTIVE);
 
         when(accountRepository.getAccountByIdAndPassword("ACC123456789", "SecureP@ssw0rd123"))
                 .thenReturn(accountEntity);
@@ -291,7 +303,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -314,7 +326,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("INACTIVE");
+        accountEntity.setState(AccountStateEnum.INACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -327,7 +339,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ENCLOSE");
+        accountEntity.setState(AccountStateEnum.ENCLOSE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -340,7 +352,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("INACTIVE");
+        accountEntity.setState(AccountStateEnum.INACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -363,7 +375,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ACTIVE");
+        accountEntity.setState(AccountStateEnum.ACTIVE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 
@@ -376,7 +388,7 @@ class AccountBusinessTest {
         accountEntity.setId("ACC123456789");
         accountEntity.setRoleId(2);
         accountEntity.setPersonalInfoId(100);
-        accountEntity.setState("ENCLOSE");
+        accountEntity.setState(AccountStateEnum.ENCLOSE);
 
         when(accountRepository.findById("ACC123456789")).thenReturn(accountEntity);
 

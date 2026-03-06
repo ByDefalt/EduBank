@@ -39,4 +39,12 @@ public class RoleController {
         Role role = roleBusiness.getRoleById(id);
         return Response.ok(role).build();
     }
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRoleById(@PathParam("name") String name) {
+        Role role = roleBusiness.getRoleByName(name);
+        return Response.ok(role).build();
+    }
 }
