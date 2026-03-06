@@ -20,30 +20,11 @@ paths:
         - Operation
       summary: Récupérer la liste des opérations
       description: "Use Case 5 (Administrateur): Voir la liste des opérations"
-      parameters:
-        - name: account_source_id
-          in: query
-          schema:
-            type: string
-          description: Filtrer par compte source
-        - name: state
-          in: query
-          schema:
-            type: string
-            enum: [completed, failed, cancelled]
-          description: Filtrer par état
-        - name: date_from
-          in: query
-          schema:
-            type: string
-            format: date-time
-          description: Date de début
-        - name: date_to
-          in: query
-          schema:
-            type: string
-            format: date-time
-          description: Date de fin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationFilter'
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -266,6 +247,27 @@ paths:
 
 components:
   schemas:
+    OperationFilter:
+      type: object
+      description: Critères de filtrage pour la liste des opérations
+      properties:
+        account_source_id:
+          type: string
+          description: Filtrer par compte source
+          example: "1"
+        state:
+          $ref: '#/components/schemas/OperationState'
+        date_from:
+          type: string
+          format: date-time
+          description: Date de début (incluse)
+          example: "2026-01-01T00:00:00Z"
+        date_to:
+          type: string
+          format: date-time
+          description: Date de fin (incluse)
+          example: "2026-12-31T23:59:59Z"
+
     OperationState:
       type: string
       description: État de l'opération
