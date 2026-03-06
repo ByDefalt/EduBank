@@ -34,14 +34,26 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateBack = { navController.popBackStack() },
         )
         operationGraph(
+            navController = navController,
             onDismiss = { navController.popBackStack() },
-            onVirementClick = { /* navigate vers écran virement */ },
+            onVirementClick = { navController.navigate(Routes.Operation.CreateTransfer) },
             onHistoriqueClick = { /* navigate vers historique */ },
             onBeneficiaireClick = { navController.navigate(Routes.Operation.Beneficiaire) },
             onNavigateBack = { navController.popBackStack() },
             onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },
             onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
             onNavigateToTransfer = { navController.navigate(Routes.Operation) },
+            onTransferSuccess = { navController.navigate(Routes.Bank.Home) },
+            onNavigateToTransferReceiver = { navController.navigate(Routes.Operation.CreateTransfer.Receiver) },
+            onNavigateToTransferAmount = { navController.navigate(Routes.Operation.CreateTransfer.Amount) },
+            onNavigateToTransferLabel = { navController.navigate(Routes.Operation.CreateTransfer.Label) },
+            onNavigateToTransferRecap = { navController.navigate(Routes.Operation.CreateTransfer.Recap) },
+            onPopTransferWizard = {
+                navController.popBackStack(
+                    route = Routes.Operation.CreateTransfer,
+                    inclusive = true,
+                )
+            },
         )
     }
 }

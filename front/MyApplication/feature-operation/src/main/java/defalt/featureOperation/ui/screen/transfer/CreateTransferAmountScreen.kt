@@ -1,4 +1,4 @@
-package defalt.featureOperation.ui.screen
+package defalt.featureOperation.ui.screen.transfer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Euro
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,21 +28,48 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
 import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
-fun CreateTransferLabelScreen(
+fun CreateTransferAmountScreen(
     onBack: () -> Unit = {},
-    onNext: (label: String) -> Unit = {},
+    onNext: () -> Unit = {},
+    viewModel: CreateTransferViewModel = koinViewModel(),
 ) {
-    var label by remember { mutableStateOf("") }
+    val form by viewModel.form.collectAsStateWithLifecycle()
+
+    CreateTransferAmountContent(
+        amount = form.amount,
+        onAmountChange = viewModel::setAmount,
+        onBack = safeClick(onBack),
+        onNext = {
+            viewModel.setAmount(form.amount)
+            onNext()
+        },
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun CreateTransferAmountContent(
+    amount: String = "",
+    onAmountChange: (String) -> Unit = {},
+    onBack: () -> Unit = {},
+    onNext: () -> Unit = {},
+) {
+    var localAmount by remember(amount) { mutableStateOf(amount) }
 
     val safeBack = safeClick(onBack)
 
@@ -67,7 +94,7 @@ fun CreateTransferLabelScreen(
                 )
             }
             Text(
-                text = "LIBELLÉ DU VIREMENT",
+                text = "MONTANT DU VIREMENT",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = CustomColor.TextPrimary,
@@ -91,24 +118,25 @@ fun CreateTransferLabelScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text(
-                    text = "SAISIR LE LIBELLÉ",
+                    text = "SAISIR LE MONTANT",
                     color = CustomColor.ArkeoRed,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                 )
 
                 ArkeoInput(
-                    value = label,
-                    onValueChange = { label = it },
-                    label = "Libellé",
-                    icon = Icons.Outlined.Description,
+                    value = localAmount,
+                    onValueChange = { localAmount = it; onAmountChange(it) },
+                    label = "Montant (€)",
+                    icon = Icons.Outlined.Euro,
+                    keyboardType = KeyboardType.Decimal,
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
                 ArkeoButton(
                     text = "SUIVANT",
-                    onClick = { onNext(label) },
+                    onClick = onNext,
                 )
             }
         }
@@ -117,6 +145,6 @@ fun CreateTransferLabelScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun CreateTransferLabelScreenPreview() {
-    CreateTransferLabelScreen()
+fun CreateTransferAmountScreenPreview() {
+    CreateTransferAmountContent()
 }

@@ -1,4 +1,4 @@
-package defalt.featureOperation.ui.screen
+package defalt.featureOperation.ui.screen.transfer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,9 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
-import defalt.featureOperation.viewModel.CreateTransferDebitViewModel
+import defalt.featureOperation.viewModel.CreateTransferViewModel
+import defalt.featureOperation.viewModel.DebitStepData
+import defalt.featureOperation.viewModel.sampleTransferAccounts
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
@@ -53,30 +52,28 @@ private val TextSecondary = CustomColor.TextSecondary
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun CreateTransferDebitScreen(
-    onConfirm: (sourceAccountId: String, beneficiaryName: String, amount: String, motif: String) -> Unit = { _, _, _, _ -> },
-    viewModel: CreateTransferDebitViewModel = koinViewModel(),
+    onNext: () -> Unit = {},
+    viewModel: CreateTransferViewModel = koinViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.debitUiState.collectAsStateWithLifecycle()
 
     CreateTransferDebitContent(
         uiState = uiState,
-        onRetry = viewModel::retry,
-        onConfirm = onConfirm,
+        onRetry = viewModel::retryDebit,
+        onAccountSelected = { account ->
+            viewModel.selectSourceAccount(account)
+            onNext()
+        },
     )
 }
 
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun CreateTransferDebitContent(
-    uiState: UiState<List<BankAccount>>,
+    uiState: UiState<DebitStepData>,
     onRetry: () -> Unit = {},
-    onConfirm: (sourceAccountId: String, beneficiaryName: String, amount: String, motif: String) -> Unit = { _, _, _, _ -> },
+    onAccountSelected: (BankAccount) -> Unit = {},
 ) {
-    var selectedAccountId by remember { mutableStateOf<String?>(null) }
-    var beneficiary by remember { mutableStateOf("") }
-    var amount by remember { mutableStateOf("") }
-    var motif by remember { mutableStateOf("") }
-
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES",
         2 to "COMPTE ÉPARGNE",
@@ -89,7 +86,7 @@ internal fun CreateTransferDebitContent(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── Header titre seul (sans retour arrière) ──────────────────────
+            // ── Header ────────────────────────────────────────────────────────
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,7 +96,7 @@ internal fun CreateTransferDebitContent(
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "NOUVEAUX VIREMENT",
+                    text = "NOUVEAU VIREMENT",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = TextPrimary,
@@ -112,15 +109,13 @@ internal fun CreateTransferDebitContent(
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
-            ) { accounts ->
-
+            ) { data ->
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(0.dp),
                 ) {
-                    // ── Section : sélection du compte à débiter ──────────────────
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
@@ -133,53 +128,42 @@ internal fun CreateTransferDebitContent(
                         Spacer(modifier = Modifier.height(4.dp))
                     }
 
-                    items(accounts) { account ->
-                        TransferAccountCard(
+                    items(data.accounts, key = { it.id ?: "" }) { account ->
+                        DebitAccountCard(
                             account = account,
                             label = typeNames[account.typeId] ?: "COMPTE",
-                            isSelected = account.id == selectedAccountId,
-                            onClick = { selectedAccountId = account.id },
+                            onClick = { onAccountSelected(account) },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }
+
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
                 }
-            } // fin UiStateHandler
+            }
         }
     }
 }
 
+// ── Card compte à débiter ─────────────────────────────────────────────────────
+
 @Composable
-private fun TransferAccountCard(
+private fun DebitAccountCard(
     account: BankAccount,
     label: String,
-    isSelected: Boolean,
     onClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    val borderColor = if (isSelected) ArkeoRed else Color.Transparent
-    val cardColor = when {
-        isSelected -> Color(0xFFFFF5F5)
-        isPressed -> Color(0xFFF0F0F0)
-        else -> Color.White
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick,
-            ),
-        colors = CardDefaults.cardColors(containerColor = cardColor),
+            .clickable(interactionSource = interactionSource, indication = null, onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isPressed) Color(0xFFF0F0F0) else Color.White,
+        ),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = androidx.compose.foundation.BorderStroke(
-            width = if (isSelected) 2.dp else 0.dp,
-            color = borderColor,
-        ),
     ) {
         Row(
             modifier = Modifier
@@ -209,24 +193,17 @@ private fun TransferAccountCard(
                     color = TextPrimary,
                 )
             }
-            if (isSelected) {
-                Icon(
-                    imageVector = Icons.Default.CheckCircle,
-                    contentDescription = "Sélectionné",
-                    tint = ArkeoRed,
-                    modifier = Modifier.size(24.dp),
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Default.ChevronRight,
-                    contentDescription = "Sélectionner",
-                    tint = TextSecondary,
-                    modifier = Modifier.size(24.dp),
-                )
-            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = TextSecondary,
+                modifier = Modifier.size(24.dp),
+            )
         }
     }
 }
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 private fun maskIban(iban: String?): String {
     val last2 = iban?.takeLast(2) ?: "XX"
@@ -236,26 +213,20 @@ private fun maskIban(iban: String?): String {
 private fun formatAmount(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-private fun sampleTransferAccounts(): List<BankAccount> = listOf(
-    BankAccount(id = "1", parameterId = 0, typeId = 1, sold = 1679138.00, iban = "FR7630006000011234567890140"),
-    BankAccount(id = "2", parameterId = 0, typeId = 2, sold = 775854.79, iban = "FR7630006000013333333333340"),
-    BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1080899.08, iban = "FR7630006000014444444444440"),
-)
-
 @Preview(showBackground = true, name = "State - Success")
 @Composable
-fun CreateTransferScreenPreviewSuccess() {
-    CreateTransferDebitContent(uiState = UiState.Success(sampleTransferAccounts()))
+fun CreateTransferDebitScreenPreviewSuccess() {
+    CreateTransferDebitContent(uiState = UiState.Success(DebitStepData(accounts = sampleTransferAccounts())))
 }
 
 @Preview(showBackground = true, name = "State - Loading")
 @Composable
-fun CreateTransferScreenPreviewLoading() {
+fun CreateTransferDebitScreenPreviewLoading() {
     CreateTransferDebitContent(uiState = UiState.Loading)
 }
 
 @Preview(showBackground = true, name = "State - Error")
 @Composable
-fun CreateTransferScreenPreviewError() {
+fun CreateTransferDebitScreenPreviewError() {
     CreateTransferDebitContent(uiState = UiState.Error("Impossible de charger les comptes"))
 }

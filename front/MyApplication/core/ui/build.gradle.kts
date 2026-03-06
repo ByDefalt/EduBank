@@ -59,6 +59,7 @@ dependencies {
     /* ---------------- KOIN Compose ---------------- */
     api(libs.koin.compose)
     api(libs.koin.android)
+    api(libs.koin.compose.navigation)
 
     /* ---------------- IMAGES ---------------- */
     api(libs.coil.compose)

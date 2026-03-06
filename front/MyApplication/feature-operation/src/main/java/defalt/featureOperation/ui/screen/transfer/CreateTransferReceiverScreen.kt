@@ -1,4 +1,4 @@
-package defalt.featureOperation.ui.screen
+package defalt.featureOperation.ui.screen.transfer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,26 +42,60 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
 import defalt.domain.entity.operation.Beneficiary
+import defalt.featureOperation.viewModel.CreateTransferViewModel
+import defalt.featureOperation.viewModel.ReceiverStepData
+import defalt.featureOperation.viewModel.sampleBeneficiaries2
+import defalt.featureOperation.viewModel.sampleTransferAccounts
+import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
 private val TextSecondary = CustomColor.TextSecondary
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun CreateTransferReceiverScreen(
-    accounts: List<BankAccount> = sampleReceiverAccounts(),
-    beneficiaries: List<Beneficiary> = defaultReceiverBeneficiaries(),
     onBack: () -> Unit = {},
-    onReceiverSelected: (receiverId: String) -> Unit = {},
+    onNext: () -> Unit = {},
+    viewModel: CreateTransferViewModel = koinViewModel(),
 ) {
-    var selectedTab by remember { mutableIntStateOf(0) }
+    val uiState by viewModel.receiverUiState.collectAsStateWithLifecycle()
 
     val safeBack = safeClick(onBack)
+
+    CreateTransferReceiverContent(
+        uiState = uiState,
+        onRetry = viewModel::retryReceiver,
+        onBack = safeBack,
+        onAccountSelected = { account ->
+            viewModel.selectReceiverAccount(account)
+            onNext()
+        },
+        onBeneficiarySelected = { beneficiary ->
+            viewModel.selectReceiverBeneficiary(beneficiary)
+            onNext()
+        },
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun CreateTransferReceiverContent(
+    uiState: UiState<ReceiverStepData>,
+    onRetry: () -> Unit = {},
+    onBack: () -> Unit = {},
+    onAccountSelected: (BankAccount) -> Unit = {},
+    onBeneficiarySelected: (Beneficiary) -> Unit = {},
+) {
+    var selectedTab by remember { mutableIntStateOf(0) }
 
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES",
@@ -83,7 +117,7 @@ fun CreateTransferReceiverScreen(
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                IconButton(onClick = safeBack) {
+                IconButton(onClick = onBack) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Retour",
@@ -101,7 +135,7 @@ fun CreateTransferReceiverScreen(
                 Spacer(modifier = Modifier.size(48.dp))
             }
 
-            // ── Tabs Compte / Bénéficiaire ────────────────────────────────────
+            // Les tabs restent visibles même en loading/erreur
             SecondaryTabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = Color.White,
@@ -137,60 +171,67 @@ fun CreateTransferReceiverScreen(
                 )
             }
 
-            // ── Contenu selon l'onglet ────────────────────────────────────────
-            LazyColumn(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp),
-            ) {
-                item { Spacer(modifier = Modifier.height(16.dp)) }
+            UiStateHandler(
+                uiState = uiState,
+                onRetry = onRetry,
+                loadingColor = ArkeoRed,
+                errorColor = ArkeoRed,
+            ) { data ->
+                // ── Contenu selon l'onglet ────────────────────────────────────
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(0.dp),
+                ) {
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
 
-                if (selectedTab == 0) {
-                    // ── Onglet Compte perso ──────────────────────────────────
-                    item {
-                        Text(
-                            text = "Mes comptes",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = ArkeoRed,
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
+                    if (selectedTab == 0) {
+                        // ── Onglet Compte perso ──────────────────────────────
+                        item {
+                            Text(
+                                text = "Mes comptes",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = ArkeoRed,
+                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+
+                        items(data.accounts, key = { it.id ?: "" }) { account ->
+                            ReceiverAccountCard(
+                                account = account,
+                                label = typeNames[account.typeId] ?: "COMPTE",
+                                onClick = { onAccountSelected(account) },
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
+                    } else {
+                        // ── Onglet Bénéficiaire ──────────────────────────────
+                        item {
+                            Text(
+                                text = "Mes bénéficiaires",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = ArkeoRed,
+                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+
+                        items(data.beneficiaries, key = { it.id ?: it.name }) { beneficiary ->
+                            ReceiverBeneficiaryCard(
+                                beneficiary = beneficiary,
+                                onClick = { onBeneficiarySelected(beneficiary) },
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                        }
                     }
 
-                    items(accounts, key = { it.id ?: "" }) { account ->
-                        ReceiverAccountCard(
-                            account = account,
-                            label = typeNames[account.typeId] ?: "COMPTE",
-                            onClick = { account.id?.let { onReceiverSelected(it) } },
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                    }
-                } else {
-                    // ── Onglet Bénéficiaire ──────────────────────────────────
-                    item {
-                        Text(
-                            text = "Mes bénéficiaires",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = ArkeoRed,
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp),
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
-                    }
-
-                    items(beneficiaries, key = { it.id ?: it.name }) { beneficiary ->
-                        ReceiverBeneficiaryCard(
-                            beneficiary = beneficiary,
-                            onClick = { beneficiary.id?.let { onReceiverSelected(it.toString()) } },
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                    }
+                    item { Spacer(modifier = Modifier.height(24.dp)) }
                 }
-
-                item { Spacer(modifier = Modifier.height(24.dp)) }
-            }
+            } // fin UiStateHandler
         }
     }
 }
@@ -316,20 +357,27 @@ private fun maskIbanReceiver(iban: String?): String {
 private fun formatAmountReceiver(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-private fun sampleReceiverAccounts(): List<BankAccount> = listOf(
-    BankAccount(id = "1", parameterId = 0, typeId = 1, sold = 1679138.00, iban = "FR7630006000011234567890140"),
-    BankAccount(id = "2", parameterId = 0, typeId = 2, sold = 775854.79, iban = "FR7630006000013333333333340"),
-    BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1080899.08, iban = "FR7630006000014444444444440"),
-)
-
-private fun defaultReceiverBeneficiaries(): List<Beneficiary> = listOf(
-    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 1234 5678 9012", name = "Alice Dupont", id = 1),
-    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 2222 3333 4444", name = "Amine Saïd", id = 2),
-    Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
-)
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "State - Success")
 @Composable
-fun CreateTransferReceiverScreenPreview() {
-    CreateTransferReceiverScreen()
+fun CreateTransferReceiverScreenPreviewSuccess() {
+    CreateTransferReceiverContent(
+        uiState = UiState.Success(
+            ReceiverStepData(
+                accounts = sampleTransferAccounts(),
+                beneficiaries = sampleBeneficiaries2(),
+            ),
+        ),
+    )
+}
+
+@Preview(showBackground = true, name = "State - Loading")
+@Composable
+fun CreateTransferReceiverScreenPreviewLoading() {
+    CreateTransferReceiverContent(uiState = UiState.Loading)
+}
+
+@Preview(showBackground = true, name = "State - Error")
+@Composable
+fun CreateTransferReceiverScreenPreviewError() {
+    CreateTransferReceiverContent(uiState = UiState.Error("Erreur de chargement"))
 }

@@ -1,4 +1,4 @@
-package defalt.featureOperation.ui.screen
+package defalt.featureOperation.ui.screen.transfer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +22,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,26 +32,65 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun CreateTransferRecapScreen(
-    // Compte source
+    onBack: () -> Unit = {},
+    onSuccess: () -> Unit = {},
+    viewModel: CreateTransferViewModel = koinViewModel(),
+) {
+    val form by viewModel.form.collectAsStateWithLifecycle()
+    val submitState by viewModel.submitUiState.collectAsStateWithLifecycle()
+
+    // Naviguer vers la suite dès que la soumission réussit
+    LaunchedEffect(submitState) {
+        if (submitState is UiState.Success) {
+            viewModel.reset()
+            onSuccess()
+        }
+    }
+
+    val typeNames = mapOf(
+        1 to "COMPTE CHÈQUES",
+        2 to "COMPTE ÉPARGNE",
+        3 to "COMPTE PROFESSIONNEL",
+    )
+
+    CreateTransferRecapContent(
+        sourceAccountLabel = typeNames[form.sourceAccount?.typeId] ?: "COMPTE",
+        sourceAccountIban = form.sourceAccount?.iban ?: "",
+        receiverName = form.receiverName ?: "",
+        receiverIban = form.receiverIban ?: "",
+        amount = form.amount.toDoubleOrNull() ?: 0.0,
+        label = form.label,
+        isSubmitting = submitState is UiState.Loading,
+        onBack = safeClick(onBack),
+        onConfirm = viewModel::submitTransfer,
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun CreateTransferRecapContent(
     sourceAccountLabel: String = "",
     sourceAccountIban: String = "",
-    // Destinataire
     receiverName: String = "",
     receiverIban: String = "",
-    // Détails
     amount: Double = 0.0,
     label: String = "",
+    isSubmitting: Boolean = false,
     onBack: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
-    val safeBack = safeClick(onBack)
     val safeConfirm = safeClick(onConfirm)
 
     Column(
@@ -66,7 +107,7 @@ fun CreateTransferRecapScreen(
                 .padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            IconButton(onClick = safeBack) {
+            IconButton(onClick = onBack) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Retour",
@@ -128,8 +169,9 @@ fun CreateTransferRecapScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 ArkeoButton(
-                    text = "EFFECTUER LE VIREMENT",
+                    text = if (isSubmitting) "EN COURS…" else "EFFECTUER LE VIREMENT",
                     onClick = safeConfirm,
+                    enabled = !isSubmitting,
                 )
             }
         }
@@ -181,7 +223,7 @@ private fun RecapDivider() {
 @Preview(showBackground = true)
 @Composable
 fun CreateTransferRecapScreenPreview() {
-    CreateTransferRecapScreen(
+    CreateTransferRecapContent(
         sourceAccountLabel = "COMPTE CHÈQUES",
         sourceAccountIban = "FR76 3000 6000 0112 3456 7890 140",
         receiverName = "Alice Dupont",

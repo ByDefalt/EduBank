@@ -41,6 +41,10 @@ sealed class Routes {
 
     @Serializable
     object Operation : Routes() {
+
+        @Serializable
+        object Virement : Routes()
+
         @Serializable
         object BottomSheet : Routes()
 
@@ -49,5 +53,30 @@ sealed class Routes {
 
         @Serializable
         object Beneficiaire : Routes()
+
+        /** Wizard de création d'un virement (sous-graphe partagé) */
+        @Serializable
+        object CreateTransfer : Routes() {
+
+            /** Étape 1 : choix du compte à débiter */
+            @Serializable
+            object Debit : Routes()
+
+            /** Étape 2 : choix du destinataire */
+            @Serializable
+            object Receiver : Routes()
+
+            /** Étape 3 : saisie du montant */
+            @Serializable
+            object Amount : Routes()
+
+            /** Étape 4 : saisie du libellé */
+            @Serializable
+            object Label : Routes()
+
+            /** Étape 5 : récapitulatif et confirmation */
+            @Serializable
+            object Recap : Routes()
+        }
     }
 }

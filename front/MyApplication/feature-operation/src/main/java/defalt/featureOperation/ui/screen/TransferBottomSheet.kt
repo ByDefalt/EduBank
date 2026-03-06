@@ -64,12 +64,12 @@ fun TransferBottomSheet(
             BottomSheetItem(
                 icon = Icons.Default.SwapHoriz,
                 label = "Faire un virement",
-                onClick = { onVirementClick(); onDismiss() },
+                onClick = { onVirementClick() },
             )
             BottomSheetItem(
                 icon = Icons.Default.History,
                 label = "Historique des virements",
-                onClick = { onHistoriqueClick(); onDismiss() },
+                onClick = { onHistoriqueClick() },
             )
             BottomSheetItem(
                 icon = Icons.Default.AccountBalance,
