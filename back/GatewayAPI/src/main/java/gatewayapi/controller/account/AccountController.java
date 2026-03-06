@@ -1,9 +1,8 @@
-package gatewayapi.controller;
+package gatewayapi.controller.account;
 
 import dto.accountapi.*;
 import gatewayapi.client.AccountClient;
 import gatewayapi.wrapper.FeignExecutor;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
