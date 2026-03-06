@@ -4,7 +4,7 @@ info:
   description: API de gestion des comptes, rôles et informations personnelles
   version: 1.1.0
 servers:
-  - url: http://localhost:8081/api/v1
+  - url: http://localhost:8080/api/v1
     description: Serveur de gestion des comptes
 
 paths:
@@ -12,9 +12,9 @@ paths:
   /roles:
     get:
       summary: Liste tous les rôles (Admin uniquement)
-      tags: [Role]
+      tags: [ Role ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -32,7 +32,7 @@ paths:
   /roles/{id}:
     get:
       summary: Récupérer un rôle par son ID
-      tags: [Role]
+      tags: [ Role ]
       parameters:
         - name: id
           in: path
@@ -49,12 +49,33 @@ paths:
         '404':
           description: Rôle non trouvé
 
+  /roles/name/{id}:
+    get:
+      summary: Récupérer le rôle associé à un compte
+      tags: [ Role ]
+      parameters:
+        - name: name
+          in: path
+          description: role du compte
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rôle trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '404':
+          description: Compte ou Rôle non trouvé
+
   /personalInformation:
     get:
       summary: Liste toutes les informations personnelles (Admin uniquement)
-      tags: [PersonalInformation]
+      tags: [ PersonalInformation ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Succès
@@ -70,7 +91,7 @@ paths:
           description: Interdit
     post:
       summary: Créer une fiche d'information personnelle
-      tags: [PersonalInformation]
+      tags: [ PersonalInformation ]
       requestBody:
         required: true
         content:
@@ -88,7 +109,7 @@ paths:
   /personalInformation/{id}:
     get:
       summary: Récupérer une info personnelle par ID
-      tags: [PersonalInformation]
+      tags: [ PersonalInformation ]
       parameters:
         - name: id
           in: path
@@ -108,9 +129,9 @@ paths:
   /accounts:
     get:
       summary: Liste tous les comptes (Admin uniquement)
-      tags: [Account]
+      tags: [ Account ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Succès
@@ -127,7 +148,7 @@ paths:
     post:
       summary: Créer un nouveau compte
       description: Crée le compte, le rôle et les informations personnelles liées.
-      tags: [Account]
+      tags: [ Account ]
       requestBody:
         required: true
         content:
@@ -145,7 +166,7 @@ paths:
   /accounts/{id}:
     get:
       summary: Récupérer un compte par ID
-      tags: [Account]
+      tags: [ Account ]
       parameters:
         - name: id
           in: path
@@ -162,10 +183,10 @@ paths:
         '404':
           description: Compte non trouvé
     delete:
-      summary: Supprimer un compte (Admin uniquement)
-      tags: [Account]
+      summary: Supprimer un compte (Admin uniquement, par le changement d'etat du compte à ENCLOSE)
+      tags: [ Account ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -189,9 +210,9 @@ paths:
   /accounts/activate/{id}:
     put:
       summary: Activer un compte (Admin uniquement)
-      tags: [Account]
+      tags: [ Account ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -215,9 +236,9 @@ paths:
   /accounts/deactivate/{id}:
     put:
       summary: Désactiver un compte (Admin uniquement)
-      tags: [Account]
+      tags: [ Account ]
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -241,7 +262,7 @@ paths:
   /accounts/role/{id}:
     get:
       summary: Récupérer le rôle associé à un compte
-      tags: [Account]
+      tags: [ Account ]
       parameters:
         - name: id
           in: path
@@ -262,7 +283,7 @@ paths:
   /accounts/personalInformation/{id}:
     get:
       summary: Récupérer les informations personnelles associées à un compte
-      tags: [Account]
+      tags: [ Account ]
       parameters:
         - name: id
           in: path
@@ -283,7 +304,7 @@ paths:
   /accounts/signin:
     post:
       summary: Connexion utilisateur
-      tags: [Account]
+      tags: [ Account ]
       requestBody:
         required: true
         content:
@@ -305,7 +326,7 @@ paths:
   /accounts/validate:
     post:
       summary: Valider un token JWT
-      tags: [Account]
+      tags: [ Account ]
       requestBody:
         required: true
         content:
@@ -335,6 +356,7 @@ components:
       enum:
         - ADMIN
         - CUSTOMER
+      example: "CUSTOMER"
 
     Role:
       type: object
@@ -358,7 +380,7 @@ components:
           format: email
         address:
           type: string
-        phone_number:
+        phoneNumber:
           type: string
 
     PersonalInformationRegister:
@@ -370,20 +392,27 @@ components:
       properties:
         firstname:
           type: string
-          exemple: "John"
+          example: "John"
         lastname:
           type: string
-          exemple: "Doe"
+          example: "Doe"
         email:
           type: string
-          exemple: "john.doe@localhost.com"
+          example: "john.doe@localhost.com"
           format: email
         address:
           type: string
-          exemple: "123 Main St, Anytown"
-        phone_number:
+          example: "123 Main St, Anytown"
+        phoneNumber:
           type: string
-          exemple: "0123456789"
+          example: "0123456789"
+
+    AccountStateEnum:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+        - ENCLOSE
 
     Account:
       type: object
@@ -397,28 +426,24 @@ components:
           type: integer
           description: ID faisant référence à Role
         state:
-          type: string
+          $ref: '#/components/schemas/AccountStateEnum'
 
     AccountRegister:
       type: object
       required:
         - personal_info
-        - role_id
+        - role
         - password
       properties:
         personal_info:
           $ref: '#/components/schemas/PersonalInformationRegister'
-        role_id:
-          type: integer
-          exemple: 1
-          description: "ID du rôle existant (ex: 1 pour Admin, 2 pour User)"
+        role:
+          $ref: '#/components/schemas/RoleEnum'
         password:
           type: string
-          exemple: "123456789"
+          example: "123456789"
           format: password
           writeOnly: true
-        state:
-          type: string
 
     SignInRequest:
       type: object
@@ -451,8 +476,50 @@ components:
         id:
           type: string
           description: "Identifiant unique de l'utilisateur (Subject du token)"
-          example: "123456789123"
+          example: "1234567891234"
         role:
           type: string
           description: "Rôle de l'utilisateur"
           example: "ADMIN"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Requête invalide"
+        details:
+          type: string
+          example: "Le champ 'amount' doit être supérieur à 0"
+
+  responses:
+    UnauthorizedError:
+      description: Non autorisé - Token d'authentification manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ForbiddenError:
+      description: Accès interdit - Permissions insuffisantes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

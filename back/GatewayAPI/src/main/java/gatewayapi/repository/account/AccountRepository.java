@@ -2,7 +2,6 @@ package gatewayapi.repository.account;
 
 import dto.accountapi.*;
 import gatewayapi.client.AccountClient;
-import gatewayapi.wrapper.FeignExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,11 +10,9 @@ import java.util.List;
 public class AccountRepository {
 
     private final AccountClient accountClient;
-    private final FeignExecutor feignExecutor;
 
-    public AccountRepository(AccountClient accountClient, FeignExecutor feignExecutor) {
+    public AccountRepository(AccountClient accountClient) {
         this.accountClient = accountClient;
-        this.feignExecutor = feignExecutor;
     }
 
     public List<Account> findAll() {
@@ -30,7 +27,7 @@ public class AccountRepository {
         return accountClient.createAccount(accountRegister);
     }
 
-    public TokenRequest getAccountByIdAndPassword(SignInRequest signInRequest) {
+    public TokenRequest signIn(SignInRequest signInRequest) {
         return accountClient.signIn(signInRequest);
     }
 
@@ -49,11 +46,11 @@ public class AccountRepository {
     public PersonalInformation getPersonalInformationByAccountId(String id) {
         return accountClient.getPersonalInformationByAccountId(id);
     }
-    
+
     public boolean deactivateAccount(String id) {
         return accountClient.deactivateAccount(id);
     }
-    
+
     public boolean activateAccount(String id) {
         return accountClient.activateAccount(id);
     }

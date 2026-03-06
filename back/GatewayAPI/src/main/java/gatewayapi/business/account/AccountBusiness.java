@@ -31,6 +31,14 @@ public class AccountBusiness {
         return accountRepository.delete(id);
     }
 
+    public boolean activateAccount(String id) {
+        return accountRepository.activateAccount(id);
+    }
+
+    public boolean deactivateAccount(String id) {
+        return accountRepository.deactivateAccount(id);
+    }
+
     public Role getRoleByAccountId(String id) {
         return accountRepository.getRoleByAccountId(id);
     }
@@ -40,18 +48,10 @@ public class AccountBusiness {
     }
 
     public TokenRequest signIn(SignInRequest signInRequest) {
-        return accountRepository.getAccountByIdAndPassword(signInRequest);
+        return accountRepository.signIn(signInRequest);
     }
 
     public TokenResponse validateToken(TokenRequest tokenRequest) {
         return accountRepository.validateToken(tokenRequest);
-    }
-
-    public boolean deactivateAccount(String id) {
-        return accountRepository.deactivateAccount(id);
-    }
-
-    public boolean activateAccount(String id) {
-        return accountRepository.activateAccount(id);
     }
 }

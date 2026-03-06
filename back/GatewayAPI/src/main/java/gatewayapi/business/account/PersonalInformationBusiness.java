@@ -1,6 +1,7 @@
 package gatewayapi.business.account;
 
 import dto.accountapi.PersonalInformation;
+import dto.accountapi.PersonalInformationRegister;
 import gatewayapi.repository.account.PersonalInformationRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,8 @@ public class PersonalInformationBusiness {
     public PersonalInformation getPersonalInformationById(Integer id) {
         return personalInformationRepository.findById(id);
     }
-}
 
+    public PersonalInformation createPersonalInformation(PersonalInformationRegister personalInformationRegister) {
+        return personalInformationRepository.create(personalInformationRegister);
+    }
+}

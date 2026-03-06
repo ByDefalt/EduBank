@@ -2,11 +2,7 @@ package gatewayapi.controller.account;
 
 import gatewayapi.business.account.RoleBusiness;
 import gatewayapi.wrapper.FeignExecutor;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
@@ -34,5 +30,12 @@ public class RoleController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRoleById(@PathParam("id") Integer id) {
         return feignExecutor.wrap(() -> roleBusiness.getRoleById(id));
+    }
+
+    @GET
+    @Path("/name/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRoleByName(@PathParam("name") String name) {
+        return feignExecutor.wrap(() -> roleBusiness.getRoleByName(name));
     }
 }

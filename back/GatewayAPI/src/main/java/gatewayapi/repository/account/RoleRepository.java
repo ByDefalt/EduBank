@@ -2,7 +2,6 @@ package gatewayapi.repository.account;
 
 import dto.accountapi.Role;
 import gatewayapi.client.AccountClient;
-import gatewayapi.wrapper.FeignExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,19 +10,20 @@ import java.util.List;
 public class RoleRepository {
 
     private final AccountClient accountClient;
-    private final FeignExecutor feignExecutor;
 
-    public RoleRepository(AccountClient accountClient, FeignExecutor feignExecutor) {
+    public RoleRepository(AccountClient accountClient) {
         this.accountClient = accountClient;
-        this.feignExecutor = feignExecutor;
     }
 
     public List<Role> findAll() {
-        return feignExecutor.execute(() -> accountClient.getAllRoles());
+        return accountClient.getAllRoles();
     }
 
     public Role findById(Integer id) {
-        return feignExecutor.execute(() -> accountClient.getRoleById(id));
+        return accountClient.getRoleById(id);
+    }
+
+    public Role findByName(String name) {
+        return accountClient.getRoleByName(name);
     }
 }
-

@@ -1,6 +1,7 @@
 package gatewayapi.controller.account;
 
 import dto.accountapi.*;
+import gatewayapi.annotation.AuthenticationRequired;
 import gatewayapi.business.account.AccountBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.ws.rs.*;
@@ -21,6 +22,7 @@ public class AccountController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAccounts() {
         return feignExecutor.wrap(accountBusiness::getAllAccounts);
@@ -57,7 +59,9 @@ public class AccountController {
     }
 
     @DELETE
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/{idAccount}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteAccount(@PathParam("idAccount") String id) {
         return feignExecutor.wrap(() -> accountBusiness.deleteAccount(id));
     }
@@ -77,6 +81,7 @@ public class AccountController {
     }
 
     @PUT
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/deactivate/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response deactivateAccount(@PathParam("idAccount") String id) {
@@ -84,6 +89,7 @@ public class AccountController {
     }
 
     @PUT
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Path("/activate/{idAccount}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response activateAccount(@PathParam("idAccount") String id) {

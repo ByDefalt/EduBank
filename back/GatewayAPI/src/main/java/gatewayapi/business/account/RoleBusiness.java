@@ -22,5 +22,8 @@ public class RoleBusiness {
     public Role getRoleById(Integer id) {
         return roleRepository.findById(id);
     }
-}
 
+    public Role getRoleByName(String name) {
+        return roleRepository.findByName(name);
+    }
+}

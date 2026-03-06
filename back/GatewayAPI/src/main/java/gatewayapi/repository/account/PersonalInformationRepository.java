@@ -1,8 +1,8 @@
 package gatewayapi.repository.account;
 
 import dto.accountapi.PersonalInformation;
+import dto.accountapi.PersonalInformationRegister;
 import gatewayapi.client.AccountClient;
-import gatewayapi.wrapper.FeignExecutor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -11,19 +11,20 @@ import java.util.List;
 public class PersonalInformationRepository {
 
     private final AccountClient accountClient;
-    private final FeignExecutor feignExecutor;
 
-    public PersonalInformationRepository(AccountClient accountClient, FeignExecutor feignExecutor) {
+    public PersonalInformationRepository(AccountClient accountClient) {
         this.accountClient = accountClient;
-        this.feignExecutor = feignExecutor;
     }
 
     public List<PersonalInformation> findAll() {
-        return feignExecutor.execute(() -> accountClient.getAllPersonalInformation());
+        return  accountClient.getAllPersonalInformation();
     }
 
     public PersonalInformation findById(Integer id) {
-        return feignExecutor.execute(() -> accountClient.getPersonalInformationById(id));
+        return  accountClient.getPersonalInformationById(id);
+    }
+
+    public PersonalInformation create(PersonalInformationRegister personalInformationRegister) {
+        return  accountClient.createPersonalInformation(personalInformationRegister);
     }
 }
-

@@ -1,8 +1,8 @@
 package gatewayapi.controller.account;
 
+import dto.accountapi.PersonalInformationRegister;
 import gatewayapi.business.account.PersonalInformationBusiness;
 import gatewayapi.wrapper.FeignExecutor;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -31,5 +31,12 @@ public class PersonalInformationController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPersonalInformationById(@PathParam("id") Integer id) {
         return feignExecutor.wrap(() -> personalInformationBusiness.getPersonalInformationById(id));
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPersonalInformation(PersonalInformationRegister personalInformationRegister) {
+        return feignExecutor.wrap(() -> personalInformationBusiness.createPersonalInformation(personalInformationRegister));
     }
 }
