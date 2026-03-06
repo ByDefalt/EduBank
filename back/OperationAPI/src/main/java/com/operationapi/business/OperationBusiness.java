@@ -3,13 +3,13 @@ package com.operationapi.business;
 import com.operationapi.exception.FunctionalException;
 import com.operationapi.repository.OperationRepository;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -20,9 +20,9 @@ public class OperationBusiness {
         this.operationRepository = operationRepository;
     }
 
-    public OperationList getOperations() {
+    public OperationList getOperations(OperationFilter filter) {
         OperationList operationList = new OperationList();
-        operationList.setData(this.operationRepository.getOperations());
+        operationList.setData(this.operationRepository.getOperations(filter));
         return operationList;
     }
 

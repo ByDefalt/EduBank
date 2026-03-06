@@ -2,6 +2,7 @@ package com.operationapi.repository;
 
 import com.operationapi.exception.NotFoundException;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationState;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -19,7 +20,6 @@ import java.util.Map;
 @Repository
 public class OperationRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_SELECT_OPERATIONS = "SELECT * FROM OPERATION";
     private static final String SQL_SELECT_OPERATION_BY_ID = "SELECT * FROM OPERATION WHERE id = :id";
     private static final String SQL_SAVE_OPERATION = "INSERT INTO OPERATION (account_source_id, label, state, iban_target, amount, date) VALUES (:account_source_id, :label, :state, :iban_target, :amount, :date)";
     private static final String SQL_UPDATE_STATE_OPERATION = "UPDATE OPERATION SET state = :state WHERE id = :id";
@@ -28,8 +28,30 @@ public class OperationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Operation> getOperations() {
-        return jdbcTemplate.query(SQL_SELECT_OPERATIONS, (rs, rowNum) -> mapRow(rs));
+    public List<Operation> getOperations(OperationFilter filter) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM OPERATION WHERE 1=1");
+        Map<String, Object> params = new HashMap<>();
+
+        if (filter != null) {
+            if (filter.getAccountSourceId() != null && !filter.getAccountSourceId().isBlank()) {
+                sql.append(" AND account_source_id = :account_source_id");
+                params.put("account_source_id", filter.getAccountSourceId());
+            }
+            if (filter.getState() != null) {
+                sql.append(" AND state = :state");
+                params.put("state", filter.getState().toString());
+            }
+            if (filter.getDateFrom() != null) {
+                sql.append(" AND date >= :date_from");
+                params.put("date_from", filter.getDateFrom().toLocalDateTime());
+            }
+            if (filter.getDateTo() != null) {
+                sql.append(" AND date <= :date_to");
+                params.put("date_to", filter.getDateTo().toLocalDateTime());
+            }
+        }
+
+        return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> mapRow(rs));
     }
 
     public Operation getOperationById(Integer id) {

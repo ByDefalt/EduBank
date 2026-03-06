@@ -1,21 +1,16 @@
 package com.operationapi.controller;
 
-import com.operationapi.annotation.AuthenticationRequired;
 import com.operationapi.business.BeneficiaryBusiness;
 import com.operationapi.mapper.BeneficiaryMapper;
 import dto.operationapi.Beneficiary;
 import dto.operationapi.BeneficiaryList;
-import dto.operationapi.Error;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-
 @Controller
 @Path("/beneficiaries")
-@AuthenticationRequired
 public class BeneficiaryController {
 
     private final BeneficiaryBusiness beneficiaryBusiness;

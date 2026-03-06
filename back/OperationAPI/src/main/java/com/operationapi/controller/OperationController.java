@@ -1,8 +1,8 @@
 package com.operationapi.controller;
 
-import com.operationapi.annotation.AuthenticationRequired;
 import com.operationapi.business.OperationBusiness;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import jakarta.ws.rs.*;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Controller
 @Path("/operations")
-@AuthenticationRequired
 public class OperationController {
     private final OperationBusiness operationBusiness;
 
@@ -23,10 +22,11 @@ public class OperationController {
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperations() {
-        OperationList operations = this.operationBusiness.getOperations();
-        return Response.ok(Map.of("data", operations)).build();
+    public Response getOperations(OperationFilter filter) {
+        OperationList operations = this.operationBusiness.getOperations(filter != null ? filter : new OperationFilter());
+        return Response.ok(operations).build();
     }
 
     @POST

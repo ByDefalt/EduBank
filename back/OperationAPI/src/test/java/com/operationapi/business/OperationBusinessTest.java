@@ -3,6 +3,7 @@ package com.operationapi.business;
 import com.operationapi.exception.FunctionalException;
 import com.operationapi.repository.OperationRepository;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,9 @@ class OperationBusinessTest {
     void testGetOperations() {
         Operation op = new Operation();
         op.setId(1);
-        when(operationRepository.getOperations()).thenReturn(List.of(op));
+        when(operationRepository.getOperations(any(OperationFilter.class))).thenReturn(List.of(op));
 
-        OperationList result = operationBusiness.getOperations();
+        OperationList result = operationBusiness.getOperations(new OperationFilter());
 
         assertEquals(1, result.getData().size());
         assertEquals(1, result.getData().get(0).getId());
