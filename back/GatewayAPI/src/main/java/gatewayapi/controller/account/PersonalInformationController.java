@@ -1,6 +1,8 @@
 package gatewayapi.controller.account;
 
 import dto.accountapi.PersonalInformationRegister;
+import dto.accountapi.RoleEnum;
+import gatewayapi.annotation.AuthenticationRequired;
 import gatewayapi.business.account.PersonalInformationBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.ws.rs.*;
@@ -21,6 +23,7 @@ public class PersonalInformationController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllPersonalInformation() {
         return feignExecutor.wrap(personalInformationBusiness::getAllPersonalInformation);

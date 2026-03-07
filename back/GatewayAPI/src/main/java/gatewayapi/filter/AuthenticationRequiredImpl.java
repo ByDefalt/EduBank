@@ -12,6 +12,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import java.lang.reflect.Method;
@@ -25,6 +26,7 @@ public class AuthenticationRequiredImpl implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
+    @Autowired
     public AuthenticationRequiredImpl(AccountClient accountClient) {
         this.accountClient = accountClient;
     }

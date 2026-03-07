@@ -1,5 +1,7 @@
 package gatewayapi.controller.account;
 
+import dto.accountapi.RoleEnum;
+import gatewayapi.annotation.AuthenticationRequired;
 import gatewayapi.business.account.RoleBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.ws.rs.*;
@@ -20,6 +22,7 @@ public class RoleController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllRoles() {
         return feignExecutor.wrap(roleBusiness::getAllRoles);
