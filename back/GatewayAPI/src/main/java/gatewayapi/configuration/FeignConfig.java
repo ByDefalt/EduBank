@@ -11,6 +11,7 @@ import gatewayapi.client.AccountClient;
 import gatewayapi.client.OperationClient;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,6 +21,12 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class FeignConfig {
+
+    @Value("${clients.account-api.url}")
+    private String accountApiUrl;
+
+    @Value("${clients.operation-api.url}")
+    private String operationApiUrl;
 
     private okhttp3.OkHttpClient getOkHttpClient() {
         var okHttpClient = new okhttp3.OkHttpClient.Builder();
@@ -39,7 +46,7 @@ public class FeignConfig {
                 .client(new OkHttpClient(getOkHttpClient()))
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
-                .target(AccountClient.class, "http://localhost:8081/api/v1");
+                .target(AccountClient.class, accountApiUrl);
     }
 
     @Bean
@@ -50,6 +57,6 @@ public class FeignConfig {
                 .client(new OkHttpClient(getOkHttpClient()))
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
-                .target(OperationClient.class, "http://localhost:8083/api/v1");
+                .target(OperationClient.class, operationApiUrl);
     }
 }
