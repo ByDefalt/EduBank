@@ -1,11 +1,13 @@
 package accountapi.entity;
 
+import dto.accountapi.AccountStateEnum;
+
 public class AccountEntity {
 
     private String id;
     private Integer personalInfoId;
     private Integer roleId;
-    private String state;
+    private AccountStateEnum state;
     private String password;
 
 
@@ -33,11 +35,11 @@ public class AccountEntity {
         this.roleId = roleId;
     }
 
-    public String getState() {
+    public AccountStateEnum getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(AccountStateEnum state) {
         this.state = state;
     }
 

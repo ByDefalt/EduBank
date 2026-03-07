@@ -2,13 +2,15 @@ package accountapi.business;
 
 import accountapi.entity.AccountEntity;
 import accountapi.entity.RoleEntity;
+import accountapi.exception.FunctionalException;
+import accountapi.exception.NotFoundException;
+import accountapi.exception.UnauthorizedException;
 import accountapi.mapper.AccountMapper;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.AccountRepository;
 import accountapi.utils.GenerateID;
 import accountapi.utils.JwtUtils;
 import dto.accountapi.*;
-import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,14 +19,17 @@ import java.util.List;
 @Service
 public class AccountBusiness {
 
-    @Inject
     private AccountRepository accountRepository;
-
-    @Inject
     private PersonalInformationBusiness personalInformationBusiness;
-
-    @Inject
     private RoleBusiness roleBusiness;
+
+    public AccountBusiness(AccountRepository accountRepository,
+                           PersonalInformationBusiness personalInformationBusiness,
+                           RoleBusiness roleBusiness) {
+        this.accountRepository = accountRepository;
+        this.personalInformationBusiness = personalInformationBusiness;
+        this.roleBusiness = roleBusiness;
+    }
 
     private final JwtUtils keyJWT = new JwtUtils();
 
@@ -39,7 +44,11 @@ public class AccountBusiness {
     }
 
     public Account getAccountById(String id) {
-        return AccountMapper.toDto(accountRepository.findById(id));
+        AccountEntity accountEntity = accountRepository.findById(id);
+        if (accountEntity == null) {
+            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + id);
+        }
+        return AccountMapper.toDto(accountEntity);
     }
 
     public Account createAccount(AccountRegister account) {
@@ -55,49 +64,53 @@ public class AccountBusiness {
             }
         }
 
-        Integer pif = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo()).getId();
+        Role roleToRegister = roleBusiness.getRoleByName(account.getRole().name());
 
-        if (pif == null) {
-            return null;
+        if (roleToRegister == null) {
+            throw new FunctionalException("400", "Le Role n'existe pas : " + account.getRole().name());
         }
+
+        PersonalInformation pInfo = personalInformationBusiness.createPersonalInformation(account.getPersonalInfo());
+
+        if (pInfo == null) {
+            throw new FunctionalException("400", "Impossible de créer les informations personnelles du compte");
+        }
+
+        Integer pif = pInfo.getId();
 
         AccountEntity accountToRegister = new AccountEntity();
         accountToRegister.setId(idGenerated);
-        accountToRegister.setRoleId(account.getRoleId());
-        accountToRegister.setState(account.getState());
+        accountToRegister.setRoleId(roleToRegister.getId());
+        accountToRegister.setState(AccountStateEnum.INACTIVE);
         accountToRegister.setPersonalInfoId(pif);
         accountToRegister.setPassword(account.getPassword());
 
-        return AccountMapper.toDto(accountRepository.register(accountToRegister));
+        AccountEntity registered = accountRepository.register(accountToRegister);
+        if (registered == null) {
+            // Delete personal information lorsque la création du compte a échoué (évite d'avoir des personal info sauvage)
+            personalInformationBusiness.deletePersonalInformation(pif);
+            throw new FunctionalException("400", "Impossible de créer le compte");
+        }
+        return AccountMapper.toDto(registered);
     }
 
     public boolean deleteAccount(String id) {
-        boolean deleted = false;
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
-        }
-
-        deleted = accountRepository.delete(id);
-        if (deleted){
-            personalInformationBusiness.deletePersonalInformation(accountEntity.getPersonalInfoId());
-        }
-        return deleted;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        accountEntity.setState(AccountStateEnum.ENCLOSE);
+        accountRepository.updateState(accountEntity);
+        return true;
     }
 
     public Role getRoleByAccountId(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return null;
-        }
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
         return roleBusiness.getRoleById(accountEntity.getRoleId());
     }
 
     public PersonalInformation getPersonalInformationByAccountId(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return null;
-        }
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
         return personalInformationBusiness.getPersonalInformationById(accountEntity.getPersonalInfoId());
     }
 
@@ -107,52 +120,58 @@ public class AccountBusiness {
         AccountEntity accountEntity = accountRepository.getAccountByIdAndPassword(signInRequest.getId(), signInRequest.getPassword());
 
         if (accountEntity == null) {
-            return null;
+            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + signInRequest.getId());
         }
         if (accountEntity.getId().equals(signInRequest.getId()) &&
                 accountEntity.getPassword().equals(signInRequest.getPassword()) &&
-                    accountEntity.getState().equals("ACTIVE")) {
-            // get le role
+                    accountEntity.getState().equals(AccountStateEnum.ACTIVE)) {
             RoleEntity roleEntity = RoleMapper.toEntity(this.getRoleByAccountId(accountEntity.getId()));
-            // genere le token avec l'id et le role
             key = keyJWT.generateKey(accountEntity.getId(), roleEntity.getName());
 
             TokenRequest tokenRequest = new TokenRequest();
             tokenRequest.setJwt(key);
             return tokenRequest;
         }
-        return null;
+        throw new UnauthorizedException("401", "Mot de passe incorrect ou compte inactif");
     }
 
     public TokenResponse validateToken(TokenRequest tokenRequest) {
         String jwt = tokenRequest.getJwt();
         TokenResponse tokenResponse = keyJWT.validateToken(jwt);
 
-        if (tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
+        if (tokenResponse != null && tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
             AccountEntity acc = accountRepository.findById(tokenResponse.getId());
-            if (acc.getId().equals(tokenResponse.getId())) {
+            if (acc != null && acc.getId().equals(tokenResponse.getId())) {
                 return tokenResponse;
             }
         }
-        return null;
+        throw new UnauthorizedException("401", "Token invalide ou expiré");
     }
 
     public boolean deactivateAccount(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals(AccountStateEnum.ENCLOSE)) {
+            throw new FunctionalException("400", "Impossible de désactiver un compte clôturé");
         }
-        accountEntity.setState("INACTIVE");
+        if (accountEntity.getState().equals(AccountStateEnum.INACTIVE)) {
+            throw new FunctionalException("400", "Le compte est déjà inactif");
+        }
+        accountEntity.setState(AccountStateEnum.INACTIVE);
         accountRepository.updateState(accountEntity);
         return true;
     }
 
     public boolean activateAccount(String id) {
-        AccountEntity accountEntity = AccountMapper.toEntity(this.getAccountById(id));
-        if (accountEntity == null) {
-            return false;
+        Account account = this.getAccountById(id);
+        AccountEntity accountEntity = AccountMapper.toEntity(account);
+        if (accountEntity.getState().equals(AccountStateEnum.ENCLOSE)) {
+            throw new FunctionalException("400", "Impossible d'activer un compte clôturé");
         }
-        accountEntity.setState("ACTIVE");
+        if (accountEntity.getState().equals(AccountStateEnum.ACTIVE)) {
+            throw new FunctionalException("400", "Le compte est déjà actif");
+        }
+        accountEntity.setState(AccountStateEnum.ACTIVE);
         accountRepository.updateState(accountEntity);
         return true;
     }

@@ -1,11 +1,10 @@
 version: '3.8'
 
 services:
-  api-spring:
+  account-api-spring:
     build:
       context: ../
       dockerfile: docker/Dockerfile
-    container_name: account-api
     ports:
       - "8081:8081"
     environment:
@@ -13,7 +12,7 @@ services:
 
       SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
 
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/accountapi
+      SPRING_DATASOURCE_URL: jdbc:mariadb://account-api-mariadb:3306/accountapi
       SPRING_DATASOURCE_USERNAME: accountuser
       SPRING_DATASOURCE_PASSWORD: accountpassword
 
@@ -21,12 +20,13 @@ services:
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
     depends_on:
-      - mariadb
+      - account-api-mariadb
 
-  mariadb:
+  account-api-mariadb:
     image: mariadb:latest
     container_name: mariadb-accountapi
     restart: always
+    command: --port=3306
     environment:
       MYSQL_DATABASE: accountapi
       MYSQL_USER: accountuser
