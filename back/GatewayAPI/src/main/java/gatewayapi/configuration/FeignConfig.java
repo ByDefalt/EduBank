@@ -8,6 +8,7 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import gatewayapi.client.AccountClient;
+import gatewayapi.client.OperationClient;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,12 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class FeignConfig {
 
+    @Value("${clients.account-api.url}")
+    private String accountApiUrl;
+
+    @Value("${clients.operation-api.url}")
+    private String operationApiUrl;
+
     private okhttp3.OkHttpClient getOkHttpClient() {
         var okHttpClient = new okhttp3.OkHttpClient.Builder();
         okHttpClient.connectTimeout(10000, TimeUnit.MILLISECONDS);
@@ -31,34 +38,25 @@ public class FeignConfig {
     @Inject
     private ObjectMapper objectMapper;
 
-    @Value("${accountapi.base-url:http://localhost:8081/api/v1}")
-    private String accountApiBaseUrl;
-
     @Bean
-    public RequestInterceptor requestInterceptor() {
-        return requestTemplate -> {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (attributes != null) {
-                HttpServletRequest request = attributes.getRequest();
-                // recupe header
-                String token = request.getHeader("Authorization");
-                if (token != null) {
-                    // injecte dans requestTemplate
-                    requestTemplate.header("Authorization", token);
-                }
-            }
-        };
-    }
-
-    @Bean
-    public AccountClient getAccountClient(RequestInterceptor requestInterceptor) {
+    public AccountClient getAccountClient() {
         return Feign.builder()
                 .encoder(new JacksonEncoder(objectMapper))
                 .decoder(new JacksonDecoder(objectMapper))
-                .requestInterceptor(requestInterceptor)
                 .client(new OkHttpClient(getOkHttpClient()))
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
-                .target(AccountClient.class, accountApiBaseUrl);
+                .target(AccountClient.class, accountApiUrl);
+    }
+
+    @Bean
+    public OperationClient getOperationClient() {
+        return Feign.builder()
+                .encoder(new JacksonEncoder(objectMapper))
+                .decoder(new JacksonDecoder(objectMapper))
+                .client(new OkHttpClient(getOkHttpClient()))
+                .logger(new Logger.JavaLogger(FeignConfig.class))
+                .logLevel(Logger.Level.FULL)
+                .target(OperationClient.class, operationApiUrl);
     }
 }
