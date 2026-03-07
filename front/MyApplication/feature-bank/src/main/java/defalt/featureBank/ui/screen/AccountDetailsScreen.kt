@@ -72,7 +72,7 @@ private const val LABEL_MAX_CHARS = 20
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun AccountDetailsScreen(
-    accountId: Int = 1,
+    accountId: String = "1",
     accountLabel: String = "COMPTE CHÈQUES 1",
     onNavigateBack: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},

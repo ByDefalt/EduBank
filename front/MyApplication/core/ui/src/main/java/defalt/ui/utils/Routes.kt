@@ -30,7 +30,7 @@ sealed class Routes {
         object ListAccount : Routes()
 
         @Serializable
-        data class AccountDetails(val accountId: Int) : Routes()
+        data class AccountDetails(val accountId: String) : Routes()
     }
 
     @Serializable

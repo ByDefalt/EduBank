@@ -12,6 +12,7 @@ import defalt.domain.entity.account.TokenResponse
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
+import defalt.network.infrastructure.ApiClient
 import defalt.network.mapper.account.toDto
 import defalt.network.mapper.account.toEntity
 import defalt.network.utils.safeApiCall
@@ -22,6 +23,7 @@ class AccountRemoteDataSource(
     private val api: AccountApi,
     private val personalInformationApi: PersonalInformationApi,
     private val roleApi: RoleApi,
+    private val apiClient: ApiClient,
 ) : IAccountRemoteDataSource {
 
     // --- COMPTES ---
@@ -43,8 +45,21 @@ class AccountRemoteDataSource(
 
     // --- AUTHENTIFICATION ---
 
-    override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> =
-        safeApiCall { api.accountsSigninPost(signInRequest.toDto()) }.map { it.toEntity() }
+    override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> {
+        val result = safeApiCall { api.accountsSigninPost(signInRequest.toDto()) }.map { it.toEntity() }
+        if (result is NetworkResult.Success) {
+            val token = result.data.jwt
+            apiClient.addAuthorization(
+                "Bearer",
+            ) { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .build()
+                chain.proceed(request)
+            }
+        }
+        return result
+    }
 
     override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> =
         safeApiCall { api.accountsValidatePost(tokenRequest.toDto()) }.map { it.toEntity() }

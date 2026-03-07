@@ -40,7 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.HomeAccountViewModel
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
@@ -60,7 +62,7 @@ private val TextSecondary = CustomColor.TextSecondary
 fun HomeAccountScreen(
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
-    onNavigateToAccountDetails: (Int) -> Unit = {},
+    onNavigateToAccountDetails: (String) -> Unit = {},
     viewModel: HomeAccountViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -77,11 +79,11 @@ fun HomeAccountScreen(
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun HomeAccountContent(
-    uiState: UiState<List<BankAccount>>,
+    uiState: UiState<BankAccountDetail>,
     onRetry: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
-    onNavigateToAccountDetails: (Int) -> Unit = {},
+    onNavigateToAccountDetails: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -95,8 +97,7 @@ internal fun HomeAccountContent(
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
-            ) { accounts ->
-                val mainAccount = accounts.firstOrNull()
+            ) { account ->
 
                 LazyColumn(
                     modifier = Modifier
@@ -116,7 +117,7 @@ internal fun HomeAccountContent(
                     }
 
                     item {
-                        MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails)
+                        MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails, account = account)
                     }
 
                     item {
@@ -142,12 +143,15 @@ internal fun HomeAccountContent(
 }
 
 @Composable
-private fun MainAccountCard(onNavigateToAccountDetails: (Int) -> Unit = {}) {
-    // Hardcodé sur l'id 1 en attendant le vrai compte depuis le ViewModel
-    val accountId = 1
+private fun MainAccountCard(onNavigateToAccountDetails: (String) -> Unit = {}, account: BankAccountDetail) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val cardColor = if (isPressed) Color(0xFFF0F0F0) else Color.White
+
+    val accountTypeName = account.type?.name ?: "COMPTE"
+    val accountIban = account.iban ?: "—"
+    val accountSold = account.sold ?: 0.0
+    val overdraftLimit = account.parameter?.overdraftLimit
 
     Card(
         modifier = Modifier
@@ -155,14 +159,14 @@ private fun MainAccountCard(onNavigateToAccountDetails: (Int) -> Unit = {}) {
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-            ) { onNavigateToAccountDetails(accountId) },
+            ) { account.id?.let { onNavigateToAccountDetails(it) } },
         colors = CardDefaults.cardColors(containerColor = cardColor),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "COMPTE CHÈQUES 1",
+                text = accountTypeName,
                 color = ArkeoRed,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
@@ -175,7 +179,7 @@ private fun MainAccountCard(onNavigateToAccountDetails: (Int) -> Unit = {}) {
                     .align(Alignment.CenterHorizontally),
             ) {
                 Text(
-                    text = "XXXXX XXXXXXX",
+                    text = accountIban,
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -186,7 +190,7 @@ private fun MainAccountCard(onNavigateToAccountDetails: (Int) -> Unit = {}) {
                 horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = formatAmount(478.27),
+                    text = formatAmount(accountSold),
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp,
                     color = TextPrimary,
@@ -202,31 +206,33 @@ private fun MainAccountCard(onNavigateToAccountDetails: (Int) -> Unit = {}) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { },
-                shape = RoundedCornerShape(20.dp),
-                color = Color(0xFFF5F5F5),
-            ) {
-                Row(
+            if (overdraftLimit != null) {
+                Surface(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                        .clickable { },
+                    shape = RoundedCornerShape(20.dp),
+                    color = Color(0xFFF5F5F5),
                 ) {
-                    Text(
-                        text = "À venir :  ${formatAmount(0.0)}",
-                        fontSize = 13.sp,
-                        color = TextSecondary,
-                    )
-                    Icon(
-                        imageVector = Icons.Default.ChevronRight,
-                        contentDescription = null,
-                        tint = TextSecondary,
-                        modifier = Modifier.size(18.dp),
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "Découvert autorisé :  ${formatAmount(overdraftLimit)}",
+                            fontSize = 13.sp,
+                            color = TextSecondary,
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = null,
+                            tint = TextSecondary,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    }
                 }
             }
 
@@ -308,15 +314,17 @@ private fun SectionRowCard(
 private fun formatAmount(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-private fun sampleHomeAccounts(): List<BankAccount> = listOf(
-    BankAccount(
+private fun sampleHomeAccounts(): BankAccountDetail =
+    BankAccountDetail(
         id = "1",
-        parameterId = 0,
-        typeId = 1,
+        parameter = BankAccountParameter(),
+        type = Type(
+            id = 1,
+            name = "COMPTE CHÈQUES",
+        ),
         sold = 478.27,
         iban = "FR7630006000011234567890140",
-    ),
-)
+    )
 
 @Preview(showBackground = true, name = "State - Success")
 @Composable

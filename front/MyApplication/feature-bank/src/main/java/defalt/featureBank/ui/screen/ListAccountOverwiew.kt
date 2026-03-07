@@ -61,7 +61,7 @@ private val TypeNames = mapOf(
 fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
-    onNavigateToAccountDetails: (Int) -> Unit = {},
+    onNavigateToAccountDetails: (String) -> Unit = {},
     viewModel: ListAccountViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -82,7 +82,7 @@ internal fun ListAccountOverviewContent(
     onRetry: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
-    onNavigateToAccountDetails: (Int) -> Unit = {},
+    onNavigateToAccountDetails: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -143,7 +143,7 @@ internal fun ListAccountOverviewContent(
                         AccountCard(
                             account = account,
                             label = TypeNames[account.typeId] ?: "COMPTE",
-                            onClick = { onNavigateToAccountDetails(account.id?.toIntOrNull() ?: 0) },
+                            onClick = { onNavigateToAccountDetails(account.id ?: "") },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                     }

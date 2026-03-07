@@ -13,7 +13,7 @@ fun NavGraphBuilder.bankGraph(
     onNavigateToAccounts: () -> Unit,
     onNavigateToTransfer: () -> Unit,
     onNavigateToHomeBank: () -> Unit,
-    onNavigateToAccountDetails: (Int) -> Unit,
+    onNavigateToAccountDetails: (String) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     navigation<Routes.Bank>(
