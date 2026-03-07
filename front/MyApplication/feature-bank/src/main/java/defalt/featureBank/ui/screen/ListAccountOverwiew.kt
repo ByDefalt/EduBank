@@ -34,7 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.ListAccountViewModel
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
@@ -48,13 +50,6 @@ private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray
 private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
-
-// Constante top-level : ne recrée pas de Map à chaque recomposition
-private val TypeNames = mapOf(
-    1 to "COMPTE CHÈQUES 1",
-    2 to "COMPTE ÉPARGNE",
-    3 to "COMPTE PROFESSIONNEL",
-)
 
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
@@ -78,7 +73,7 @@ fun ListAccountOverviewScreen(
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun ListAccountOverviewContent(
-    uiState: UiState<List<BankAccount>>,
+    uiState: UiState<List<BankAccountDetail>>,
     onRetry: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
@@ -142,7 +137,7 @@ internal fun ListAccountOverviewContent(
                     items(accounts) { account ->
                         AccountCard(
                             account = account,
-                            label = TypeNames[account.typeId] ?: "COMPTE",
+                            label = account.type?.name ?: "COMPTE",
                             onClick = { onNavigateToAccountDetails(account.id ?: "") },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
@@ -165,7 +160,7 @@ internal fun ListAccountOverviewContent(
 
 @Composable
 private fun AccountCard(
-    account: BankAccount,
+    account: BankAccountDetail,
     label: String,
     onClick: () -> Unit,
 ) {
@@ -214,7 +209,7 @@ private fun AccountCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "À venir : ${formatMoney(0.0)}",
+                    text = "Découvert autorisé : ${formatMoney(account.parameter?.overdraftLimit ?: 0.0)}",
                     color = TextSecondary,
                     fontSize = 12.sp,
                 )
@@ -229,41 +224,27 @@ private fun AccountCard(
     }
 }
 
-private fun sampleAccounts(): List<BankAccount> = listOf(
-    BankAccount(
+private fun sampleAccounts(): List<BankAccountDetail> = listOf(
+    BankAccountDetail(
         id = "1",
-        parameterId = 0,
-        typeId = 1,
+        parameter = BankAccountParameter(id = 1, overdraftLimit = 500.0),
+        type = Type(id = 1, name = "COMPTE CHÈQUES"),
         sold = 1679138.00,
         iban = "FR7630006000011234567890140",
     ),
-    BankAccount(
+    BankAccountDetail(
         id = "2",
-        parameterId = 0,
-        typeId = 1,
+        parameter = BankAccountParameter(id = 2, overdraftLimit = 0.0),
+        type = Type(id = 2, name = "COMPTE ÉPARGNE"),
         sold = 459393.44,
         iban = "FR7630006000019876543210140",
     ),
-    BankAccount(
+    BankAccountDetail(
         id = "3",
-        parameterId = 0,
-        typeId = 1,
+        parameter = BankAccountParameter(id = 3, overdraftLimit = 1000.0),
+        type = Type(id = 3, name = "COMPTE PROFESSIONNEL"),
         sold = 5866841.38,
         iban = "FR7630006000015555555555540",
-    ),
-    BankAccount(
-        id = "4",
-        parameterId = 0,
-        typeId = 2,
-        sold = 775854.79,
-        iban = "FR7630006000013333333333340",
-    ),
-    BankAccount(
-        id = "5",
-        parameterId = 0,
-        typeId = 3,
-        sold = 1080899.08,
-        iban = "FR7630006000014444444444440",
     ),
 )
 
