@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ButtonDefaults
@@ -26,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,23 +39,62 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureOperation.viewModel.EditBeneficiaryViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
+import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun EditBeneficiaryScreen(
+    id: Int,
+    onBack: () -> Unit = {},
+    onSuccess: () -> Unit = {},
+    viewModel: EditBeneficiaryViewModel = koinViewModel(),
+) {
+    val beneficiaryState by viewModel.beneficiary.collectAsStateWithLifecycle()
+    val actionState by viewModel.actionState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(id) { viewModel.load(id) }
+
+    LaunchedEffect(actionState) {
+        if (actionState is UiState.Success) onSuccess()
+    }
+
+    UiStateHandler(
+        uiState = beneficiaryState,
+        onRetry = { viewModel.load(id) },
+        loadingColor = CustomColor.ArkeoRed,
+        errorColor = CustomColor.ArkeoRed,
+    ) { beneficiary ->
+        EditBeneficiaryContent(
+            initialName = beneficiary.name,
+            initialIban = beneficiary.ibanTarget,
+            isLoading = actionState is UiState.Loading,
+            onBack = onBack,
+            onSave = { name, iban -> viewModel.save(id, name, iban, beneficiary.accountSourceId) },
+            onDelete = { viewModel.delete(id) },
+        )
+    }
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun EditBeneficiaryContent(
     initialName: String = "",
     initialIban: String = "",
-    initialBankName: String = "",
+    isLoading: Boolean = false,
     onBack: () -> Unit = {},
-    onSave: (name: String, iban: String, bankName: String) -> Unit = { _, _, _ -> },
+    onSave: (name: String, iban: String) -> Unit = { _, _ -> },
     onDelete: () -> Unit = {},
 ) {
     var name by remember { mutableStateOf(initialName) }
     var iban by remember { mutableStateOf(initialIban) }
-    var bankName by remember { mutableStateOf(initialBankName) }
 
     val safeBack = safeClick(onBack)
     val safeDelete = safeClick(onDelete)
@@ -66,7 +105,6 @@ fun EditBeneficiaryScreen(
             .background(CustomColor.BackgroundGray)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Header style AccountDetailsScreen
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,7 +130,6 @@ fun EditBeneficiaryScreen(
             Spacer(modifier = Modifier.size(48.dp))
         }
 
-        // Carte formulaire
         Card(
             modifier = Modifier
                 .padding(16.dp)
@@ -127,22 +164,16 @@ fun EditBeneficiaryScreen(
                     keyboardType = KeyboardType.Ascii,
                 )
 
-                ArkeoInput(
-                    value = bankName,
-                    onValueChange = { bankName = it },
-                    label = "Nom de la banque",
-                    icon = Icons.Outlined.AccountBalance,
-                )
-
                 Spacer(modifier = Modifier.height(8.dp))
 
                 ArkeoButton(
-                    text = "ENREGISTRER LES MODIFICATIONS",
-                    onClick = { onSave(name, iban, bankName) },
+                    text = if (isLoading) "Enregistrement…" else "ENREGISTRER LES MODIFICATIONS",
+                    onClick = { if (!isLoading) onSave(name, iban) },
                 )
 
                 OutlinedButton(
                     onClick = safeDelete,
+                    enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -168,9 +199,8 @@ fun EditBeneficiaryScreen(
 @Preview(showBackground = true)
 @Composable
 fun EditBeneficiaryScreenPreview() {
-    EditBeneficiaryScreen(
+    EditBeneficiaryContent(
         initialName = "Alice Dupont",
         initialIban = "FR76 1234 5678 9012",
-        initialBankName = "Banque A",
     )
 }

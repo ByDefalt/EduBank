@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material.icons.outlined.CreditCard
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
@@ -24,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,19 +37,44 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.featureOperation.viewModel.AddBeneficiaryViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
 import defalt.ui.component.safeClick
+import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
+// ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
 fun AddBeneficiaryScreen(
     onBack: () -> Unit = {},
-    onConfirm: (name: String, iban: String, bankName: String) -> Unit = { _, _, _ -> },
+    onSuccess: () -> Unit = {},
+    viewModel: AddBeneficiaryViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) onSuccess()
+    }
+
+    AddBeneficiaryContent(
+        isLoading = uiState is UiState.Loading,
+        onBack = onBack,
+        onConfirm = { name, iban -> viewModel.add(name, iban) },
+    )
+}
+
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun AddBeneficiaryContent(
+    isLoading: Boolean = false,
+    onBack: () -> Unit = {},
+    onConfirm: (name: String, iban: String) -> Unit = { _, _ -> },
 ) {
     var name by remember { mutableStateOf("") }
     var iban by remember { mutableStateOf("") }
-    var bankName by remember { mutableStateOf("") }
 
     val safeBack = safeClick(onBack)
 
@@ -59,7 +84,6 @@ fun AddBeneficiaryScreen(
             .background(CustomColor.BackgroundGray)
             .verticalScroll(rememberScrollState()),
     ) {
-        // Header style AccountDetailsScreen
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -85,7 +109,6 @@ fun AddBeneficiaryScreen(
             Spacer(modifier = Modifier.size(48.dp))
         }
 
-        // Carte formulaire
         Card(
             modifier = Modifier
                 .padding(16.dp)
@@ -120,18 +143,11 @@ fun AddBeneficiaryScreen(
                     keyboardType = KeyboardType.Ascii,
                 )
 
-                ArkeoInput(
-                    value = bankName,
-                    onValueChange = { bankName = it },
-                    label = "Nom de la banque",
-                    icon = Icons.Outlined.AccountBalance,
-                )
-
                 Spacer(modifier = Modifier.height(8.dp))
 
                 ArkeoButton(
-                    text = "AJOUTER LE BÉNÉFICIAIRE",
-                    onClick = { onConfirm(name, iban, bankName) },
+                    text = if (isLoading) "Ajout en cours…" else "AJOUTER LE BÉNÉFICIAIRE",
+                    onClick = { if (!isLoading) onConfirm(name, iban) },
                 )
             }
         }
@@ -141,5 +157,5 @@ fun AddBeneficiaryScreen(
 @Preview(showBackground = true)
 @Composable
 fun AddBeneficiaryScreenPreview() {
-    AddBeneficiaryScreen()
+    AddBeneficiaryContent()
 }

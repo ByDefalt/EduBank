@@ -6,4 +6,3 @@ data class HomeData(
     val account: BankAccountDetail,
     val personalInformation: PersonalInformation,
 )
-

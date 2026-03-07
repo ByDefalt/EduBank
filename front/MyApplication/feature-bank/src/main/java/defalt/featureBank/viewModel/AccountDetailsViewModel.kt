@@ -19,9 +19,7 @@ data class AccountDetailsData(
     val operations: List<Operation>,
 )
 
-class AccountDetailsViewModel(
-) : ViewModel() {
-
+class AccountDetailsViewModel() : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<AccountDetailsData>>(UiState.Loading)
     val uiState: StateFlow<UiState<AccountDetailsData>> = _uiState.asStateFlow()

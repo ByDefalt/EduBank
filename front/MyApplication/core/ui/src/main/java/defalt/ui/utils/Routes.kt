@@ -54,6 +54,15 @@ sealed class Routes {
         @Serializable
         object Beneficiaire : Routes()
 
+        @Serializable
+        object BeneficiaireGraph : Routes()
+
+        @Serializable
+        object AddBeneficiaire : Routes()
+
+        @Serializable
+        data class EditBeneficiaire(val id: Int) : Routes()
+
         /** Wizard de création d'un virement (sous-graphe partagé) */
         @Serializable
         object CreateTransfer : Routes() {

@@ -8,7 +8,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
+import defalt.featureOperation.ui.screen.AddBeneficiaryScreen
 import defalt.featureOperation.ui.screen.BeneficiariesScreen
+import defalt.featureOperation.ui.screen.EditBeneficiaryScreen
 import defalt.featureOperation.ui.screen.TransferBottomSheet
 import defalt.featureOperation.ui.screen.transfer.CreateTransferAmountScreen
 import defalt.featureOperation.ui.screen.transfer.CreateTransferDebitScreen
@@ -48,15 +51,41 @@ fun NavGraphBuilder.operationGraph(
             )
         }
 
-        composable<Routes.Operation.Beneficiaire> {
-            BeneficiariesScreen(
-                onBack = onNavigateBack,
-                onNavigateToHomeBank = onNavigateToHomeBank,
-                onNavigateToAccounts = onNavigateToAccounts,
-                onNavigateToTransfer = onNavigateToTransfer,
-            )
+        // ── Sous-graphe Bénéficiaires ──────────────────────────────────────────
+        navigation<Routes.Operation.BeneficiaireGraph>(
+            startDestination = Routes.Operation.Beneficiaire,
+        ) {
+            composable<Routes.Operation.Beneficiaire> {
+                BeneficiariesScreen(
+                    onItemClick = { beneficiary ->
+                        navController.navigate(Routes.Operation.EditBeneficiaire(id = beneficiary.id!!))
+                    },
+                    onBack = onNavigateBack,
+                    onAddBeneficiary = { navController.navigate(Routes.Operation.AddBeneficiaire) },
+                    onNavigateToHomeBank = onNavigateToHomeBank,
+                    onNavigateToAccounts = onNavigateToAccounts,
+                    onNavigateToTransfer = onNavigateToTransfer,
+                )
+            }
+
+            composable<Routes.Operation.AddBeneficiaire> {
+                AddBeneficiaryScreen(
+                    onBack = { navController.popBackStack() },
+                    onSuccess = { navController.popBackStack() },
+                )
+            }
+
+            composable<Routes.Operation.EditBeneficiaire> { entry ->
+                val route = entry.toRoute<Routes.Operation.EditBeneficiaire>()
+                EditBeneficiaryScreen(
+                    id = route.id,
+                    onBack = { navController.popBackStack() },
+                    onSuccess = { navController.popBackStack() },
+                )
+            }
         }
 
+        // ── Wizard création de virement ────────────────────────────────────────
         navigation<Routes.Operation.CreateTransfer>(
             startDestination = Routes.Operation.CreateTransfer.Debit,
         ) {

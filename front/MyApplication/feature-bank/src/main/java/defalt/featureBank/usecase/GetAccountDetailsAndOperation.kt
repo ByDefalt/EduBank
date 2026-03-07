@@ -7,9 +7,9 @@ import defalt.utils.logger.Logger
 class GetAccountDetailsAndOperation(
     private val accountRepository: IAccountRepository,
     private val operationRepository: IOperationRepository,
-    private val logger: Logger
+    private val logger: Logger,
 ) {
-    suspend operator fun invoke(){
-
+    suspend operator fun invoke() {
+        TODO()
     }
 }

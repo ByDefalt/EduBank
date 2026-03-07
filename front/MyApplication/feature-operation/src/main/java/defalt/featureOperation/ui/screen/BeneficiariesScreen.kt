@@ -74,9 +74,12 @@ fun BeneficiariesScreen(
     viewModel: BeneficiariesViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val query by viewModel.query.collectAsStateWithLifecycle()
 
     BeneficiariesContent(
         uiState = uiState,
+        query = query,
+        onQueryChange = viewModel::onQueryChange,
         onRetry = viewModel::retry,
         onItemClick = onItemClick,
         onBack = onBack,
@@ -93,6 +96,7 @@ internal fun BeneficiariesContent(
     uiState: UiState<List<Beneficiary>>,
     onRetry: () -> Unit = {},
     query: String = "",
+    onQueryChange: (String) -> Unit = {},
     onItemClick: (Beneficiary) -> Unit = {},
     onBack: () -> Unit = {},
     onAddBeneficiary: () -> Unit = {},
@@ -142,7 +146,7 @@ internal fun BeneficiariesContent(
                         item {
                             ArkeoInput(
                                 value = query,
-                                onValueChange = {},
+                                onValueChange = onQueryChange,
                                 label = "Rechercher un bénéficiaire",
                                 icon = Icons.Default.Search,
                             )
@@ -199,6 +203,7 @@ internal fun BeneficiariesContent(
                                         shape = RoundedCornerShape(12.dp),
                                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                                         colors = CardDefaults.cardColors(containerColor = Color.White),
+                                        onClick = { onItemClick(b) },
                                     ) {
                                         Row(
                                             modifier = Modifier

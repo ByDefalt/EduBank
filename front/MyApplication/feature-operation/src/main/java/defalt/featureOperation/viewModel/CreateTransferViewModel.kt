@@ -1,16 +1,17 @@
 package defalt.featureOperation.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.bank.BankAccount
 import defalt.domain.entity.operation.Beneficiary
+import defalt.featureOperation.usecase.CreateTransfer
+import defalt.featureOperation.usecase.GetMyBankAccounts
+import defalt.featureOperation.usecase.GetMyBeneficiaries
 import defalt.ui.state.UiState
-import kotlinx.coroutines.delay
+import defalt.ui.state.launchWithUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 // ── État du formulaire (données accumulées au fil des étapes) ─────────────────
 
@@ -36,7 +37,11 @@ data class ReceiverStepData(
 
 // ── ViewModel partagé pour tout le wizard de création de virement ─────────────
 
-class CreateTransferViewModel : ViewModel() {
+class CreateTransferViewModel(
+    private val getMyBankAccounts: GetMyBankAccounts,
+    private val getMyBeneficiaries: GetMyBeneficiaries,
+    private val createTransfer: CreateTransfer,
+) : ViewModel() {
 
     // Données chargées – étape 1 : compte à débiter
     private val _debitUiState = MutableStateFlow<UiState<DebitStepData>>(UiState.Loading)
@@ -47,8 +52,8 @@ class CreateTransferViewModel : ViewModel() {
     val receiverUiState: StateFlow<UiState<ReceiverStepData>> = _receiverUiState.asStateFlow()
 
     // État de la soumission finale
-    private val _submitUiState = MutableStateFlow<UiState<Unit>?>(null)
-    val submitUiState: StateFlow<UiState<Unit>?> = _submitUiState.asStateFlow()
+    private val _submitUiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
+    val submitUiState: StateFlow<UiState<Unit>> = _submitUiState.asStateFlow()
 
     // Formulaire accumulé
     private val _form = MutableStateFlow(CreateTransferForm())
@@ -63,19 +68,11 @@ class CreateTransferViewModel : ViewModel() {
 
     fun retryDebit() = loadDebitAccounts()
 
-    private fun loadDebitAccounts() {
-        viewModelScope.launch {
-            _debitUiState.update { UiState.Loading }
-            // TODO : appeler le use case pour charger les comptes à débiter
-            delay(2000)
-            _debitUiState.update {
-                UiState.Success(
-                    DebitStepData(
-                        accounts = sampleTransferAccounts(),
-                    ),
-                )
-            }
-        }
+    private fun loadDebitAccounts() = launchWithUiState(
+        stateFlow = _debitUiState,
+        transform = { DebitStepData(accounts = it) },
+    ) {
+        getMyBankAccounts()
     }
 
     fun selectSourceAccount(account: BankAccount) {
@@ -87,18 +84,35 @@ class CreateTransferViewModel : ViewModel() {
     fun retryReceiver() = loadReceiverData()
 
     private fun loadReceiverData() {
-        viewModelScope.launch {
-            _receiverUiState.update { UiState.Loading }
-            // TODO : appeler les use cases pour charger comptes et bénéficiaires
-            delay(2000)
-            _receiverUiState.update {
-                UiState.Success(
-                    ReceiverStepData(
-                        accounts = sampleTransferAccounts(),
-                        beneficiaries = sampleBeneficiaries2(),
-                    ),
-                )
+        // Lance les deux appels et combine les résultats
+        launchWithUiState(
+            stateFlow = _receiverUiState,
+            transform = { it },
+        ) {
+            val accountsResult = getMyBankAccounts()
+            if (accountsResult is defalt.utils.NetworkResult.Error) {
+                return@launchWithUiState defalt.utils.NetworkResult.Error(accountsResult.code, accountsResult.message)
             }
+            if (accountsResult is defalt.utils.NetworkResult.Exception) {
+                return@launchWithUiState defalt.utils.NetworkResult.Exception(accountsResult.throwable)
+            }
+            accountsResult as defalt.utils.NetworkResult.Success
+
+            val beneficiariesResult = getMyBeneficiaries()
+            if (beneficiariesResult is defalt.utils.NetworkResult.Error) {
+                return@launchWithUiState defalt.utils.NetworkResult.Error(beneficiariesResult.code, beneficiariesResult.message)
+            }
+            if (beneficiariesResult is defalt.utils.NetworkResult.Exception) {
+                return@launchWithUiState defalt.utils.NetworkResult.Exception(beneficiariesResult.throwable)
+            }
+            beneficiariesResult as defalt.utils.NetworkResult.Success
+
+            defalt.utils.NetworkResult.Success(
+                ReceiverStepData(
+                    accounts = accountsResult.data,
+                    beneficiaries = beneficiariesResult.data,
+                ),
+            )
         }
     }
 
@@ -138,24 +152,24 @@ class CreateTransferViewModel : ViewModel() {
 
     // ── Étape 5 : confirmation / soumission ───────────────────────────────────
 
-    fun submitTransfer() {
-        viewModelScope.launch {
-            _submitUiState.update { UiState.Loading }
-            // TODO : appeler le use case pour créer le virement
-            delay(1500)
-            _submitUiState.update { UiState.Success(Unit) }
-        }
+    fun submitTransfer() = launchWithUiState(_submitUiState) {
+        val f = _form.value
+        createTransfer(
+            ibanTarget = f.receiverIban!!,
+            amount = f.amount.toDouble(),
+            label = f.label,
+        )
     }
 
     fun resetSubmitState() {
-        _submitUiState.update { null }
+        _submitUiState.update { UiState.Idle }
     }
 
     // ── Réinitialisation du wizard ────────────────────────────────────────────
 
     fun reset() {
         _form.update { CreateTransferForm() }
-        _submitUiState.update { null }
+        _submitUiState.update { UiState.Idle }
     }
 }
 
