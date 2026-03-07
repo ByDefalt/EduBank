@@ -16,6 +16,23 @@ sealed class Routes {
     }
 
     @Serializable
+    object Admin : Routes() {
+        @Serializable object AccountList : Routes()
+
+        @Serializable data class AccountDetail(val id: String) : Routes()
+
+        @Serializable object BankList : Routes()
+
+        @Serializable data class BankDetail(val id: String) : Routes()
+
+        @Serializable object OfferList : Routes()
+
+        @Serializable data class OfferDetail(val id: Int) : Routes()
+
+        @Serializable object CreateOffer : Routes()
+    }
+
+    @Serializable
     object Account : Routes() {
         @Serializable
         object Login : Routes()

@@ -3,11 +3,11 @@ package defalt.eduBank.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.ui.navigation.accountGraph
 import defalt.featureBank.ui.navigation.bankGraph
 import defalt.featureOffer.ui.navigation.offerGraph
 import defalt.featureOperation.ui.navigation.operationGraph
-import defalt.domain.entity.account.RoleEnum
 import defalt.ui.utils.Routes
 
 @Composable
@@ -61,11 +61,10 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToTransferLabel = { navController.navigate(Routes.Operation.CreateTransfer.Label) },
             onNavigateToTransferRecap = { navController.navigate(Routes.Operation.CreateTransfer.Recap) },
             onPopTransferWizard = {
-                navController.popBackStack(
-                    route = Routes.Operation.CreateTransfer,
-                    inclusive = true,
-                )
+                navController.popBackStack(route = Routes.Operation.CreateTransfer, inclusive = true)
             },
         )
+        // ── Admin ──────────────────────────────────────────────────────────
+        adminGraph(navController)
     }
 }
