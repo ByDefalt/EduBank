@@ -10,6 +10,6 @@ class GetAccountDetailsAndOperation(
     private val logger: Logger
 ) {
     suspend operator fun invoke(){
-        operationRepository.
+
     }
 }
