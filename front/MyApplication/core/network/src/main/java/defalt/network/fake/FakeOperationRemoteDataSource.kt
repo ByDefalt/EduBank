@@ -35,7 +35,7 @@ class FakeOperationRemoteDataSource : IOperationRemoteDataSource {
 
     override suspend fun createOperation(operation: Operation): NetworkResult<Operation> {
         val newOperation = operation.copy(
-            id    = operations.size + 1,
+            id = operations.size + 1,
             state = OperationState.PENDING,
         )
         operations.add(newOperation)
@@ -92,7 +92,7 @@ class FakeOperationRemoteDataSource : IOperationRemoteDataSource {
     }
 
     override suspend fun deleteBeneficiary(id: Int): NetworkResult<Unit> =
-        if (beneficiaries.removeIf { it.id == id }) NetworkResult.Success(Unit)
-        else NetworkResult.Error(code = 404, message = "Bénéficiaire introuvable : $id")
+        if (beneficiaries.removeIf { it.id == id }) {
+            NetworkResult.Success(Unit)
+        } else NetworkResult.Error(code = 404, message = "Bénéficiaire introuvable : $id")
 }
-

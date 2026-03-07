@@ -10,15 +10,13 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.account.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * Données utilisateur extraites et décodées depuis le token JWT
@@ -27,19 +25,14 @@ import kotlinx.serialization.Contextual
  * @param role Rôle de l'utilisateur
  */
 @Serializable
+data class TokenResponse(
 
-data class TokenResponse (
-
-    /* Identifiant unique de l'utilisateur (Subject du token) */
+    // Identifiant unique de l'utilisateur (Subject du token)
     @SerialName(value = "id")
     val id: kotlin.String? = null,
 
-    /* Rôle de l'utilisateur */
+    // Rôle de l'utilisateur
     @SerialName(value = "role")
-    val role: kotlin.String? = null
+    val role: kotlin.String? = null,
 
-) {
-
-
-}
-
+)

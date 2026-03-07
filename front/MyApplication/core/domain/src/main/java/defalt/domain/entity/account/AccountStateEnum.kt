@@ -8,4 +8,3 @@ enum class AccountStateEnum(val value: String) {
 
     override fun toString(): String = value
 }
-

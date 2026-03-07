@@ -15,7 +15,6 @@ class LoginViewModel(
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
 
-
     fun retry() = login("", "")
 
     fun login(identifier: String, password: String) =

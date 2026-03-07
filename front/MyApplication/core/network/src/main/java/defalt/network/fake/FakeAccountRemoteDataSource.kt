@@ -30,18 +30,18 @@ class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
 
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> {
         val newPersonalInfo = PersonalInformation(
-            id          = personalInformations.size + 1,
-            firstname   = accountRegister.personalInfo.firstname,
-            lastname    = accountRegister.personalInfo.lastname,
-            email       = accountRegister.personalInfo.email,
-            address     = accountRegister.personalInfo.address,
+            id = personalInformations.size + 1,
+            firstname = accountRegister.personalInfo.firstname,
+            lastname = accountRegister.personalInfo.lastname,
+            email = accountRegister.personalInfo.email,
+            address = accountRegister.personalInfo.address,
             phoneNumber = accountRegister.personalInfo.phoneNumber,
         )
         val newAccount = Account(
-            id             = "acc-${(accounts.size + 1).toString().padStart(4, '0')}",
+            id = "acc-${(accounts.size + 1).toString().padStart(4, '0')}",
             personalInfoId = newPersonalInfo.id,
-            roleId         = FakeData.roles.find { it.name == accountRegister.role.value }?.id,
-            state          = AccountStateEnum.INACTIVE,
+            roleId = FakeData.roles.find { it.name == accountRegister.role.value }?.id,
+            state = AccountStateEnum.INACTIVE,
         )
         personalInformations.add(newPersonalInfo)
         accounts.add(newAccount)
@@ -124,15 +124,14 @@ class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
         personalInformationRegister: PersonalInformationRegister,
     ): NetworkResult<PersonalInformation> {
         val newInfo = PersonalInformation(
-            id          = personalInformations.size + 1,
-            firstname   = personalInformationRegister.firstname,
-            lastname    = personalInformationRegister.lastname,
-            email       = personalInformationRegister.email,
-            address     = personalInformationRegister.address,
+            id = personalInformations.size + 1,
+            firstname = personalInformationRegister.firstname,
+            lastname = personalInformationRegister.lastname,
+            email = personalInformationRegister.email,
+            address = personalInformationRegister.address,
             phoneNumber = personalInformationRegister.phoneNumber,
         )
         personalInformations.add(newInfo)
         return NetworkResult.Success(newInfo)
     }
 }
-

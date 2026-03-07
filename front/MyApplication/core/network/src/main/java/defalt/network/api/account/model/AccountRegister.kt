@@ -10,28 +10,24 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.account.model
 
-import defalt.network.api.account.model.PersonalInformationRegister
-import defalt.network.api.account.model.RoleEnum
-
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param personalInfo 
- * @param role 
- * @param password 
+ *
+ * @param personalInfo
+ * @param role
+ * @param password
  */
 @Serializable
-
-data class AccountRegister (
+data class AccountRegister(
 
     @SerialName(value = "personal_info")
     val personalInfo: PersonalInformationRegister,
@@ -40,10 +36,6 @@ data class AccountRegister (
     val role: RoleEnum,
 
     @SerialName(value = "password")
-    val password: kotlin.String
+    val password: kotlin.String,
 
-) {
-
-
-}
-
+)

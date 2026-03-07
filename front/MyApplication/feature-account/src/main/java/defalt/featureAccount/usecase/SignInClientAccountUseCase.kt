@@ -10,7 +10,7 @@ class SignInClientAccountUseCase(
     private val repository: IAccountRepository,
     private val logger: Logger,
 ) {
-    suspend operator fun invoke(email: String, password: String) : NetworkResult<TokenRequest> {
+    suspend operator fun invoke(email: String, password: String): NetworkResult<TokenRequest> {
         logger.debug("SignInClientAccountUseCase")
         return repository.signIn(SignInRequest(id = email, password = password))
     }

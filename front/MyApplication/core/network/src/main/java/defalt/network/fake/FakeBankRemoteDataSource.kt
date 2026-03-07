@@ -33,24 +33,24 @@ class FakeBankRemoteDataSource : IBankRemoteDataSource {
         request: BankAccountCreateRequest,
     ): NetworkResult<BankAccountDetail> {
         val newParam = BankAccountParameter(
-            id             = bankParameters.size + 1,
+            id = bankParameters.size + 1,
             overdraftLimit = request.overdraftLimit,
-            state          = request.state ?: State.ACTIVE,
+            state = request.state ?: State.ACTIVE,
         )
         val newType = Type(id = request.typeId, name = "Type ${ request.typeId }")
         val newDetail = BankAccountDetail(
-            id        = "bank-${(bankAccountDetails.size + 1).toString().padStart(4, '0')}",
+            id = "bank-${(bankAccountDetails.size + 1).toString().padStart(4, '0')}",
             parameter = newParam,
-            type      = newType,
-            sold      = request.sold,
-            iban      = request.iban,
+            type = newType,
+            sold = request.sold,
+            iban = request.iban,
         )
         val newAccount = BankAccount(
-            id          = newDetail.id,
+            id = newDetail.id,
             parameterId = newParam.id,
-            typeId      = request.typeId,
-            sold        = request.sold,
-            iban        = request.iban,
+            typeId = request.typeId,
+            sold = request.sold,
+            iban = request.iban,
         )
         bankParameters.add(newParam)
         bankAccounts.add(newAccount)
@@ -81,8 +81,9 @@ class FakeBankRemoteDataSource : IBankRemoteDataSource {
     // --- CLIENT ---
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> {
-        val result = if (typeId != null) bankAccounts.filter { it.typeId == typeId }
-                     else bankAccounts.toList()
+        val result = if (typeId != null) {
+            bankAccounts.filter { it.typeId == typeId }
+        } else bankAccounts.toList()
         return NetworkResult.Success(result)
     }
 
@@ -94,4 +95,3 @@ class FakeBankRemoteDataSource : IBankRemoteDataSource {
     override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> =
         NetworkResult.Success(emptyList())
 }
-

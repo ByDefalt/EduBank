@@ -5,4 +5,3 @@ data class Error(
     val message: String? = null,
     val details: String? = null,
 )
-

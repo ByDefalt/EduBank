@@ -10,34 +10,27 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.bank.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
  * Lien compte-utilisateur (co-titulaire)
  *
- * @param bankAccountId 
- * @param accountId 
+ * @param bankAccountId
+ * @param accountId
  */
 @Serializable
-
-data class BankAccountPivot (
+data class BankAccountPivot(
 
     @SerialName(value = "bank_account_id")
     val bankAccountId: kotlin.String,
 
     @SerialName(value = "account_id")
-    val accountId: kotlin.Int
+    val accountId: kotlin.Int,
 
-) {
-
-
-}
-
+)

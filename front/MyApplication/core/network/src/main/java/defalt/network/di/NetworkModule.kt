@@ -7,7 +7,6 @@ import defalt.network.fake.fakeDataSourcesModule
 
 /** Module racine de core:network — APIs + DataSources */
 
-val sourceModule = if(!BuildConfig.FAKE_DATA_IS_ACTIVE) dataSourcesModule else fakeDataSourcesModule
-
+val sourceModule = if (!BuildConfig.FAKE_DATA_IS_ACTIVE) dataSourcesModule else fakeDataSourcesModule
 
 val coreNetworkModule = listOf(networkModule, sourceModule)

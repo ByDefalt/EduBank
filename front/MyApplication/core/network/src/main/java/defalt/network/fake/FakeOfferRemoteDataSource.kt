@@ -34,12 +34,12 @@ class FakeOfferRemoteDataSource : IOfferRemoteDataSource {
 
     override suspend fun createOffer(request: OffersPostRequest): NetworkResult<Offer> {
         val newOffer = Offer(
-            id          = offers.size + 1,
-            title       = request.title,
+            id = offers.size + 1,
+            title = request.title,
             description = request.description,
-            state       = Offer.State.valueOf(request.state.value.uppercase()),
-            startDate   = request.startDate,
-            endDate     = request.endDate,
+            state = Offer.State.valueOf(request.state.value.uppercase()),
+            startDate = request.startDate,
+            endDate = request.endDate,
             picturePath = request.picturePath,
         )
         offers.add(newOffer)
@@ -51,11 +51,11 @@ class FakeOfferRemoteDataSource : IOfferRemoteDataSource {
         return if (index != -1) {
             val current = offers[index]
             val updated = current.copy(
-                title       = request.title ?: current.title,
+                title = request.title ?: current.title,
                 description = request.description ?: current.description,
-                state       = request.state?.let { Offer.State.valueOf(it.value.uppercase()) } ?: current.state,
-                startDate   = request.startDate ?: current.startDate,
-                endDate     = request.endDate ?: current.endDate,
+                state = request.state?.let { Offer.State.valueOf(it.value.uppercase()) } ?: current.state,
+                startDate = request.startDate ?: current.startDate,
+                endDate = request.endDate ?: current.endDate,
                 picturePath = request.picturePath ?: current.picturePath,
             )
             offers[index] = updated
@@ -79,7 +79,7 @@ class FakeOfferRemoteDataSource : IOfferRemoteDataSource {
     }
 
     override suspend fun deleteOffer(id: Int): NetworkResult<Unit> =
-        if (offers.removeIf { it.id == id }) NetworkResult.Success(Unit)
-        else NetworkResult.Error(code = 404, message = "Offre introuvable : $id")
+        if (offers.removeIf { it.id == id }) {
+            NetworkResult.Success(Unit)
+        } else NetworkResult.Error(code = 404, message = "Offre introuvable : $id")
 }
-

@@ -29,7 +29,6 @@ class AccountRepository(
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> =
         remoteDataSource.createAccount(accountRegister)
 
-
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> =
         remoteDataSource.activateAccount(id)
 

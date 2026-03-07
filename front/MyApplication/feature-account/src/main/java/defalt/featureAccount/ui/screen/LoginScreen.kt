@@ -57,8 +57,9 @@ fun LoginScreen(
         onBackToHome = onBackToHome,
     )
 }
-//alice.dupont@mail.fr
-//Alice1234!
+
+// alice.dupont@mail.fr
+// Alice1234!
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun LoginContent(
