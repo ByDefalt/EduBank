@@ -40,8 +40,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.account.PersonalInformation
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.HomeData
 import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.HomeAccountViewModel
 import defalt.ui.component.BottomNavBar
@@ -79,7 +81,7 @@ fun HomeAccountScreen(
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun HomeAccountContent(
-    uiState: UiState<BankAccountDetail>,
+    uiState: UiState<HomeData>,
     onRetry: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
@@ -97,7 +99,14 @@ internal fun HomeAccountContent(
                 onRetry = onRetry,
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
-            ) { account ->
+            ) { homeData ->
+                val firstName = homeData.personalInformation.firstname?.firstOrNull()?.uppercaseChar()
+                val lastName = homeData.personalInformation.lastname?.uppercase()
+                val greeting = when {
+                    firstName != null && lastName != null -> "Bonjour $firstName. $lastName"
+                    lastName != null -> "Bonjour $lastName"
+                    else -> "Bonjour"
+                }
 
                 LazyColumn(
                     modifier = Modifier
@@ -108,7 +117,7 @@ internal fun HomeAccountContent(
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Bonjour X.XXXXXX",
+                            text = greeting,
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
                             color = TextPrimary,
@@ -117,7 +126,7 @@ internal fun HomeAccountContent(
                     }
 
                     item {
-                        MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails, account = account)
+                        MainAccountCard(onNavigateToAccountDetails = onNavigateToAccountDetails, account = homeData.account)
                     }
 
                     item {
@@ -314,22 +323,30 @@ private fun SectionRowCard(
 private fun formatAmount(value: Double): String =
     String.format(Locale.FRANCE, "%.2f €", value)
 
-private fun sampleHomeAccounts(): BankAccountDetail =
-    BankAccountDetail(
-        id = "1",
-        parameter = BankAccountParameter(),
-        type = Type(
-            id = 1,
-            name = "COMPTE CHÈQUES",
+private fun sampleHomeData(): HomeData =
+    HomeData(
+        account = BankAccountDetail(
+            id = "1",
+            parameter = BankAccountParameter(),
+            type = Type(
+                id = 1,
+                name = "COMPTE CHÈQUES",
+            ),
+            sold = 478.27,
+            iban = "FR7630006000011234567890140",
         ),
-        sold = 478.27,
-        iban = "FR7630006000011234567890140",
+        personalInformation = PersonalInformation(
+            id = 1,
+            firstname = "Jean",
+            lastname = "Dupont",
+            email = "jean.dupont@email.com",
+        ),
     )
 
 @Preview(showBackground = true, name = "State - Success")
 @Composable
 fun HomeAccountPreviewSuccess() {
-    HomeAccountContent(uiState = UiState.Success(sampleHomeAccounts()))
+    HomeAccountContent(uiState = UiState.Success(sampleHomeData()))
 }
 
 @Preview(showBackground = true, name = "State - Loading")

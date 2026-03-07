@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val dataSourcesModule = module {
     single<IAccountRemoteDataSource> {
-        AccountRemoteDataSource(get(), get(), get(), get())
+        AccountRemoteDataSource(get(), get(), get(), get(), get())
     }
     single<IBankRemoteDataSource> {
         BankRemoteDataSource(get(), get())

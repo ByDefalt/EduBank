@@ -9,6 +9,7 @@ import defalt.domain.entity.account.Role
 import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.entity.account.TokenResponse
+import defalt.domain.session.Session
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
@@ -24,6 +25,7 @@ class AccountRemoteDataSource(
     private val personalInformationApi: PersonalInformationApi,
     private val roleApi: RoleApi,
     private val apiClient: ApiClient,
+    private val session: Session,
 ) : IAccountRemoteDataSource {
 
     // --- COMPTES ---
@@ -57,6 +59,8 @@ class AccountRemoteDataSource(
                     .build()
                 chain.proceed(request)
             }
+            session.token = token
+            session.accountId = signInRequest.id
         }
         return result
     }

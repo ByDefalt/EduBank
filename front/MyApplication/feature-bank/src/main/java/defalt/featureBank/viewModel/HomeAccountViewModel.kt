@@ -1,8 +1,8 @@
 package defalt.featureBank.viewModel
 
 import androidx.lifecycle.ViewModel
-import defalt.domain.entity.bank.BankAccountDetail
-import defalt.featureBank.usecase.GetHomeAccount
+import defalt.domain.entity.bank.HomeData
+import defalt.featureBank.usecase.GetHomeData
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class HomeAccountViewModel(
-    private val getHomeAccount: GetHomeAccount,
+    private val getHomeData: GetHomeData,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<BankAccountDetail>>(UiState.Loading)
-    val uiState: StateFlow<UiState<BankAccountDetail>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<HomeData>>(UiState.Loading)
+    val uiState: StateFlow<UiState<HomeData>> = _uiState.asStateFlow()
 
     init {
         loadData()
@@ -23,6 +23,6 @@ class HomeAccountViewModel(
     fun retry() = loadData()
 
     private fun loadData() = launchWithUiState(stateFlow = _uiState, transform = { it }) {
-        getHomeAccount()
+        getHomeData()
     }
 }
