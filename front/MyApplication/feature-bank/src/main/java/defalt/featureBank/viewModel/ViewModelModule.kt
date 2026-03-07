@@ -5,6 +5,6 @@ import org.koin.dsl.module
 
 val featureBankViewModelModule = module {
     viewModel { ListAccountViewModel() }
-    viewModel { AccountDetailsViewModel(get()) }
+    viewModel { AccountDetailsViewModel() }
     viewModel { HomeAccountViewModel(get()) }
 }

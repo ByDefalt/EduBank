@@ -10,9 +10,12 @@ import defalt.domain.entity.account.Role
 import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.entity.account.TokenResponse
+import defalt.domain.session.Session
 import defalt.utils.NetworkResult
 
-class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
+class FakeAccountRemoteDataSource(
+    private val session: Session,
+) : IAccountRemoteDataSource {
 
     // Copie mutable des données pour simuler les créations / suppressions
     private val accounts = FakeData.accounts.toMutableList()
@@ -71,6 +74,8 @@ class FakeAccountRemoteDataSource : IAccountRemoteDataSource {
             it.email == signInRequest.id && it.password == signInRequest.password
         }
         return if (credential != null) {
+            session.accountId = credential.accountId
+            session.token = FakeData.FAKE_JWT
             NetworkResult.Success(TokenRequest(jwt = FakeData.FAKE_JWT))
         } else {
             NetworkResult.Error(code = 401, message = "Identifiants invalides")

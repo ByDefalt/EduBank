@@ -1,6 +1,5 @@
 package defalt.featureBank.viewModel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.bank.BankAccount
@@ -21,10 +20,8 @@ data class AccountDetailsData(
 )
 
 class AccountDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val accountId: Int = savedStateHandle["accountId"] ?: 0
 
     private val _uiState = MutableStateFlow<UiState<AccountDetailsData>>(UiState.Loading)
     val uiState: StateFlow<UiState<AccountDetailsData>> = _uiState.asStateFlow()

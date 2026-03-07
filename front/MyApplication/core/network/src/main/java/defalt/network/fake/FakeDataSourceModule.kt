@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val fakeDataSourcesModule = module {
     single<IAccountRemoteDataSource> {
-        FakeAccountRemoteDataSource()
+        FakeAccountRemoteDataSource(get())
     }
     single<IBankRemoteDataSource> {
         FakeBankRemoteDataSource()
