@@ -7,6 +7,7 @@ import defalt.featureAccount.ui.navigation.accountGraph
 import defalt.featureBank.ui.navigation.bankGraph
 import defalt.featureOffer.ui.navigation.offerGraph
 import defalt.featureOperation.ui.navigation.operationGraph
+import defalt.domain.entity.account.RoleEnum
 import defalt.ui.utils.Routes
 
 @Composable
@@ -23,7 +24,16 @@ fun ArkeoNavHost(navController: NavHostController) {
         accountGraph(
             onBackToHome = { navController.popBackStack() },
             onRegisterSuccess = { navController.navigate(Routes.Core.Home) },
-            onLoginSuccess = { navController.navigate(Routes.Bank.Home) },
+            onLoginSuccess = { role ->
+                when (role) {
+                    RoleEnum.ADMIN -> navController.navigate(Routes.Core.AdminHome) {
+                        popUpTo(Routes.Core.Home) { inclusive = false }
+                    }
+                    RoleEnum.CUSTOMER -> navController.navigate(Routes.Bank.Home) {
+                        popUpTo(Routes.Core.Home) { inclusive = false }
+                    }
+                }
+            },
         )
         offerGraph(
             onBack = { navController.popBackStack() },

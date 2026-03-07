@@ -60,7 +60,12 @@ class AccountRemoteDataSource(
                 chain.proceed(request)
             }
             session.token = token
-            session.accountId = signInRequest.id
+            // Récupérer le vrai id et le rôle depuis le token
+            val validateResult = safeApiCall { api.accountsValidatePost(result.data.toDto()) }.map { it.toEntity() }
+            if (validateResult is NetworkResult.Success) {
+                session.accountId = validateResult.data.id
+                session.role = validateResult.data.role
+            }
         }
         return result
     }

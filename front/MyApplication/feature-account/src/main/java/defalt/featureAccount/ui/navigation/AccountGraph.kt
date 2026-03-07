@@ -3,6 +3,7 @@ package defalt.featureAccount.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.ui.screen.LoginScreen
 import defalt.featureAccount.ui.screen.RegisterScreen
 import defalt.ui.utils.Routes
@@ -10,7 +11,7 @@ import defalt.ui.utils.Routes
 fun NavGraphBuilder.accountGraph(
     onBackToHome: () -> Unit,
     onRegisterSuccess: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {},
+    onLoginSuccess: (RoleEnum) -> Unit = {},
 ) {
     navigation<Routes.Account>(
         startDestination = Routes.Account.Login,

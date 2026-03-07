@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.viewModel.LoginViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
@@ -41,13 +42,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(
     onBackToHome: () -> Unit,
-    onLoginSuccess: () -> Unit = {},
+    onLoginSuccess: (RoleEnum) -> Unit = {},
     viewModel: LoginViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState) {
-        if (uiState is UiState.Success) onLoginSuccess()
+        if (uiState is UiState.Success) onLoginSuccess((uiState as UiState.Success<RoleEnum>).data)
     }
 
     LoginContent(

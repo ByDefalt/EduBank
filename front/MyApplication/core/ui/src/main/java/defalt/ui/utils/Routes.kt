@@ -10,6 +10,9 @@ sealed class Routes {
 
         @Serializable
         object Home : Routes()
+
+        @Serializable
+        object AdminHome : Routes()
     }
 
     @Serializable

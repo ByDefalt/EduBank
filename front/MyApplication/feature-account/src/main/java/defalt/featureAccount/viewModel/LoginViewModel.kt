@@ -1,6 +1,7 @@
 package defalt.featureAccount.viewModel
 
 import androidx.lifecycle.ViewModel
+import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.usecase.SignInClientAccountUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
@@ -12,13 +13,12 @@ class LoginViewModel(
     private val signInClientAccountUseCase: SignInClientAccountUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
-    val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState<RoleEnum>>(UiState.Idle)
+    val uiState: StateFlow<UiState<RoleEnum>> = _uiState.asStateFlow()
 
-    fun retry() = login("", "")
 
     fun login(identifier: String, password: String) =
-        launchWithUiState(_uiState) {
+        launchWithUiState(_uiState, transform = { it }) {
             signInClientAccountUseCase(identifier, password)
         }
 }

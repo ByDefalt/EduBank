@@ -75,6 +75,7 @@ class FakeAccountRemoteDataSource(
         }
         return if (credential != null) {
             session.accountId = credential.accountId
+            session.role = credential.role
             session.token = FakeData.FAKE_JWT
             NetworkResult.Success(TokenRequest(jwt = FakeData.FAKE_JWT))
         } else {
@@ -82,12 +83,16 @@ class FakeAccountRemoteDataSource(
         }
     }
 
-    override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> =
-        if (tokenRequest.jwt == FakeData.FAKE_JWT) {
-            NetworkResult.Success(FakeData.tokenResponseAlice)
-        } else {
-            NetworkResult.Error(code = 401, message = "Token invalide ou expiré")
+    override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> {
+        if (tokenRequest.jwt != FakeData.FAKE_JWT) {
+            return NetworkResult.Error(code = 401, message = "Token invalide ou expiré")
         }
+        val tokenResponse = TokenResponse(
+            id = session.accountId,
+            role = session.role,
+        )
+        return NetworkResult.Success(tokenResponse)
+    }
 
     // --- RÔLES ---
 
