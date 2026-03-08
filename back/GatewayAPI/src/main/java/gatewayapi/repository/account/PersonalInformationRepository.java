@@ -27,4 +27,8 @@ public class PersonalInformationRepository {
     public PersonalInformation create(PersonalInformationRegister personalInformationRegister) {
         return  accountClient.createPersonalInformation(personalInformationRegister);
     }
+
+    public PersonalInformation update(Integer id, PersonalInformation personalInformation) {
+        return accountClient.updatePersonalInformation(id, personalInformation);
+    }
 }
