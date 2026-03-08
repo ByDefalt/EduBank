@@ -11,4 +11,5 @@ val featureAccountUseCaseModule = module {
     single { GetAccountByIdUseCase(get(), get()) }
     single { ActivateAccountUseCase(get(), get()) }
     single { DeactivateAccountUseCase(get(), get()) }
+    single { UpdatePersonalInfoUseCase(get(), get()) }
 }

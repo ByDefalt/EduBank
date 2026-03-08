@@ -7,6 +7,8 @@ val featureOperationViewModelModule = module {
     viewModel { BeneficiariesViewModel(get()) }
     viewModel { AddBeneficiaryViewModel(get()) }
     viewModel { EditBeneficiaryViewModel(get(), get(), get()) }
-    // VM partagé pour tout le wizard de création de virement (étapes Débit → Destinataire → Montant → Libellé → Récap)
     viewModel { CreateTransferViewModel(get(), get(), get()) }
+    // Admin
+    viewModel { AdminOperationListViewModel(get()) }
+    viewModel { AdminOperationDetailViewModel(get(), get(), get()) }
 }

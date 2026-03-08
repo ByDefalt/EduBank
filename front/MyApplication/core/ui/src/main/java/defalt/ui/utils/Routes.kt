@@ -33,6 +33,10 @@ sealed class Routes {
         @Serializable data class OfferDetail(val id: Int) : Routes()
 
         @Serializable object CreateOffer : Routes()
+
+        @Serializable object OperationList : Routes()
+
+        @Serializable data class OperationDetail(val id: Int) : Routes()
     }
 
     @Serializable

@@ -75,11 +75,13 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToAccounts = { navController.navigate(Routes.Admin.AccountList) },
             onNavigateToBankAccounts = { navController.navigate(Routes.Admin.BankList) },
             onNavigateToOffers = { navController.navigate(Routes.Admin.OfferList) },
+            onNavigateToOperations = { navController.navigate(Routes.Admin.OperationList) },
             onNavigateToAccountDetail = { id -> navController.navigate(Routes.Admin.AccountDetail(id)) },
             onNavigateToAdminHome = { navController.navigate(Routes.Core.AdminHome) },
             onNavigateToBankDetail = { id -> navController.navigate(Routes.Admin.BankDetail(id)) },
             onNavigateToOfferDetail = { id -> navController.navigate(Routes.Admin.OfferDetail(id)) },
             onNavigateToCreateOffer = { navController.navigate(Routes.Admin.CreateOffer) },
+            onNavigateToOperationDetail = { id -> navController.navigate(Routes.Admin.OperationDetail(id)) },
             onBack = { navController.popBackStack() },
         )
         // ── Menu ───────────────────────────────────────────────────────────

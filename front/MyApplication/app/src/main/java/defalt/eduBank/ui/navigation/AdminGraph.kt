@@ -12,25 +12,29 @@ import defalt.featureBank.ui.screen.AdminBankListScreen
 import defalt.featureOffer.ui.screen.AdminCreateOfferScreen
 import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
+import defalt.featureOperation.ui.screen.AdminOperationDetailScreen
+import defalt.featureOperation.ui.screen.AdminOperationListScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.adminGraph(
     onNavigateToAccounts: () -> Unit,
     onNavigateToBankAccounts: () -> Unit,
     onNavigateToOffers: () -> Unit,
+    onNavigateToOperations: () -> Unit,
     onNavigateToAccountDetail: (String) -> Unit,
     onNavigateToAdminHome: () -> Unit,
     onNavigateToBankDetail: (String) -> Unit,
     onNavigateToOfferDetail: (Int) -> Unit,
     onNavigateToCreateOffer: () -> Unit,
+    onNavigateToOperationDetail: (Int) -> Unit,
     onBack: () -> Unit,
 ) {
-    // Hub admin (hors sous-graphe pour être accessible depuis Routes.Core.AdminHome)
     composable<Routes.Core.AdminHome> {
         AdminHomeScreen(
             onNavigateToAccounts = onNavigateToAccounts,
             onNavigateToBankAccounts = onNavigateToBankAccounts,
             onNavigateToOffers = onNavigateToOffers,
+            onNavigateToOperations = onNavigateToOperations,
         )
     }
 
@@ -84,6 +88,21 @@ fun NavGraphBuilder.adminGraph(
             AdminCreateOfferScreen(
                 onBack = onBack,
                 onSuccess = onBack,
+            )
+        }
+
+        // ── Opérations ─────────────────────────────────────────────────────
+        composable<Routes.Admin.OperationList> {
+            AdminOperationListScreen(
+                onBack = onNavigateToAdminHome,
+                onItemClick = onNavigateToOperationDetail,
+            )
+        }
+        composable<Routes.Admin.OperationDetail> { entry ->
+            val id = entry.toRoute<Routes.Admin.OperationDetail>().id
+            AdminOperationDetailScreen(
+                id = id,
+                onBack = onBack,
             )
         }
     }

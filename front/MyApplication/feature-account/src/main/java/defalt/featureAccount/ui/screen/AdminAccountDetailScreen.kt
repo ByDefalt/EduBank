@@ -1,5 +1,6 @@
 package defalt.featureAccount.ui.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,10 +22,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,6 +62,7 @@ fun AdminAccountDetailScreen(
     LaunchedEffect(id) { viewModel.load(id) }
 
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
+        // Header
         Row(
             modifier = Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -81,12 +87,20 @@ fun AdminAccountDetailScreen(
             loadingColor = CustomColor.ArkeoRed,
             errorColor = CustomColor.ArkeoRed,
         ) { data ->
-            Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+            val isLoading = actionState is UiState.Loading
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                // UC6 : Infos
                 InfoCard(data)
-                Spacer(modifier = Modifier.height(16.dp))
+                // UC14 : Formulaire MAJ infos personnelles
+                EditPersonalInfoCard(
+                    info = data.personalInfo,
+                    isLoading = isLoading,
+                    onSave = { updated -> viewModel.updateInfo(id, updated) },
+                )
+                // UC10 : Changer état
                 ActionsCard(
                     isActive = data.account.state == AccountStateEnum.ACTIVE,
-                    isLoading = actionState is UiState.Loading,
+                    isLoading = isLoading,
                     onActivate = { viewModel.activate(id) },
                     onDeactivate = { viewModel.deactivate(id) },
                 )
@@ -117,6 +131,42 @@ private fun InfoCard(data: AccountWithInfo) {
 }
 
 @Composable
+private fun EditPersonalInfoCard(
+    info: PersonalInformation,
+    isLoading: Boolean,
+    onSave: (PersonalInformation) -> Unit,
+) {
+    var firstname by remember(info) { mutableStateOf(info.firstname ?: "") }
+    var lastname by remember(info) { mutableStateOf(info.lastname ?: "") }
+    var email by remember(info) { mutableStateOf(info.email ?: "") }
+    var phone by remember(info) { mutableStateOf(info.phoneNumber ?: "") }
+    var address by remember(info) { mutableStateOf(info.address ?: "") }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(2.dp),
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("MODIFIER INFORMATIONS PERSONNELLES", color = CustomColor.ArkeoRed, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+            OutlinedTextField(value = firstname, onValueChange = { firstname = it }, label = { Text("Prénom") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = lastname, onValueChange = { lastname = it }, label = { Text("Nom") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = email, onValueChange = { email = it }, label = { Text("Email") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = phone, onValueChange = { phone = it }, label = { Text("Téléphone") }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(value = address, onValueChange = { address = it }, label = { Text("Adresse") }, modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(4.dp))
+            ArkeoButton(
+                text = if (isLoading) "Enregistrement…" else "ENREGISTRER",
+                onClick = {
+                    if (!isLoading) onSave(info.copy(firstname = firstname, lastname = lastname, email = email, phoneNumber = phone, address = address))
+                },
+            )
+        }
+    }
+}
+
+@Composable
 private fun ActionsCard(isActive: Boolean, isLoading: Boolean, onActivate: () -> Unit, onDeactivate: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -138,7 +188,7 @@ private fun ActionsCard(isActive: Boolean, isLoading: Boolean, onActivate: () ->
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = CustomColor.ArkeoRed),
-                    border = androidx.compose.foundation.BorderStroke(1.5.dp, CustomColor.ArkeoRed),
+                    border = BorderStroke(1.5.dp, CustomColor.ArkeoRed),
                 ) {
                     Text(if (isLoading) "En cours…" else "DÉSACTIVER LE COMPTE", fontWeight = FontWeight.Bold, color = CustomColor.ArkeoRed)
                 }

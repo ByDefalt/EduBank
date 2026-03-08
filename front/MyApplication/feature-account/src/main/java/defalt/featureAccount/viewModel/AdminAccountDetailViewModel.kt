@@ -2,10 +2,12 @@ package defalt.featureAccount.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import defalt.domain.entity.account.PersonalInformation
 import defalt.featureAccount.usecase.AccountWithInfo
 import defalt.featureAccount.usecase.ActivateAccountUseCase
 import defalt.featureAccount.usecase.DeactivateAccountUseCase
 import defalt.featureAccount.usecase.GetAccountByIdUseCase
+import defalt.featureAccount.usecase.UpdatePersonalInfoUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import defalt.utils.NetworkResult
@@ -19,6 +21,7 @@ class AdminAccountDetailViewModel(
     private val getAccountById: GetAccountByIdUseCase,
     private val activateAccount: ActivateAccountUseCase,
     private val deactivateAccount: DeactivateAccountUseCase,
+    private val updatePersonalInfo: UpdatePersonalInfoUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<AccountWithInfo>>(UiState.Loading)
@@ -46,6 +49,18 @@ class AdminAccountDetailViewModel(
         viewModelScope.launch {
             _actionState.update { UiState.Loading }
             when (val r = deactivateAccount(id)) {
+                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
+                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
+                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
+            }
+        }
+    }
+
+    fun updateInfo(id: String, info: PersonalInformation) {
+        viewModelScope.launch {
+            _actionState.update { UiState.Loading }
+            val infoId = (_uiState.value as? UiState.Success)?.data?.personalInfo?.id ?: return@launch
+            when (val r = updatePersonalInfo(infoId, info)) {
                 is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
                 is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
                 is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -37,6 +38,7 @@ fun AdminHomeScreen(
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToBankAccounts: () -> Unit = {},
     onNavigateToOffers: () -> Unit = {},
+    onNavigateToOperations: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -54,24 +56,10 @@ fun AdminHomeScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        AdminMenuCard(
-            icon = Icons.Default.People,
-            title = "Comptes utilisateurs",
-            subtitle = "Gérer les comptes et leur état",
-            onClick = onNavigateToAccounts,
-        )
-        AdminMenuCard(
-            icon = Icons.Default.AccountBalance,
-            title = "Comptes bancaires",
-            subtitle = "Gérer les comptes bancaires",
-            onClick = onNavigateToBankAccounts,
-        )
-        AdminMenuCard(
-            icon = Icons.Default.CardGiftcard,
-            title = "Offres",
-            subtitle = "Créer et gérer les offres",
-            onClick = onNavigateToOffers,
-        )
+        AdminMenuCard(icon = Icons.Default.People, title = "Comptes utilisateurs", subtitle = "Gérer les comptes et leur état", onClick = onNavigateToAccounts)
+        AdminMenuCard(icon = Icons.Default.AccountBalance, title = "Comptes bancaires", subtitle = "Gérer les comptes bancaires", onClick = onNavigateToBankAccounts)
+        AdminMenuCard(icon = Icons.Default.CardGiftcard, title = "Offres", subtitle = "Créer et gérer les offres", onClick = onNavigateToOffers)
+        AdminMenuCard(icon = Icons.Default.SwapHoriz, title = "Opérations", subtitle = "Consulter et gérer les opérations", onClick = onNavigateToOperations)
     }
 }
 

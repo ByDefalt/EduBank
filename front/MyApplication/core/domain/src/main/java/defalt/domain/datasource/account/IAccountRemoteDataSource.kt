@@ -32,4 +32,5 @@ interface IAccountRemoteDataSource {
     suspend fun getPersonalInformationById(id: Int): NetworkResult<PersonalInformation>
     suspend fun getPersonalInformationByAccountId(accountId: String): NetworkResult<PersonalInformation>
     suspend fun createPersonalInformation(personalInformationRegister: PersonalInformationRegister): NetworkResult<PersonalInformation>
+    suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation>
 }

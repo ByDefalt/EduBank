@@ -9,4 +9,9 @@ val featureOperationUseCaseModule = module {
     single { DeleteBeneficiary(get(), get()) }
     single { GetMyBankAccounts(get(), get()) }
     single { CreateTransfer(get(), get(), get()) }
+    // Admin
+    single { GetAllOperationsUseCase(get(), get()) }
+    single { GetOperationByIdUseCase(get(), get()) }
+    single { CancelOperationUseCase(get(), get()) }
+    single { UpdateOperationStateUseCase(get(), get()) }
 }

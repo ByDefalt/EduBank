@@ -77,4 +77,7 @@ class AccountRepository(
 
     override suspend fun createPersonalInformation(personalInformationRegister: PersonalInformationRegister): NetworkResult<PersonalInformation> =
         remoteDataSource.createPersonalInformation(personalInformationRegister)
+
+    override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> =
+        remoteDataSource.updatePersonalInformation(id, personalInformation)
 }

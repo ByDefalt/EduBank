@@ -144,4 +144,12 @@ class FakeAccountRemoteDataSource(
         personalInformations.add(newInfo)
         return NetworkResult.Success(newInfo)
     }
+
+    override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> {
+        val index = personalInformations.indexOfFirst { it.id == id }
+        return if (index != -1) {
+            personalInformations[index] = personalInformation.copy(id = id)
+            NetworkResult.Success(personalInformations[index])
+        } else NetworkResult.Error(code = 404, message = "Info personnelle introuvable : $id")
+    }
 }

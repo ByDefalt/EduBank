@@ -9,5 +9,5 @@ val featureAccountViewModelModule = module {
     viewModel { MenuViewModel(get()) }
     // Admin
     viewModel { AdminAccountListViewModel(get()) }
-    viewModel { AdminAccountDetailViewModel(get(), get(), get()) }
+    viewModel { AdminAccountDetailViewModel(get(), get(), get(), get()) }
 }

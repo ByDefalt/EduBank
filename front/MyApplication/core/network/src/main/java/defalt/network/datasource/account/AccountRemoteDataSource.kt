@@ -101,4 +101,9 @@ class AccountRemoteDataSource(
         safeApiCall {
             personalInformationApi.personalInformationPost(personalInformationRegister.toDto())
         }.map { it.toEntity() }
+
+    override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> =
+        safeApiCall {
+            personalInformationApi.personalInformationIdPut(id, personalInformation.toDto())
+        }.map { it.toEntity() }
 }
