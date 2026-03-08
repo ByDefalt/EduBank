@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static accountapi.mapper.PersonalInformationMapper.toDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -39,8 +38,6 @@ class PersonalInformationBusinessTest {
         entity.setAddress("123 Rue de la République, 69001 Lyon");
         entity.setPhoneNumber("+33698765432");
 
-        PersonalInformation personalInfo = toDto(entity);
-
         when(personalInformationRepository.findAll()).thenReturn(java.util.Collections.singletonList(entity));
 
         List<PersonalInformation> results = personalInformationBusiness.getAllPersonalInformation();
@@ -58,8 +55,6 @@ class PersonalInformationBusinessTest {
         entity.setEmail("jean.martin@example.com");
         entity.setAddress("123 Rue de la République, 69001 Lyon");
         entity.setPhoneNumber("+33698765432");
-
-        PersonalInformation personalInfo = toDto(entity);
 
         when(personalInformationRepository.findById(100)).thenReturn(entity);
 
@@ -86,14 +81,12 @@ class PersonalInformationBusinessTest {
         savedEntity.setAddress("123 Rue de la République, 69001 Lyon");
         savedEntity.setPhoneNumber("+33698765432");
 
-        PersonalInformation personalInfo = toDto(savedEntity);
-
         when(personalInformationRepository.create(any(PersonalInformationEntity.class))).thenReturn(savedEntity);
 
         PersonalInformation result = personalInformationBusiness.createPersonalInformation(registerDto);
 
-        assertEquals(personalInfo.getFirstname(), result.getFirstname());
-        assertEquals(personalInfo.getLastname(), result.getLastname());
+        assertEquals(savedEntity.getFirstname(), result.getFirstname());
+        assertEquals(savedEntity.getLastname(), result.getLastname());
     }
 
     @Test
@@ -123,5 +116,87 @@ class PersonalInformationBusinessTest {
 
         assertTrue(result);
         verify(personalInformationRepository).delete(100);
+    }
+
+    @Test
+    void testUpdatePersonalInformation() {
+        PersonalInformation dto = new PersonalInformation();
+        dto.setId(100);
+        dto.setFirstname("Jean");
+        dto.setLastname("Dupont");
+        dto.setEmail("jean.dupont@example.com");
+        dto.setAddress("456 Avenue des Fleurs, 75008 Paris");
+        dto.setPhoneNumber("+33612345678");
+
+        PersonalInformationEntity existing = new PersonalInformationEntity();
+        existing.setId(100);
+        existing.setFirstname("Jean");
+        existing.setLastname("Martin");
+        existing.setEmail("jean.martin@example.com");
+        existing.setAddress("123 Rue de la République, 69001 Lyon");
+        existing.setPhoneNumber("+33698765432");
+
+        PersonalInformationEntity updated = new PersonalInformationEntity();
+        updated.setId(100);
+        updated.setFirstname("Jean");
+        updated.setLastname("Dupont");
+        updated.setEmail("jean.dupont@example.com");
+        updated.setAddress("456 Avenue des Fleurs, 75008 Paris");
+        updated.setPhoneNumber("+33612345678");
+
+        when(personalInformationRepository.findById(100)).thenReturn(existing);
+        when(personalInformationRepository.update(any(Integer.class), any(PersonalInformationEntity.class))).thenReturn(updated);
+
+        PersonalInformation result = personalInformationBusiness.updatePersonalInformation(100, dto);
+
+        assertEquals("Jean", result.getFirstname());
+        assertEquals("Dupont", result.getLastname());
+        assertEquals("jean.dupont@example.com", result.getEmail());
+        verify(personalInformationRepository).update(any(Integer.class), any(PersonalInformationEntity.class));
+    }
+
+    @Test
+    void testUpdatePersonalInformationNotFound() {
+        PersonalInformation dto = new PersonalInformation();
+        dto.setId(999);
+        dto.setFirstname("Jean");
+        dto.setLastname("Dupont");
+
+        when(personalInformationRepository.findById(999)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> personalInformationBusiness.updatePersonalInformation(999, dto));
+    }
+
+    @Test
+    void testUpdatePersonalInformationFails() {
+        PersonalInformation dto = new PersonalInformation();
+        dto.setId(100);
+        dto.setFirstname("Jean");
+        dto.setLastname("Dupont");
+        dto.setEmail("jean.dupont@example.com");
+        dto.setAddress("456 Avenue des Fleurs, 75008 Paris");
+        dto.setPhoneNumber("+33612345678");
+
+        PersonalInformationEntity existing = new PersonalInformationEntity();
+        existing.setId(100);
+        existing.setFirstname("Jean");
+        existing.setLastname("Martin");
+        existing.setEmail("jean.martin@example.com");
+        existing.setAddress("123 Rue de la République, 69001 Lyon");
+        existing.setPhoneNumber("+33698765432");
+
+        when(personalInformationRepository.findById(100)).thenReturn(existing);
+        when(personalInformationRepository.update(any(Integer.class), any(PersonalInformationEntity.class))).thenReturn(null);
+
+        assertThrows(FunctionalException.class, () -> personalInformationBusiness.updatePersonalInformation(100, dto));
+    }
+
+    @Test
+    void testGetAllPersonalInformationEmpty() {
+        when(personalInformationRepository.findAll()).thenReturn(java.util.Collections.emptyList());
+
+        List<PersonalInformation> results = personalInformationBusiness.getAllPersonalInformation();
+
+        assertTrue(results.isEmpty());
     }
 }
