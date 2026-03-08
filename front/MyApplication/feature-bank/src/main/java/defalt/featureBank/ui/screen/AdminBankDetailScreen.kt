@@ -145,12 +145,14 @@ fun AdminBankDetailScreen(
                         ArkeoButton(
                             text = if (isLoading) "Enregistrement…" else "ENREGISTRER",
                             onClick = {
-                                if (!isLoading) viewModel.updateFull(
-                                    id = id,
-                                    typeId = selectedTypeId,
-                                    overdraftLimit = overdraft.toDoubleOrNull() ?: 0.0,
-                                    state = selectedState,
-                                )
+                                if (!isLoading) {
+                                    viewModel.updateFull(
+                                        id = id,
+                                        typeId = selectedTypeId,
+                                        overdraftLimit = overdraft.toDoubleOrNull() ?: 0.0,
+                                        state = selectedState,
+                                    )
+                                }
                             },
                         )
                     }

@@ -1,7 +1,6 @@
 package defalt.featureBank.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
 import defalt.domain.entity.bank.State
@@ -15,8 +14,6 @@ import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class AdminBankDetailViewModel(
     private val getBankAccountById: AdminGetBankAccountByIdUseCase,
@@ -35,43 +32,23 @@ class AdminBankDetailViewModel(
         getBankAccountById(id)
     }
 
-    // Mise à jour complète : type + état + découvert
+    // UC11 + UC15 : type + état + découvert
     fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
-            when (val r = updateBankAccount(id, typeId, param)) {
-                is NetworkResult.Success -> {
-                    _actionState.update { UiState.Success(Unit) }
-                    _uiState.update { UiState.Success(r.data) }
-                }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
+        val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
+        launchWithUiState(stateFlow = _uiState, transform = { it }) {
+            updateBankAccount(id, typeId, param).also {
+                if (it is NetworkResult.Success) _actionState.value = UiState.Success(Unit)
             }
         }
     }
 
-    // Mise à jour découvert uniquement (UC15 — conservé pour compatibilité)
-    fun update(id: String, overdraftLimit: Double) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            val param = BankAccountParameter(overdraftLimit = overdraftLimit)
-            when (val r = updateBankAccountParam(id, param)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    // UC15 uniquement
+    fun update(id: String, overdraftLimit: Double) = launchWithUiState(_actionState) {
+        updateBankAccountParam(id, BankAccountParameter(overdraftLimit = overdraftLimit))
+            .also { if (it is NetworkResult.Success) load(id) }
     }
 
-    fun delete(id: String, onSuccess: () -> Unit) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            when (val r = deleteBankAccount(id)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; onSuccess() }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    fun delete(id: String, onSuccess: () -> Unit) = launchWithUiState(_actionState) {
+        deleteBankAccount(id).also { if (it is NetworkResult.Success) onSuccess() }
     }
 }

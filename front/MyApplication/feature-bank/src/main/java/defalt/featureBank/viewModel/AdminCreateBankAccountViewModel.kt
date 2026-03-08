@@ -1,7 +1,6 @@
 package defalt.featureBank.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.bank.BankAccountCreateRequest
 import defalt.domain.entity.bank.BankAccountDetail
@@ -14,8 +13,6 @@ import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class AdminCreateBankAccountViewModel(
     private val createBankAccount: AdminCreateBankAccountUseCase,
@@ -45,21 +42,17 @@ class AdminCreateBankAccountViewModel(
         state: State,
         onSuccess: () -> Unit,
     ) {
-        viewModelScope.launch {
-            _createState.update { UiState.Loading }
-            val request = BankAccountCreateRequest(
-                typeId = typeId,
-                iban = iban,
-                sold = sold,
-                overdraftLimit = overdraftLimit,
-                state = state,
-            )
-            when (val r = createBankAccount(accountId, request)) {
-                is NetworkResult.Success -> { _createState.update { UiState.Success(r.data) }; onSuccess() }
-                is NetworkResult.Error -> _createState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _createState.update { UiState.Error(r.throwable.message ?: "Erreur") }
+        val request = BankAccountCreateRequest(
+            typeId = typeId,
+            iban = iban,
+            sold = sold,
+            overdraftLimit = overdraftLimit,
+            state = state,
+        )
+        launchWithUiState(stateFlow = _createState, transform = { it }) {
+            createBankAccount(accountId, request).also {
+                if (it is NetworkResult.Success) onSuccess()
             }
         }
     }
 }
-

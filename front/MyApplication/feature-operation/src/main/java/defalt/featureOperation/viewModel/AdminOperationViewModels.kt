@@ -1,7 +1,6 @@
 package defalt.featureOperation.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.featureOperation.usecase.CancelOperationUseCase
@@ -14,8 +13,6 @@ import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 // ── UC5 : Liste des opérations ───────────────────────────────────────────────
 class AdminOperationListViewModel(
@@ -51,27 +48,13 @@ class AdminOperationDetailViewModel(
         getOperationById(id)
     }
 
-    // UC20 : Créer une opération d'annulation
-    fun cancel(id: Int) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            when (val r = cancelOperation(id)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    // UC20 : Annuler l'opération
+    fun cancel(id: Int) = launchWithUiState(_actionState) {
+        cancelOperation(id).also { if (it is NetworkResult.Success) load(id) }
     }
 
-    // UC13/UC21 : Changer / Mettre à jour l'état
-    fun updateState(id: Int, state: OperationState) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            when (val r = updateOperationState(id, state.value)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    // UC13/UC21 : Changer / mettre à jour l'état
+    fun updateState(id: Int, state: OperationState) = launchWithUiState(_actionState) {
+        updateOperationState(id, state.value).also { if (it is NetworkResult.Success) load(id) }
     }
 }

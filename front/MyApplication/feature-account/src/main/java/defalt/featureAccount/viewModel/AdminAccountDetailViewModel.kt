@@ -1,7 +1,6 @@
 package defalt.featureAccount.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.account.PersonalInformation
 import defalt.featureAccount.usecase.AccountWithInfo
 import defalt.featureAccount.usecase.ActivateAccountUseCase
@@ -10,12 +9,9 @@ import defalt.featureAccount.usecase.GetAccountByIdUseCase
 import defalt.featureAccount.usecase.UpdatePersonalInfoUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
-import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class AdminAccountDetailViewModel(
     private val getAccountById: GetAccountByIdUseCase,
@@ -34,37 +30,18 @@ class AdminAccountDetailViewModel(
         getAccountById(id)
     }
 
-    fun activate(id: String) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            when (val r = activateAccount(id)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    fun activate(id: String) = launchWithUiState(_actionState) {
+        activateAccount(id).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
     }
 
-    fun deactivate(id: String) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            when (val r = deactivateAccount(id)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
-        }
+    fun deactivate(id: String) = launchWithUiState(_actionState) {
+        deactivateAccount(id).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
     }
 
     fun updateInfo(id: String, info: PersonalInformation) {
-        viewModelScope.launch {
-            _actionState.update { UiState.Loading }
-            val infoId = (_uiState.value as? UiState.Success)?.data?.personalInfo?.id ?: return@launch
-            when (val r = updatePersonalInfo(infoId, info)) {
-                is NetworkResult.Success -> { _actionState.update { UiState.Success(Unit) }; load(id) }
-                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
-                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
-            }
+        val infoId = (_uiState.value as? UiState.Success)?.data?.personalInfo?.id ?: return
+        launchWithUiState(_actionState) {
+            updatePersonalInfo(infoId, info).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
         }
     }
 }
