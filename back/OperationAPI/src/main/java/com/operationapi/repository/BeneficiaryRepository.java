@@ -1,6 +1,6 @@
 package com.operationapi.repository;
 
-import dto.operationapi.Beneficiary;
+import com.operationapi.entity.BeneficiaryEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -21,30 +21,30 @@ public class BeneficiaryRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Beneficiary save(Beneficiary beneficiary) {
+    public BeneficiaryEntity save(BeneficiaryEntity beneficiary) {
         this.jdbcTemplate.update(SQL_INSERT_BENEFICIARY, Map.of(
-                "account_source_id", beneficiary.getAccountSourceId(),
-                "iban_target", beneficiary.getIbanTarget(),
-                "name", beneficiary.getName()
+                "account_source_id", beneficiary.accountSourceId(),
+                "iban_target", beneficiary.ibanTarget(),
+                "name", beneficiary.name()
         ));
         return beneficiary;
     }
 
-    public List<Beneficiary> getBeneficiaries() {
+    public List<BeneficiaryEntity> getBeneficiaries() {
         return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES, (rs, rowNum) -> mapRow(rs));
     }
 
-    public List<Beneficiary> getBeneficiariesByAccountId(String accountId) {
+    public List<BeneficiaryEntity> getBeneficiariesByAccountId(String accountId) {
         return jdbcTemplate.query(SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID, Map.of(
                 "account_source_id", accountId), (rs, rowNum) -> mapRow(rs));
     }
 
-    public Beneficiary update(Beneficiary beneficiary) {
+    public BeneficiaryEntity update(BeneficiaryEntity beneficiary) {
         this.jdbcTemplate.update(SQL_UPDATE_BENEFICIARY, Map.of(
-                "id", beneficiary.getId(),
-                "account_source_id", beneficiary.getAccountSourceId(),
-                "iban_target", beneficiary.getIbanTarget(),
-                "name", beneficiary.getName()
+                "id", beneficiary.id(),
+                "account_source_id", beneficiary.accountSourceId(),
+                "iban_target", beneficiary.ibanTarget(),
+                "name", beneficiary.name()
         ));
         return beneficiary;
     }
@@ -54,12 +54,11 @@ public class BeneficiaryRepository {
         this.jdbcTemplate.update(SQL_DELETE_BENEFICIARY_BY_ID, params);
     }
 
-    private Beneficiary mapRow(ResultSet rs) throws SQLException {
-        Beneficiary beneficiary = new Beneficiary();
-        beneficiary.setId(rs.getInt("id"));
-        beneficiary.setAccountSourceId(rs.getString("account_source_id"));
-        beneficiary.setIbanTarget(rs.getString("iban_target"));
-        beneficiary.setName(rs.getString("name"));
-        return beneficiary;
+    private BeneficiaryEntity mapRow(ResultSet rs) throws SQLException {
+        return new BeneficiaryEntity(
+                rs.getInt("id"),
+                rs.getString("account_source_id"),
+                rs.getString("iban_target"),
+                rs.getString("name"));
     }
 }

@@ -1,8 +1,13 @@
 package com.operationapi.repository;
 
+import com.operationapi.entity.OperationEntity;
+import com.operationapi.entity.OperationFilterEntity;
+import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.NotFoundException;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationState;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -19,7 +24,6 @@ import java.util.Map;
 @Repository
 public class OperationRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_SELECT_OPERATIONS = "SELECT * FROM OPERATION";
     private static final String SQL_SELECT_OPERATION_BY_ID = "SELECT * FROM OPERATION WHERE id = :id";
     private static final String SQL_SAVE_OPERATION = "INSERT INTO OPERATION (account_source_id, label, state, iban_target, amount, date) VALUES (:account_source_id, :label, :state, :iban_target, :amount, :date)";
     private static final String SQL_UPDATE_STATE_OPERATION = "UPDATE OPERATION SET state = :state WHERE id = :id";
@@ -28,37 +32,59 @@ public class OperationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Operation> getOperations() {
-        return jdbcTemplate.query(SQL_SELECT_OPERATIONS, (rs, rowNum) -> mapRow(rs));
+    public List<OperationEntity> getOperations(String accountId, OperationFilterEntity filter) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM OPERATION WHERE 1=1");
+        Map<String, Object> params = new HashMap<>();
+
+        if (accountId != null && !accountId.isBlank()) {
+            sql.append(" AND account_source_id = :account_source_id");
+            params.put("account_source_id", accountId);
+        }
+        if (filter != null) {
+            if (filter.state() != null) {
+                sql.append(" AND state = :state");
+                params.put("state", filter.state().toString());
+            }
+            if (filter.dateFrom() != null) {
+                sql.append(" AND date >= :date_from");
+                params.put("date_from", filter.dateFrom().toLocalDateTime());
+            }
+            if (filter.dateTo() != null) {
+                sql.append(" AND date <= :date_to");
+                params.put("date_to", filter.dateTo().toLocalDateTime());
+            }
+        }
+
+        return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> mapRow(rs));
     }
 
-    public Operation getOperationById(Integer id) {
-        List<Operation> results = jdbcTemplate.query(
-                SQL_SELECT_OPERATION_BY_ID,
-                Map.of("id", id),
-                (rs, rowNum) -> mapRow(rs)
-        );
-        if (results.isEmpty()) {
+    public OperationEntity getOperationById(Integer id) {
+        try {
+            return jdbcTemplate.queryForObject(
+                    SQL_SELECT_OPERATION_BY_ID,
+                    Map.of("id", id),
+                    (rs, rowNum) -> mapRow(rs)
+            );
+        } catch (Exception e) {
             throw new NotFoundException("404", "Opération introuvable pour l'id " + id);
         }
-        return results.get(0);
     }
 
-    public Operation save(Operation operation) {
+    public OperationEntity save(OperationEntity operation) {
         Map<String, Object> params = new HashMap<>();
-        params.put("account_source_id", operation.getAccountSourceId());
-        params.put("label", operation.getLabel());
-        params.put("state", operation.getState() != null ? operation.getState().toString() : "pending");
-        params.put("iban_target", operation.getIbanTarget());
-        params.put("amount", operation.getAmount());
-        params.put("date", operation.getDate() != null ? operation.getDate().toLocalDateTime() : LocalDateTime.now());
+        params.put("account_source_id", operation.accountSourceId());
+        params.put("label", operation.label());
+        params.put("state", operation.state() != null ? operation.state().toString() : "pending");
+        params.put("iban_target", operation.ibanTarget());
+        params.put("amount", operation.amount());
+        params.put("date", operation.date() != null ? operation.date() : LocalDateTime.now());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(SQL_SAVE_OPERATION, new org.springframework.jdbc.core.namedparam.MapSqlParameterSource(params), keyHolder);
 
         Number key = keyHolder.getKey();
         if (key != null) {
-            operation.setId(key.intValue());
+            return new OperationEntity(key.intValue(), operation.accountSourceId(), operation.label(), operation.state(), operation.ibanTarget(), operation.amount(), operation.date());
         }
         return operation;
     }
@@ -70,15 +96,15 @@ public class OperationRepository {
         ));
     }
 
-    private Operation mapRow(ResultSet rs) throws SQLException {
-        Operation operation = new Operation();
-        operation.setId(rs.getInt("id"));
-        operation.setAccountSourceId(rs.getString("account_source_id"));
-        operation.setLabel(rs.getString("label"));
-        operation.setState(OperationState.fromValue(rs.getString("state")));
-        operation.setIbanTarget(rs.getString("iban_target"));
-        operation.setAmount(rs.getDouble("amount"));
-        operation.setDate(rs.getTimestamp("date").toLocalDateTime().atOffset(ZoneOffset.UTC));
-        return operation;
+    private OperationEntity mapRow(ResultSet rs) throws SQLException {
+        return new OperationEntity(
+                rs.getInt("id"),
+                rs.getString("account_source_id"),
+                rs.getString("label"),
+                StateEnumEntity.fromValue(rs.getString("state")),
+                rs.getString("iban_target"),
+                rs.getDouble("amount"),
+                rs.getTimestamp("date").toLocalDateTime()
+        );
     }
 }

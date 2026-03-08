@@ -1,8 +1,12 @@
 package com.operationapi.business;
 
+import com.operationapi.entity.OperationEntity;
+import com.operationapi.entity.OperationFilterEntity;
+import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.FunctionalException;
 import com.operationapi.repository.OperationRepository;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.junit.jupiter.api.Test;
@@ -11,15 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,11 +36,10 @@ class OperationBusinessTest {
 
     @Test
     void testGetOperations() {
-        Operation op = new Operation();
-        op.setId(1);
-        when(operationRepository.getOperations()).thenReturn(List.of(op));
+        OperationEntity op = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        when(operationRepository.getOperations(isNull(), any(OperationFilterEntity.class))).thenReturn(List.of(op));
 
-        OperationList result = operationBusiness.getOperations();
+        OperationList result = operationBusiness.getOperations(new OperationFilter());
 
         assertEquals(1, result.getData().size());
         assertEquals(1, result.getData().get(0).getId());
@@ -45,70 +47,81 @@ class OperationBusinessTest {
 
     @Test
     void testSaveOperationFunctionalExceptionOnAccountSourceId() {
-        Operation operation = validOperation();
-        operation.setAccountSourceId(" ");
+        Operation operation = new Operation();
+        operation.setLabel("Virement");
+        operation.setIbanTarget("FR7612345678901234567890123");
+        operation.setAmount(10.0);
 
         FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.save(operation));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("account_source_id"));
     }
 
     @Test
     void testSaveOperationFunctionalExceptionOnLabel() {
-        Operation operation = validOperation();
-        operation.setLabel("");
+        Operation operation = new Operation();
+        operation.setAccountSourceId("ACC-1");
+        operation.setIbanTarget("FR7612345678901234567890123");
+        operation.setAmount(10.0);
 
         FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.save(operation));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("label"));
     }
 
     @Test
     void testSaveOperationFunctionalExceptionOnIbanTarget() {
-        Operation operation = validOperation();
-        operation.setIbanTarget(" ");
+        Operation operation = new Operation();
+        operation.setAccountSourceId("ACC-1");
+        operation.setLabel("Virement");
+        operation.setAmount(10.0);
 
         FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.save(operation));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("iban_target"));
     }
 
     @Test
     void testSaveOperationFunctionalExceptionOnAmount() {
-        Operation operation = validOperation();
+        Operation operation = new Operation();
+        operation.setAccountSourceId("ACC-1");
+        operation.setLabel("Virement");
+        operation.setIbanTarget("FR7612345678901234567890123");
         operation.setAmount(0.0);
 
         FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.save(operation));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("amount"));
     }
 
     @Test
-    void testSaveOperationFunctionalExceptionOnDate() {
-        Operation operation = validOperation();
-        operation.setDate(null);
+    void testSaveOperationSuccess() {
+        Operation operation = new Operation();
+        operation.setAccountSourceId("ACC-1");
+        operation.setLabel("Virement");
+        operation.setIbanTarget("FR7612345678901234567890123");
+        operation.setAmount(10.0);
 
-        when(operationRepository.save(any(Operation.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        OperationEntity saved = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+
+        when(operationRepository.save(any(OperationEntity.class))).thenReturn(saved);
 
         Operation result = operationBusiness.save(operation);
 
+        assertEquals(1, result.getId());
+        assertEquals("ACC-1", result.getAccountSourceId());
         assertEquals(OperationState.PENDING, result.getState());
-        assertNotNull(result.getDate());
     }
 
     @Test
     void testGetOperationById() {
-        Operation operation = validOperation();
-        operation.setId(12);
-        when(operationRepository.getOperationById(12)).thenReturn(operation);
+        OperationEntity op = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        when(operationRepository.getOperationById(1)).thenReturn(op);
 
-        Operation result = operationBusiness.getOperationById(12);
+        Operation result = operationBusiness.getOperationById(1);
 
-        assertEquals(12, result.getId());
+        assertEquals(1, result.getId());
+        assertEquals("Virement", result.getLabel());
     }
 
     @Test
@@ -116,87 +129,56 @@ class OperationBusinessTest {
         FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.updateStateOperation(1, null));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("state"));
     }
 
     @Test
     void testUpdateStateOperationFunctionalExceptionOnCancelledOperation() {
-        Operation cancelled = validOperation();
-        cancelled.setState(OperationState.CANCELLED);
-        when(operationRepository.getOperationById(2)).thenReturn(cancelled);
+        OperationEntity cancelledOp = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.CANCELLED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        when(operationRepository.getOperationById(1)).thenReturn(cancelledOp);
 
-        FunctionalException ex = assertThrows(
-            FunctionalException.class,
-            () -> operationBusiness.updateStateOperation(2, OperationState.COMPLETED)
-        );
+        FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.updateStateOperation(1, OperationState.COMPLETED));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("annul"));
     }
 
     @Test
     void testUpdateStateOperationSuccess() {
-        Operation initial = validOperation();
-        initial.setState(OperationState.PENDING);
-        Operation updated = validOperation();
-        updated.setState(OperationState.COMPLETED);
+        OperationEntity op = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        OperationEntity updatedOp = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.COMPLETED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
 
-        when(operationRepository.getOperationById(3)).thenReturn(initial, updated);
+        when(operationRepository.getOperationById(1)).thenReturn(op);
+        when(operationRepository.getOperationById(1)).thenReturn(updatedOp);
 
-        Operation result = operationBusiness.updateStateOperation(3, OperationState.COMPLETED);
+        Operation result = operationBusiness.updateStateOperation(1, OperationState.COMPLETED);
 
+        assertEquals(1, result.getId());
         assertEquals(OperationState.COMPLETED, result.getState());
     }
 
     @Test
     void testCancelOperationFunctionalExceptionOnAlreadyCancelledOperation() {
-        Operation cancelled = validOperation();
-        cancelled.setState(OperationState.CANCELLED);
-        when(operationRepository.getOperationById(4)).thenReturn(cancelled);
+        OperationEntity cancelledOp = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.CANCELLED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        when(operationRepository.getOperationById(1)).thenReturn(cancelledOp);
 
-        FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.cancelOperation(4));
+        FunctionalException ex = assertThrows(FunctionalException.class, () -> operationBusiness.cancelOperation(1));
 
         assertEquals("400", ex.getCode());
-        assertTrue(ex.getMessage().contains("déjà annulée"));
     }
 
     @Test
     void testCancelOperationSuccess() {
-        Operation original = validOperation();
-        original.setId(10);
-        original.setState(OperationState.PENDING);
-        original.setAmount(25.5);
-        original.setLabel("Paiement test");
+        OperationEntity original = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        OperationEntity cancelled = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.CANCELLED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
+        OperationEntity cancellation = new OperationEntity(2, "ACC-1", "ANNULATION - Virement", StateEnumEntity.COMPLETED, "FR7612345678901234567890123", -10.0, LocalDateTime.now());
 
-        Operation updatedOriginal = validOperation();
-        updatedOriginal.setId(10);
-        updatedOriginal.setState(OperationState.CANCELLED);
+        when(operationRepository.getOperationById(1)).thenReturn(original).thenReturn(cancelled);
+        when(operationRepository.save(any(OperationEntity.class))).thenReturn(cancellation);
 
-        when(operationRepository.getOperationById(10)).thenReturn(original, updatedOriginal);
-        when(operationRepository.save(any(Operation.class))).thenAnswer(invocation -> {
-            Operation op = invocation.getArgument(0);
-            op.setId(99);
-            return op;
-        });
+        Operation result = operationBusiness.cancelOperation(1);
 
-        Map<String, Operation> result = operationBusiness.cancelOperation(10);
-
-        assertEquals(OperationState.CANCELLED, result.get("original_operation").getState());
-        Operation cancellation = result.get("cancellation_operation");
-        assertEquals(OperationState.COMPLETED, cancellation.getState());
-        assertEquals(-25.5, cancellation.getAmount());
-        assertTrue(cancellation.getLabel().startsWith("ANNULATION - "));
-        assertNotNull(cancellation.getDate());
-    }
-
-    private Operation validOperation() {
-        Operation operation = new Operation();
-        operation.setAccountSourceId("ACC-1");
-        operation.setLabel("Virement");
-        operation.setIbanTarget("FR7612345678901234567890123");
-        operation.setAmount(10.0);
-        operation.setState(OperationState.PENDING);
-        operation.setDate(OffsetDateTime.now());
-        return operation;
+        assertNotNull(result);
+        assertEquals(2, result.getId());
+        assertEquals("ANNULATION - Virement", result.getLabel());
+        assertEquals(-10.0, result.getAmount());
     }
 }

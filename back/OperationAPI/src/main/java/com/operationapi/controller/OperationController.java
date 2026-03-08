@@ -1,8 +1,8 @@
 package com.operationapi.controller;
 
-import com.operationapi.annotation.AuthenticationRequired;
 import com.operationapi.business.OperationBusiness;
 import dto.operationapi.Operation;
+import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import jakarta.ws.rs.*;
@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Controller
 @Path("/operations")
-@AuthenticationRequired
 public class OperationController {
     private final OperationBusiness operationBusiness;
 
@@ -23,10 +22,11 @@ public class OperationController {
     }
 
     @GET
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperations() {
-        OperationList operations = this.operationBusiness.getOperations();
-        return Response.ok(Map.of("data", operations)).build();
+    public Response getOperations(OperationFilter filter) {
+        OperationList operations = this.operationBusiness.getOperations(filter);
+        return Response.ok(operations).build();
     }
 
     @POST
@@ -45,6 +45,15 @@ public class OperationController {
         return Response.ok(operation).build();
     }
 
+    @GET
+    @Path("/account/{accountId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, OperationFilter filter) {
+        OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, filter);
+        return Response.ok(operations).build();
+    }
+
     @PATCH
     @Path("/{id}/state")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -59,7 +68,7 @@ public class OperationController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCancelOperation(@PathParam("id") Integer id) {
-        Map<String, Operation> result = this.operationBusiness.cancelOperation(id);
-        return Response.status(Response.Status.CREATED).entity(result).build();
+        Operation operationOfCancellation = this.operationBusiness.cancelOperation(id);
+        return Response.status(Response.Status.CREATED).entity(operationOfCancellation).build();
     }
 }

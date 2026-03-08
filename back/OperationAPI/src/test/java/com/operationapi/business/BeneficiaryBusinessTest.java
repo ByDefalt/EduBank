@@ -30,15 +30,16 @@ class BeneficiaryBusinessTest {
 
     @Test
     void testCreateBeneficiary() {
-        BeneficiaryEntity entity = new BeneficiaryEntity(null, "ACC-1", "FR7612345678901234567890123", "Alice");
+        Beneficiary beneficiary = new Beneficiary();
+        beneficiary.setAccountSourceId("ACC-1");
+        beneficiary.setIbanTarget("FR7612345678901234567890123");
+        beneficiary.setName("Alice");
 
-        Beneficiary saved = new Beneficiary();
-        saved.setId(1);
-        saved.setName("Alice");
+        BeneficiaryEntity saved = new BeneficiaryEntity(1, "ACC-1", "FR7612345678901234567890123", "Alice");
 
-        when(beneficiaryRepository.save(any(Beneficiary.class))).thenReturn(saved);
+        when(beneficiaryRepository.save(any(BeneficiaryEntity.class))).thenReturn(saved);
 
-        Beneficiary result = beneficiaryBusiness.createBeneficiary(entity);
+        Beneficiary result = beneficiaryBusiness.createBeneficiary(beneficiary);
 
         assertEquals(1, result.getId());
         assertEquals("Alice", result.getName());
@@ -46,8 +47,7 @@ class BeneficiaryBusinessTest {
 
     @Test
     void testGetBeneficiaries() {
-        Beneficiary beneficiary = new Beneficiary();
-        beneficiary.setId(2);
+        BeneficiaryEntity beneficiary = new BeneficiaryEntity(2, "ACC-2", "FR7611111111111111111111111", "Bob");
         when(beneficiaryRepository.getBeneficiaries()).thenReturn(List.of(beneficiary));
 
         BeneficiaryList result = beneficiaryBusiness.getBeneficiaries();
@@ -58,8 +58,7 @@ class BeneficiaryBusinessTest {
 
     @Test
     void testGetBeneficiariesByAccountId() {
-        Beneficiary beneficiary = new Beneficiary();
-        beneficiary.setId(3);
+        BeneficiaryEntity beneficiary = new BeneficiaryEntity(3, "ACC-1", "FR7612345678901234567890123", "Alice");
         when(beneficiaryRepository.getBeneficiariesByAccountId("ACC-1")).thenReturn(List.of(beneficiary));
 
         BeneficiaryList result = beneficiaryBusiness.getBeneficiariesByAccountId("ACC-1");
@@ -79,19 +78,18 @@ class BeneficiaryBusinessTest {
 
     @Test
     void testUpdateBeneficiary() {
-        Beneficiary input = new Beneficiary();
-        input.setName("New Name");
+        Beneficiary beneficiary = new Beneficiary();
+        beneficiary.setAccountSourceId("ACC-1");
+        beneficiary.setName("Alice Updated");
 
-        Beneficiary updated = new Beneficiary();
-        updated.setId(7);
-        updated.setName("New Name");
+        BeneficiaryEntity updated = new BeneficiaryEntity(4, "ACC-1", "FR7612345678901234567890123", "Alice Updated");
 
-        when(beneficiaryRepository.update(input)).thenReturn(updated);
+        when(beneficiaryRepository.update(any())).thenReturn(updated);
 
-        Beneficiary result = beneficiaryBusiness.updateBeneficiary(7, input);
+        Beneficiary result = beneficiaryBusiness.updateBeneficiary(4, beneficiary);
 
-        assertEquals(7, input.getId());
-        assertEquals(7, result.getId());
+        assertEquals(4, result.getId());
+        assertEquals("Alice Updated", result.getName());
     }
 
     @Test
