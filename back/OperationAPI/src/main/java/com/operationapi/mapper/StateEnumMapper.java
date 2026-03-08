@@ -7,6 +7,9 @@ public class StateEnumMapper {
     private StateEnumMapper() {}
 
     public static OperationState toDto(StateEnumEntity stateEnumEntity) {
+        if(stateEnumEntity == null) {
+            return null;
+        }
         return switch (stateEnumEntity) {
             case PENDING -> OperationState.PENDING;
             case COMPLETED -> OperationState.COMPLETED;
@@ -16,6 +19,9 @@ public class StateEnumMapper {
     }
 
     public static StateEnumEntity toEntity(OperationState stateEnum) {
+        if(stateEnum == null) {
+            return null;
+        }
         return switch (stateEnum) {
             case PENDING -> StateEnumEntity.PENDING;
             case COMPLETED -> StateEnumEntity.COMPLETED;

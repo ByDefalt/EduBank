@@ -26,7 +26,7 @@ public class BeneficiaryBusiness {
 
     public BeneficiaryList getBeneficiaries() {
         List<BeneficiaryEntity> beneficiaryEntities = this.beneficiaryRepository.getBeneficiaries();
-        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDtoList(beneficiaryEntities);
+        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDto(beneficiaryEntities);
         BeneficiaryList beneficiaryList = new BeneficiaryList();
         beneficiaryList.setData(beneficiaries);
         return beneficiaryList;
@@ -34,7 +34,7 @@ public class BeneficiaryBusiness {
 
     public BeneficiaryList getBeneficiariesByAccountId(String accountId) {
         List<BeneficiaryEntity> beneficiaryEntities = this.beneficiaryRepository.getBeneficiariesByAccountId(accountId);
-        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDtoList(beneficiaryEntities);
+        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDto(beneficiaryEntities);
         BeneficiaryList beneficiaryList = new BeneficiaryList();
         beneficiaryList.setData(beneficiaries);
         if (beneficiaryList.getData().isEmpty()) {

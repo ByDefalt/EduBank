@@ -68,7 +68,7 @@ public class OperationController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateCancelOperation(@PathParam("id") Integer id) {
-        Map<String, Operation> result = this.operationBusiness.cancelOperation(id);
-        return Response.status(Response.Status.CREATED).entity(result).build();
+        Operation operationOfCancellation = this.operationBusiness.cancelOperation(id);
+        return Response.status(Response.Status.CREATED).entity(operationOfCancellation).build();
     }
 }
