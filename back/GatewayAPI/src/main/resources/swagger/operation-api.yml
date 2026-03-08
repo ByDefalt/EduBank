@@ -87,6 +87,37 @@ paths:
           $ref: '#/components/responses/NotFoundError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+
+  /operations/account/{accountId}:
+    get:
+      tags:
+        - Operation
+      summary: Récupérer les opérations d'un compte
+      description: "Retourne toutes les opérations liées à un compte source spécifique"
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID du compte source
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationFilter'
+      responses:
+        '200':
+          description: Liste récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationList'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
   /operations/{id}/state:
     patch:
       tags:
@@ -251,10 +282,6 @@ components:
       type: object
       description: Critères de filtrage pour la liste des opérations
       properties:
-        account_source_id:
-          type: string
-          description: Filtrer par compte source
-          example: "1"
         state:
           $ref: '#/components/schemas/OperationState'
         date_from:
