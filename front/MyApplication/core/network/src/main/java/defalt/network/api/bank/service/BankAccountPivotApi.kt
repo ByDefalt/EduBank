@@ -1,9 +1,12 @@
 package defalt.network.api.bank.service
 
 import defalt.network.api.bank.model.BankAccountPivot
-import defalt.network.infrastructure.CollectionFormats.*
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface BankAccountPivotApi {
     /**

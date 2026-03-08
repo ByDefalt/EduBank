@@ -8,12 +8,22 @@ import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.offerGraph(
     onBack: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAccounts: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
 ) {
     navigation<Routes.Offer>(
         startDestination = Routes.Offer.List,
     ) {
         composable<Routes.Offer.List> {
-            OffersScreen(onBack = onBack)
+            OffersScreen(
+                onBack = onBack,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToAccounts = onNavigateToAccounts,
+                onNavigateToTransfer = onNavigateToTransfer,
+                onNavigateToMenu = onNavigateToMenu,
+            )
         }
     }
 }

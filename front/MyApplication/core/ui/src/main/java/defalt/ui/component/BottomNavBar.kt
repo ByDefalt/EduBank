@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -62,6 +63,7 @@ fun BottomNavBar(
         BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Bank.Home),
         BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount),
         BottomNavItem("Virements", Icons.Default.SwapHoriz, route = Routes.Operation),
+        BottomNavItem("Menus", Icons.Default.Menu, route = Routes.Core.Menu),
     )
     items.forEach { items ->
         items.onClick = mapItems[items.route]
@@ -127,12 +129,6 @@ fun BottomNavBar(
         }
     }
 }
-
-private fun defaultItems(): List<BottomNavItem> = listOf(
-    BottomNavItem("Accueil", Icons.Default.Home, route = Routes.Bank.Home),
-    BottomNavItem("Comptes", Icons.AutoMirrored.Filled.List, route = Routes.Bank.ListAccount),
-    BottomNavItem("Virements", Icons.Default.SwapHoriz, route = Routes.Operation),
-)
 
 @Preview(showBackground = true, widthDp = 390, heightDp = 120)
 @Composable

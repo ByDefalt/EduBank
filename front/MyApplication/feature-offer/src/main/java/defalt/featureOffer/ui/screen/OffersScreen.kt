@@ -33,9 +33,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.offer.Offer
 import defalt.featureOffer.viewModel.OffersViewModel
 import defalt.ui.component.ArkeoButton
+import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
+import defalt.ui.utils.Routes
 import java.time.LocalDate
 import org.koin.androidx.compose.koinViewModel
 
@@ -43,26 +45,45 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun OffersScreen(
     onBack: () -> Unit,
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToAccounts: () -> Unit = {},
+    onNavigateToTransfer: () -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
     viewModel: OffersViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    OffersContent(
-        uiState = uiState,
-        onRetry = viewModel::retry,
-        onBack = onBack,
-    )
+    Column(modifier = Modifier.fillMaxSize()) {
+        OffersContent(
+            uiState = uiState,
+            modifier = Modifier.weight(1f),
+            onRetry = viewModel::retry,
+            onBack = onBack,
+        )
+        if (viewModel.isConnected) {
+            BottomNavBar(
+                selectedRoute = Routes.Core.Menu,
+                mapItems = mapOf(
+                    Routes.Bank.Home to onNavigateToHome,
+                    Routes.Bank.ListAccount to onNavigateToAccounts,
+                    Routes.Operation to onNavigateToTransfer,
+                    Routes.Core.Menu to onNavigateToMenu,
+                ),
+            )
+        }
+    }
 }
 
 // ── Composable stateless (testable / previewable) ────────────────────────────
 @Composable
 internal fun OffersContent(
     uiState: UiState<List<Offer>>,
+    modifier: Modifier = Modifier,
     onRetry: () -> Unit = {},
     onBack: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {

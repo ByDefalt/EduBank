@@ -2,6 +2,7 @@ package defalt.featureOffer.viewModel
 
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
+import defalt.domain.session.Session
 import defalt.featureOffer.usecase.GetAllOffersUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
@@ -11,10 +12,13 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class OffersViewModel(
     private val getAllOffers: GetAllOffersUseCase,
+    private val session: Session,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<Offer>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Offer>>> = _uiState.asStateFlow()
+
+    val isConnected: Boolean get() = session.token != null
 
     init { loadOffers() }
 

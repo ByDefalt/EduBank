@@ -65,6 +65,7 @@ fun HomeAccountScreen(
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (String) -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
     viewModel: HomeAccountViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -75,6 +76,7 @@ fun HomeAccountScreen(
         onNavigateToAccounts = onNavigateToAccounts,
         onNavigateToTransfer = onNavigateToTransfer,
         onNavigateToAccountDetails = onNavigateToAccountDetails,
+        onNavigateToMenu = onNavigateToMenu,
     )
 }
 
@@ -86,6 +88,7 @@ internal fun HomeAccountContent(
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (String) -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -145,6 +148,7 @@ internal fun HomeAccountContent(
                     Routes.Bank.Home to { },
                     Routes.Bank.ListAccount to { onNavigateToAccounts() },
                     Routes.Operation to { onNavigateToTransfer() },
+                    Routes.Core.Menu to { onNavigateToMenu() },
                 ),
             )
         }

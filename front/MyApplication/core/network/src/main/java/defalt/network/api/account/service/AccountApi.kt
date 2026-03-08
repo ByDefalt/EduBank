@@ -7,9 +7,12 @@ import defalt.network.api.account.model.Role
 import defalt.network.api.account.model.SignInRequest
 import defalt.network.api.account.model.TokenRequest
 import defalt.network.api.account.model.TokenResponse
-import defalt.network.infrastructure.CollectionFormats.*
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface AccountApi {
     /**

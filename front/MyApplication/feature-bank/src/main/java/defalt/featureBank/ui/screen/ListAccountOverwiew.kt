@@ -57,6 +57,7 @@ fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (String) -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
     viewModel: ListAccountViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -67,6 +68,7 @@ fun ListAccountOverviewScreen(
         onNavigateToHomeBank = onNavigateToHomeBank,
         onNavigateToTransfer = onNavigateToTransfer,
         onNavigateToAccountDetails = onNavigateToAccountDetails,
+        onNavigateToMenu = onNavigateToMenu,
     )
 }
 
@@ -78,6 +80,7 @@ internal fun ListAccountOverviewContent(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
     onNavigateToAccountDetails: (String) -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -149,9 +152,10 @@ internal fun ListAccountOverviewContent(
             BottomNavBar(
                 selectedRoute = Routes.Bank.ListAccount,
                 mapItems = mapOf(
-                    Routes.Bank.ListAccount to { },
                     Routes.Bank.Home to onNavigateToHomeBank,
+                    Routes.Bank.ListAccount to { },
                     Routes.Operation to onNavigateToTransfer,
+                    Routes.Core.Menu to onNavigateToMenu,
                 ),
             )
         }

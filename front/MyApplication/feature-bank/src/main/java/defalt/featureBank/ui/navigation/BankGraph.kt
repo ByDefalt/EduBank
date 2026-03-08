@@ -15,6 +15,7 @@ fun NavGraphBuilder.bankGraph(
     onNavigateToHomeBank: () -> Unit,
     onNavigateToAccountDetails: (String) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToMenu: () -> Unit = {},
 ) {
     navigation<Routes.Bank>(
         startDestination = Routes.Bank.Home,
@@ -24,6 +25,7 @@ fun NavGraphBuilder.bankGraph(
                 onNavigateToAccounts = onNavigateToAccounts,
                 onNavigateToTransfer = onNavigateToTransfer,
                 onNavigateToAccountDetails = onNavigateToAccountDetails,
+                onNavigateToMenu = onNavigateToMenu,
             )
         }
         composable<Routes.Bank.ListAccount> {
@@ -31,6 +33,7 @@ fun NavGraphBuilder.bankGraph(
                 onNavigateToHomeBank = onNavigateToHomeBank,
                 onNavigateToTransfer = onNavigateToTransfer,
                 onNavigateToAccountDetails = onNavigateToAccountDetails,
+                onNavigateToMenu = onNavigateToMenu,
             )
         }
         composable<Routes.Bank.AccountDetails> { backStackEntry ->
@@ -41,6 +44,7 @@ fun NavGraphBuilder.bankGraph(
                 onNavigateToHomeBank = onNavigateToHomeBank,
                 onNavigateToAccounts = onNavigateToAccounts,
                 onNavigateToTransfer = onNavigateToTransfer,
+                onNavigateToMenu = onNavigateToMenu,
             )
         }
     }

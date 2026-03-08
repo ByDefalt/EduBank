@@ -78,6 +78,7 @@ fun AccountDetailsScreen(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
     viewModel: AccountDetailsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,6 +91,7 @@ fun AccountDetailsScreen(
         onNavigateToHomeBank = onNavigateToHomeBank,
         onNavigateToAccounts = onNavigateToAccounts,
         onNavigateToTransfer = onNavigateToTransfer,
+        onNavigateToMenu = onNavigateToMenu,
     )
 }
 
@@ -103,6 +105,7 @@ internal fun AccountDetailsContent(
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
+    onNavigateToMenu: () -> Unit = {},
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showFullLabel by rememberSaveable { mutableStateOf(false) }
@@ -112,6 +115,7 @@ internal fun AccountDetailsContent(
     val safeNavigateHome = safeClick(onNavigateToHomeBank)
     val safeNavigateAccounts = safeClick(onNavigateToAccounts)
     val safeNavigateTransfer = safeClick(onNavigateToTransfer)
+    val safeNavigateMenu = safeClick(onNavigateToMenu)
 
     Box(
         modifier = Modifier
@@ -209,6 +213,7 @@ internal fun AccountDetailsContent(
                     Routes.Bank.Home to safeNavigateHome,
                     Routes.Bank.ListAccount to safeNavigateAccounts,
                     Routes.Operation to safeNavigateTransfer,
+                    Routes.Core.Menu to safeNavigateMenu,
                 ),
             )
         }

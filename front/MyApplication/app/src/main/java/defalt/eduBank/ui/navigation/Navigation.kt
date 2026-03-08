@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.ui.navigation.accountGraph
+import defalt.featureAccount.ui.navigation.menuGraph
 import defalt.featureBank.ui.navigation.bankGraph
 import defalt.featureOffer.ui.navigation.offerGraph
 import defalt.featureOperation.ui.navigation.operationGraph
@@ -37,6 +38,10 @@ fun ArkeoNavHost(navController: NavHostController) {
         )
         offerGraph(
             onBack = { navController.popBackStack() },
+            onNavigateToHome = { navController.navigate(Routes.Bank.Home) },
+            onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
+            onNavigateToTransfer = { navController.navigate(Routes.Operation) },
+            onNavigateToMenu = { navController.navigate(Routes.Core.Menu) },
         )
         bankGraph(
             onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
@@ -44,6 +49,7 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },
             onNavigateToAccountDetails = { accountId -> navController.navigate(Routes.Bank.AccountDetails(accountId)) },
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToMenu = { navController.navigate(Routes.Core.Menu) },
         )
         operationGraph(
             navController = navController,
@@ -65,6 +71,26 @@ fun ArkeoNavHost(navController: NavHostController) {
             },
         )
         // ── Admin ──────────────────────────────────────────────────────────
-        adminGraph(navController)
+        adminGraph(
+            onNavigateToAccounts = { navController.navigate(Routes.Admin.AccountList) },
+            onNavigateToBankAccounts = { navController.navigate(Routes.Admin.BankList) },
+            onNavigateToOffers = { navController.navigate(Routes.Admin.OfferList) },
+            onNavigateToAccountDetail = { id -> navController.navigate(Routes.Admin.AccountDetail(id)) },
+            onNavigateToAdminHome = { navController.navigate(Routes.Core.AdminHome) },
+            onNavigateToBankDetail = { id -> navController.navigate(Routes.Admin.BankDetail(id)) },
+            onNavigateToOfferDetail = { id -> navController.navigate(Routes.Admin.OfferDetail(id)) },
+            onNavigateToCreateOffer = { navController.navigate(Routes.Admin.CreateOffer) },
+            onBack = { navController.popBackStack() },
+        )
+        // ── Menu ───────────────────────────────────────────────────────────
+        menuGraph(
+            onNavigateToProfile = { /* TODO : écran profil */ },
+            onNavigateToOffers = { navController.navigate(Routes.Offer.List) },
+            onLogout = {
+                navController.navigate(Routes.Core.Home) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+        )
     }
 }

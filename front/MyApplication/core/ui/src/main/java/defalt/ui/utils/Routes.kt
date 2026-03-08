@@ -13,6 +13,9 @@ sealed class Routes {
 
         @Serializable
         object AdminHome : Routes()
+
+        @Serializable
+        object Menu : Routes()
     }
 
     @Serializable

@@ -1,6 +1,5 @@
 package defalt.eduBank.ui.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -15,13 +14,23 @@ import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
 import defalt.ui.utils.Routes
 
-fun NavGraphBuilder.adminGraph(navController: NavController) {
+fun NavGraphBuilder.adminGraph(
+    onNavigateToAccounts: () -> Unit,
+    onNavigateToBankAccounts: () -> Unit,
+    onNavigateToOffers: () -> Unit,
+    onNavigateToAccountDetail: (String) -> Unit,
+    onNavigateToAdminHome: () -> Unit,
+    onNavigateToBankDetail: (String) -> Unit,
+    onNavigateToOfferDetail: (Int) -> Unit,
+    onNavigateToCreateOffer: () -> Unit,
+    onBack: () -> Unit,
+) {
     // Hub admin (hors sous-graphe pour être accessible depuis Routes.Core.AdminHome)
     composable<Routes.Core.AdminHome> {
         AdminHomeScreen(
-            onNavigateToAccounts = { navController.navigate(Routes.Admin.AccountList) },
-            onNavigateToBankAccounts = { navController.navigate(Routes.Admin.BankList) },
-            onNavigateToOffers = { navController.navigate(Routes.Admin.OfferList) },
+            onNavigateToAccounts = onNavigateToAccounts,
+            onNavigateToBankAccounts = onNavigateToBankAccounts,
+            onNavigateToOffers = onNavigateToOffers,
         )
     }
 
@@ -29,52 +38,52 @@ fun NavGraphBuilder.adminGraph(navController: NavController) {
         // ── Comptes utilisateurs ───────────────────────────────────────────
         composable<Routes.Admin.AccountList> {
             AdminAccountListScreen(
-                onBack = { navController.navigate(Routes.Core.AdminHome) },
-                onItemClick = { id -> navController.navigate(Routes.Admin.AccountDetail(id)) },
+                onBack = onNavigateToAdminHome,
+                onItemClick = onNavigateToAccountDetail,
             )
         }
         composable<Routes.Admin.AccountDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.AccountDetail>().id
             AdminAccountDetailScreen(
                 id = id,
-                onBack = { navController.popBackStack() },
+                onBack = onBack,
             )
         }
 
         // ── Comptes bancaires ──────────────────────────────────────────────
         composable<Routes.Admin.BankList> {
             AdminBankListScreen(
-                onBack = { navController.navigate(Routes.Core.AdminHome) },
-                onItemClick = { id -> navController.navigate(Routes.Admin.BankDetail(id)) },
+                onBack = onNavigateToAdminHome,
+                onItemClick = onNavigateToBankDetail,
             )
         }
         composable<Routes.Admin.BankDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.BankDetail>().id
             AdminBankDetailScreen(
                 id = id,
-                onBack = { navController.popBackStack() },
+                onBack = onBack,
             )
         }
 
         // ── Offres ─────────────────────────────────────────────────────────
         composable<Routes.Admin.OfferList> {
             AdminOfferListScreen(
-                onBack = { navController.navigate(Routes.Core.AdminHome) },
-                onItemClick = { id -> navController.navigate(Routes.Admin.OfferDetail(id)) },
-                onCreateClick = { navController.navigate(Routes.Admin.CreateOffer) },
+                onBack = onNavigateToAdminHome,
+                onItemClick = onNavigateToOfferDetail,
+                onCreateClick = onNavigateToCreateOffer,
             )
         }
         composable<Routes.Admin.OfferDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.OfferDetail>().id
             AdminOfferDetailScreen(
                 id = id,
-                onBack = { navController.popBackStack() },
+                onBack = onBack,
             )
         }
         composable<Routes.Admin.CreateOffer> {
             AdminCreateOfferScreen(
-                onBack = { navController.popBackStack() },
-                onSuccess = { navController.popBackStack() },
+                onBack = onBack,
+                onSuccess = onBack,
             )
         }
     }

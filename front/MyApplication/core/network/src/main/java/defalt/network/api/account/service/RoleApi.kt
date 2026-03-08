@@ -1,9 +1,9 @@
 package defalt.network.api.account.service
 
 import defalt.network.api.account.model.Role
-import defalt.network.infrastructure.CollectionFormats.*
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface RoleApi {
     /**
