@@ -10,7 +10,11 @@ public interface OperationClient {
     // OperationController
     @RequestLine("GET /operations")
     @Headers("Content-Type: application/json")
-    OperationList getAllOperations();
+    OperationList getAllOperations(OperationFilter filter);
+
+    @RequestLine("GET /operations/account/{accountId}")
+    @Headers("Content-Type: application/json")
+    OperationList getOperationsByAccountId(@Param("accountId") String accountId, OperationFilter filter);
 
     @RequestLine("POST /operations")
     @Headers("Content-Type: application/json")
@@ -47,5 +51,5 @@ public interface OperationClient {
 
     @RequestLine("DELETE /beneficiaries/{id}")
     @Headers("Content-Type: application/json")
-    Boolean deleteBeneficiary(@Param("id") Integer id);
+    void deleteBeneficiary(@Param("id") Integer id);
 }
