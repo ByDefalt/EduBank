@@ -97,8 +97,33 @@ class MapperTest {
     }
 
     @Test
+    void testPersonalInformationMapperToEntityFromDto() {
+        PersonalInformation dto = new PersonalInformation();
+        dto.setId(100);
+        dto.setFirstname("Jean");
+        dto.setLastname("Dupont");
+        dto.setEmail("jean.dupont@example.com");
+        dto.setAddress("456 Avenue des Fleurs");
+        dto.setPhoneNumber("+33612345678");
+
+        PersonalInformationEntity entity = PersonalInformationMapper.toEntity(dto);
+
+        assertEquals("Jean", entity.getFirstname());
+        assertEquals("Dupont", entity.getLastname());
+        assertEquals("jean.dupont@example.com", entity.getEmail());
+        assertEquals("456 Avenue des Fleurs", entity.getAddress());
+        assertEquals("+33612345678", entity.getPhoneNumber());
+    }
+
+    @Test
+    void testPersonalInformationMapperToEntityFromDtoNull() {
+        PersonalInformation dto = null;
+        assertNull(PersonalInformationMapper.toEntity(dto));
+    }
+
+    @Test
     void testPersonalInformationMapperToEntityNull() {
-        assertNull(PersonalInformationMapper.toEntity(null));
+        assertNull(PersonalInformationMapper.toEntity((PersonalInformationRegister) null));
     }
 
     @Test

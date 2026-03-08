@@ -51,4 +51,17 @@ public class PersonalInformationBusiness {
     public boolean deletePersonalInformation(Integer id) {
         return personalInformationRepository.delete(id);
     }
+
+    public PersonalInformation updatePersonalInformation(Integer id, PersonalInformation dto) {
+        PersonalInformationEntity existing = personalInformationRepository.findById(id);
+        if (existing == null) {
+            throw new NotFoundException("404", "Information personnelle non trouvée avec l'ID : " + id);
+        }
+        PersonalInformationEntity updated = PersonalInformationMapper.toEntity(dto);
+        PersonalInformationEntity result = personalInformationRepository.update(id, updated);
+        if (result == null) {
+            throw new FunctionalException("400", "Impossible de mettre à jour les informations personnelles");
+        }
+        return PersonalInformationMapper.toDto(result);
+    }
 }

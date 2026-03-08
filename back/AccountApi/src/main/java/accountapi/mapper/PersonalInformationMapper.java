@@ -37,4 +37,19 @@ public class PersonalInformationMapper {
 
         return entity;
     }
+
+    public static PersonalInformationEntity toEntity(PersonalInformation dto) {
+        if (dto == null) {
+            return null;
+        }
+        PersonalInformationEntity entity = new PersonalInformationEntity();
+
+        entity.setFirstname(dto.getFirstname());
+        entity.setLastname(dto.getLastname());
+        entity.setEmail(dto.getEmail());
+        entity.setAddress(dto.getAddress());
+        entity.setPhoneNumber(dto.getPhoneNumber());
+
+        return entity;
+    }
 }
