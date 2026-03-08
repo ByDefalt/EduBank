@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.sp
 fun TransferBottomSheet(
     onDismiss: () -> Unit,
     onVirementClick: () -> Unit = {},
-    onHistoriqueClick: () -> Unit = {},
     onBeneficiaireClick: () -> Unit = {},
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -65,11 +63,6 @@ fun TransferBottomSheet(
                 icon = Icons.Default.SwapHoriz,
                 label = "Faire un virement",
                 onClick = { onVirementClick() },
-            )
-            BottomSheetItem(
-                icon = Icons.Default.History,
-                label = "Historique des virements",
-                onClick = { onHistoriqueClick() },
             )
             BottomSheetItem(
                 icon = Icons.Default.AccountBalance,

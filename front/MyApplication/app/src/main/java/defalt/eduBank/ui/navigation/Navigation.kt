@@ -55,7 +55,6 @@ fun ArkeoNavHost(navController: NavHostController) {
             navController = navController,
             onDismiss = { navController.popBackStack() },
             onVirementClick = { navController.navigate(Routes.Operation.CreateTransfer) },
-            onHistoriqueClick = { /* navigate vers historique */ },
             onBeneficiaireClick = { navController.navigate(Routes.Operation.BeneficiaireGraph) },
             onNavigateBack = { navController.popBackStack() },
             onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },

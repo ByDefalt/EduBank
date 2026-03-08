@@ -32,7 +32,6 @@ class AdminBankDetailViewModel(
         getBankAccountById(id)
     }
 
-    // UC11 + UC15 : type + état + découvert
     fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
         val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
         launchWithUiState(stateFlow = _uiState, transform = { it }) {
@@ -42,7 +41,6 @@ class AdminBankDetailViewModel(
         }
     }
 
-    // UC15 uniquement
     fun update(id: String, overdraftLimit: Double) = launchWithUiState(_actionState) {
         updateBankAccountParam(id, BankAccountParameter(overdraftLimit = overdraftLimit))
             .also { if (it is NetworkResult.Success) load(id) }

@@ -43,9 +43,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.account.PersonalInformation
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
-import defalt.domain.entity.bank.HomeData
 import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.HomeAccountViewModel
+import defalt.featureBank.viewModel.HomeData
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState

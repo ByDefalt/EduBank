@@ -5,7 +5,7 @@ import org.koin.dsl.module
 
 val featureOfferViewModelModule = module {
     viewModel { OffersViewModel(get(), get()) }
-    // Admin
+
     viewModel { AdminOfferDetailViewModel(get(), get(), get()) }
     viewModel { AdminCreateOfferViewModel(get()) }
 }

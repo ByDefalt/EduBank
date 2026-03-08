@@ -1,9 +1,9 @@
 package defalt.featureBank.usecase
 
-import defalt.domain.entity.bank.HomeData
 import defalt.domain.repository.service.IAccountRepository
 import defalt.domain.repository.service.IBankRepository
 import defalt.domain.session.Session
+import defalt.featureBank.viewModel.HomeData
 import defalt.utils.NetworkResult
 import defalt.utils.logger.Logger
 

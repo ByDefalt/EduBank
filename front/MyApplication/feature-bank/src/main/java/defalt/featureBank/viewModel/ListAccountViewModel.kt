@@ -21,7 +21,6 @@ class ListAccountViewModel(
         loadAccounts()
     }
 
-    // Intention UI exposée : appelée depuis l'écran en cas d'erreur
     fun retry() = loadAccounts()
 
     private fun loadAccounts() = launchWithUiState(stateFlow = _uiState, transform = { it }) {

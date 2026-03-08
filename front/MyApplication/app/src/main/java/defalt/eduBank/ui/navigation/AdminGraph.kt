@@ -4,7 +4,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import defalt.eduBank.ui.screen.AdminHomeScreen
 import defalt.featureAccount.ui.screen.AdminAccountDetailScreen
 import defalt.featureAccount.ui.screen.AdminAccountListScreen
 import defalt.featureBank.ui.screen.AdminBankDetailScreen
@@ -15,6 +14,7 @@ import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
 import defalt.featureOperation.ui.screen.AdminOperationDetailScreen
 import defalt.featureOperation.ui.screen.AdminOperationListScreen
+import defalt.ui.screen.AdminHomeScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.adminGraph(
@@ -41,7 +41,6 @@ fun NavGraphBuilder.adminGraph(
     }
 
     navigation<Routes.Admin>(startDestination = Routes.Admin.AccountList) {
-        // ── Comptes utilisateurs ───────────────────────────────────────────
         composable<Routes.Admin.AccountList> {
             AdminAccountListScreen(
                 onBack = onNavigateToAdminHome,
@@ -56,7 +55,6 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        // ── Comptes bancaires ──────────────────────────────────────────────
         composable<Routes.Admin.BankList> {
             AdminBankListScreen(
                 onBack = onNavigateToAdminHome,
@@ -78,7 +76,6 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        // ── Offres ─────────────────────────────────────────────────────────
         composable<Routes.Admin.OfferList> {
             AdminOfferListScreen(
                 onBack = onNavigateToAdminHome,
@@ -100,7 +97,6 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        // ── Opérations ─────────────────────────────────────────────────────
         composable<Routes.Admin.OperationList> {
             AdminOperationListScreen(
                 onBack = onNavigateToAdminHome,

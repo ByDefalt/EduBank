@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.featureOperation.usecase.CancelOperationUseCase
-import defalt.featureOperation.usecase.GetAllOperationsUseCase
 import defalt.featureOperation.usecase.GetOperationByIdUseCase
 import defalt.featureOperation.usecase.UpdateOperationStateUseCase
 import defalt.ui.state.UiState
@@ -13,23 +12,6 @@ import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
-// ── UC5 : Liste des opérations ───────────────────────────────────────────────
-class AdminOperationListViewModel(
-    private val getAllOperations: GetAllOperationsUseCase,
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<UiState<List<Operation>>>(UiState.Loading)
-    val uiState: StateFlow<UiState<List<Operation>>> = _uiState.asStateFlow()
-
-    init { load() }
-
-    fun retry() = load()
-
-    private fun load() = launchWithUiState(stateFlow = _uiState, transform = { it }) {
-        getAllOperations()
-    }
-}
 
 // ── UC8/UC13/UC20/UC21 : Détail + actions opération ─────────────────────────
 class AdminOperationDetailViewModel(

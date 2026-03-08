@@ -8,7 +8,7 @@ val featureOperationViewModelModule = module {
     viewModel { AddBeneficiaryViewModel(get()) }
     viewModel { EditBeneficiaryViewModel(get(), get(), get()) }
     viewModel { CreateTransferViewModel(get(), get(), get()) }
-    // Admin
+
     viewModel { AdminOperationListViewModel(get()) }
     viewModel { AdminOperationDetailViewModel(get(), get(), get()) }
 }

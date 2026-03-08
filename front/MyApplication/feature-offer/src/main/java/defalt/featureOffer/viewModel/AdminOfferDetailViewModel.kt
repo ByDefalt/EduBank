@@ -3,8 +3,6 @@ package defalt.featureOffer.viewModel
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
 import defalt.domain.entity.offer.OffersIdPutRequest
-import defalt.domain.entity.offer.OffersPostRequest
-import defalt.featureOffer.usecase.CreateOfferUseCase
 import defalt.featureOffer.usecase.DeleteOfferUseCase
 import defalt.featureOffer.usecase.GetOfferByIdUseCase
 import defalt.featureOffer.usecase.UpdateOfferUseCase
@@ -15,8 +13,6 @@ import java.time.LocalDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
-// ── Détail / édition ─────────────────────────────────────────────────────────
 
 class AdminOfferDetailViewModel(
     private val getOfferById: GetOfferByIdUseCase,
@@ -43,22 +39,5 @@ class AdminOfferDetailViewModel(
 
     fun delete(id: Int, onSuccess: () -> Unit) = launchWithUiState(_actionState) {
         deleteOffer(id).also { if (it is NetworkResult.Success) onSuccess() }
-    }
-}
-
-// ── Création ─────────────────────────────────────────────────────────────────
-
-class AdminCreateOfferViewModel(
-    private val createOffer: CreateOfferUseCase,
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
-    val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
-
-    fun create(title: String, description: String, state: OffersPostRequest.State, startDate: LocalDate, endDate: LocalDate) {
-        val request = OffersPostRequest(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
-        launchWithUiState(_uiState) {
-            createOffer(request)
-        }
     }
 }

@@ -72,13 +72,7 @@ sealed class Routes {
     object Operation : Routes() {
 
         @Serializable
-        object Virement : Routes()
-
-        @Serializable
         object BottomSheet : Routes()
-
-        @Serializable
-        object Historique : Routes()
 
         @Serializable
         object Beneficiaire : Routes()

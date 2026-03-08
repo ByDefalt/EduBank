@@ -1,4 +1,4 @@
-package defalt.eduBank.ui.screen
+package defalt.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

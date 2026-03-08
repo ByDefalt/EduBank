@@ -19,7 +19,6 @@ class SignInClientAccountUseCase(
         if (signInResult is NetworkResult.Error) return NetworkResult.Error(signInResult.code, signInResult.message)
         if (signInResult is NetworkResult.Exception) return NetworkResult.Exception(signInResult.throwable)
 
-        // Le rôle est stocké en session par AccountRemoteDataSource.signIn via validateToken
         val role = when (session.role?.uppercase()) {
             RoleEnum.ADMIN.value -> RoleEnum.ADMIN
             else -> RoleEnum.CUSTOMER

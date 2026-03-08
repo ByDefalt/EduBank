@@ -26,7 +26,6 @@ fun NavGraphBuilder.operationGraph(
     navController: NavController,
     onDismiss: () -> Unit,
     onVirementClick: () -> Unit = {},
-    onHistoriqueClick: () -> Unit = {},
     onBeneficiaireClick: () -> Unit = {},
     onNavigateBack: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
@@ -46,7 +45,6 @@ fun NavGraphBuilder.operationGraph(
             TransferBottomSheet(
                 onDismiss = onDismiss,
                 onVirementClick = onVirementClick,
-                onHistoriqueClick = onHistoriqueClick,
                 onBeneficiaireClick = onBeneficiaireClick,
             )
         }
