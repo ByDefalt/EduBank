@@ -1,10 +1,8 @@
 package accountapi.controller;
 
-import accountapi.annotation.AuthenticationRequired;
 import accountapi.business.PersonalInformationBusiness;
 import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;
-import dto.accountapi.RoleEnum;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -43,5 +41,14 @@ public class PersonalInformationController {
     public Response createPersonalInformation(PersonalInformationRegister registerDto) {
         PersonalInformation created = personalInformationBusiness.createPersonalInformation(registerDto);
         return Response.status(Response.Status.CREATED).entity(created).build();
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePersonalInformation(@PathParam("id") Integer id, PersonalInformation dto) {
+        PersonalInformation updated = personalInformationBusiness.updatePersonalInformation(id, dto);
+        return Response.ok(updated).build();
     }
 }

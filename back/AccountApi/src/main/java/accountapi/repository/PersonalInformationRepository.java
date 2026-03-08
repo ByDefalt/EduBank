@@ -24,6 +24,7 @@ public class PersonalInformationRepository {
     private static final String SQL_FIND_ALL = "SELECT id, firstname, lastname, email, address, phone_number FROM PersonalInformation";
     private static final String SQL_FIND_BY_ID = "SELECT id, firstname, lastname, email, address, phone_number FROM PersonalInformation WHERE id = :id";
     private static final String SQL_INSERT = "INSERT INTO PersonalInformation (firstname, lastname, email, address, phone_number) VALUES (:firstname, :lastname, :email, :address, :phone_number)";
+    private static final String SQL_UPDATE = "UPDATE PersonalInformation SET firstname = :firstname, lastname = :lastname, email = :email, address = :address, phone_number = :phone_number WHERE id = :id";
     private static final String SQL_DELETE = "DELETE FROM PersonalInformation WHERE id = :id";
 
     public List<PersonalInformationEntity> findAll() {
@@ -56,7 +57,6 @@ public class PersonalInformationRepository {
     }
 
     public PersonalInformationEntity create(PersonalInformationEntity personalInfo) {
-
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("firstname", personalInfo.getFirstname());
         params.addValue("lastname", personalInfo.getLastname());
@@ -80,5 +80,22 @@ public class PersonalInformationRepository {
         params.put("id", id);
 
         return jdbcTemplate.update(SQL_DELETE, params) > 0;
+    }
+
+    public PersonalInformationEntity update(Integer id, PersonalInformationEntity personalInfo) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", id);
+        params.put("firstname", personalInfo.getFirstname());
+        params.put("lastname", personalInfo.getLastname());
+        params.put("email", personalInfo.getEmail());
+        params.put("address", personalInfo.getAddress());
+        params.put("phone_number", personalInfo.getPhoneNumber());
+
+        int rowsAffected = jdbcTemplate.update(SQL_UPDATE, params);
+        if (rowsAffected == 0) {
+            return null;
+        }
+        personalInfo.setId(id);
+        return personalInfo;
     }
 }
