@@ -40,6 +40,7 @@ import defalt.domain.entity.operation.Beneficiary
 import defalt.featureOperation.viewModel.BeneficiariesViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoInput
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
@@ -114,7 +115,7 @@ internal fun BeneficiariesContent(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            BeneficiariesHeader(onNavigateBack = safeNavigateBack)
+            ArkeoTopBar(title = "MES BÉNÉFICIAIRES", onBack = safeNavigateBack)
 
             UiStateHandler(
                 uiState = uiState,
@@ -252,33 +253,6 @@ internal fun BeneficiariesContent(
     } // fin Box principal
 }
 
-@Composable
-private fun BeneficiariesHeader(onNavigateBack: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        IconButton(onClick = onNavigateBack) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Retour",
-                tint = ArkeoRed,
-            )
-        }
-        Text(
-            text = "MES BÉNÉFICIAIRES",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            color = TextPrimary,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.size(48.dp))
-    }
-}
 
 private fun defaultData(): List<Beneficiary> = listOf(
     Beneficiary(accountSourceId = "1", ibanTarget = "FR76 1234 5678 9012", name = "Alice Dupont", id = 1),

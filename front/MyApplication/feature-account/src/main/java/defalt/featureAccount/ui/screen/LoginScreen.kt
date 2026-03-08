@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.account.RoleEnum
 import defalt.featureAccount.viewModel.LoginViewModel
 import defalt.ui.component.ArkeoButton
+import defalt.ui.component.ArkeoErrorText
 import defalt.ui.component.ArkeoInput
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
@@ -136,11 +137,7 @@ internal fun LoginContent(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (errorMessage != null) {
-                    Text(
-                        text = errorMessage,
-                        color = CustomColor.ArkeoRed,
-                        fontSize = 13.sp,
-                    )
+                    ArkeoErrorText(message = errorMessage)
                 }
 
                 ArkeoButton(

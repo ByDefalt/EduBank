@@ -10,19 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.bank.BankAccount
 import defalt.featureBank.viewModel.AdminBankListViewModel
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
@@ -69,24 +67,7 @@ internal fun AdminBankListContent(
 ) {
     Box(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── Header ─────────────────────────────────────────────────────
-            Row(
-                modifier = Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 8.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = CustomColor.ArkeoRed)
-                }
-                Text(
-                    "COMPTES BANCAIRES",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = CustomColor.TextPrimary,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center,
-                )
-                Spacer(modifier = Modifier.size(48.dp))
-            }
+            ArkeoTopBar(title = "COMPTES BANCAIRES", onBack = onBack)
 
             // ── Liste ──────────────────────────────────────────────────────
             UiStateHandler(

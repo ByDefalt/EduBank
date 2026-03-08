@@ -33,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +45,7 @@ import defalt.domain.entity.bank.BankAccountParameter
 import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.HomeAccountViewModel
 import defalt.featureBank.viewModel.HomeData
+import defalt.ui.component.ArkeoQuickAction
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
@@ -257,27 +257,10 @@ private fun MainAccountCard(onNavigateToAccountDetails: (String) -> Unit = {}, a
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
-                QuickAction(icon = Icons.Default.Receipt, label = "Relevés")
-                QuickAction(icon = Icons.Default.AccountBalance, label = "RIB")
+                ArkeoQuickAction(icon = Icons.Default.Receipt, label = "Relevés")
+                ArkeoQuickAction(icon = Icons.Default.AccountBalance, label = "RIB")
             }
         }
-    }
-}
-
-@Composable
-private fun QuickAction(icon: ImageVector, label: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { },
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = TextPrimary,
-            modifier = Modifier.size(28.dp),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = label, fontSize = 11.sp, color = TextSecondary)
     }
 }
 

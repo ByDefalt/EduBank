@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
@@ -27,7 +26,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +47,8 @@ import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.featureBank.viewModel.AccountDetailsData
 import defalt.featureBank.viewModel.AccountDetailsViewModel
+import defalt.ui.component.ArkeoQuickAction
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
@@ -123,7 +122,7 @@ internal fun AccountDetailsContent(
             .background(LightGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            Header(title = accountLabel, onNavigateBack = safeNavigateBack)
+            ArkeoTopBar(title = accountLabel, onBack = safeNavigateBack)
 
             UiStateHandler(
                 uiState = uiState,
@@ -220,33 +219,6 @@ internal fun AccountDetailsContent(
     }
 }
 
-@Composable
-private fun Header(title: String, onNavigateBack: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        IconButton(onClick = onNavigateBack) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Retour",
-                tint = ArkeoRed,
-            )
-        }
-        Text(
-            text = title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            color = TextPrimary,
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.size(48.dp))
-    }
-}
 
 @Composable
 private fun AccountSummaryCard(account: BankAccount) {
@@ -280,8 +252,8 @@ private fun AccountSummaryCard(account: BankAccount) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround,
             ) {
-                QuickActionDetail(icon = Icons.Default.Receipt, label = "Relevés")
-                QuickActionDetail(icon = Icons.Default.AccountBalance, label = "RIB")
+                ArkeoQuickAction(icon = Icons.Default.Receipt, label = "Relevés")
+                ArkeoQuickAction(icon = Icons.Default.AccountBalance, label = "RIB")
             }
         }
     }
@@ -444,17 +416,6 @@ private fun OperationRow(operation: Operation, showFullLabel: Boolean) {
     }
 }
 
-@Composable
-private fun QuickActionDetail(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { },
-    ) {
-        Icon(imageVector = icon, contentDescription = label, tint = TextPrimary, modifier = Modifier.size(28.dp))
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = label, fontSize = 11.sp, color = TextSecondary)
-    }
-}
 
 private fun formatAmount(value: Double?): String =
     String.format(Locale.FRANCE, "%.2f €", value)

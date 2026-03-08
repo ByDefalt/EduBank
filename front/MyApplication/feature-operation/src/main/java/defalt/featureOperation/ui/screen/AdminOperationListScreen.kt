@@ -5,34 +5,32 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.size
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.operation.Operation
 import defalt.featureOperation.viewModel.AdminOperationListViewModel
+import defalt.ui.component.ArkeoStatusBadge
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.utils.CustomColor
 import java.time.format.DateTimeFormatter
@@ -47,23 +45,7 @@ fun AdminOperationListScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
-        Row(
-            modifier = Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 8.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = CustomColor.ArkeoRed)
-            }
-            Text(
-                "OPÉRATIONS",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = CustomColor.TextPrimary,
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.size(48.dp))
-        }
+        ArkeoTopBar(title = "OPÉRATIONS", onBack = onBack)
 
         UiStateHandler(
             uiState = uiState,
@@ -98,8 +80,9 @@ private fun OperationRow(operation: Operation, onClick: () -> Unit) {
         ) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(operation.label, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = CustomColor.TextPrimary)
-                Text("%.2f €  •  ${operation.state.value}".format(operation.amount), fontSize = 12.sp, color = CustomColor.TextSecondary)
+                Text("%.2f €".format(operation.amount), fontSize = 12.sp, color = CustomColor.TextSecondary)
                 Text(operation.date.format(fmt), fontSize = 11.sp, color = CustomColor.TextSecondary)
+                ArkeoStatusBadge(label = operation.state.value, isActive = operation.state.value == "PENDING" || operation.state.value == "COMPLETED")
             }
             Icon(Icons.Default.ChevronRight, contentDescription = null, tint = CustomColor.ArkeoRed, modifier = Modifier.size(20.dp))
         }

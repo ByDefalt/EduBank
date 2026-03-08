@@ -2,7 +2,6 @@ package defalt.featureAccount.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,17 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,6 +31,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.account.AccountStateEnum
 import defalt.featureAccount.viewModel.AdminAccountListViewModel
+import defalt.ui.component.ArkeoStatusBadge
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
@@ -62,23 +60,7 @@ internal fun AdminAccountListContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().background(Color.White).padding(horizontal = 8.dp, vertical = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour", tint = CustomColor.ArkeoRed)
-            }
-            Text(
-                "COMPTES UTILISATEURS",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = CustomColor.TextPrimary,
-                modifier = Modifier.weight(1f),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.size(48.dp))
-        }
+        ArkeoTopBar(title = "COMPTES UTILISATEURS", onBack = onBack)
 
         UiStateHandler(
             uiState = uiState,
@@ -118,21 +100,10 @@ private fun AccountAdminCard(account: Account, onClick: () -> Unit) {
                     color = CustomColor.TextPrimary,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = if (isActive) Color(0xFF4CAF50) else Color(0xFFBDBDBD),
-                            shape = RoundedCornerShape(50),
-                        )
-                        .padding(horizontal = 10.dp, vertical = 2.dp),
-                ) {
-                    Text(
-                        text = account.state?.value ?: "?",
-                        fontSize = 11.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
+                ArkeoStatusBadge(
+                    label = account.state?.value ?: "?",
+                    isActive = isActive,
+                )
             }
             Icon(Icons.Default.ChevronRight, contentDescription = null, tint = CustomColor.ArkeoRed)
         }
