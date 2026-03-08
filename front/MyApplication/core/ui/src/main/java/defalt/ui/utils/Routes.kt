@@ -28,6 +28,8 @@ sealed class Routes {
 
         @Serializable data class BankDetail(val id: String) : Routes()
 
+        @Serializable object CreateBankAccount : Routes()
+
         @Serializable object OfferList : Routes()
 
         @Serializable data class OfferDetail(val id: Int) : Routes()

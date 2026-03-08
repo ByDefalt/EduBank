@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.State
 import defalt.featureBank.usecase.AdminDeleteBankAccountUseCase
 import defalt.featureBank.usecase.AdminGetBankAccountByIdUseCase
 import defalt.featureBank.usecase.AdminUpdateBankAccountParamUseCase
+import defalt.featureBank.usecase.AdminUpdateBankAccountUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import defalt.utils.NetworkResult
@@ -20,6 +22,7 @@ class AdminBankDetailViewModel(
     private val getBankAccountById: AdminGetBankAccountByIdUseCase,
     private val deleteBankAccount: AdminDeleteBankAccountUseCase,
     private val updateBankAccountParam: AdminUpdateBankAccountParamUseCase,
+    private val updateBankAccount: AdminUpdateBankAccountUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<BankAccountDetail>>(UiState.Loading)
@@ -32,6 +35,23 @@ class AdminBankDetailViewModel(
         getBankAccountById(id)
     }
 
+    // Mise à jour complète : type + état + découvert
+    fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
+        viewModelScope.launch {
+            _actionState.update { UiState.Loading }
+            val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
+            when (val r = updateBankAccount(id, typeId, param)) {
+                is NetworkResult.Success -> {
+                    _actionState.update { UiState.Success(Unit) }
+                    _uiState.update { UiState.Success(r.data) }
+                }
+                is NetworkResult.Error -> _actionState.update { UiState.Error(r.message) }
+                is NetworkResult.Exception -> _actionState.update { UiState.Error(r.throwable.message ?: "Erreur") }
+            }
+        }
+    }
+
+    // Mise à jour découvert uniquement (UC15 — conservé pour compatibilité)
     fun update(id: String, overdraftLimit: Double) {
         viewModelScope.launch {
             _actionState.update { UiState.Loading }

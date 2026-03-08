@@ -50,6 +50,21 @@ class BankRemoteDataSource(
             bankAccountParameterApi.adminBankAccountsBankAccountIdParametersPatch(bankAccountId, parameter.toDto())
         }
 
+    override suspend fun adminUpdateBankAccount(
+        bankAccountId: String,
+        typeId: Int,
+        parameter: BankAccountParameter,
+    ): NetworkResult<BankAccountDetail> {
+        // Met à jour les paramètres (overdraft + état)
+        val paramResult = safeApiCall {
+            bankAccountParameterApi.adminBankAccountsBankAccountIdParametersPatch(bankAccountId, parameter.toDto())
+        }
+        if (paramResult is NetworkResult.Error) return NetworkResult.Error(paramResult.code, paramResult.message)
+        if (paramResult is NetworkResult.Exception) return NetworkResult.Exception(paramResult.throwable)
+        // Recharge le détail mis à jour
+        return safeApiCall { bankAccountApi.adminBankAccountsIdGet(bankAccountId) }.map { it.toEntity() }
+    }
+
     // --- CLIENT ---
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =

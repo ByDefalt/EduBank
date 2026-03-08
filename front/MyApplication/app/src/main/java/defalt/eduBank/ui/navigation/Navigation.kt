@@ -79,6 +79,7 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToAccountDetail = { id -> navController.navigate(Routes.Admin.AccountDetail(id)) },
             onNavigateToAdminHome = { navController.navigate(Routes.Core.AdminHome) },
             onNavigateToBankDetail = { id -> navController.navigate(Routes.Admin.BankDetail(id)) },
+            onNavigateToCreateBankAccount = { navController.navigate(Routes.Admin.CreateBankAccount) },
             onNavigateToOfferDetail = { id -> navController.navigate(Routes.Admin.OfferDetail(id)) },
             onNavigateToCreateOffer = { navController.navigate(Routes.Admin.CreateOffer) },
             onNavigateToOperationDetail = { id -> navController.navigate(Routes.Admin.OperationDetail(id)) },

@@ -78,6 +78,27 @@ class FakeBankRemoteDataSource : IBankRemoteDataSource {
         }
     }
 
+    override suspend fun adminUpdateBankAccount(
+        bankAccountId: String,
+        typeId: Int,
+        parameter: BankAccountParameter,
+    ): NetworkResult<BankAccountDetail> {
+        val index = bankAccountDetails.indexOfFirst { it.id == bankAccountId }
+        return if (index != -1) {
+            val updated = bankAccountDetails[index].copy(
+                parameter = parameter,
+                type = Type(id = typeId, name = "Type $typeId"),
+            )
+            bankAccountDetails[index] = updated
+            // Mise à jour du BankAccount aussi
+            val accIndex = bankAccounts.indexOfFirst { it.id == bankAccountId }
+            if (accIndex != -1) bankAccounts[accIndex] = bankAccounts[accIndex].copy(typeId = typeId)
+            NetworkResult.Success(updated)
+        } else {
+            NetworkResult.Error(code = 404, message = "Compte bancaire introuvable : $bankAccountId")
+        }
+    }
+
     // --- CLIENT ---
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> {

@@ -9,5 +9,6 @@ val featureBankViewModelModule = module {
     viewModel { HomeAccountViewModel(get()) }
     // Admin
     viewModel { AdminBankListViewModel(get()) }
-    viewModel { AdminBankDetailViewModel(get(), get(), get()) }
+    viewModel { AdminBankDetailViewModel(get(), get(), get(), get()) }
+    viewModel { AdminCreateBankAccountViewModel(get(), get()) }
 }

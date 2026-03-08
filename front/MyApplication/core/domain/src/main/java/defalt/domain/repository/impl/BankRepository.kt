@@ -32,6 +32,9 @@ class BankRepository(
     override suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit> =
         remoteDataSource.adminUpdateBankAccountParameters(bankAccountId, parameter)
 
+    override suspend fun adminUpdateBankAccount(bankAccountId: String, typeId: Int, parameter: BankAccountParameter): NetworkResult<BankAccountDetail> =
+        remoteDataSource.adminUpdateBankAccount(bankAccountId, typeId, parameter)
+
     // --- CLIENT ---
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =

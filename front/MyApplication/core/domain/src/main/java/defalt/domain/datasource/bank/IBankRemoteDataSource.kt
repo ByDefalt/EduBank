@@ -14,6 +14,7 @@ interface IBankRemoteDataSource {
     suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit>
     suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail>
     suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit>
+    suspend fun adminUpdateBankAccount(bankAccountId: String, typeId: Int, parameter: BankAccountParameter): NetworkResult<BankAccountDetail>
 
     // --- CLIENT ---
     suspend fun getMyBankAccounts(typeId: Int? = null): NetworkResult<List<BankAccount>>

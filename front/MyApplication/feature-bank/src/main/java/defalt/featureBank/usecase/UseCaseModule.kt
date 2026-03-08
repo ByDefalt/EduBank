@@ -11,4 +11,7 @@ val featureBankUseCaseModule = module {
     single { AdminGetBankAccountByIdUseCase(get(), get()) }
     single { AdminDeleteBankAccountUseCase(get(), get()) }
     single { AdminUpdateBankAccountParamUseCase(get(), get()) }
+    single { AdminCreateBankAccountUseCase(get(), get()) }
+    single { AdminUpdateBankAccountUseCase(get(), get()) }
+    single { AdminGetAllAccountsForBankUseCase(get(), get()) }
 }

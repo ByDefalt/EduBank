@@ -9,6 +9,7 @@ import defalt.featureAccount.ui.screen.AdminAccountDetailScreen
 import defalt.featureAccount.ui.screen.AdminAccountListScreen
 import defalt.featureBank.ui.screen.AdminBankDetailScreen
 import defalt.featureBank.ui.screen.AdminBankListScreen
+import defalt.featureBank.ui.screen.AdminCreateBankAccountScreen
 import defalt.featureOffer.ui.screen.AdminCreateOfferScreen
 import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
@@ -24,6 +25,7 @@ fun NavGraphBuilder.adminGraph(
     onNavigateToAccountDetail: (String) -> Unit,
     onNavigateToAdminHome: () -> Unit,
     onNavigateToBankDetail: (String) -> Unit,
+    onNavigateToCreateBankAccount: () -> Unit,
     onNavigateToOfferDetail: (Int) -> Unit,
     onNavigateToCreateOffer: () -> Unit,
     onNavigateToOperationDetail: (Int) -> Unit,
@@ -59,6 +61,7 @@ fun NavGraphBuilder.adminGraph(
             AdminBankListScreen(
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToBankDetail,
+                onCreateClick = onNavigateToCreateBankAccount,
             )
         }
         composable<Routes.Admin.BankDetail> { entry ->
@@ -66,6 +69,12 @@ fun NavGraphBuilder.adminGraph(
             AdminBankDetailScreen(
                 id = id,
                 onBack = onBack,
+            )
+        }
+        composable<Routes.Admin.CreateBankAccount> {
+            AdminCreateBankAccountScreen(
+                onBack = onBack,
+                onSuccess = onBack,
             )
         }
 
