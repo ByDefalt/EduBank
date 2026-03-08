@@ -3,6 +3,8 @@ package com.operationapi.mapper;
 import com.operationapi.entity.BeneficiaryEntity;
 import dto.operationapi.Beneficiary;
 
+import java.util.List;
+
 public class BeneficiaryMapper {
     private BeneficiaryMapper() {
     }
@@ -18,5 +20,13 @@ public class BeneficiaryMapper {
         beneficiary.setIbanTarget(beneficiaryEntity.ibanTarget());
         beneficiary.setName(beneficiaryEntity.name());
         return beneficiary;
+    }
+
+    public static List<Beneficiary> toDtoList(List<BeneficiaryEntity> beneficiaryEntities) {
+        return beneficiaryEntities.stream().map(BeneficiaryMapper::toDto).toList();
+    }
+
+    public static List<BeneficiaryEntity> toEntityList(List<Beneficiary> beneficiaries) {
+        return beneficiaries.stream().map(BeneficiaryMapper::toEntity).toList();
     }
 }

@@ -6,8 +6,6 @@ import com.operationapi.mapper.BeneficiaryMapper;
 import com.operationapi.repository.BeneficiaryRepository;
 import dto.operationapi.Beneficiary;
 import dto.operationapi.BeneficiaryList;
-import dto.operationapi.Error;
-import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +18,25 @@ public class BeneficiaryBusiness {
         this.beneficiaryRepository = beneficiaryRepository;
     }
 
-    public Beneficiary createBeneficiary(BeneficiaryEntity beneficiaryEntity) {
-        return this.beneficiaryRepository.save(BeneficiaryMapper.toDto(beneficiaryEntity));
+    public Beneficiary createBeneficiary(Beneficiary beneficiary) {
+        BeneficiaryEntity beneficiaryEntity = BeneficiaryMapper.toEntity(beneficiary);
+        BeneficiaryEntity beneficiaryResult = this.beneficiaryRepository.save(beneficiaryEntity);
+        return BeneficiaryMapper.toDto(beneficiaryResult);
     }
 
     public BeneficiaryList getBeneficiaries() {
+        List<BeneficiaryEntity> beneficiaryEntities = this.beneficiaryRepository.getBeneficiaries();
+        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDtoList(beneficiaryEntities);
         BeneficiaryList beneficiaryList = new BeneficiaryList();
-        beneficiaryList.setData(this.beneficiaryRepository.getBeneficiaries());
+        beneficiaryList.setData(beneficiaries);
         return beneficiaryList;
     }
 
     public BeneficiaryList getBeneficiariesByAccountId(String accountId) {
+        List<BeneficiaryEntity> beneficiaryEntities = this.beneficiaryRepository.getBeneficiariesByAccountId(accountId);
+        List<Beneficiary> beneficiaries = BeneficiaryMapper.toDtoList(beneficiaryEntities);
         BeneficiaryList beneficiaryList = new BeneficiaryList();
-        beneficiaryList.setData(this.beneficiaryRepository.getBeneficiariesByAccountId(accountId));
+        beneficiaryList.setData(beneficiaries);
         if (beneficiaryList.getData().isEmpty()) {
             throw new NotFoundException("404", "Aucun bénéficiaire trouvé pour le compte " + accountId);
         }
@@ -41,7 +45,9 @@ public class BeneficiaryBusiness {
 
     public Beneficiary updateBeneficiary(Integer id, Beneficiary beneficiary) {
         beneficiary.setId(id);
-        return this.beneficiaryRepository.update(beneficiary);
+        BeneficiaryEntity beneficiaryEntity = BeneficiaryMapper.toEntity(beneficiary);
+        BeneficiaryEntity beneficiaryResult = this.beneficiaryRepository.update(beneficiaryEntity);
+        return BeneficiaryMapper.toDto(beneficiaryResult);
     }
 
     public void deleteBeneficiaryById(Integer id) {

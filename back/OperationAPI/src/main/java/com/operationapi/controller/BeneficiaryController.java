@@ -1,7 +1,6 @@
 package com.operationapi.controller;
 
 import com.operationapi.business.BeneficiaryBusiness;
-import com.operationapi.mapper.BeneficiaryMapper;
 import dto.operationapi.Beneficiary;
 import dto.operationapi.BeneficiaryList;
 import jakarta.ws.rs.*;
@@ -23,7 +22,7 @@ public class BeneficiaryController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createBeneficiary(Beneficiary beneficiary) {
-        Beneficiary createdBeneficiary = beneficiaryBusiness.createBeneficiary(BeneficiaryMapper.toEntity(beneficiary));
+        Beneficiary createdBeneficiary = beneficiaryBusiness.createBeneficiary(beneficiary);
         return Response.status(Response.Status.CREATED).entity(createdBeneficiary).build();
     }
 
