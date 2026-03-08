@@ -27,4 +27,8 @@ public class PersonalInformationBusiness {
     public PersonalInformation createPersonalInformation(PersonalInformationRegister personalInformationRegister) {
         return personalInformationRepository.create(personalInformationRegister);
     }
+
+    public PersonalInformation updatePersonalInformation(Integer id, PersonalInformation personalInformation) {
+        return personalInformationRepository.update(id, personalInformation);
+    }
 }

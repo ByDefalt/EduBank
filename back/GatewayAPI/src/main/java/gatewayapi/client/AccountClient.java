@@ -63,6 +63,10 @@ public interface AccountClient {
     @Headers("Content-Type: application/json")
     PersonalInformation createPersonalInformation(PersonalInformationRegister personalInformationRegister);
 
+    @RequestLine("PUT /personalInformation/{id}")
+    @Headers("Content-Type: application/json")
+    PersonalInformation updatePersonalInformation(@Param("id") Integer id, PersonalInformation personalInformation);
+
     // --- RoleController ---
     @RequestLine("GET /roles")
     @Headers("Content-Type: application/json")

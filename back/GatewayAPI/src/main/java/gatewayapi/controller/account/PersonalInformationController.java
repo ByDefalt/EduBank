@@ -1,5 +1,6 @@
 package gatewayapi.controller.account;
 
+import dto.accountapi.PersonalInformation;
 import dto.accountapi.PersonalInformationRegister;
 import dto.accountapi.RoleEnum;
 import gatewayapi.annotation.AuthenticationRequired;
@@ -41,5 +42,13 @@ public class PersonalInformationController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPersonalInformation(PersonalInformationRegister personalInformationRegister) {
         return feignExecutor.wrap(() -> personalInformationBusiness.createPersonalInformation(personalInformationRegister));
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePersonalInformation(@PathParam("id") Integer id, PersonalInformation personalInformation) {
+        return feignExecutor.wrap(() -> personalInformationBusiness.updatePersonalInformation(id, personalInformation));
     }
 }

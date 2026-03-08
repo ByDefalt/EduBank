@@ -26,8 +26,16 @@ paths:
                   $ref: '#/components/schemas/Role'
         '401':
           description: Non autorisé (Token manquant ou invalide)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit (Permission insuffisante)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /roles/{id}:
     get:
@@ -48,8 +56,12 @@ paths:
                 $ref: '#/components/schemas/Role'
         '404':
           description: Rôle non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /roles/name/{id}:
+  /roles/name/{name}:
     get:
       summary: Récupérer le rôle associé à un compte
       tags: [ Role ]
@@ -68,7 +80,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Role'
         '404':
-          description: Compte ou Rôle non trouvé
+          description: Rôle non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /personalInformation:
     get:
@@ -87,8 +103,16 @@ paths:
                   $ref: '#/components/schemas/PersonalInformation'
         '401':
           description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       summary: Créer une fiche d'information personnelle
       tags: [ PersonalInformation ]
@@ -105,6 +129,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PersonalInformation'
+        '400':
+          description: Impossible de créer les informations personnelles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /personalInformation/{id}:
     get:
@@ -125,6 +155,44 @@ paths:
                 $ref: '#/components/schemas/PersonalInformation'
         '404':
           description: Non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Mettre à jour une info personnelle par ID
+      tags: [ PersonalInformation ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalInformation'
+      responses:
+        '200':
+          description: Mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalInformation'
+        '400':
+          description: Impossible de mettre à jour les informations personnelles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Information personnelle non trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts:
     get:
@@ -143,8 +211,16 @@ paths:
                   $ref: '#/components/schemas/Account'
         '401':
           description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       summary: Créer un nouveau compte
       description: Crée le compte, le rôle et les informations personnelles liées.
@@ -162,6 +238,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Account'
+        '400':
+          description: Impossible de créer le compte (rôle inexistant, erreur personnelle info, etc.)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Rôle non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/{id}:
     get:
@@ -182,7 +270,11 @@ paths:
                 $ref: '#/components/schemas/Account'
         '404':
           description: Compte non trouvé
-    delete:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
       summary: Supprimer un compte (Admin uniquement, par le changement d'etat du compte à ENCLOSE)
       tags: [ Account ]
       security:
@@ -202,10 +294,22 @@ paths:
                 type: boolean
         '404':
           description: Compte non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
           description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/activate/{id}:
     put:
@@ -226,12 +330,30 @@ paths:
             application/json:
               schema:
                 type: boolean
+        '400':
+          description: Compte déjà actif ou clôturé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Compte non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
           description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/deactivate/{id}:
     put:
@@ -252,12 +374,30 @@ paths:
             application/json:
               schema:
                 type: boolean
+        '400':
+          description: Compte déjà inactif ou clôturé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '404':
           description: Compte non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
           description: Non autorisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '403':
           description: Interdit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/role/{id}:
     get:
@@ -279,6 +419,10 @@ paths:
                 $ref: '#/components/schemas/Role'
         '404':
           description: Compte ou Rôle non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/personalInformation/{id}:
     get:
@@ -300,6 +444,10 @@ paths:
                 $ref: '#/components/schemas/PersonalInformation'
         '404':
           description: Compte ou Infos non trouvées
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/signin:
     post:
@@ -320,8 +468,16 @@ paths:
                 $ref: '#/components/schemas/TokenRequest'
         '404':
           description: Compte non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '401':
-          description: Mot de passe incorrect
+          description: Mot de passe incorrect ou compte inactif
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /accounts/validate:
     post:
@@ -342,6 +498,10 @@ paths:
                 $ref: '#/components/schemas/TokenResponse'
         '401':
           description: Token invalide ou expiré
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   securitySchemes:
