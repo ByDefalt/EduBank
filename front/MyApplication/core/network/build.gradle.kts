@@ -56,9 +56,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:testing"))
     implementation(project(":core:domain"))
     implementation(project(":core:utils"))
+    testImplementation(project(":core:testing"))
 
     /* ---------------- NETWORK ---------------- */
     implementation(libs.retrofit)
@@ -68,6 +68,8 @@ dependencies {
 
     /* ---------------- TESTS ---------------- */
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

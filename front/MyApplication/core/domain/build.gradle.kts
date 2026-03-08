@@ -27,4 +27,7 @@ tasks.jacocoTestReport {
 dependencies {
     implementation(project(":core:utils"))
     // koin et coroutines transitifs via :core:utils
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
