@@ -25,7 +25,7 @@ public class OperationController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOperations(OperationFilter filter) {
-        OperationList operations = this.operationBusiness.getOperations(filter != null ? filter : new OperationFilter());
+        OperationList operations = this.operationBusiness.getOperations(filter);
         return Response.ok(operations).build();
     }
 
@@ -43,6 +43,15 @@ public class OperationController {
     public Response getOperation(@PathParam("id") Integer id) {
         Operation operation = this.operationBusiness.getOperationById(id);
         return Response.ok(operation).build();
+    }
+
+    @GET
+    @Path("/account/{accountId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, OperationFilter filter) {
+        OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, filter);
+        return Response.ok(operations).build();
     }
 
     @PATCH

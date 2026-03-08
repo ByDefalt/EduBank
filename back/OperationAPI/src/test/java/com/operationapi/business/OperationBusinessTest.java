@@ -36,7 +36,7 @@ class OperationBusinessTest {
     void testGetOperations() {
         Operation op = new Operation();
         op.setId(1);
-        when(operationRepository.getOperations(any(OperationFilter.class))).thenReturn(List.of(op));
+        when(operationRepository.getOperations(any(String.class), any(OperationFilter.class))).thenReturn(List.of(op));
 
         OperationList result = operationBusiness.getOperations(new OperationFilter());
 

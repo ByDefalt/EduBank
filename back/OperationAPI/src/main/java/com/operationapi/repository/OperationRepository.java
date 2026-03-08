@@ -28,15 +28,15 @@ public class OperationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Operation> getOperations(OperationFilter filter) {
+    public List<Operation> getOperations(String accountId, OperationFilter filter) {
         StringBuilder sql = new StringBuilder("SELECT * FROM OPERATION WHERE 1=1");
         Map<String, Object> params = new HashMap<>();
 
+        if (accountId != null && !accountId.isBlank()) {
+            sql.append(" AND account_source_id = :account_source_id");
+            params.put("account_source_id", accountId);
+        }
         if (filter != null) {
-            if (filter.getAccountSourceId() != null && !filter.getAccountSourceId().isBlank()) {
-                sql.append(" AND account_source_id = :account_source_id");
-                params.put("account_source_id", filter.getAccountSourceId());
-            }
             if (filter.getState() != null) {
                 sql.append(" AND state = :state");
                 params.put("state", filter.getState().toString());

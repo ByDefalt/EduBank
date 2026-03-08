@@ -22,7 +22,13 @@ public class OperationBusiness {
 
     public OperationList getOperations(OperationFilter filter) {
         OperationList operationList = new OperationList();
-        operationList.setData(this.operationRepository.getOperations(filter));
+        operationList.setData(this.operationRepository.getOperations(null, filter));
+        return operationList;
+    }
+
+    public OperationList getOperationsByAccountId(String accountId, OperationFilter filter) {
+        OperationList operationList = new OperationList();
+        operationList.setData(this.operationRepository.getOperations(accountId, filter));
         return operationList;
     }
 
