@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  accountbank-api-spring:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SERVER_PORT: 8082
+
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+
+      SPRING_DATASOURCE_URL: jdbc:mariadb://accountbank-api-mariadb:3307/accountbankapi
+      SPRING_DATASOURCE_USERNAME: accountbankuser
+      SPRING_DATASOURCE_PASSWORD: accountbankpassword
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      - accountbank-api-mariadb
+
+  accountbank-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-accountbankapi
+    restart: always
+    command: --port=3307
+    environment:
+      MYSQL_DATABASE: accountbankapi
+      MYSQL_USER: accountbankuser
+      MYSQL_PASSWORD: accountbankpassword
+      MYSQL_ROOT_PASSWORD: accountbankrootpassword
+    ports:
+      # hote:conteneur_interne
+      - "3382:3307"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./data.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mariadb_data:
