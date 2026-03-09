@@ -2,7 +2,6 @@ package gatewayapi.controller.operation;
 
 import dto.accountapi.RoleEnum;
 import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationState;
 import gatewayapi.annotation.AuthenticationRequired;
 import gatewayapi.business.operation.OperationBusiness;
@@ -27,16 +26,16 @@ public class OperationController {
     @GET
     @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllOperations(@BeanParam OperationFilter filter) {
-        return feignExecutor.wrap(() -> operationBusiness.getAllOperations(filter));
+    public Response getAllOperations(@QueryParam("state") OperationState state, @QueryParam("date_from") String dateFrom, @QueryParam("date_to") String dateTo) {
+        return feignExecutor.wrap(() -> operationBusiness.getAllOperations(state, dateFrom, dateTo));
     }
 
     @GET
     @Path("/account/{accountId}")
     @AuthenticationRequired(RoleEnum.CUSTOMER)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @BeanParam OperationFilter filter) {
-        return feignExecutor.wrap(() -> operationBusiness.getOperationsByAccountId(accountId, filter));
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @QueryParam("state") OperationState state, @QueryParam("date_from") String dateFrom, @QueryParam("date_to") String dateTo) {
+        return feignExecutor.wrap(() -> operationBusiness.getOperationsByAccountId(accountId, state, dateFrom, dateTo));
     }
 
     @POST

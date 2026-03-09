@@ -20,11 +20,24 @@ paths:
         - Operation
       summary: Récupérer la liste des opérations
       description: "Use Case 5 (Administrateur): Voir la liste des opérations"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OperationFilter'
+      parameters:
+        - in: query
+          name: state
+          required: false
+          schema:
+            $ref: '#/components/schemas/OperationState'
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -93,19 +106,29 @@ paths:
       tags:
         - Operation
       summary: Récupérer les opérations d'un compte
-      description: "Retourne toutes les opérations liées à un compte source spécifique"
       parameters:
         - name: accountId
           in: path
           required: true
           schema:
             type: string
-          description: ID du compte source
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OperationFilter'
+        - in: query
+          name: state
+          required: false
+          schema:
+            $ref: '#/components/schemas/OperationState'
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -278,23 +301,6 @@ paths:
 
 components:
   schemas:
-    OperationFilter:
-      type: object
-      description: Critères de filtrage pour la liste des opérations
-      properties:
-        state:
-          $ref: '#/components/schemas/OperationState'
-        date_from:
-          type: string
-          format: date-time
-          description: Date de début (incluse)
-          example: "2026-01-01T00:00:00Z"
-        date_to:
-          type: string
-          format: date-time
-          description: Date de fin (incluse)
-          example: "2026-12-31T23:59:59Z"
-
     OperationState:
       type: string
       description: État de l'opération

@@ -7,14 +7,13 @@ import feign.RequestLine;
 
 public interface OperationClient {
 
-    // OperationController
-    @RequestLine("GET /operations")
+    @RequestLine("GET /operations?state={state}&date_from={dateFrom}&date_to={dateTo}")
     @Headers("Content-Type: application/json")
-    OperationList getAllOperations(OperationFilter filter);
+    OperationList getAllOperations(@Param("state") OperationState state, @Param("dateFrom") String dateFrom, @Param("dateTo") String dateTo);
 
-    @RequestLine("GET /operations/account/{accountId}")
+    @RequestLine("GET /operations/account/{accountId}?state={state}&date_from={dateFrom}&date_to={dateTo}")
     @Headers("Content-Type: application/json")
-    OperationList getOperationsByAccountId(@Param("accountId") String accountId, OperationFilter filter);
+    OperationList getOperationsByAccountId(@Param("accountId") String accountId, @Param("state") OperationState state, @Param("dateFrom") String dateFrom, @Param("dateTo") String dateTo);
 
     @RequestLine("POST /operations")
     @Headers("Content-Type: application/json")
@@ -32,7 +31,6 @@ public interface OperationClient {
     @Headers("Content-Type: application/json")
     Operation cancelOperation(@Param("id") Integer id);
 
-    // BeneficiaryController
     @RequestLine("GET /beneficiaries")
     @Headers("Content-Type: application/json")
     BeneficiaryList getAllBeneficiaries();

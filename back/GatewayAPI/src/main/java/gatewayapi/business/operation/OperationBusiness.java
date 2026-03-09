@@ -1,7 +1,6 @@
 package gatewayapi.business.operation;
 
 import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import gatewayapi.repository.operation.OperationRepository;
@@ -16,12 +15,12 @@ public class OperationBusiness {
         this.operationRepository = operationRepository;
     }
 
-    public OperationList getAllOperations(OperationFilter filter) {
-        return this.operationRepository.getAllOperations(filter);
+    public OperationList getAllOperations(OperationState state, String dateFrom, String dateTo) {
+        return this.operationRepository.getAllOperations(state, dateFrom, dateTo);
     }
 
-    public OperationList getOperationsByAccountId(String accountId, OperationFilter filter) {
-        return this.operationRepository.getOperationsByAccountId(accountId, filter);
+    public OperationList getOperationsByAccountId(String accountId, OperationState state, String dateFrom, String dateTo) {
+        return this.operationRepository.getOperationsByAccountId(accountId, state, dateFrom, dateTo);
     }
 
     public Operation createOperation(Operation operation) {
