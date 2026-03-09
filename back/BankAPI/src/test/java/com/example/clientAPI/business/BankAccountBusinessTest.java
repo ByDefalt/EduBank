@@ -35,6 +35,9 @@ class BankAccountBusinessTest {
     private BankAccountParameterBusiness bankAccountParameterBusiness;
 
     @Mock
+    private BankAccountPivotBusiness bankAccountPivotBusiness;
+
+    @Mock
     private BankAccountParameterRepository bankAccountParameterRepository;
 
     @Mock
@@ -202,13 +205,10 @@ class BankAccountBusinessTest {
 
     @Test
     void testGetCoHolderIdsExcludesCurrentUser() {
-        jakarta.ws.rs.container.ContainerRequestContext ctx =
-                mock(jakarta.ws.rs.container.ContainerRequestContext.class);
-        when(ctx.getProperty("userId")).thenReturn("ACC-1");
         when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
                 .thenReturn(List.of("ACC-1", "ACC-2", "ACC-3"));
 
-        List<String> result = bankAccountBusiness.getCoHolderIds(ctx, "BA001");
+        List<String> result = bankAccountPivotBusiness.getCoHolderIds("ACC-1", "BA001");
 
         assertEquals(2, result.size());
         assertFalse(result.contains("ACC-1"));
@@ -218,15 +218,12 @@ class BankAccountBusinessTest {
 
     @Test
     void testGetCoHolderIdsThrowsSecurityExceptionWhenUserDoesNotOwnAccount() {
-        jakarta.ws.rs.container.ContainerRequestContext ctx =
-                mock(jakarta.ws.rs.container.ContainerRequestContext.class);
-        when(ctx.getProperty("userId")).thenReturn("ACC-STRANGER");
         when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
                 .thenReturn(List.of("ACC-1", "ACC-2"));
 
         SecurityException ex = assertThrows(
                 SecurityException.class,
-                () -> bankAccountBusiness.getCoHolderIds(ctx, "BA001")
+                () -> bankAccountPivotBusiness.getCoHolderIds("ACC-STRANGER", "BA001")
         );
 
         assertTrue(ex.getMessage().contains("appartient pas"));
