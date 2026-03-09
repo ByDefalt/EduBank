@@ -1,15 +1,14 @@
 spring:
-  spring:
-    datasource:
-      url: jdbc:mariadb://localhost:3381/offerapi
-      driver-class-name: org.mariadb.jdbc.Driver
-      username: offeruser
-      password: offerpassword
+  datasource:
+    url: jdbc:mariadb://localhost:3384/offerapi
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: offeruser
+    password: offerpassword
 
-    jpa:
-      show-sql: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
       hibernate:
-        ddl-auto: validate
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: org.hibernate.dialect.MariaDBDialect
