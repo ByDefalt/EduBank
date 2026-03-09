@@ -13,9 +13,8 @@
     "UnusedImport"
 )
 
-package defalt.network.api.operation.model
+package defalt.network.api.bank.model
 
-import defalt.network.api.operation.model.Beneficiary
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -24,14 +23,14 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param `data` 
+ * @param name 
  */
 @Serializable
 
-data class BeneficiaryList (
+data class TypesPostRequest (
 
-    @SerialName(value = "data")
-    val `data`: kotlin.collections.List<Beneficiary>? = null
+    @SerialName(value = "name")
+    val name: kotlin.String
 
 ) {
 

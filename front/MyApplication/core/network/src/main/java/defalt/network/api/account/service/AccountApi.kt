@@ -1,31 +1,34 @@
 package defalt.network.api.account.service
 
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 import defalt.network.api.account.model.Account
 import defalt.network.api.account.model.AccountRegister
+import defalt.network.api.account.model.Error
 import defalt.network.api.account.model.PersonalInformation
 import defalt.network.api.account.model.Role
 import defalt.network.api.account.model.SignInRequest
 import defalt.network.api.account.model.TokenRequest
 import defalt.network.api.account.model.TokenResponse
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
 
 interface AccountApi {
     /**
      * PUT accounts/activate/{id}
      * Activer un compte (Admin uniquement)
-     *
+     * 
      * Responses:
      *  - 200: Compte activé avec succès
+     *  - 400: Compte déjà actif ou clôturé
      *  - 404: Compte non trouvé
      *  - 401: Non autorisé
      *  - 403: Interdit
      *
-     * @param id
+     * @param id 
      * @return [kotlin.Boolean]
      */
     @PUT("accounts/activate/{id}")
@@ -34,14 +37,15 @@ interface AccountApi {
     /**
      * PUT accounts/deactivate/{id}
      * Désactiver un compte (Admin uniquement)
-     *
+     * 
      * Responses:
      *  - 200: Compte désactivé avec succès
+     *  - 400: Compte déjà inactif ou clôturé
      *  - 404: Compte non trouvé
      *  - 401: Non autorisé
      *  - 403: Interdit
      *
-     * @param id
+     * @param id 
      * @return [kotlin.Boolean]
      */
     @PUT("accounts/deactivate/{id}")
@@ -50,7 +54,7 @@ interface AccountApi {
     /**
      * GET accounts
      * Liste tous les comptes (Admin uniquement)
-     *
+     * 
      * Responses:
      *  - 200: Succès
      *  - 401: Non autorisé
@@ -64,12 +68,12 @@ interface AccountApi {
     /**
      * GET accounts/{id}
      * Récupérer un compte par ID
-     *
+     * 
      * Responses:
      *  - 200: Compte trouvé
      *  - 404: Compte non trouvé
      *
-     * @param id
+     * @param id 
      * @return [Account]
      */
     @GET("accounts/{id}")
@@ -78,14 +82,14 @@ interface AccountApi {
     /**
      * PUT accounts/{id}
      * Supprimer un compte (Admin uniquement, par le changement d&#39;etat du compte à ENCLOSE)
-     *
+     * 
      * Responses:
      *  - 200: Compte supprimé avec succès (retourne true)
      *  - 404: Compte non trouvé
      *  - 401: Non autorisé
      *  - 403: Interdit
      *
-     * @param id
+     * @param id 
      * @return [kotlin.Boolean]
      */
     @PUT("accounts/{id}")
@@ -94,7 +98,7 @@ interface AccountApi {
     /**
      * GET accounts/personalInformation/{id}
      * Récupérer les informations personnelles associées à un compte
-     *
+     * 
      * Responses:
      *  - 200: Infos trouvées
      *  - 404: Compte ou Infos non trouvées
@@ -111,8 +115,10 @@ interface AccountApi {
      * Crée le compte, le rôle et les informations personnelles liées.
      * Responses:
      *  - 201: Compte créé
+     *  - 400: Impossible de créer le compte (rôle inexistant, erreur personnelle info, etc.)
+     *  - 404: Rôle non trouvé
      *
-     * @param accountRegister
+     * @param accountRegister 
      * @return [Account]
      */
     @POST("accounts")
@@ -121,7 +127,7 @@ interface AccountApi {
     /**
      * GET accounts/role/{id}
      * Récupérer le rôle associé à un compte
-     *
+     * 
      * Responses:
      *  - 200: Rôle trouvé
      *  - 404: Compte ou Rôle non trouvé
@@ -135,13 +141,13 @@ interface AccountApi {
     /**
      * POST accounts/signin
      * Connexion utilisateur
-     *
+     * 
      * Responses:
      *  - 200: Connexion réussie, retourne le token
      *  - 404: Compte non trouvé
-     *  - 401: Mot de passe incorrect
+     *  - 401: Mot de passe incorrect ou compte inactif
      *
-     * @param signInRequest
+     * @param signInRequest 
      * @return [TokenRequest]
      */
     @POST("accounts/signin")
@@ -150,14 +156,15 @@ interface AccountApi {
     /**
      * POST accounts/validate
      * Valider un token JWT
-     *
+     * 
      * Responses:
      *  - 200: Token valide
      *  - 401: Token invalide ou expiré
      *
-     * @param tokenRequest
+     * @param tokenRequest 
      * @return [TokenResponse]
      */
     @POST("accounts/validate")
     suspend fun accountsValidatePost(@Body tokenRequest: TokenRequest): Response<TokenResponse>
+
 }

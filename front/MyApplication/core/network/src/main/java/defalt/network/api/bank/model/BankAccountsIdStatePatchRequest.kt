@@ -23,37 +23,28 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id Identifiant des paramètres
- * @param overdraftLimit Limite de découvert autorisé
- * @param state État des paramètres
+ * @param state 
  */
 @Serializable
 
-data class BankAccountParameter (
+data class BankAccountsIdStatePatchRequest (
 
-    /* Identifiant des paramètres */
-    @SerialName(value = "id")
-    val id: kotlin.Int,
-
-    /* Limite de découvert autorisé */
-    @SerialName(value = "overdraft_limit")
-    val overdraftLimit: kotlin.Double,
-
-    /* État des paramètres */
     @SerialName(value = "state")
-    val state: BankAccountParameter.State
+    val state: BankAccountsIdStatePatchRequest.State
 
 ) {
 
     /**
-     * État des paramètres
+     * 
      *
-     * Values: ACTIVE,INACTIVE
+     * Values: ACTIVE,INACTIVE,BLOQUED,CLOSED
      */
     @Serializable
     enum class State(val value: kotlin.String) {
         @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive");
+        @SerialName(value = "inactive") INACTIVE("inactive"),
+        @SerialName(value = "bloqued") BLOQUED("bloqued"),
+        @SerialName(value = "closed") CLOSED("closed");
     }
 
 }

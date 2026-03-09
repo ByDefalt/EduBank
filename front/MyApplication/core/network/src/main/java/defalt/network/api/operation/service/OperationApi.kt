@@ -1,33 +1,34 @@
 package defalt.network.api.operation.service
 
-import defalt.network.api.operation.model.Operation
-import defalt.network.api.operation.model.OperationList
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+
+import defalt.network.api.operation.model.Error
+import defalt.network.api.operation.model.Operation
+import defalt.network.api.operation.model.OperationFilter
+import defalt.network.api.operation.model.OperationList
+import defalt.network.api.operation.model.OperationState
 
 interface OperationApi {
-
     /**
-     * enum for parameter state
+     * GET operations/account/{accountId}
+     * Récupérer les opérations d&#39;un compte
+     * Retourne toutes les opérations liées à un compte source spécifique
+     * Responses:
+     *  - 200: Liste récupérée avec succès
+     *  - 404: Ressource non trouvée
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *
+     * @param accountId ID du compte source
+     * @param operationFilter  (optional)
+     * @return [OperationList]
      */
-    @Serializable
-    enum class StateOperationsGet(val value: kotlin.String) {
-        @SerialName(value = "completed")
-        COMPLETED("completed"),
-
-        @SerialName(value = "failed")
-        FAILED("failed"),
-
-        @SerialName(value = "cancelled")
-        CANCELLED("cancelled"),
-    }
+    @GET("operations/account/{accountId}")
+    suspend fun operationsAccountAccountIdGet(@Path("accountId") accountId: kotlin.String, @Body operationFilter: OperationFilter? = null): Response<OperationList>
 
     /**
      * GET operations
@@ -37,14 +38,11 @@ interface OperationApi {
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountSourceId Filtrer par compte source (optional)
-     * @param state Filtrer par état (optional)
-     * @param dateFrom Date de début (optional)
-     * @param dateTo Date de fin (optional)
+     * @param operationFilter  (optional)
      * @return [OperationList]
      */
     @GET("operations")
-    suspend fun operationsGet(@Query("account_source_id") accountSourceId: kotlin.String? = null, @Query("state") state: StateOperationsGet? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationList>
+    suspend fun operationsGet(@Body operationFilter: OperationFilter? = null): Response<OperationList>
 
     /**
      * POST operations/{id}/cancel
@@ -89,8 +87,8 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
-     * @param body
+     * @param id 
+     * @param body 
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
@@ -106,9 +104,10 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operation
+     * @param operation 
      * @return [Operation]
      */
     @POST("operations")
     suspend fun operationsPost(@Body operation: Operation): Response<Operation>
+
 }

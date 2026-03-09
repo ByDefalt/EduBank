@@ -4,6 +4,7 @@ import defalt.domain.datasource.operation.IOperationRemoteDataSource
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
+import defalt.network.api.operation.model.OperationFilter
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
@@ -26,17 +27,19 @@ class OperationRemoteDataSource(
         dateFrom: OffsetDateTime?,
         dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> {
-        val stateDto = state?.let {
-            when (it) {
-                OperationState.COMPLETED -> OperationApi.StateOperationsGet.COMPLETED
-                OperationState.FAILED -> OperationApi.StateOperationsGet.FAILED
-                OperationState.CANCELLED -> OperationApi.StateOperationsGet.CANCELLED
-                // PENDING n'existe pas côté API filtre, on passe null
-                else -> null
-            }
+        val stateDto = state?.toDto()
+        val filter = OperationFilter(
+            state = stateDto,
+            dateFrom = dateFrom,
+            dateTo = dateTo,
+        )
+        return if (accountSourceId != null) {
+            safeApiCall { operationApi.operationsAccountAccountIdGet(accountSourceId, filter) }
+                .map { it.data?.toEntity() ?: emptyList() }
+        } else {
+            safeApiCall { operationApi.operationsGet(filter) }
+                .map { it.data?.toEntity() ?: emptyList() }
         }
-        return safeApiCall { operationApi.operationsGet(accountSourceId, stateDto, dateFrom, dateTo) }
-            .map { it.data?.toEntity() ?: emptyList() }
     }
 
     override suspend fun getOperationById(id: Int): NetworkResult<Operation> =

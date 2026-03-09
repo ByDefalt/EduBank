@@ -27,6 +27,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -42,7 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.Type
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.featureBank.viewModel.AccountDetailsData
@@ -80,6 +83,8 @@ fun AccountDetailsScreen(
     onNavigateToMenu: () -> Unit = {},
     viewModel: AccountDetailsViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(accountId) { viewModel.load(accountId) }
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     AccountDetailsContent(
@@ -221,7 +226,7 @@ internal fun AccountDetailsContent(
 
 
 @Composable
-private fun AccountSummaryCard(account: BankAccount) {
+private fun AccountSummaryCard(account: BankAccountDetail) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -241,7 +246,7 @@ private fun AccountSummaryCard(account: BankAccount) {
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "Découvert autorisé : ${formatAmount(0.0)}",
+                text = "Découvert autorisé : ${formatAmount(account.parameter?.overdraftLimit ?: 0.0)}",
                 color = TextSecondary,
                 fontSize = 12.sp,
             )
@@ -427,10 +432,10 @@ private fun formatDateHeader(date: LocalDate): String {
         .replaceFirstChar { it.uppercase() }
 }
 
-private fun sampleAccount() = BankAccount(
+private fun sampleAccount() = BankAccountDetail(
     id = "1",
-    parameterId = 0,
-    typeId = 1,
+    parameter = BankAccountParameter(id = 1, overdraftLimit = -500.0),
+    type = Type(id = 1, name = "Compte courant"),
     sold = 478.27,
     iban = "FR7630006000011234567890140",
 )

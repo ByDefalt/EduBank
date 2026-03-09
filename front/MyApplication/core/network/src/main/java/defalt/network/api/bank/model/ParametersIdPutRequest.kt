@@ -23,30 +23,23 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id Identifiant des paramètres
- * @param overdraftLimit Limite de découvert autorisé
- * @param state État des paramètres
+ * @param overdraftLimit 
+ * @param state 
  */
 @Serializable
 
-data class BankAccountParameter (
+data class ParametersIdPutRequest (
 
-    /* Identifiant des paramètres */
-    @SerialName(value = "id")
-    val id: kotlin.Int,
-
-    /* Limite de découvert autorisé */
     @SerialName(value = "overdraft_limit")
-    val overdraftLimit: kotlin.Double,
+    val overdraftLimit: kotlin.Double? = null,
 
-    /* État des paramètres */
     @SerialName(value = "state")
-    val state: BankAccountParameter.State
+    val state: ParametersIdPutRequest.State? = null
 
 ) {
 
     /**
-     * État des paramètres
+     * 
      *
      * Values: ACTIVE,INACTIVE
      */

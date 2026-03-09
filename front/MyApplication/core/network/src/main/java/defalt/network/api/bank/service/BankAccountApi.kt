@@ -1,123 +1,147 @@
 package defalt.network.api.bank.service
 
-import defalt.network.api.bank.model.BankAccount
-import defalt.network.api.bank.model.BankAccountCreateRequest
-import defalt.network.api.bank.model.BankAccountDetail
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+import defalt.network.api.bank.model.BankAccount
+import defalt.network.api.bank.model.BankAccountDetails
+import defalt.network.api.bank.model.BankAccountsIdBalanceGet200Response
+import defalt.network.api.bank.model.BankAccountsIdPutRequest
+import defalt.network.api.bank.model.BankAccountsIdStatePatchRequest
+import defalt.network.api.bank.model.BankAccountsPostRequest
+import defalt.network.api.bank.model.Error
 
 interface BankAccountApi {
     /**
-     * GET admin/accounts/{account_id}/bank-accounts
-     * [ADMIN] Comptes d&#39;un utilisateur
-     *
+     * GET bank-accounts/current
+     * Afficher le compte courant de l&#39;utilisateur connecté
+     * Use Case 3 (Client): Afficher le compte courant
      * Responses:
-     *  - 200: Liste des comptes
+     *  - 200: Compte courant récupéré avec succès
+     *  - 404: Aucun compte courant trouvé
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountId
-     * @return [kotlin.collections.List<BankAccount>]
+     * @return [BankAccountDetails]
      */
-    @GET("admin/accounts/{account_id}/bank-accounts")
-    suspend fun adminAccountsAccountIdBankAccountsGet(@Path("account_id") accountId: kotlin.Int): Response<kotlin.collections.List<BankAccount>>
+    @GET("bank-accounts/current")
+    suspend fun bankAccountsCurrentGet(): Response<BankAccountDetails>
 
     /**
-     * POST admin/accounts/{account_id}/bank-accounts
-     * [ADMIN] Créer un compte
-     *
+     * GET bank-accounts
+     * Récupérer la liste des comptes bancaires
+     * Use Case 5 (Client): Voir la liste des comptes / Use Case 3 (Administrateur): Voir la liste des comptes bancaires
      * Responses:
-     *  - 201: Compte créé
-     *  - 400: Requête invalide
+     *  - 200: Liste récupérée avec succès
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountId
-     * @param bankAccountCreateRequest
-     * @return [BankAccountDetail]
+     * @param accountId Filtrer par ID de compte utilisateur (optional)
+     * @param typeId Filtrer par type de compte (optional)
+     * @param state Filtrer par état (via paramètres) (optional)
+     * @return [kotlin.collections.List<BankAccountDetails>]
      */
-    @POST("admin/accounts/{account_id}/bank-accounts")
-    suspend fun adminAccountsAccountIdBankAccountsPost(@Path("account_id") accountId: kotlin.Int, @Body bankAccountCreateRequest: BankAccountCreateRequest): Response<BankAccountDetail>
+    @GET("bank-accounts")
+    suspend fun bankAccountsGet(@Query("account_id") accountId: kotlin.Int? = null, @Query("type_id") typeId: kotlin.Int? = null, @Query("state") state: kotlin.String? = null): Response<kotlin.collections.List<BankAccountDetails>>
 
     /**
-     * GET admin/bank-accounts
-     * [ADMIN] Liste tous les comptes
-     *
+     * GET bank-accounts/{id}/balance
+     * Récupérer le solde d&#39;un compte bancaire
+     * 
      * Responses:
-     *  - 200: Liste récupérée
-     *
-     * @return [kotlin.collections.List<BankAccount>]
-     */
-    @GET("admin/bank-accounts")
-    suspend fun adminBankAccountsGet(): Response<kotlin.collections.List<BankAccount>>
-
-    /**
-     * DELETE admin/bank-accounts/{id}
-     * [ADMIN] Supprimer un compte
-     *
-     * Responses:
-     *  - 204: Compte supprimé
+     *  - 200: Solde récupéré avec succès
      *  - 404: Ressource non trouvée
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param id
+     * @param id 
+     * @return [BankAccountsIdBalanceGet200Response]
+     */
+    @GET("bank-accounts/{id}/balance")
+    suspend fun bankAccountsIdBalanceGet(@Path("id") id: kotlin.Int): Response<BankAccountsIdBalanceGet200Response>
+
+    /**
+     * DELETE bank-accounts/{id}
+     * Supprimer un compte bancaire
+     * 
+     * Responses:
+     *  - 204: Compte bancaire supprimé avec succès
+     *  - 404: Ressource non trouvée
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 403: Accès interdit - Permissions insuffisantes
+     *
+     * @param id 
      * @return [Unit]
      */
-    @DELETE("admin/bank-accounts/{id}")
-    suspend fun adminBankAccountsIdDelete(@Path("id") id: kotlin.String): Response<Unit>
+    @DELETE("bank-accounts/{id}")
+    suspend fun bankAccountsIdDelete(@Path("id") id: kotlin.Int): Response<Unit>
 
     /**
-     * GET admin/bank-accounts/{id}
-     * [ADMIN] Détails d&#39;un compte
-     *
+     * GET bank-accounts/{id}
+     * Récupérer un compte bancaire par ID
+     * Use Case 4 (Client): Voir les détails d&#39;un compte / Use Case 7 (Administrateur): Voir un compte bancaire spécifique avec ses détails
      * Responses:
-     *  - 200: Détails du compte
+     *  - 200: Compte bancaire récupéré avec succès
      *  - 404: Ressource non trouvée
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
-     * @return [BankAccountDetail]
+     * @param id Numéro du compte bancaire
+     * @return [BankAccountDetails]
      */
-    @GET("admin/bank-accounts/{id}")
-    suspend fun adminBankAccountsIdGet(@Path("id") id: kotlin.String): Response<BankAccountDetail>
+    @GET("bank-accounts/{id}")
+    suspend fun bankAccountsIdGet(@Path("id") id: kotlin.Int): Response<BankAccountDetails>
 
     /**
-     * GET my-bank-accounts
-     * [CLIENT] Mes comptes actifs
-     *
+     * PUT bank-accounts/{id}
+     * Mettre à jour un compte bancaire
+     * 
      * Responses:
-     *  - 200: Liste de mes comptes
-     *
-     * @param typeId  (optional)
-     * @return [kotlin.collections.List<BankAccount>]
-     */
-    @GET("my-bank-accounts")
-    suspend fun myBankAccountsGet(@Query("type_id") typeId: kotlin.Int? = null): Response<kotlin.collections.List<BankAccount>>
-
-    /**
-     * GET my-bank-accounts/{id}/co-holders
-     * [CLIENT] IDs des co-titulaires
-     *
-     * Responses:
-     *  - 200: Liste des IDs
-     *
-     * @param id
-     * @return [kotlin.collections.List<kotlin.Int>]
-     */
-    @GET("my-bank-accounts/{id}/co-holders")
-    suspend fun myBankAccountsIdCoHoldersGet(@Path("id") id: kotlin.String): Response<kotlin.collections.List<kotlin.Int>>
-
-    /**
-     * GET my-bank-accounts/{id}
-     * [CLIENT] Détails d&#39;un de mes comptes
-     *
-     * Responses:
-     *  - 200: Détails du compte
-     *  - 403: Accès interdit
+     *  - 200: Compte bancaire mis à jour avec succès
      *  - 404: Ressource non trouvée
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
-     * @return [BankAccountDetail]
+     * @param id 
+     * @param bankAccountsIdPutRequest 
+     * @return [BankAccount]
      */
-    @GET("my-bank-accounts/{id}")
-    suspend fun myBankAccountsIdGet(@Path("id") id: kotlin.String): Response<BankAccountDetail>
+    @PUT("bank-accounts/{id}")
+    suspend fun bankAccountsIdPut(@Path("id") id: kotlin.Int, @Body bankAccountsIdPutRequest: BankAccountsIdPutRequest): Response<BankAccount>
+
+    /**
+     * PATCH bank-accounts/{id}/state
+     * Changer l&#39;état d&#39;un compte bancaire
+     * Use Case 11 (Administrateur): Changer l&#39;état d&#39;un compte bancaire
+     * Responses:
+     *  - 200: État modifié avec succès
+     *  - 404: Ressource non trouvée
+     *  - 400: Requête invalide
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 403: Accès interdit - Permissions insuffisantes
+     *
+     * @param id 
+     * @param bankAccountsIdStatePatchRequest 
+     * @return [BankAccount]
+     */
+    @PATCH("bank-accounts/{id}/state")
+    suspend fun bankAccountsIdStatePatch(@Path("id") id: kotlin.Int, @Body bankAccountsIdStatePatchRequest: BankAccountsIdStatePatchRequest): Response<BankAccount>
+
+    /**
+     * POST bank-accounts
+     * Créer un nouveau compte bancaire
+     * 
+     * Responses:
+     *  - 201: Compte bancaire créé avec succès
+     *  - 400: Requête invalide
+     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
+     *  - 403: Accès interdit - Permissions insuffisantes
+     *
+     * @param bankAccountsPostRequest 
+     * @return [BankAccount]
+     */
+    @POST("bank-accounts")
+    suspend fun bankAccountsPost(@Body bankAccountsPostRequest: BankAccountsPostRequest): Response<BankAccount>
+
 }

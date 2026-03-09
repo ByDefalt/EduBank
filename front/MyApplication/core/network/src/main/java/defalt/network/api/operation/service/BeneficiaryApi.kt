@@ -1,10 +1,15 @@
 package defalt.network.api.operation.service
 
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 import defalt.network.api.operation.model.Beneficiary
 import defalt.network.api.operation.model.BeneficiaryList
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.Response
-import retrofit2.http.*
+import defalt.network.api.operation.model.Error
 
 interface BeneficiaryApi {
     /**
@@ -24,7 +29,7 @@ interface BeneficiaryApi {
     /**
      * GET beneficiaries
      * Récupérer tous les bénéficiaires
-     *
+     * 
      * Responses:
      *  - 200: Liste globale des bénéficiaires
      *
@@ -36,11 +41,11 @@ interface BeneficiaryApi {
     /**
      * DELETE beneficiaries/{id}
      * Supprimer un bénéficiaire
-     *
+     * 
      * Responses:
      *  - 204: Supprimé avec succès
      *
-     * @param id
+     * @param id 
      * @return [Unit]
      */
     @DELETE("beneficiaries/{id}")
@@ -49,12 +54,12 @@ interface BeneficiaryApi {
     /**
      * PUT beneficiaries/{id}
      * Mettre à jour un bénéficiaire
-     *
+     * 
      * Responses:
      *  - 200: Bénéficiaire mis à jour
      *
-     * @param id
-     * @param beneficiary
+     * @param id 
+     * @param beneficiary 
      * @return [Beneficiary]
      */
     @PUT("beneficiaries/{id}")
@@ -63,13 +68,14 @@ interface BeneficiaryApi {
     /**
      * POST beneficiaries
      * Créer un nouveau bénéficiaire
-     *
+     * 
      * Responses:
      *  - 201: Bénéficiaire créé
      *
-     * @param beneficiary
+     * @param beneficiary 
      * @return [Beneficiary]
      */
     @POST("beneficiaries")
     suspend fun beneficiariesPost(@Body beneficiary: Beneficiary): Response<Beneficiary>
+
 }
