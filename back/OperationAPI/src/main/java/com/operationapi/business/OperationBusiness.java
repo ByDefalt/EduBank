@@ -3,11 +3,10 @@ package com.operationapi.business;
 import com.operationapi.entity.OperationEntity;
 import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.FunctionalException;
-import com.operationapi.mapper.OperationFilterMapper;
 import com.operationapi.mapper.OperationMapper;
 import com.operationapi.repository.OperationRepository;
+import com.operationapi.util.DateUtils;
 import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OperationBusiness {
@@ -26,15 +25,15 @@ public class OperationBusiness {
         this.operationRepository = operationRepository;
     }
 
-    public OperationList getOperations(OperationFilter filter) {
-        List<OperationEntity> operations = this.operationRepository.getOperations(null, OperationFilterMapper.toEntity(filter));
+    public OperationList getOperations(OperationState state, String dateFrom, String dateTo) {
+        List<OperationEntity> operations = this.operationRepository.getOperations(null, state, DateUtils.parseDate(dateFrom), DateUtils.parseDate(dateTo));
         OperationList operationList = new OperationList();
         operationList.setData(OperationMapper.toDto(operations));
         return operationList;
     }
 
-    public OperationList getOperationsByAccountId(String accountId, OperationFilter filter) {
-        List<OperationEntity> operations = this.operationRepository.getOperations(accountId, OperationFilterMapper.toEntity(filter));
+    public OperationList getOperationsByAccountId(String accountId, OperationState state, String dateFrom, String dateTo) {
+        List<OperationEntity> operations = this.operationRepository.getOperations(accountId, state, DateUtils.parseDate(dateFrom), DateUtils.parseDate(dateTo));
         OperationList operationList = new OperationList();
         operationList.setData(OperationMapper.toDto(operations));
         return operationList;
@@ -89,7 +88,6 @@ public class OperationBusiness {
         }
 
         this.operationRepository.updateState(id, OperationState.CANCELLED);
-        OperationEntity updatedOriginal = this.operationRepository.getOperationById(id);
 
         OperationEntity cancellation = new OperationEntity(
                 null,

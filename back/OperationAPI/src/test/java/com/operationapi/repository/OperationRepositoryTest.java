@@ -1,11 +1,8 @@
 package com.operationapi.repository;
 
 import com.operationapi.entity.OperationEntity;
-import com.operationapi.entity.OperationFilterEntity;
 import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.NotFoundException;
-import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +57,7 @@ class OperationRepositoryTest {
     void testGetOperations() {
         operationRepository.save(operation);
 
-        List<OperationEntity> result = operationRepository.getOperations(null, null);
+        List<OperationEntity> result = operationRepository.getOperations(null, null, null, null);
 
         assertFalse(result.isEmpty());
         assertEquals(1, result.size());
@@ -129,7 +126,7 @@ class OperationRepositoryTest {
         );
         operationRepository.save(op2);
 
-        List<OperationEntity> result = operationRepository.getOperations(null, null);
+        List<OperationEntity> result = operationRepository.getOperations(null, null, null, null);
         assertEquals(2, result.size());
     }
 
@@ -148,8 +145,7 @@ class OperationRepositoryTest {
         );
         operationRepository.save(op2);
 
-        OperationFilterEntity filter = new OperationFilterEntity(null, null, null);
-        List<OperationEntity> result = operationRepository.getOperations("ACC-1", filter);
+        List<OperationEntity> result = operationRepository.getOperations("ACC-1", null, null, null);
 
         assertEquals(1, result.size());
         assertEquals("ACC-1", result.get(0).accountSourceId());
@@ -170,8 +166,7 @@ class OperationRepositoryTest {
         );
         operationRepository.save(op2);
 
-        OperationFilterEntity filter = new OperationFilterEntity(StateEnumEntity.COMPLETED, null, null);
-        List<OperationEntity> result = operationRepository.getOperations(null, filter);
+        List<OperationEntity> result = operationRepository.getOperations(null, OperationState.COMPLETED, null, null);
 
         assertEquals(1, result.size());
         assertEquals(StateEnumEntity.COMPLETED, result.get(0).state());
@@ -192,15 +187,14 @@ class OperationRepositoryTest {
         );
         operationRepository.save(op2);
 
-        OperationFilterEntity filter = new OperationFilterEntity(
+        List<OperationEntity> result = operationRepository.getOperations(
+                null,
                 null,
                 OffsetDateTime.of(2026, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC),
                 OffsetDateTime.of(2026, 3, 31, 23, 59, 59, 0, ZoneOffset.UTC)
         );
-        List<OperationEntity> result = operationRepository.getOperations(null, filter);
 
         assertEquals(1, result.size());
         assertEquals("Virement mars", result.get(0).label());
     }
 }
-

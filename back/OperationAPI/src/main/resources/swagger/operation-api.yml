@@ -22,12 +22,22 @@ paths:
       description: "Use Case 5 (Administrateur): Voir la liste des opérations"
       parameters:
         - in: query
-          name: filter
+          name: state
           required: false
-          style: deepObject
-          explode: true
           schema:
-            $ref: '#/components/schemas/OperationFilter'
+            $ref: '#/components/schemas/OperationState'
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -103,12 +113,22 @@ paths:
           schema:
             type: string
         - in: query
-          name: filter
+          name: state
           required: false
-          style: deepObject
-          explode: true
           schema:
-            $ref: '#/components/schemas/OperationFilter'
+            $ref: '#/components/schemas/OperationState'
+        - in: query
+          name: date_from
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: date_to
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Liste récupérée avec succès

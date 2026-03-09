@@ -23,9 +23,8 @@ public class OperationController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperations(@BeanParam OperationFilterParam filterParam) {
-        OperationFilter filter = filterParam != null ? filterParam.toDto() : new OperationFilter();
-        OperationList operations = this.operationBusiness.getOperations(filter);
+    public Response getOperations(@QueryParam("state") OperationState state, @QueryParam("date_from") String dateFrom, @QueryParam("date_to") String dateTo) {
+        OperationList operations = this.operationBusiness.getOperations(state, dateFrom, dateTo);
         return Response.ok(operations).build();
     }
 
@@ -48,9 +47,8 @@ public class OperationController {
     @GET
     @Path("/account/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @BeanParam OperationFilterParam filterParam) {
-        OperationFilter filter = filterParam != null ? filterParam.toDto() : new OperationFilter();
-        OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, filter);
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @QueryParam("state") OperationState state, @QueryParam("date_from") String dateFrom, @QueryParam("date_to") String dateTo) {
+        OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, state, dateFrom, dateTo);
         return Response.ok(operations).build();
     }
 

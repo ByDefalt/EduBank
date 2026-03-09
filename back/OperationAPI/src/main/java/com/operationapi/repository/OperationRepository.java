@@ -1,13 +1,9 @@
 package com.operationapi.repository;
 
 import com.operationapi.entity.OperationEntity;
-import com.operationapi.entity.OperationFilterEntity;
 import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.NotFoundException;
-import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationState;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +28,7 @@ public class OperationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<OperationEntity> getOperations(String accountId, OperationFilterEntity filter) {
+    public List<OperationEntity> getOperations(String accountId, OperationState state, OffsetDateTime dateFrom, OffsetDateTime dateTo) {
         StringBuilder sql = new StringBuilder("SELECT * FROM operation WHERE 1=1");
         Map<String, Object> params = new HashMap<>();
 
@@ -40,19 +36,17 @@ public class OperationRepository {
             sql.append(" AND account_source_id = :account_source_id");
             params.put("account_source_id", accountId);
         }
-        if (filter != null) {
-            if (filter.state() != null) {
-                sql.append(" AND state = :state");
-                params.put("state", filter.state().toString());
-            }
-            if (filter.dateFrom() != null) {
-                sql.append(" AND date >= :date_from");
-                params.put("date_from", filter.dateFrom().toLocalDateTime());
-            }
-            if (filter.dateTo() != null) {
-                sql.append(" AND date <= :date_to");
-                params.put("date_to", filter.dateTo().toLocalDateTime());
-            }
+        if (state != null) {
+            sql.append(" AND state = :state");
+            params.put("state", state.toString());
+        }
+        if (dateFrom != null) {
+            sql.append(" AND date >= :date_from");
+            params.put("date_from", dateFrom.toLocalDateTime());
+        }
+        if (dateTo != null) {
+            sql.append(" AND date <= :date_to");
+            params.put("date_to", dateTo.toLocalDateTime());
         }
 
         return jdbcTemplate.query(sql.toString(), params, (rs, rowNum) -> mapRow(rs));
