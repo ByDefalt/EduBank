@@ -15,7 +15,9 @@ services:
       SERVER_PORT: 8080
       SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
       ACCOUNT_API_URL: http://account-api-spring:8081/api/v1
+      BANK_ACCOUNT_API_URL: http://accountbank-api-spring:8082/api/v1
       OPERATION_API_URL: http://operation-api-spring:8083/api/v1
+      OFFER_API_URL: http://offer-api-spring:8084/api/v1
     depends_on:
       - account-api-spring
     networks:
@@ -164,6 +166,54 @@ services:
     networks:
       - edubank-network
 
+  # ──────────────────────────────────────────
+  # Operation API (port 8083) + MariaDB
+  # ──────────────────────────────────────────
+  operation-api-spring:
+    build:
+      context: ../OperationAPI
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      SERVER_PORT: 8083
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://operation-api-mariadb:3308/operationapi
+      SPRING_DATASOURCE_USERNAME: operationuser
+      SPRING_DATASOURCE_PASSWORD: operationpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      operation-api-mariadb:
+        condition: service_healthy
+    networks:
+      - edubank-network
+
+  operation-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-operationapi
+    restart: always
+    command: --port=3308
+    environment:
+      MYSQL_DATABASE: operationapi
+      MYSQL_USER: operationuser
+      MYSQL_PASSWORD: operationpassword
+      MYSQL_ROOT_PASSWORD: operationrootpassword
+    ports:
+      - "3383:3308"
+    volumes:
+      - mariadb_data_operation:/var/lib/mysql
+      - ../OperationAPI/docker/data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - edubank-network
+
 networks:
   edubank-network:
     driver: bridge
@@ -172,4 +222,5 @@ volumes:
   mariadb_data_account:
   mariadb_data_bank:
   mariadb_data_offer:
+  mariadb_data_operation:
 

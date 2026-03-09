@@ -39,5 +39,40 @@ services:
       - mariadb_data_bank:/var/lib/mysql
       - ./data.sql:/docker-entrypoint-initdb.d/init.sql
 
+  operation-api-spring:
+    build:
+      context: ../../OperationAPI
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      SERVER_PORT: 8083
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://operation-api-mariadb:3308/operationapi
+      SPRING_DATASOURCE_USERNAME: operationuser
+      SPRING_DATASOURCE_PASSWORD: operationpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      - operation-api-mariadb
+
+  operation-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-operationapi
+    restart: always
+    command: --port=3308
+    environment:
+      MYSQL_DATABASE: operationapi
+      MYSQL_USER: operationuser
+      MYSQL_PASSWORD: operationpassword
+      MYSQL_ROOT_PASSWORD: operationrootpassword
+    ports:
+      - "3383:3308"
+    volumes:
+      - mariadb_data_operation:/var/lib/mysql
+      - ../../OperationAPI/docker/data.sql:/docker-entrypoint-initdb.d/init.sql
+
 volumes:
   mariadb_data_bank:
+  mariadb_data_operation:

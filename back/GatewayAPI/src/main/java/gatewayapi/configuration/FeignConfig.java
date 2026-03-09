@@ -9,6 +9,7 @@ import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import gatewayapi.client.AccountClient;
 import gatewayapi.client.BankAccountClient;
+import gatewayapi.client.OfferClient;
 import gatewayapi.client.OperationClient;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,9 @@ public class FeignConfig {
 
     @Value("${clients.bank-account-api.url}")
     private String bankAccountApiUrl;
+
+    @Value("${clients.offer-api.url}")
+    private String offerApiUrl;
 
     private okhttp3.OkHttpClient getOkHttpClient() {
         var okHttpClient = new okhttp3.OkHttpClient.Builder();
@@ -73,5 +77,16 @@ public class FeignConfig {
                 .logger(new Logger.JavaLogger(FeignConfig.class))
                 .logLevel(Logger.Level.FULL)
                 .target(BankAccountClient.class, bankAccountApiUrl);
+    }
+
+    @Bean
+    public OfferClient getOfferClient() {
+        return Feign.builder()
+                .encoder(new JacksonEncoder(objectMapper))
+                .decoder(new JacksonDecoder(objectMapper))
+                .client(new OkHttpClient(getOkHttpClient()))
+                .logger(new Logger.JavaLogger(FeignConfig.class))
+                .logLevel(Logger.Level.FULL)
+                .target(OfferClient.class, offerApiUrl);
     }
 }

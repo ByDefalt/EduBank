@@ -11,4 +11,6 @@ services:
       SERVER_PORT: 8080
       SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
       ACCOUNT_API_URL: http://account-api-spring:8081/api/v1
+      BANK_ACCOUNT_API_URL: http://bank-account-api-spring:8082/api/v1
       OPERATION_API_URL: http://operation-api-spring:8083/api/v1
+      OFFER_API_URL: http://offer-api-spring:8084/api/v1
