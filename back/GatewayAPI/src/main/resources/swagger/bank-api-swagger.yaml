@@ -21,7 +21,7 @@ tags:
 paths:
   # ==================== BANK ACCOUNTS ====================
 
-  /admin/bank-accounts:
+  /bank/admin/bank-accounts:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Liste tous les comptes"
@@ -48,7 +48,7 @@ paths:
                   sold: 5000.00
                   iban: "FR7698765432109876543210987"
 
-  /admin/bank-accounts/{id}:
+  /bank/admin/bank-accounts/{id}:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Détails d'un compte"
@@ -100,7 +100,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /admin/accounts/{account_id}/bank-accounts:
+  /bank/admin/accounts/{account_id}/bank-accounts:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Comptes d'un utilisateur"
@@ -163,7 +163,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestError'
 
-  /my-bank-accounts:
+  /bank/my-bank-accounts:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] Mes comptes actifs"
@@ -185,7 +185,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/BankAccount'
 
-  /my-bank-accounts/{id}:
+  /bank/my-bank-accounts/{id}:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] Détails d'un de mes comptes"
@@ -210,7 +210,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /my-bank-accounts/{id}/co-holders:
+  /bank/my-bank-accounts/{id}/co-holders:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] IDs des co-titulaires"
@@ -236,7 +236,7 @@ paths:
 
   # ==================== PARAMETERS ====================
 
-  /admin/bank-accounts/{bank_account_id}/parameters:
+  /bank/admin/bank-accounts/{bank_account_id}/parameters:
     patch:
       tags: [BankAccountParameter]
       summary: "[ADMIN] Mettre à jour les paramètres"
@@ -279,7 +279,7 @@ paths:
 
   # ==================== TYPES ====================
 
-  /admin/types:
+  /bank/admin/types:
     get:
       tags: [Type]
       summary: "[ADMIN] Liste des types"
@@ -318,7 +318,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestError'
 
-  /admin/types/{id}:
+  /bank/admin/types/{id}:
     get:
       tags: [Type]
       summary: "[ADMIN] Récupérer un type"
@@ -343,7 +343,7 @@ paths:
 
   # ==================== PIVOT (CO-TITULAIRES) ====================
 
-  /bank-accounts-pivot:
+  /bank/bank-accounts-pivot:
     post:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Ajouter un co-titulaire"
@@ -384,7 +384,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /bank-accounts-pivot/bank-account/{bankAccountId}:
+  /bank/bank-accounts-pivot/bank-account/{bankAccountId}:
     get:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Co-titulaires d'un compte"
@@ -423,7 +423,7 @@ paths:
         '204':
           description: Tous les liens supprimés
 
-  /bank-accounts-pivot/account/{accountId}:
+  /bank/bank-accounts-pivot/account/{accountId}:
     get:
       tags: [BankAccountPivot]
       summary: "[CLIENT] Mes liens de comptes"
