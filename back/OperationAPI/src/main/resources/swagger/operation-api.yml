@@ -20,11 +20,14 @@ paths:
         - Operation
       summary: Récupérer la liste des opérations
       description: "Use Case 5 (Administrateur): Voir la liste des opérations"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OperationFilter'
+      parameters:
+        - in: query
+          name: filter
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            $ref: '#/components/schemas/OperationFilter'
       responses:
         '200':
           description: Liste récupérée avec succès

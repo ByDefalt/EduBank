@@ -12,11 +12,11 @@ import java.util.Map;
 @Repository
 public class BeneficiaryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_INSERT_BENEFICIARY = "INSERT INTO BENEFICIARY (account_source_id, iban_target, name) VALUES (:account_source_id, :iban_target, :name)";
-    private static final String SQL_SELECT_BENEFICIARIES = "SELECT * FROM BENEFICIARY";
-    private static final String SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID = "SELECT * FROM BENEFICIARY WHERE account_source_id = :account_source_id";
-    private static final String SQL_UPDATE_BENEFICIARY = "UPDATE BENEFICIARY SET account_source_id = :account_source_id, iban_target = :iban_target, name = :name WHERE id = :id";
-    private static final String SQL_DELETE_BENEFICIARY_BY_ID = "DELETE FROM BENEFICIARY WHERE id = :id";
+    private static final String SQL_INSERT_BENEFICIARY = "INSERT INTO beneficiary (account_source_id, iban_target, name) VALUES (:account_source_id, :iban_target, :name)";
+    private static final String SQL_SELECT_BENEFICIARIES = "SELECT * FROM beneficiary";
+    private static final String SQL_SELECT_BENEFICIARIES_BY_ACCOUNT_ID = "SELECT * FROM beneficiary WHERE account_source_id = :account_source_id";
+    private static final String SQL_UPDATE_BENEFICIARY = "UPDATE beneficiary SET account_source_id = :account_source_id, iban_target = :iban_target, name = :name WHERE id = :id";
+    private static final String SQL_DELETE_BENEFICIARY_BY_ID = "DELETE FROM beneficiary WHERE id = :id";
     public BeneficiaryRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

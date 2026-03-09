@@ -24,16 +24,16 @@ import java.util.Map;
 @Repository
 public class OperationRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private static final String SQL_SELECT_OPERATION_BY_ID = "SELECT * FROM OPERATION WHERE id = :id";
-    private static final String SQL_SAVE_OPERATION = "INSERT INTO OPERATION (account_source_id, label, state, iban_target, amount, date) VALUES (:account_source_id, :label, :state, :iban_target, :amount, :date)";
-    private static final String SQL_UPDATE_STATE_OPERATION = "UPDATE OPERATION SET state = :state WHERE id = :id";
+    private static final String SQL_SELECT_OPERATION_BY_ID = "SELECT * FROM operation WHERE id = :id";
+    private static final String SQL_SAVE_OPERATION = "INSERT INTO operation (account_source_id, label, state, iban_target, amount, date) VALUES (:account_source_id, :label, :state, :iban_target, :amount, :date)";
+    private static final String SQL_UPDATE_STATE_OPERATION = "UPDATE operation SET state = :state WHERE id = :id";
 
     public OperationRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<OperationEntity> getOperations(String accountId, OperationFilterEntity filter) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM OPERATION WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM operation WHERE 1=1");
         Map<String, Object> params = new HashMap<>();
 
         if (accountId != null && !accountId.isBlank()) {

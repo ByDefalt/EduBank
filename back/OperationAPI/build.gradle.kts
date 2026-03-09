@@ -12,7 +12,7 @@ description = "AccountAPI"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -35,8 +35,6 @@ dependencies{
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("io.github.openfeign:feign-mock")
 
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.1")
 
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
@@ -54,6 +52,8 @@ dependencies{
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
     implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
+
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.7")
 }
 
 tasks.withType<Test> {
