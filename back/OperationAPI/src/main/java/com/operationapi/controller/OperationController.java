@@ -1,9 +1,7 @@
 package com.operationapi.controller;
 
 import com.operationapi.business.OperationBusiness;
-import com.operationapi.controller.param.OperationFilterParam;
 import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import jakarta.ws.rs.*;
