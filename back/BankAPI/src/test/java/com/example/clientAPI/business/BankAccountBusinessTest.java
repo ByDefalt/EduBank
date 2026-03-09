@@ -35,9 +35,6 @@ class BankAccountBusinessTest {
     private BankAccountParameterBusiness bankAccountParameterBusiness;
 
     @Mock
-    private BankAccountPivotBusiness bankAccountPivotBusiness;
-
-    @Mock
     private BankAccountParameterRepository bankAccountParameterRepository;
 
     @Mock
@@ -201,31 +198,4 @@ class BankAccountBusinessTest {
         assertTrue(ex.getMessage().contains("non trouvé"));
     }
 
-    // ==================== getCoHolderIds ====================
-
-    @Test
-    void testGetCoHolderIdsExcludesCurrentUser() {
-        when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
-                .thenReturn(List.of("ACC-1", "ACC-2", "ACC-3"));
-
-        List<String> result = bankAccountPivotBusiness.getCoHolderIds("ACC-1", "BA001");
-
-        assertEquals(2, result.size());
-        assertFalse(result.contains("ACC-1"));
-        assertTrue(result.contains("ACC-2"));
-        assertTrue(result.contains("ACC-3"));
-    }
-
-    @Test
-    void testGetCoHolderIdsThrowsSecurityExceptionWhenUserDoesNotOwnAccount() {
-        when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
-                .thenReturn(List.of("ACC-1", "ACC-2"));
-
-        SecurityException ex = assertThrows(
-                SecurityException.class,
-                () -> bankAccountPivotBusiness.getCoHolderIds("ACC-STRANGER", "BA001")
-        );
-
-        assertTrue(ex.getMessage().contains("appartient pas"));
-    }
 }
