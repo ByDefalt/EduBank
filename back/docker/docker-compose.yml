@@ -1,0 +1,175 @@
+version: '3.8'
+
+services:
+
+  # ──────────────────────────────────────────
+  # Gateway API (port 8080)
+  # ──────────────────────────────────────────
+  gateway-api-spring:
+    build:
+      context: ../GatewayAPI
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      ACCOUNT_API_URL: http://account-api-spring:8081/api/v1
+      OPERATION_API_URL: http://operation-api-spring:8083/api/v1
+    depends_on:
+      - account-api-spring
+    networks:
+      - edubank-network
+
+  # ──────────────────────────────────────────
+  # Account API (port 8081) + MariaDB
+  # ──────────────────────────────────────────
+  account-api-spring:
+    build:
+      context: ../AccountApi
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      SERVER_PORT: 8081
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://account-api-mariadb:3306/accountapi
+      SPRING_DATASOURCE_USERNAME: accountuser
+      SPRING_DATASOURCE_PASSWORD: accountpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      account-api-mariadb:
+        condition: service_healthy
+    networks:
+      - edubank-network
+
+  account-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-accountapi
+    restart: always
+    command: --port=3306
+    environment:
+      MYSQL_DATABASE: accountapi
+      MYSQL_USER: accountuser
+      MYSQL_PASSWORD: accountpassword
+      MYSQL_ROOT_PASSWORD: accountrootpassword
+    ports:
+      - "3381:3306"
+    volumes:
+      - mariadb_data_account:/var/lib/mysql
+      - ../AccountApi/docker/data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - edubank-network
+
+  # ──────────────────────────────────────────
+  # Bank API (port 8082) + MariaDB
+  # ──────────────────────────────────────────
+  accountbank-api-spring:
+    build:
+      context: ../BankAPI
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      SERVER_PORT: 8082
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://accountbank-api-mariadb:3307/accountbankapi
+      SPRING_DATASOURCE_USERNAME: accountbankuser
+      SPRING_DATASOURCE_PASSWORD: accountbankpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      accountbank-api-mariadb:
+        condition: service_healthy
+    networks:
+      - edubank-network
+
+  accountbank-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-accountbankapi
+    restart: always
+    command: --port=3307
+    environment:
+      MYSQL_DATABASE: accountbankapi
+      MYSQL_USER: accountbankuser
+      MYSQL_PASSWORD: accountbankpassword
+      MYSQL_ROOT_PASSWORD: accountbankrootpassword
+    ports:
+      - "3382:3307"
+    volumes:
+      - mariadb_data_bank:/var/lib/mysql
+      - ../BankAPI/docker/data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - edubank-network
+
+  # ──────────────────────────────────────────
+  # Offer API (port 8084) + MariaDB
+  # ──────────────────────────────────────────
+  offer-api-spring:
+    build:
+      context: ../OfferAPI
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      SERVER_PORT: 8084
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+      SPRING_DATASOURCE_URL: jdbc:mariadb://offer-api-mariadb:3309/offerapi
+      SPRING_DATASOURCE_USERNAME: offeruser
+      SPRING_DATASOURCE_PASSWORD: offerpassword
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+    depends_on:
+      offer-api-mariadb:
+        condition: service_healthy
+    networks:
+      - edubank-network
+
+  offer-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-offerapi
+    restart: always
+    command: --port=3309
+    environment:
+      MYSQL_DATABASE: offerapi
+      MYSQL_USER: offeruser
+      MYSQL_PASSWORD: offerpassword
+      MYSQL_ROOT_PASSWORD: offerrootpassword
+    ports:
+      - "3384:3309"
+    volumes:
+      - mariadb_data_offer:/var/lib/mysql
+      - ../OfferAPI/docker/data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - edubank-network
+
+networks:
+  edubank-network:
+    driver: bridge
+
+volumes:
+  mariadb_data_account:
+  mariadb_data_bank:
+  mariadb_data_offer:
+
