@@ -1,12 +1,10 @@
 package com.operationapi.business;
 
 import com.operationapi.entity.OperationEntity;
-import com.operationapi.entity.OperationFilterEntity;
 import com.operationapi.entity.StateEnumEntity;
 import com.operationapi.exception.FunctionalException;
 import com.operationapi.repository.OperationRepository;
 import dto.operationapi.Operation;
-import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import org.junit.jupiter.api.Test;
@@ -16,11 +14,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
@@ -37,13 +34,13 @@ class OperationBusinessTest {
     @Test
     void testGetOperations() {
         OperationEntity op = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
-        when(operationRepository.getOperations(isNull(), any(OperationFilterEntity.class))).thenReturn(List.of(op));
+        when(operationRepository.getOperations(isNull(), isNull(), isNull(), isNull())).thenReturn(List.of(op));
 
-        OperationList result = operationBusiness.getOperations(new OperationFilter());
+        OperationList result = operationBusiness.getOperations(null, null, null);
 
         assertEquals(1, result.getData().size());
         assertEquals(1, result.getData().get(0).getId());
-   }
+    }
 
     @Test
     void testSaveOperationFunctionalExceptionOnAccountSourceId() {
@@ -146,8 +143,7 @@ class OperationBusinessTest {
         OperationEntity op = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
         OperationEntity updatedOp = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.COMPLETED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
 
-        when(operationRepository.getOperationById(1)).thenReturn(op);
-        when(operationRepository.getOperationById(1)).thenReturn(updatedOp);
+        when(operationRepository.getOperationById(1)).thenReturn(op).thenReturn(updatedOp);
 
         Operation result = operationBusiness.updateStateOperation(1, OperationState.COMPLETED);
 
@@ -168,10 +164,9 @@ class OperationBusinessTest {
     @Test
     void testCancelOperationSuccess() {
         OperationEntity original = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.PENDING, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
-        OperationEntity cancelled = new OperationEntity(1, "ACC-1", "Virement", StateEnumEntity.CANCELLED, "FR7612345678901234567890123", 10.0, LocalDateTime.now());
         OperationEntity cancellation = new OperationEntity(2, "ACC-1", "ANNULATION - Virement", StateEnumEntity.COMPLETED, "FR7612345678901234567890123", -10.0, LocalDateTime.now());
 
-        when(operationRepository.getOperationById(1)).thenReturn(original).thenReturn(cancelled);
+        when(operationRepository.getOperationById(1)).thenReturn(original);
         when(operationRepository.save(any(OperationEntity.class))).thenReturn(cancellation);
 
         Operation result = operationBusiness.cancelOperation(1);
