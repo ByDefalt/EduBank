@@ -1,3 +1,7 @@
+-- Ensure user has all privileges on the database
+GRANT ALL PRIVILEGES ON offerapi.* TO 'offeruser'@'%' IDENTIFIED BY 'offerpassword';
+FLUSH PRIVILEGES;
+
 DROP TABLE IF EXISTS offer;
 
 CREATE TABLE offer (

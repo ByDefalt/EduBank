@@ -48,8 +48,6 @@ dependencies{
     implementation("org.springframework.boot:spring-boot-starter-web")
     testImplementation("io.github.openfeign:feign-mock")
 
-
-
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.20")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.20.0")
     implementation("com.fasterxml.jackson.core:jackson-core:2.20.0")
@@ -66,7 +64,6 @@ dependencies{
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
 
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")

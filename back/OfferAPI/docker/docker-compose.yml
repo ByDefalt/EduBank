@@ -18,9 +18,9 @@ services:
 
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
       SPRING_JPA_SHOW_SQL: "true"
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
     depends_on:
-      - offer-api-mariadb
+      offer-api-mariadb:
+        condition: service_healthy
 
   offer-api-mariadb:
     image: mariadb:latest
@@ -36,8 +36,14 @@ services:
       # hote:conteneur_interne
       - "3384:3309"
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mariadb_data_offer:/var/lib/mysql
       - ./data.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  mariadb_data:
+  mariadb_data_offer:
