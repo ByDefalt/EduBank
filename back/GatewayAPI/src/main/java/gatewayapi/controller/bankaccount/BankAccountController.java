@@ -13,7 +13,7 @@ import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@Path("/")
+@Path("/bank")
 public class BankAccountController {
 
     private final BankAccountBusiness bankAccountBusiness;
