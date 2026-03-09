@@ -10,7 +10,6 @@ import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.accountGraph(
     onBackToHome: () -> Unit,
-    onRegisterSuccess: () -> Unit = {},
     onLoginSuccess: (RoleEnum) -> Unit = {},
 ) {
     navigation<Routes.Account>(
@@ -25,7 +24,6 @@ fun NavGraphBuilder.accountGraph(
         composable<Routes.Account.Register> {
             RegisterScreen(
                 onBackToHome = onBackToHome,
-                onRegisterSuccess = onRegisterSuccess,
             )
         }
     }

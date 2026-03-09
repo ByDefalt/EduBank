@@ -51,14 +51,7 @@ class AccountRemoteDataSource(
         val result = safeApiCall { api.accountsSigninPost(signInRequest.toDto()) }.map { it.toEntity() }
         if (result is NetworkResult.Success) {
             val token = result.data.jwt
-            apiClient.addAuthorization(
-                "Bearer",
-            ) { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .build()
-                chain.proceed(request)
-            }
+            apiClient.bearerToken = token
             session.token = token
             // Récupérer le vrai id et le rôle depuis le token
             val validateResult = safeApiCall { api.accountsValidatePost(result.data.toDto()) }.map { it.toEntity() }
@@ -67,6 +60,7 @@ class AccountRemoteDataSource(
                 session.role = validateResult.data.role
             }
         }
+        println("token : ${session.token}")
         return result
     }
 

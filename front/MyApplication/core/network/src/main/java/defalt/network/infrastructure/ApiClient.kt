@@ -25,6 +25,21 @@ class ApiClient(
     private val apiAuthorizations = mutableMapOf<String, Interceptor>()
     var logger: ((String) -> Unit)? = null
 
+    /** Token JWT courant, mis à jour après le login */
+    var bearerToken: String? = null
+
+    private val bearerInterceptor = Interceptor { chain ->
+        val token = bearerToken
+        val request = if (token != null) {
+            chain.request().newBuilder()
+                .header("Authorization", "Bearer $token")
+                .build()
+        } else {
+            chain.request()
+        }
+        chain.proceed(request)
+    }
+
     private val retrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()
             .baseUrl(baseUrl)
@@ -41,7 +56,7 @@ class ApiClient(
     }
 
     private val clientBuilder: OkHttpClient.Builder by lazy {
-        okHttpClientBuilder ?: defaultClientBuilder
+        (okHttpClientBuilder ?: defaultClientBuilder).addInterceptor(bearerInterceptor)
     }
 
     private val defaultClientBuilder: OkHttpClient.Builder by lazy {

@@ -24,7 +24,6 @@ fun ArkeoNavHost(navController: NavHostController) {
         )
         accountGraph(
             onBackToHome = { navController.popBackStack() },
-            onRegisterSuccess = { navController.navigate(Routes.Core.Home) },
             onLoginSuccess = { role ->
                 when (role) {
                     RoleEnum.ADMIN -> navController.navigate(Routes.Core.AdminHome) {
