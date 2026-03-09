@@ -1,6 +1,7 @@
 package com.operationapi.controller;
 
 import com.operationapi.business.OperationBusiness;
+import com.operationapi.controller.param.OperationFilterParam;
 import dto.operationapi.Operation;
 import dto.operationapi.OperationFilter;
 import dto.operationapi.OperationList;
@@ -9,8 +10,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
-
-import java.time.OffsetDateTime;
 
 
 @Controller
@@ -24,11 +23,8 @@ public class OperationController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperations(@QueryParam("filter[state]") OperationState state, @QueryParam("filter[date_from]") String dateFrom, @QueryParam("filter[date_to]") String dateTo) {
-        OperationFilter filter = new OperationFilter();
-        filter.setState(state);
-        filter.setDateFrom(dateFrom != null && !dateFrom.isBlank() ? OffsetDateTime.parse(dateFrom) : null);
-        filter.setDateTo(dateTo != null && !dateTo.isBlank() ? OffsetDateTime.parse(dateTo) : null);
+    public Response getOperations(@BeanParam OperationFilterParam filterParam) {
+        OperationFilter filter = filterParam != null ? filterParam.toDto() : new OperationFilter();
         OperationList operations = this.operationBusiness.getOperations(filter);
         return Response.ok(operations).build();
     }
@@ -52,11 +48,8 @@ public class OperationController {
     @GET
     @Path("/account/{accountId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @QueryParam("filter[state]") OperationState state, @QueryParam("filter[date_from]") String dateFrom, @QueryParam("filter[date_to]") String dateTo) {
-        OperationFilter filter = new OperationFilter();
-        filter.setState(state);
-        filter.setDateFrom(dateFrom != null && !dateFrom.isBlank() ? OffsetDateTime.parse(dateFrom) : null);
-        filter.setDateTo(dateTo != null && !dateTo.isBlank() ? OffsetDateTime.parse(dateTo) : null);
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @BeanParam OperationFilterParam filterParam) {
+        OperationFilter filter = filterParam != null ? filterParam.toDto() : new OperationFilter();
         OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, filter);
         return Response.ok(operations).build();
     }
