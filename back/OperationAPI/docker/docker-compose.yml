@@ -12,7 +12,7 @@ services:
 
       SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
 
-      SPRING_DATASOURCE_URL: jdbc:mariadb://operation-api-mariadb:3306/operationapi
+      SPRING_DATASOURCE_URL: jdbc:mariadb://operation-api-mariadb:3308/operationapi
       SPRING_DATASOURCE_USERNAME: operationuser
       SPRING_DATASOURCE_PASSWORD: operationpassword
 

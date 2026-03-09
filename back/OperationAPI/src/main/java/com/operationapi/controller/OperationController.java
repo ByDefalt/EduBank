@@ -23,13 +23,12 @@ public class OperationController {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOperations(@QueryParam("filter[state]") OperationState state, @QueryParam("filter[date_from]") String dateFrom, @QueryParam("filter[date_to]") String dateTo) {
         OperationFilter filter = new OperationFilter();
         filter.setState(state);
-        filter.setDateFrom(OffsetDateTime.parse(dateFrom));
-        filter.setDateTo(OffsetDateTime.parse(dateTo));
+        filter.setDateFrom(dateFrom != null && !dateFrom.isBlank() ? OffsetDateTime.parse(dateFrom) : null);
+        filter.setDateTo(dateTo != null && !dateTo.isBlank() ? OffsetDateTime.parse(dateTo) : null);
         OperationList operations = this.operationBusiness.getOperations(filter);
         return Response.ok(operations).build();
     }
@@ -52,9 +51,12 @@ public class OperationController {
 
     @GET
     @Path("/account/{accountId}")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, OperationFilter filter) {
+    public Response getOperationsByAccountId(@PathParam("accountId") String accountId, @QueryParam("filter[state]") OperationState state, @QueryParam("filter[date_from]") String dateFrom, @QueryParam("filter[date_to]") String dateTo) {
+        OperationFilter filter = new OperationFilter();
+        filter.setState(state);
+        filter.setDateFrom(dateFrom != null && !dateFrom.isBlank() ? OffsetDateTime.parse(dateFrom) : null);
+        filter.setDateTo(dateTo != null && !dateTo.isBlank() ? OffsetDateTime.parse(dateTo) : null);
         OperationList operations = this.operationBusiness.getOperationsByAccountId(accountId, filter);
         return Response.ok(operations).build();
     }
