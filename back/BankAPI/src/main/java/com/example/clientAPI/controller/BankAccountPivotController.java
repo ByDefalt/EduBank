@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 
 @Controller
-@Path("/bank-accounts-pivot")
+@Path("bank/bank-accounts-pivot")
 public class BankAccountPivotController {
 
     private final BankAccountPivotBusiness bankAccountPivotBusiness;

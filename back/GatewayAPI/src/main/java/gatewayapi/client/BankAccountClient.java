@@ -11,85 +11,85 @@ public interface BankAccountClient {
 
     // ==================== ADMIN ====================
 
-    @RequestLine("GET /admin/bank-accounts")
+    @RequestLine("GET /bank/admin/bank-accounts")
     @Headers("Content-Type: application/json")
     List<BankAccount> getAllBankAccounts();
 
-    @RequestLine("GET /admin/bank-accounts/{id}")
+    @RequestLine("GET /bank/admin/bank-accounts/{id}")
     @Headers("Content-Type: application/json")
     BankAccountDetail getBankAccountById(@Param("id") String id);
 
-    @RequestLine("DELETE /admin/bank-accounts/{id}")
+    @RequestLine("DELETE /bank/admin/bank-accounts/{id}")
     @Headers("Content-Type: application/json")
     void deleteBankAccount(@Param("id") String id);
 
-    @RequestLine("GET /admin/accounts/{accountId}/bank-accounts")
+    @RequestLine("GET /bank/admin/accounts/{accountId}/bank-accounts")
     @Headers("Content-Type: application/json")
     List<BankAccount> getBankAccountsByAccountId(@Param("accountId") String accountId);
 
-    @RequestLine("POST /admin/accounts/{accountId}/bank-accounts")
+    @RequestLine("POST /bank/admin/accounts/{accountId}/bank-accounts")
     @Headers("Content-Type: application/json")
     BankAccountDetail createBankAccount(@Param("accountId") String accountId, BankAccountCreateRequest request);
 
-    @RequestLine("PATCH /admin/bank-accounts/{bankAccountId}/parameters")
+    @RequestLine("PATCH /bank/admin/bank-accounts/{bankAccountId}/parameters")
     @Headers("Content-Type: application/json")
     void updateParameters(@Param("bankAccountId") String bankAccountId, BankAccountParameter parameters);
 
     // ==================== TYPES ====================
 
-    @RequestLine("GET /admin/types")
+    @RequestLine("GET /bank/admin/types")
     @Headers("Content-Type: application/json")
     List<Type> getAllTypes();
 
-    @RequestLine("GET /admin/types/{id}")
+    @RequestLine("GET /bank/admin/types/{id}")
     @Headers("Content-Type: application/json")
     Type getTypeById(@Param("id") Integer id);
 
-    @RequestLine("POST /admin/types")
+    @RequestLine("POST /bank/admin/types")
     @Headers("Content-Type: application/json")
     Type createType(Type type);
 
     // ==================== PIVOT ====================
 
-    @RequestLine("POST /bank-accounts-pivot")
+    @RequestLine("POST /bank/bank-accounts-pivot")
     @Headers("Content-Type: application/json")
     void createPivot(BankAccountPivot pivot);
 
-    @RequestLine("DELETE /bank-accounts-pivot")
+    @RequestLine("DELETE /bank/bank-accounts-pivot")
     @Headers("Content-Type: application/json")
     void deletePivot(BankAccountPivot pivot);
 
-    @RequestLine("GET /bank-accounts-pivot/bank-account/{bankAccountId}")
+    @RequestLine("GET /bank/bank-accounts-pivot/bank-account/{bankAccountId}")
     @Headers("Content-Type: application/json")
     List<BankAccountPivot> getPivotsByBankAccount(@Param("bankAccountId") String bankAccountId);
 
-    @RequestLine("GET /bank-accounts-pivot/account/{accountId}")
+    @RequestLine("GET /bank/bank-accounts-pivot/account/{accountId}")
     @Headers("Content-Type: application/json")
     List<BankAccountPivot> getPivotsByAccount(@Param("accountId") String accountId);
 
-    @RequestLine("DELETE /bank-accounts-pivot/bank-account/{bankAccountId}")
+    @RequestLine("DELETE /bank/bank-accounts-pivot/bank-account/{bankAccountId}")
     @Headers("Content-Type: application/json")
     void deleteAllPivotsByBankAccount(@Param("bankAccountId") String bankAccountId);
 
-    @RequestLine("DELETE /bank-accounts-pivot/account/{accountId}")
+    @RequestLine("DELETE /bank/bank-accounts-pivot/account/{accountId}")
     @Headers("Content-Type: application/json")
     void deleteAllPivotsByAccount(@Param("accountId") String accountId);
 
     // ==================== CLIENT ====================
 
-    @RequestLine("GET /my-bank-accounts")
+    @RequestLine("GET /bank/my-bank-accounts")
     @Headers({"Content-Type: application/json", "X-User-Id: {userId}"})
     List<BankAccount> getMyBankAccounts(@Param("userId") String userId);
 
-    @RequestLine("GET /my-bank-accounts?type_id={typeId}")
+    @RequestLine("GET /bank/my-bank-accounts?type_id={typeId}")
     @Headers({"Content-Type: application/json", "X-User-Id: {userId}"})
     List<BankAccount> getMyBankAccountsByType(@Param("userId") String userId, @Param("typeId") Integer typeId);
 
-    @RequestLine("GET /my-bank-accounts/{id}")
+    @RequestLine("GET /bank/my-bank-accounts/{id}")
     @Headers({"Content-Type: application/json", "X-User-Id: {userId}"})
     BankAccountDetail getMyBankAccountById(@Param("userId") String userId, @Param("id") String id);
 
-    @RequestLine("GET /my-bank-accounts/{id}/co-holders")
+    @RequestLine("GET /bank/my-bank-accounts/{id}/co-holders")
     @Headers({"Content-Type: application/json", "X-User-Id: {userId}"})
     List<String> getMyCoHolders(@Param("userId") String userId, @Param("id") String id);
 }

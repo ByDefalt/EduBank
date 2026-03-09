@@ -21,12 +21,11 @@ tags:
 paths:
   # ==================== BANK ACCOUNTS ====================
 
-  /admin/bank-accounts:
+  /bank/admin/bank-accounts:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Liste tous les comptes"
-      security:
-        - bearerAuth: []
+      
       responses:
         '200':
           description: Liste récupérée
@@ -48,12 +47,11 @@ paths:
                   sold: 5000.00
                   iban: "FR7698765432109876543210987"
 
-  /admin/bank-accounts/{id}:
+  /bank/admin/bank-accounts/{id}:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Détails d'un compte"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -85,8 +83,7 @@ paths:
     delete:
       tags: [BankAccount]
       summary: "[ADMIN] Supprimer un compte"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -100,12 +97,11 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /admin/accounts/{account_id}/bank-accounts:
+  /bank/admin/accounts/{account_id}/bank-accounts:
     get:
       tags: [BankAccount]
       summary: "[ADMIN] Comptes d'un utilisateur"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: account_id
           in: path
@@ -132,8 +128,7 @@ paths:
     post:
       tags: [BankAccount]
       summary: "[ADMIN] Créer un compte"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: account_id
           in: path
@@ -163,7 +158,7 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestError'
 
-  /my-bank-accounts:
+  /bank/my-bank-accounts:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] Mes comptes actifs"
@@ -191,7 +186,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/BankAccount'
 
-  /my-bank-accounts/{id}:
+  /bank/my-bank-accounts/{id}:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] Détails d'un de mes comptes"
@@ -222,7 +217,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /my-bank-accounts/{id}/co-holders:
+  /bank/my-bank-accounts/{id}/co-holders:
     get:
       tags: [ BankAccount ]
       summary: "[CLIENT] IDs des co-titulaires"
@@ -254,12 +249,11 @@ paths:
 
   # ==================== PARAMETERS ====================
 
-  /admin/bank-accounts/{bank_account_id}/parameters:
+  /bank/admin/bank-accounts/{bank_account_id}/parameters:
     patch:
       tags: [BankAccountParameter]
       summary: "[ADMIN] Mettre à jour les paramètres"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: bank_account_id
           in: path
@@ -297,12 +291,11 @@ paths:
 
   # ==================== TYPES ====================
 
-  /admin/types:
+  /bank/admin/types:
     get:
       tags: [Type]
       summary: "[ADMIN] Liste des types"
-      security:
-        - bearerAuth: []
+      
       responses:
         '200':
           description: Liste des types
@@ -316,8 +309,7 @@ paths:
     post:
       tags: [Type]
       summary: "[ADMIN] Créer un type"
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -336,12 +328,11 @@ paths:
         '400':
           $ref: '#/components/responses/BadRequestError'
 
-  /admin/types/{id}:
+  /bank/admin/types/{id}:
     get:
       tags: [Type]
       summary: "[ADMIN] Récupérer un type"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: id
           in: path
@@ -361,12 +352,11 @@ paths:
 
   # ==================== PIVOT (CO-TITULAIRES) ====================
 
-  /bank-accounts-pivot:
+  /bank/bank-accounts-pivot:
     post:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Ajouter un co-titulaire"
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -385,8 +375,7 @@ paths:
     delete:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Retirer un co-titulaire"
-      security:
-        - bearerAuth: []
+      
       requestBody:
         required: true
         content:
@@ -402,12 +391,11 @@ paths:
         '404':
           $ref: '#/components/responses/NotFoundError'
 
-  /bank-accounts-pivot/bank-account/{bankAccountId}:
+  /bank/bank-accounts-pivot/bank-account/{bankAccountId}:
     get:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Co-titulaires d'un compte"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: bankAccountId
           in: path
@@ -428,8 +416,7 @@ paths:
     delete:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Retirer tous les co-titulaires"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: bankAccountId
           in: path
@@ -441,12 +428,11 @@ paths:
         '204':
           description: Tous les liens supprimés
 
-  /bank-accounts-pivot/account/{accountId}:
+  /bank/bank-accounts-pivot/account/{accountId}:
     get:
       tags: [BankAccountPivot]
       summary: "[CLIENT] Mes liens de comptes"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: accountId
           in: path
@@ -467,8 +453,7 @@ paths:
     delete:
       tags: [BankAccountPivot]
       summary: "[ADMIN] Retirer tous les comptes d'un user"
-      security:
-        - bearerAuth: []
+      
       parameters:
         - name: accountId
           in: path

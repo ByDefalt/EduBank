@@ -13,7 +13,7 @@ import java.util.Map;
 
 
 @Controller
-@Path("/admin/bank-accounts/{bank_account_id}/parameters")
+@Path("bank/admin/bank-accounts/{bank_account_id}/parameters")
 public class BankAccountParameterController {
 
     private final BankAccountParameterBusiness bankAccountParameterBusiness;

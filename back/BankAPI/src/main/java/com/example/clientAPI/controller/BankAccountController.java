@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 @Controller
-@Path("/")
+@Path("/bank")
 public class BankAccountController {
 
     private final BankAccountBusiness bankAccountBusiness;

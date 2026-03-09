@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 
 @Controller
-@Path("/admin/types")
+@Path("bank/admin/types")
 public class TypeController {
 
     private final TypeBusiness typeBusiness;
