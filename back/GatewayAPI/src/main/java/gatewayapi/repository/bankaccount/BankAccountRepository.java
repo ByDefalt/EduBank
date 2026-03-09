@@ -37,50 +37,6 @@ public class BankAccountRepository {
         return bankAccountClient.createBankAccount(accountId, request);
     }
 
-    public void updateParameters(String bankAccountId, BankAccountParameter parameters) {
-        bankAccountClient.updateParameters(bankAccountId, parameters);
-    }
-
-    // ==================== TYPES ====================
-
-    public List<Type> findAllTypes() {
-        return bankAccountClient.getAllTypes();
-    }
-
-    public Type findTypeById(Integer id) {
-        return bankAccountClient.getTypeById(id);
-    }
-
-    public Type createType(Type type) {
-        return bankAccountClient.createType(type);
-    }
-
-    // ==================== PIVOT ====================
-
-    public void createPivot(BankAccountPivot pivot) {
-        bankAccountClient.createPivot(pivot);
-    }
-
-    public void deletePivot(BankAccountPivot pivot) {
-        bankAccountClient.deletePivot(pivot);
-    }
-
-    public List<BankAccountPivot> getPivotsByBankAccount(String bankAccountId) {
-        return bankAccountClient.getPivotsByBankAccount(bankAccountId);
-    }
-
-    public List<BankAccountPivot> getPivotsByAccount(String accountId) {
-        return bankAccountClient.getPivotsByAccount(accountId);
-    }
-
-    public void deleteAllPivotsByBankAccount(String bankAccountId) {
-        bankAccountClient.deleteAllPivotsByBankAccount(bankAccountId);
-    }
-
-    public void deleteAllPivotsByAccount(String accountId) {
-        bankAccountClient.deleteAllPivotsByAccount(accountId);
-    }
-
     // ==================== CLIENT ====================
 
     public List<BankAccount> findMyBankAccounts(String userId) {

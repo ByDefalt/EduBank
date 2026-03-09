@@ -2,6 +2,7 @@ package gatewayapi.business.bankaccount;
 
 import dto.bankapiswagger.*;
 import gatewayapi.repository.bankaccount.BankAccountRepository;
+import gatewayapi.repository.bankaccount.BankAccountPivotRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class BankAccountBusiness {
 
     private final BankAccountRepository bankAccountRepository;
+    private final BankAccountPivotRepository bankAccountPivotRepository;
 
-    public BankAccountBusiness(BankAccountRepository bankAccountRepository) {
+    public BankAccountBusiness(BankAccountRepository bankAccountRepository, BankAccountPivotRepository bankAccountPivotRepository) {
         this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountPivotRepository = bankAccountPivotRepository;
     }
 
     // ==================== ADMIN ====================
@@ -37,50 +40,6 @@ public class BankAccountBusiness {
         return bankAccountRepository.create(accountId, request);
     }
 
-    public void updateParameters(String bankAccountId, BankAccountParameter parameters) {
-        bankAccountRepository.updateParameters(bankAccountId, parameters);
-    }
-
-    // ==================== TYPES ====================
-
-    public List<Type> getAllTypes() {
-        return bankAccountRepository.findAllTypes();
-    }
-
-    public Type getTypeById(Integer id) {
-        return bankAccountRepository.findTypeById(id);
-    }
-
-    public Type createType(Type type) {
-        return bankAccountRepository.createType(type);
-    }
-
-    // ==================== PIVOT ====================
-
-    public void createPivot(BankAccountPivot pivot) {
-        bankAccountRepository.createPivot(pivot);
-    }
-
-    public void deletePivot(BankAccountPivot pivot) {
-        bankAccountRepository.deletePivot(pivot);
-    }
-
-    public List<BankAccountPivot> getPivotsByBankAccount(String bankAccountId) {
-        return bankAccountRepository.getPivotsByBankAccount(bankAccountId);
-    }
-
-    public List<BankAccountPivot> getPivotsByAccount(String accountId) {
-        return bankAccountRepository.getPivotsByAccount(accountId);
-    }
-
-    public void deleteAllPivotsByBankAccount(String bankAccountId) {
-        bankAccountRepository.deleteAllPivotsByBankAccount(bankAccountId);
-    }
-
-    public void deleteAllPivotsByAccount(String accountId) {
-        bankAccountRepository.deleteAllPivotsByAccount(accountId);
-    }
-
     // ==================== CLIENT ====================
 
     public List<BankAccount> getMyBankAccounts(String userId, Integer typeId) {
@@ -103,7 +62,7 @@ public class BankAccountBusiness {
     // ==================== PRIVATE ====================
 
     private void checkOwnership(String userId, String bankAccountId) {
-        List<BankAccountPivot> pivots = bankAccountRepository.getPivotsByBankAccount(bankAccountId);
+        List<BankAccountPivot> pivots = bankAccountPivotRepository.getPivotsByBankAccount(bankAccountId);
         boolean owns = pivots.stream()
                 .anyMatch(pivot -> userId.equals(pivot.getAccountId()));
         if (!owns) {
