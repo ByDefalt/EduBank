@@ -5,19 +5,16 @@ import com.example.clientAPI.entity.BankAccountDetailEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.mapper.BankAccountDetailMapper;
 import com.example.clientAPI.mapper.BankAccountMapper;
-import com.example.clientAPI.mapper.BankAccountParameterMapper;
 import com.example.clientAPI.repository.BankAccountRepository;
 import com.example.clientAPI.repository.BankAccountParameterRepository;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountDetail;
-import dto.bankapi.BankAccountParameter;
 import dto.bankapi.BankAccountPivot;
-import jakarta.ws.rs.container.ContainerRequestContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -92,9 +89,7 @@ public class BankAccountBusiness {
         bankAccountParameterRepository.deleteParameter(bankAccount.getParameterId());
     }
 
-    public List<BankAccountEntity> getMyBankAccounts(ContainerRequestContext requestContext, Integer typeId) {
-        String userId = (String) requestContext.getProperty("userId");
-
+    public List<BankAccountEntity> getMyBankAccounts(String userId, Integer typeId) {
         List<BankAccount> dtos;
         if (typeId != null) {
             dtos = bankAccountRepository.getActiveBankAccountsByUserIdAndTypeId(userId, typeId);
@@ -104,40 +99,19 @@ public class BankAccountBusiness {
         return dtos.stream().map(BankAccountMapper::toEntity).collect(Collectors.toList());
     }
 
-    public BankAccountDetailEntity getMyBankAccountById(ContainerRequestContext requestContext, String bankAccountId) {
-        String userId = (String) requestContext.getProperty("userId");
-
-        if (!userOwnsAccount(userId, bankAccountId)) {
-            throw new SecurityException("Ce compte ne vous appartient pas");
-        }
-
+    public BankAccountDetailEntity getMyBankAccountById(String userId, String bankAccountId) {
         BankAccountDetail dto = bankAccountRepository.getBankAccountDetailById(bankAccountId);
         if (dto == null) {
             throw new IllegalArgumentException("Compte bancaire non trouvé");
         }
-
         return BankAccountDetailMapper.toEntity(dto);
     }
 
-    public List<String> getCoHolderIds(ContainerRequestContext requestContext, String bankAccountId) {
-        String userId = (String) requestContext.getProperty("userId");
-
-        if (!userOwnsAccount(userId, bankAccountId)) {
-            throw new SecurityException("Ce compte ne vous appartient pas");
-        }
-
-
-
+    public List<String> getCoHolderIds(String userId, String bankAccountId) {
         List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
-
         return accountIds.stream()
                 .filter(accountId -> !accountId.equals(userId))
                 .toList();
-    }
-
-    private boolean userOwnsAccount(String userId, String bankAccountId) {
-        List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
-        return accountIds.contains(userId);
     }
 
     private String generateBankAccountId() {

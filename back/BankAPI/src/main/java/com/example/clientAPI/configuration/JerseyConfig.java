@@ -11,6 +11,5 @@ public class JerseyConfig extends ResourceConfig {
   public JerseyConfig() {
     packages("com.example.clientAPI.controller");
     packages("com.example.clientAPI.exception");
-    //packages("com.example.clientAPI.filter");
   }
 }

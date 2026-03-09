@@ -1,10 +1,8 @@
 package com.example.clientAPI.controller;
 
-import com.example.clientAPI.annotation.AuthenticationRequired;
 import com.example.clientAPI.business.TypeBusiness;
 import com.example.clientAPI.entity.TypesEntity;
 import com.example.clientAPI.mapper.TypeMapper;
-import dto.accountapi.RoleEnum;
 import dto.bankapi.Type;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -27,42 +25,30 @@ public class TypeController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
     public Response getTypes() {
         List<TypesEntity> entities = typeBusiness.getAllTypes();
-
         List<Type> dtos = entities.stream()
                 .map(TypeMapper::toDto)
                 .collect(Collectors.toList());
-
         return Response.ok(dtos).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
     public Response getTypeById(@PathParam("id") Integer id) {
-
         TypesEntity entity = typeBusiness.getTypeById(id);
-
         Type dto = TypeMapper.toDto(entity);
-
         return Response.ok(dto).build();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
     public Response createType(Type requestDto) {
-
         TypesEntity entity = TypeMapper.toEntity(requestDto);
-
         TypesEntity createdEntity = typeBusiness.createType(entity);
-
         Type createdDto = TypeMapper.toDto(createdEntity);
-
         return Response.status(Response.Status.CREATED).entity(createdDto).build();
     }
 }

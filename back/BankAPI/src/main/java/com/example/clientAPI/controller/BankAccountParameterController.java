@@ -1,10 +1,8 @@
 package com.example.clientAPI.controller;
 
-import com.example.clientAPI.annotation.AuthenticationRequired;
 import com.example.clientAPI.business.BankAccountParameterBusiness;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.mapper.BankAccountParameterMapper;
-import dto.accountapi.RoleEnum;
 import dto.bankapi.BankAccountParameter;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -27,7 +25,6 @@ public class BankAccountParameterController {
     @PATCH
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @AuthenticationRequired(RoleEnum.ADMIN)
     public Response updateParameters(
             @PathParam("bank_account_id") String bankAccountId,
             BankAccountParameter requestDto) {

@@ -165,16 +165,22 @@ paths:
 
   /my-bank-accounts:
     get:
-      tags: [BankAccount]
+      tags: [ BankAccount ]
       summary: "[CLIENT] Mes comptes actifs"
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: type_id
           in: query
           required: false
           schema:
             type: integer
+        - name: X-User-Id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur injecté par la gateway
       responses:
         '200':
           description: Liste de mes comptes
@@ -184,24 +190,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BankAccount'
-              example:
-                - id: "BA001"
-                  parameter_id: 1
-                  type_id: 1
-                  sold: 1500.50
-                  iban: "FR7612345678901234567890123"
-                - id: "BA002"
-                  parameter_id: 2
-                  type_id: 2
-                  sold: 5000.00
-                  iban: "FR7698765432109876543210987"
 
   /my-bank-accounts/{id}:
     get:
-      tags: [BankAccount]
+      tags: [ BankAccount ]
       summary: "[CLIENT] Détails d'un de mes comptes"
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -209,6 +204,12 @@ paths:
           schema:
             type: string
           example: "BA001"
+        - name: X-User-Id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur injecté par la gateway
       responses:
         '200':
           description: Détails du compte
@@ -223,10 +224,10 @@ paths:
 
   /my-bank-accounts/{id}/co-holders:
     get:
-      tags: [BankAccount]
+      tags: [ BankAccount ]
       summary: "[CLIENT] IDs des co-titulaires"
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: id
           in: path
@@ -234,6 +235,12 @@ paths:
           schema:
             type: string
           example: "BA001"
+        - name: X-User-Id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: ID de l'utilisateur injecté par la gateway
       responses:
         '200':
           description: Liste des IDs des co-titulaires
@@ -243,7 +250,7 @@ paths:
                 type: array
                 items:
                   type: string
-                example: ["123456789124", "123456789125"]
+                example: [ "123456789124", "123456789125" ]
 
   # ==================== PARAMETERS ====================
 

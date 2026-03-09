@@ -46,8 +46,8 @@ dependencies{
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.21.1")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.core:jackson-core")
     testImplementation("io.github.openfeign:feign-mock")
 
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.20")
