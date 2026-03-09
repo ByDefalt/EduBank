@@ -58,6 +58,6 @@ INSERT INTO BankAccount (id, parameter_id, type_id, sold, iban)
 VALUES ('BA003', 3, 3, 10000.00, 'FR7611111111111111111111111');
 
 -- Note: Les données pour BankAccountPivot seront insérées après la création des Accounts
-INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA001', '1');
-INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA002', '1');
-INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA003', '2');
+INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA001', 'admin');
+INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA002', 'admin');
+INSERT INTO BankAccountPivot (bank_account_id, account_id) VALUES ('BA003', 'admin');
