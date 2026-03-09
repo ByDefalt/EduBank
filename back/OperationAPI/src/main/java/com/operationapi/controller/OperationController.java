@@ -10,7 +10,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
 
-import java.util.Map;
+import java.time.OffsetDateTime;
+
 
 @Controller
 @Path("/operations")
@@ -24,7 +25,11 @@ public class OperationController {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOperations(OperationFilter filter) {
+    public Response getOperations(@QueryParam("filter[state]") OperationState state, @QueryParam("filter[date_from]") String dateFrom, @QueryParam("filter[date_to]") String dateTo) {
+        OperationFilter filter = new OperationFilter();
+        filter.setState(state);
+        filter.setDateFrom(OffsetDateTime.parse(dateFrom));
+        filter.setDateTo(OffsetDateTime.parse(dateTo));
         OperationList operations = this.operationBusiness.getOperations(filter);
         return Response.ok(operations).build();
     }
