@@ -96,19 +96,19 @@ paths:
       tags:
         - Operation
       summary: Récupérer les opérations d'un compte
-      description: "Retourne toutes les opérations liées à un compte source spécifique"
       parameters:
         - name: accountId
           in: path
           required: true
           schema:
             type: string
-          description: ID du compte source
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OperationFilter'
+        - in: query
+          name: filter
+          required: false
+          style: deepObject
+          explode: true
+          schema:
+            $ref: '#/components/schemas/OperationFilter'
       responses:
         '200':
           description: Liste récupérée avec succès
