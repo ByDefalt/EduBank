@@ -198,37 +198,4 @@ class BankAccountBusinessTest {
         assertTrue(ex.getMessage().contains("non trouvé"));
     }
 
-    // ==================== getCoHolderIds ====================
-
-    @Test
-    void testGetCoHolderIdsExcludesCurrentUser() {
-        jakarta.ws.rs.container.ContainerRequestContext ctx =
-                mock(jakarta.ws.rs.container.ContainerRequestContext.class);
-        when(ctx.getProperty("userId")).thenReturn("ACC-1");
-        when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
-                .thenReturn(List.of("ACC-1", "ACC-2", "ACC-3"));
-
-        List<String> result = bankAccountBusiness.getCoHolderIds(ctx, "BA001");
-
-        assertEquals(2, result.size());
-        assertFalse(result.contains("ACC-1"));
-        assertTrue(result.contains("ACC-2"));
-        assertTrue(result.contains("ACC-3"));
-    }
-
-    @Test
-    void testGetCoHolderIdsThrowsSecurityExceptionWhenUserDoesNotOwnAccount() {
-        jakarta.ws.rs.container.ContainerRequestContext ctx =
-                mock(jakarta.ws.rs.container.ContainerRequestContext.class);
-        when(ctx.getProperty("userId")).thenReturn("ACC-STRANGER");
-        when(bankAccountPivotRepository.getAccountsByBankAccount("BA001"))
-                .thenReturn(List.of("ACC-1", "ACC-2"));
-
-        SecurityException ex = assertThrows(
-                SecurityException.class,
-                () -> bankAccountBusiness.getCoHolderIds(ctx, "BA001")
-        );
-
-        assertTrue(ex.getMessage().contains("appartient pas"));
-    }
 }

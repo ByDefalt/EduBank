@@ -3,3 +3,5 @@ clients:
     url: ${ACCOUNT_API_URL:http://localhost:8081/api/v1}
   operation-api:
     url: ${OPERATION_API_URL:http://localhost:8083/api/v1}
+  bank-account-api:
+    url: ${BANK_ACCOUNT_API_URL:http://localhost:8082/api/v1}

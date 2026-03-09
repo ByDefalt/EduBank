@@ -44,4 +44,14 @@ public class BankAccountPivotBusiness {
         List<String> bankAccountIds = bankAccountPivotRepository.getBankAccountsByAccount(accountId);
         return BankAccountPivotMapper.bankAccountIdsToEntities(accountId, bankAccountIds);
     }
+
+    public List<String> getCoHolderIds(String userId, String bankAccountId) {
+        List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
+        if (!accountIds.contains(userId)) {
+            throw new SecurityException("Ce compte ne vous appartient pas");
+        }
+        return accountIds.stream()
+                .filter(id -> !id.equals(userId))
+                .toList();
+    }
 }
