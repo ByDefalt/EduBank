@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  offer-api-spring:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      SERVER_PORT: 8084
+
+      SPRING_CLOUD_COMPATIBILITY_VERIFIER_ENABLED: "false"
+
+      SPRING_DATASOURCE_URL: jdbc:mariadb://offer-api-mariadb:3309/offerapi
+      SPRING_DATASOURCE_USERNAME: offeruser
+      SPRING_DATASOURCE_PASSWORD: offerpassword
+
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      - offer-api-mariadb
+
+  offer-api-mariadb:
+    image: mariadb:latest
+    container_name: mariadb-offerapi
+    restart: always
+    command: --port=3309
+    environment:
+      MYSQL_DATABASE: offerapi
+      MYSQL_USER: offeruser
+      MYSQL_PASSWORD: offerpassword
+      MYSQL_ROOT_PASSWORD: offerrootpassword
+    ports:
+      # hote:conteneur_interne
+      - "3384:3309"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./data.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mariadb_data:

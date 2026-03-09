@@ -9,7 +9,7 @@ info:
 servers:
   - url: https://api.example.com/v1
     description: Serveur de production
-  - url: https://api-dev.example.com/v1
+  - url: https://localhost:8084/api/v1
     description: Serveur de développement
 
 tags:

@@ -37,7 +37,12 @@ task("generateSwagger") {
             val g=emptyList<io.swagger.v3.parser.core.models.AuthorizationValue>()
             val h=io.swagger.v3.parser.core.models.ParseOptions()
             h.setFlatten(true); h.setResolve(true)
-            val i=io.swagger.parser.OpenAPIParser().readLocation(f.absolutePath,g,h).openAPI
+            val parseResult=io.swagger.parser.OpenAPIParser().readLocation(f.absolutePath,g,h)
+            val i=parseResult.openAPI
+            if (i == null) {
+                val messages = parseResult.messages?.joinToString("\n  - ") ?: "aucun détail"
+                throw GradleException("Impossible de parser le fichier OpenAPI : ${f.name}\n  - $messages")
+            }
             e.opts(io.swagger.codegen.v3.ClientOpts()).openAPI(i)
             io.swagger.codegen.v3.DefaultGenerator().opts(e).generate()
         }
