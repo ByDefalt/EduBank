@@ -253,7 +253,7 @@ internal fun RegisterContent(
                 ArkeoInput(
                     email,
                     { email = it },
-                    "Identifiant (e-mail)",
+                    "E-mail",
                     keyboardType = KeyboardType.Email,
                     icon = Icons.Outlined.Person,
                 )
