@@ -1,6 +1,7 @@
 package accountapi.business;
 
 import accountapi.entity.RoleEntity;
+import accountapi.exception.FunctionalException;
 import accountapi.exception.NotFoundException;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.RoleRepository;
@@ -20,7 +21,12 @@ public class RoleBusiness {
     }
 
     public List<Role> getAllRoles() {
-        List<RoleEntity> roles = roleRepository.findAll();
+        List<RoleEntity> roles;
+        try {
+            roles = roleRepository.findAll();
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible de récupérer les rôles : " + e.getMessage());
+        }
 
         List<Role> dtos = new ArrayList<>();
         for (RoleEntity role : roles) {
@@ -30,7 +36,12 @@ public class RoleBusiness {
     }
 
     public Role getRoleById(Integer id) {
-        RoleEntity roleEntity = roleRepository.findById(id);
+        RoleEntity roleEntity;
+        try {
+            roleEntity = roleRepository.findById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("404", "Rôle non trouvé avec l'ID : " + id);
+        }
         if (roleEntity == null) {
             throw new NotFoundException("404", "Rôle non trouvé avec l'ID : " + id);
         }
@@ -38,9 +49,14 @@ public class RoleBusiness {
     }
 
     public Role getRoleByName(String name) {
-        RoleEntity roleEntity = roleRepository.findByName(name);
+        RoleEntity roleEntity;
+        try {
+            roleEntity = roleRepository.findByName(name);
+        } catch (Exception e) {
+            throw new NotFoundException("404", "Rôle non trouvé avec le nom : " + name);
+        }
         if (roleEntity == null) {
-            throw new NotFoundException("404", "Rôle non trouvé avec l'ID : " + name);
+            throw new NotFoundException("404", "Rôle non trouvé avec le nom : " + name);
         }
         return RoleMapper.toDto(roleEntity);
     }

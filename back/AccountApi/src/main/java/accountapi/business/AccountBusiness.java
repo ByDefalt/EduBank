@@ -34,7 +34,12 @@ public class AccountBusiness {
     private final JwtUtils keyJWT = new JwtUtils();
 
     public List<Account> getAllAccounts() {
-        List<AccountEntity> accounts = accountRepository.findAll();
+        List<AccountEntity> accounts;
+        try {
+            accounts = accountRepository.findAll();
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible de récupérer les comptes : " + e.getMessage());
+        }
 
         List<Account> dtos = new ArrayList<>();
         for (AccountEntity account : accounts) {
@@ -44,7 +49,12 @@ public class AccountBusiness {
     }
 
     public Account getAccountById(String id) {
-        AccountEntity accountEntity = accountRepository.findById(id);
+        AccountEntity accountEntity;
+        try {
+            accountEntity = accountRepository.findById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + id);
+        }
         if (accountEntity == null) {
             throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + id);
         }
@@ -63,7 +73,6 @@ public class AccountBusiness {
                 idGenerated = GenerateID.generateId();
             }
         }
-
         Role roleToRegister = roleBusiness.getRoleByName(account.getRole().name());
 
         if (roleToRegister == null) {
@@ -98,7 +107,11 @@ public class AccountBusiness {
         Account account = this.getAccountById(id);
         AccountEntity accountEntity = AccountMapper.toEntity(account);
         accountEntity.setState(AccountStateEnum.ENCLOSE);
-        accountRepository.updateState(accountEntity);
+        try {
+            accountRepository.updateState(accountEntity);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible de supprimer le compte : " + e.getMessage());
+        }
         return true;
     }
 
@@ -115,18 +128,22 @@ public class AccountBusiness {
     }
 
     public TokenRequest signIn(SignInRequest signInRequest) {
-        String key = "";
-
-        AccountEntity accountEntity = accountRepository.getAccountByIdAndPassword(signInRequest.getId(), signInRequest.getPassword());
+        AccountEntity accountEntity;
+        try {
+            accountEntity = accountRepository.getAccountByIdAndPassword(signInRequest.getId(), signInRequest.getPassword());
+        } catch (Exception e) {
+            throw new UnauthorizedException("401", "Numéro de compte ou mot de passe incorrect");
+        }
 
         if (accountEntity == null) {
-            throw new NotFoundException("404", "Compte non trouvé avec l'ID : " + signInRequest.getId());
+            throw new UnauthorizedException("401", "Numéro de compte ou mot de passe incorrect");
         }
+
         if (accountEntity.getId().equals(signInRequest.getId()) &&
                 accountEntity.getPassword().equals(signInRequest.getPassword()) &&
                     accountEntity.getState().equals(AccountStateEnum.ACTIVE)) {
             RoleEntity roleEntity = RoleMapper.toEntity(this.getRoleByAccountId(accountEntity.getId()));
-            key = keyJWT.generateKey(accountEntity.getId(), roleEntity.getName());
+            String key = keyJWT.generateKey(accountEntity.getId(), roleEntity.getName());
 
             TokenRequest tokenRequest = new TokenRequest();
             tokenRequest.setJwt(key);
@@ -137,7 +154,12 @@ public class AccountBusiness {
 
     public TokenResponse validateToken(TokenRequest tokenRequest) {
         String jwt = tokenRequest.getJwt();
-        TokenResponse tokenResponse = keyJWT.validateToken(jwt);
+        TokenResponse tokenResponse;
+        try {
+            tokenResponse = keyJWT.validateToken(jwt);
+        } catch (Exception e) {
+            throw new UnauthorizedException("401", "Token invalide ou expiré");
+        }
 
         if (tokenResponse != null && tokenResponse.getId() != null && !tokenResponse.getId().isEmpty()) {
             AccountEntity acc = accountRepository.findById(tokenResponse.getId());
@@ -158,7 +180,11 @@ public class AccountBusiness {
             throw new FunctionalException("400", "Le compte est déjà inactif");
         }
         accountEntity.setState(AccountStateEnum.INACTIVE);
-        accountRepository.updateState(accountEntity);
+        try {
+            accountRepository.updateState(accountEntity);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible de désactiver le compte : " + e.getMessage());
+        }
         return true;
     }
 
@@ -172,7 +198,11 @@ public class AccountBusiness {
             throw new FunctionalException("400", "Le compte est déjà actif");
         }
         accountEntity.setState(AccountStateEnum.ACTIVE);
-        accountRepository.updateState(accountEntity);
+        try {
+            accountRepository.updateState(accountEntity);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible d'activer le compte : " + e.getMessage());
+        }
         return true;
     }
 }

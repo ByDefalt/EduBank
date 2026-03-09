@@ -22,7 +22,12 @@ public class PersonalInformationBusiness {
     }
 
     public List<PersonalInformation> getAllPersonalInformation() {
-        List<PersonalInformationEntity> entities = personalInformationRepository.findAll();
+        List<PersonalInformationEntity> entities;
+        try {
+            entities = personalInformationRepository.findAll();
+        } catch (Exception e) {
+            throw new FunctionalException("400", "Impossible de récupérer les informations personnelles : " + e.getMessage());
+        }
 
         List<PersonalInformation> dtos = new ArrayList<>();
         for (PersonalInformationEntity entity : entities) {
@@ -32,7 +37,12 @@ public class PersonalInformationBusiness {
     }
 
     public PersonalInformation getPersonalInformationById(Integer id) {
-        PersonalInformationEntity entity = personalInformationRepository.findById(id);
+        PersonalInformationEntity entity;
+        try {
+            entity = personalInformationRepository.findById(id);
+        } catch (Exception e) {
+            throw new NotFoundException("404", "Information personnelle non trouvée avec l'ID : " + id);
+        }
         if (entity == null) {
             throw new NotFoundException("404", "Information personnelle non trouvée avec l'ID : " + id);
         }
@@ -41,7 +51,12 @@ public class PersonalInformationBusiness {
 
     public PersonalInformation createPersonalInformation(PersonalInformationRegister registerDto) {
         PersonalInformationEntity personalInfo = PersonalInformationMapper.toEntity(registerDto);
-        PersonalInformationEntity created = personalInformationRepository.create(personalInfo);
+        PersonalInformationEntity created;
+        try {
+            created = personalInformationRepository.create(personalInfo);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "La création des informations personnelles a échoué : " + e.getMessage());
+        }
         if (created == null) {
             throw new FunctionalException("400", "Impossible de créer les informations personnelles");
         }
@@ -49,18 +64,25 @@ public class PersonalInformationBusiness {
     }
 
     public boolean deletePersonalInformation(Integer id) {
-        return personalInformationRepository.delete(id);
+        this.getPersonalInformationById(id);
+        try {
+            return personalInformationRepository.delete(id);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "La suppression de l'information personnelle a échoué avec l'ID : " + id);
+        }
     }
 
     public PersonalInformation updatePersonalInformation(Integer id, PersonalInformation dto) {
-        PersonalInformationEntity existing = personalInformationRepository.findById(id);
-        if (existing == null) {
-            throw new NotFoundException("404", "Information personnelle non trouvée avec l'ID : " + id);
-        }
+        this.getPersonalInformationById(id);
         PersonalInformationEntity updated = PersonalInformationMapper.toEntity(dto);
-        PersonalInformationEntity result = personalInformationRepository.update(id, updated);
+        PersonalInformationEntity result;
+        try {
+            result = personalInformationRepository.update(id, updated);
+        } catch (Exception e) {
+            throw new FunctionalException("400", "La mise à jour des informations personnelles a échoué : " + e.getMessage());
+        }
         if (result == null) {
-            throw new FunctionalException("400", "Impossible de mettre à jour les informations personnelles");
+            throw new FunctionalException("400", "La mise à jour des informations personnelles a échoué");
         }
         return PersonalInformationMapper.toDto(result);
     }
