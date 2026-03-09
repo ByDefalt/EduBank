@@ -1,0 +1,402 @@
+openapi: 3.0.3
+info:
+  title: Operation API
+  description: API pour la gestion des opérations bancaires (virements, paiements, etc.)
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: "http://localhost:8083/api/v1"
+
+tags:
+  - name: Operation
+    description: Gestion des opérations bancaires
+
+paths:
+  /operations:
+    get:
+      tags:
+        - Operation
+      summary: Récupérer la liste des opérations
+      description: "Use Case 5 (Administrateur): Voir la liste des opérations"
+      parameters:
+        - name: account_source_id
+          in: query
+          schema:
+            type: string
+          description: Filtrer par compte source
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum: [completed, failed, cancelled]
+          description: Filtrer par état
+        - name: date_from
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Date de début
+        - name: date_to
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Date de fin
+      responses:
+        '200':
+          description: Liste récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Operation'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Operation
+      summary: Créer une nouvelle opération
+      description: "Use Case 10 (Client): Effectuer un virement"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Operation'
+      responses:
+        '201':
+          description: Opération créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Solde insuffisant ou limite de découvert dépassée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /operations/{id}:
+    get:
+      tags:
+        - Operation
+      summary: Récupérer une opération par ID
+      description: "Use Case 8 (Administrateur): Voir une opération spécifique avec ses détails"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Identifiant de l'opération
+      responses:
+        '200':
+          description: Opération récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /operations/{id}/state:
+    patch:
+      tags:
+        - Operation
+      summary: Changer l'état d'une opération
+      description: "Use Case 13 (Administrateur): Changer l'état d'une opération / Use Case 21 (Administrateur): Mettre à jour l'état d'une opération"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationState'
+      responses:
+        '200':
+          description: État modifié avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Operation'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /operations/{id}/cancel:
+    post:
+      tags:
+        - Operation
+      summary: Créer une opération d'annulation
+      description: "Use Case 20 (Administrateur): Créer une opération d'annulation"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID de l'opération à annuler
+      responses:
+        '201':
+          description: Opération d'annulation créée avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  original_operation:
+                    $ref: '#/components/schemas/Operation'
+                  cancellation_operation:
+                    $ref: '#/components/schemas/Operation'
+        '400':
+          description: L'opération ne peut pas être annulée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /beneficiaries:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer tous les bénéficiaires
+      responses:
+        '200':
+          description: Liste globale des bénéficiaires
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+    post:
+      tags:
+        - Beneficiary
+      summary: Créer un nouveau bénéficiaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Beneficiary'
+      responses:
+        '201':
+          description: Bénéficiaire créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+
+  /beneficiaries/{accountId}:
+    get:
+      tags:
+        - Beneficiary
+      summary: Récupérer les bénéficiaires d'un compte
+      description: "Retourne tous les bénéficiaires associés à un compte source spécifique"
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: "ID du compte source (ex: 1)"
+      responses:
+        '200':
+          description: Liste des bénéficiaires du compte
+          content:
+            application/json:
+              schema:
+                type: array # Important : ton code retourne une List
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /beneficiaries/{id}:
+    put:
+      tags:
+        - Beneficiary
+      summary: Mettre à jour un bénéficiaire
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Beneficiary'
+      responses:
+        '200':
+          description: Bénéficiaire mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beneficiary'
+    delete:
+      tags:
+        - Beneficiary
+      summary: Supprimer un bénéficiaire
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Supprimé avec succès
+
+components:
+  schemas:
+    OperationState:
+      type: string
+      description: État de l'opération
+      enum: [pending, completed, failed, cancelled]
+      example: completed
+
+    Operation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifiant de l'opération
+          example: 1
+        account_source_id:
+          type: string
+          description: ID du compte bancaire source
+          example: "1"
+        label:
+          type: string
+          description: Libellé de l'opération
+          example: "Virement pour loyer"
+        state:
+          $ref: '#/components/schemas/OperationState'
+        iban_target:
+          type: string
+          description: IBAN du compte destinataire
+          example: "FR7698765432109876543210987"
+        amount:
+          type: number
+          format: double
+          description: Montant de l'opération
+          example: 850.00
+        date:
+          type: string
+          format: date-time
+          description: Date et heure de l'opération
+          example: "2026-01-15T14:30:00Z"
+      required:
+        - id
+        - account_source_id
+        - label
+        - state
+        - iban_target
+        - amount
+        - date
+
+    Beneficiary:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Identifiant du bénéficiaire
+          example: 1
+        account_source_id:
+          type: string
+          description: ID du compte source
+          example: "1"
+        iban_target:
+          type: string
+          description: IBAN du bénéficiaire
+          example: "FR7698765432109876543210987"
+        name:
+          type: string
+          description: Nom du bénéficiaire
+          example: "Marie Martin"
+      required:
+        - account_source_id
+        - iban_target
+        - name
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "400"
+        message:
+          type: string
+          example: "Requête invalide"
+        details:
+          type: string
+          example: "Le champ 'amount' doit être supérieur à 0"
+
+  responses:
+    UnauthorizedError:
+      description: Non autorisé - Token d'authentification manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFoundError:
+      description: Ressource non trouvée
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequestError:
+      description: Requête invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ForbiddenError:
+      description: Accès interdit - Permissions insuffisantes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

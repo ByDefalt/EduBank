@@ -1,0 +1,168 @@
+package defalt.featureAccount.ui.screen
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.account.RoleEnum
+import defalt.featureAccount.viewModel.LoginViewModel
+import defalt.ui.component.ArkeoButton
+import defalt.ui.component.ArkeoErrorText
+import defalt.ui.component.ArkeoInput
+import defalt.ui.state.UiState
+import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
+// ── Composable stateful (prod) ───────────────────────────────────────────────
+@Composable
+fun LoginScreen(
+    onBackToHome: () -> Unit,
+    onLoginSuccess: (RoleEnum) -> Unit = {},
+    viewModel: LoginViewModel = koinViewModel(),
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState) {
+        if (uiState is UiState.Success) onLoginSuccess((uiState as UiState.Success<RoleEnum>).data)
+    }
+
+    LoginContent(
+        onLogin = viewModel::login,
+        errorMessage = (uiState as? UiState.Error)?.message,
+        isLoading = uiState is UiState.Loading,
+        onBackToHome = onBackToHome,
+    )
+}
+
+// alice.dupont@mail.fr
+// Alice1234!
+// ── Composable stateless (testable / previewable) ────────────────────────────
+@Composable
+internal fun LoginContent(
+    onLogin: (String, String) -> Unit = { _, _ -> },
+    onBackToHome: () -> Unit = {},
+    errorMessage: String? = null,
+    isLoading: Boolean = false,
+) {
+    var login by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(CustomColor.BackgroundGray),
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(0.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = CustomColor.ArkeoWhite),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    "ESPACE CLIENT",
+                    color = CustomColor.TextPrimary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                )
+            }
+        }
+
+        Card(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            shape = RoundedCornerShape(12.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        ) {
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(
+                    "IDENTIFICATION",
+                    color = CustomColor.ArkeoRed,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                )
+
+                ArkeoInput(
+                    value = login,
+                    onValueChange = { login = it },
+                    label = "Identifiant",
+                    icon = Icons.Outlined.Person,
+                )
+
+                ArkeoInput(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = "Mot de passe",
+                    icon = Icons.Outlined.Lock,
+                    isPassword = true,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (errorMessage != null) {
+                    ArkeoErrorText(message = errorMessage)
+                }
+
+                ArkeoButton(
+                    text = "ACCÉDER À MES COMPTES",
+                    onClick = { onLogin(login, password) },
+                    enabled = !isLoading,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextButton(
+            onClick = onBackToHome,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 24.dp),
+        ) {
+            Text("Retour à l'accueil", color = CustomColor.ArkeoRed)
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginContent(onBackToHome = {})
+}

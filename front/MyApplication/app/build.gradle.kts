@@ -3,10 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose) // Gère automatiquement le compilateur Compose
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.spotless)
+    alias(libs.plugins.kotlin.compose)
+    jacoco
 }
 
 android {
@@ -15,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "defalt.eduBank"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -30,6 +28,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            enableAndroidTestCoverage = true
+            enableUnitTestCoverage = true
         }
     }
 
@@ -46,74 +48,26 @@ android {
         compose = true
     }
 
-    // Suppression de composeOptions { kotlinCompilerExtensionVersion }
-    // car géré par le plugin kotlin.compose (Kotlin 2.0+)
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE.md"
+            excludes += "/META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
-    /* ---------------- CORE ---------------- */
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.kotlin.stdlib)
-
-    /* ---------------- COMPOSE ---------------- */
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    /* ---------------- NAVIGATION ---------------- */
-    implementation(libs.androidx.navigation.compose)
-
-    /* ---------------- VIEWMODEL ---------------- */
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    /* ---------------- COROUTINES ---------------- */
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.android)
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    /* ---------------- NETWORK (Retrofit 3 / JSON) ---------------- */
-    implementation(libs.retrofit)
-    implementation(libs.okhttp.logging)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.converter.scalars)
-
-    /* ---------------- DATABASE ---------------- */
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-
-    /* ---------------- DATASTORE ---------------- */
-    implementation(libs.androidx.datastore.preferences)
-
-    /* ---------------- DEPENDENCY INJECTION (KOIN) ---------------- */
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
-
-    /* ---------------- IMAGES ---------------- */
-    implementation(libs.coil.compose)
-
-    /* ---------------- PERMISSIONS ---------------- */
-    implementation(libs.accompanist.permissions)
-
-    /* ---------------- SPLASHSCREEN ---------------- */
-    implementation(libs.androidx.core.splashscreen)
-
-    /* ---------------- TESTS ---------------- */
-    testImplementation(libs.junit)
-    testImplementation(libs.kotlintest.runner)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    implementation(project(":core:testing"))
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:utils"))
+    implementation(project(":core:domain"))
+    implementation(project(":feature-account"))
+    implementation(project(":feature-offer"))
+    implementation(project(":feature-bank"))
+    implementation(project(":feature-operation"))
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -125,9 +79,67 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     }
 }
 
-// Configuration Spotless (Optionnel, si vous voulez le configurer ici)
-spotless {
-    kotlin {
-        ktfmt()
+// ─── JaCoCo ───────────────────────────────────────────────────────────────────
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+val jacocoExcludes = listOf(
+    // Android / Build
+    "**/R.class",
+    "**/R$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+    "android/**/*.*",
+    // Jetpack Compose
+    "**/*ComposableSingletons*",
+    "**/*_PreviewParameterProvider*",
+    "**/*Preview*",
+    // Koin DI
+    "**/di/**",
+    "**/*Module*",
+    // Tests
+    "**/*Test*.*",
+    "**/test/**",
+    "**/androidTest/**",
+)
+
+// ── Rapport pour le module :app uniquement ────────────────────────────────────
+tasks.register<JacocoReport>("jacocoTestReport") {
+    group = "Reporting"
+    description = "Génère le rapport de couverture JaCoCo pour le module :app (debug)."
+
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/html"))
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/jacocoTestReport.xml"))
     }
+
+    // AGP génère les .class dans ces deux emplacements selon la version
+    val kotlinClasses = fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+        exclude(jacocoExcludes)
+    }
+    val javacClasses = fileTree(layout.buildDirectory.dir("intermediates/javac/debug")) {
+        exclude(jacocoExcludes)
+    }
+    classDirectories.setFrom(kotlinClasses, javacClasses)
+
+    sourceDirectories.setFrom(
+        files(
+            "${projectDir}/src/main/java",
+            "${projectDir}/src/main/kotlin",
+        )
+    )
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include(
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                "jacoco/testDebugUnitTest.exec",
+            )
+        }
+    )
 }
