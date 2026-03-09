@@ -301,23 +301,6 @@ paths:
 
 components:
   schemas:
-    OperationFilter:
-      type: object
-      description: Critères de filtrage pour la liste des opérations
-      properties:
-        state:
-          $ref: '#/components/schemas/OperationState'
-        date_from:
-          type: string
-          format: date-time
-          description: Date de début (incluse)
-          example: "2026-01-01T00:00:00Z"
-        date_to:
-          type: string
-          format: date-time
-          description: Date de fin (incluse)
-          example: "2026-12-31T23:59:59Z"
-
     OperationState:
       type: string
       description: État de l'opération
