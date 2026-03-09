@@ -110,12 +110,45 @@ class PersonalInformationBusinessTest {
 
     @Test
     void testDeletePersonalInformation() {
+        PersonalInformationEntity entity = new PersonalInformationEntity();
+        entity.setId(100);
+        entity.setFirstname("Jean");
+        entity.setLastname("Martin");
+        entity.setEmail("jean.martin@example.com");
+        entity.setAddress("123 Rue de la République, 69001 Lyon");
+        entity.setPhoneNumber("+33698765432");
+
+        when(personalInformationRepository.findById(100)).thenReturn(entity);
         when(personalInformationRepository.delete(100)).thenReturn(true);
 
         boolean result = personalInformationBusiness.deletePersonalInformation(100);
 
         assertTrue(result);
+        verify(personalInformationRepository).findById(100);
         verify(personalInformationRepository).delete(100);
+    }
+
+    @Test
+    void testDeletePersonalInformationNotFound() {
+        when(personalInformationRepository.findById(999)).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> personalInformationBusiness.deletePersonalInformation(999));
+    }
+
+    @Test
+    void testDeletePersonalInformationFails() {
+        PersonalInformationEntity entity = new PersonalInformationEntity();
+        entity.setId(100);
+        entity.setFirstname("Jean");
+        entity.setLastname("Martin");
+        entity.setEmail("jean.martin@example.com");
+        entity.setAddress("123 Rue de la République, 69001 Lyon");
+        entity.setPhoneNumber("+33698765432");
+
+        when(personalInformationRepository.findById(100)).thenReturn(entity);
+        when(personalInformationRepository.delete(100)).thenThrow(new RuntimeException("Erreur DB"));
+
+        assertThrows(FunctionalException.class, () -> personalInformationBusiness.deletePersonalInformation(100));
     }
 
     @Test

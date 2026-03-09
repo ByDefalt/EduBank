@@ -26,7 +26,7 @@ public class PersonalInformationBusiness {
         try {
             entities = personalInformationRepository.findAll();
         } catch (Exception e) {
-            throw new FunctionalException("400", "Impossible de récupérer les informations personnelles : " + e.getMessage());
+            throw new NotFoundException("404", "Impossible de récupérer les informations personnelles");
         }
 
         List<PersonalInformation> dtos = new ArrayList<>();

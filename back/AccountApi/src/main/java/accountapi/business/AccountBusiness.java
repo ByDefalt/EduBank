@@ -38,7 +38,7 @@ public class AccountBusiness {
         try {
             accounts = accountRepository.findAll();
         } catch (Exception e) {
-            throw new FunctionalException("400", "Impossible de récupérer les comptes : " + e.getMessage());
+            throw new NotFoundException("404", "Impossible de récupérer les comptes");
         }
 
         List<Account> dtos = new ArrayList<>();
@@ -110,7 +110,7 @@ public class AccountBusiness {
         try {
             accountRepository.updateState(accountEntity);
         } catch (Exception e) {
-            throw new FunctionalException("400", "Impossible de supprimer le compte : " + e.getMessage());
+            throw new NotFoundException("404", "Impossible de supprimer le compte avec l'ID : " + id);
         }
         return true;
     }
@@ -132,11 +132,11 @@ public class AccountBusiness {
         try {
             accountEntity = accountRepository.getAccountByIdAndPassword(signInRequest.getId(), signInRequest.getPassword());
         } catch (Exception e) {
-            throw new UnauthorizedException("401", "Numéro de compte ou mot de passe incorrect");
+            throw new NotFoundException("404", "Compte non trouvé");
         }
 
         if (accountEntity == null) {
-            throw new UnauthorizedException("401", "Numéro de compte ou mot de passe incorrect");
+            throw new NotFoundException("404", "Compte non trouvé");
         }
 
         if (accountEntity.getId().equals(signInRequest.getId()) &&

@@ -1,7 +1,6 @@
 package accountapi.business;
 
 import accountapi.entity.RoleEntity;
-import accountapi.exception.FunctionalException;
 import accountapi.exception.NotFoundException;
 import accountapi.mapper.RoleMapper;
 import accountapi.repository.RoleRepository;
@@ -25,7 +24,7 @@ public class RoleBusiness {
         try {
             roles = roleRepository.findAll();
         } catch (Exception e) {
-            throw new FunctionalException("400", "Impossible de récupérer les rôles : " + e.getMessage());
+            throw new NotFoundException("404", "Impossible de récupérer les rôles");
         }
 
         List<Role> dtos = new ArrayList<>();
