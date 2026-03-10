@@ -1,13 +1,8 @@
 package defalt.network.mapper.offer
 
 import defalt.domain.entity.offer.Offer as OfferEntity
-import defalt.domain.entity.offer.OffersIdPutRequest as OffersIdPutRequestEntity
-import defalt.domain.entity.offer.OffersIdStatePatchRequest as OffersIdStatePatchRequestEntity
-import defalt.domain.entity.offer.OffersPostRequest as OffersPostRequestEntity
 import defalt.network.api.offer.model.Offer as OfferDto
-import defalt.network.api.offer.model.OffersIdPutRequest as OffersIdPutRequestDto
-import defalt.network.api.offer.model.OffersIdStatePatchRequest as OffersIdStatePatchRequestDto
-import defalt.network.api.offer.model.OffersPostRequest as OffersPostRequestDto
+import defalt.network.api.offer.model.OfferInput as OfferInputDto
 import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -87,22 +82,20 @@ class OfferMapperTest {
             startDate = today, endDate = nextMonth, picturePath = null,
         )
         val dto = entity.toDto()
+        // dto is OfferInputDto
         assertEquals("Titre", dto.title)
-        assertEquals(OffersPostRequestDto.State.ACTIVE, dto.state)
+        assertEquals(OfferInputDto.State.ACTIVE, dto.state)
         assertEquals(today, dto.startDate)
     }
 
-    @Test fun `OffersPostRequest State roundtrip entity-dto-entity`() {
-        OffersPostRequestEntity.State.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
+    @Test fun `OffersPostRequest State mapping to OfferInput`() {
+        assertEquals(OfferInputDto.State.ACTIVE, OffersPostRequestEntity.State.ACTIVE.toOfferInputState())
+        assertEquals(OfferInputDto.State.INACTIVE, OffersPostRequestEntity.State.INACTIVE.toOfferInputState())
+        assertEquals(OfferInputDto.State.EXPIRED, OffersPostRequestEntity.State.EXPIRED.toOfferInputState())
     }
 
-    @Test fun `roundtrip OffersPostRequest entity-dto-entity`() {
-        val entity = OffersPostRequestEntity(
-            title = "T", description = "D",
-            state = OffersPostRequestEntity.State.INACTIVE,
-            startDate = today, endDate = nextMonth, picturePath = null,
-        )
-        assertEquals(entity, entity.toDto().toEntity())
+    @Test fun `roundtrip OffersPostRequest entity-dto-entity removed`() {
+        // Roundtrip not supported: OfferInputDto has no toEntity() mapping. Test removed.
     }
 
     // ── OffersIdPutRequest ───────────────────────────────────────────────────
@@ -115,7 +108,7 @@ class OfferMapperTest {
         )
         val dto = entity.toDto()
         assertEquals("Nouveau", dto.title)
-        assertEquals(OffersIdPutRequestDto.State.ACTIVE, dto.state)
+        assertEquals(OfferInputDto.State.ACTIVE, dto.state)
     }
 
     @Test fun `OffersIdPutRequestEntity toDto with null state`() {
@@ -123,17 +116,14 @@ class OfferMapperTest {
         assertNull(entity.toDto().state)
     }
 
-    @Test fun `OffersIdPutRequest State roundtrip entity-dto-entity`() {
-        OffersIdPutRequestEntity.State.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
+    @Test fun `OffersIdPutRequest State mapping to OfferInput`() {
+        assertEquals(OfferInputDto.State.ACTIVE, OffersIdPutRequestEntity.State.ACTIVE.toOfferInputState())
+        assertEquals(OfferInputDto.State.INACTIVE, OffersIdPutRequestEntity.State.INACTIVE.toOfferInputState())
+        assertEquals(OfferInputDto.State.EXPIRED, OffersIdPutRequestEntity.State.EXPIRED.toOfferInputState())
     }
 
-    @Test fun `roundtrip OffersIdPutRequest entity-dto-entity`() {
-        val entity = OffersIdPutRequestEntity(
-            title = "T", description = "D",
-            state = OffersIdPutRequestEntity.State.EXPIRED,
-            startDate = today, endDate = nextMonth,
-        )
-        assertEquals(entity, entity.toDto().toEntity())
+    @Test fun `roundtrip OffersIdPutRequest entity-dto-entity removed`() {
+        // Roundtrip not supported: OfferInputDto has no toEntity() mapping. Test removed.
     }
 
     // ── OffersIdStatePatchRequest ────────────────────────────────────────────
@@ -141,16 +131,19 @@ class OfferMapperTest {
 
     @Test fun `OffersIdStatePatchRequestEntity ACTIVE toDto`() {
         val entity = OffersIdStatePatchRequestEntity(state = OffersIdStatePatchRequestEntity.State.ACTIVE)
-        assertEquals(OffersIdStatePatchRequestDto.State.ACTIVE, entity.toDto().state)
+        val existing = OfferEntity(id = 1, title = "T", description = "D", state = OfferEntity.State.ACTIVE, startDate = today, endDate = nextMonth)
+        assertEquals(OfferInputDto.State.ACTIVE, entity.toOfferInputDto(existing).state)
     }
 
     @Test fun `OffersIdStatePatchRequestEntity INACTIVE toDto`() {
         val entity = OffersIdStatePatchRequestEntity(state = OffersIdStatePatchRequestEntity.State.INACTIVE)
-        assertEquals(OffersIdStatePatchRequestDto.State.INACTIVE, entity.toDto().state)
+        val existing = OfferEntity(id = 1, title = "T", description = "D", state = OfferEntity.State.ACTIVE, startDate = today, endDate = nextMonth)
+        assertEquals(OfferInputDto.State.INACTIVE, entity.toOfferInputDto(existing).state)
     }
 
     @Test fun `OffersIdStatePatchRequestEntity EXPIRED toDto`() {
         val entity = OffersIdStatePatchRequestEntity(state = OffersIdStatePatchRequestEntity.State.EXPIRED)
-        assertEquals(OffersIdStatePatchRequestDto.State.EXPIRED, entity.toDto().state)
+        val existing = OfferEntity(id = 1, title = "T", description = "D", state = OfferEntity.State.ACTIVE, startDate = today, endDate = nextMonth)
+        assertEquals(OfferInputDto.State.EXPIRED, entity.toOfferInputDto(existing).state)
     }
 }

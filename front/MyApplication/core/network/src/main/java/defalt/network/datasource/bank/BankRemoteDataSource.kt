@@ -1,12 +1,8 @@
 package defalt.network.datasource.bank
 
 import defalt.domain.datasource.bank.IBankRemoteDataSource
-import defalt.domain.entity.bank.BankAccount
-import defalt.domain.entity.bank.BankAccountCreateRequest
-import defalt.domain.entity.bank.BankAccountDetail
-import defalt.domain.entity.bank.BankAccountParameter
-import defalt.network.api.bank.service.BankAccountApi
-import defalt.network.api.bank.service.BankAccountParameterApi
+import defalt.domain.entity.bank.*
+import defalt.network.api.bank.service.*
 import defalt.network.mapper.bank.toDto
 import defalt.network.mapper.bank.toEntity
 import defalt.network.utils.safeApiCall
@@ -16,79 +12,94 @@ import defalt.utils.map
 class BankRemoteDataSource(
     private val bankAccountApi: BankAccountApi,
     private val bankAccountParameterApi: BankAccountParameterApi,
+    private val bankAccountPivotApi: BankAccountPivotApi,
+    private val typeApi: TypeApi
 ) : IBankRemoteDataSource {
 
-    // --- ADMIN ---
+    // --- ADMIN : Comptes bancaires ---
 
-    override suspend fun adminGetBankAccountsByAccountId(accountId: Int): NetworkResult<List<BankAccount>> =
-        safeApiCall { bankAccountApi.bankAdminAccountsAccountIdBankAccountsGet(accountId.toString()) }
-            .map { it.toEntity() }
+    override suspend fun adminGetBankAccountsByAccountId(accountId: String): NetworkResult<List<BankAccount>> =
+        safeApiCall { bankAccountApi.bankAdminAccountsAccountIdBankAccountsGet(accountId) }.map { it.toEntity() }
 
     override suspend fun adminCreateBankAccount(
-        accountId: Int,
-        request: BankAccountCreateRequest,
+        accountId: String,
+        request: BankAccountCreateRequest
     ): NetworkResult<BankAccountDetail> =
         safeApiCall {
             bankAccountApi.bankAdminAccountsAccountIdBankAccountsPost(
-                accountId.toString(),
-                request.toDto(),
+                accountId,
+                request.toDto()
             )
         }.map { it.toEntity() }
 
     override suspend fun adminGetAllBankAccounts(): NetworkResult<List<BankAccount>> =
-        safeApiCall { bankAccountApi.bankAdminBankAccountsGet() }
-            .map { it.toEntity() }
+        safeApiCall { bankAccountApi.bankAdminBankAccountsGet() }.map { it.toEntity() }
 
     override suspend fun adminDeleteBankAccount(id: String): NetworkResult<Unit> =
         safeApiCall { bankAccountApi.bankAdminBankAccountsIdDelete(id) }
 
     override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> =
-        safeApiCall { bankAccountApi.bankAdminBankAccountsIdGet(id) }
-            .map { it.toEntity() }
+        safeApiCall { bankAccountApi.bankAdminBankAccountsIdGet(id) }.map { it.toEntity() }
 
     override suspend fun adminUpdateBankAccountParameters(
         bankAccountId: String,
-        parameter: BankAccountParameter,
+        parameter: BankAccountParameter
     ): NetworkResult<Unit> =
         safeApiCall {
             bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch(
                 bankAccountId,
-                parameter.toDto(),
+                parameter.toDto()
             )
         }
 
-    override suspend fun adminUpdateBankAccount(
-        bankAccountId: String,
-        typeId: Int,
-        parameter: BankAccountParameter,
-    ): NetworkResult<BankAccountDetail> {
-        // Met à jour les paramètres
-        val paramResult = safeApiCall {
-            bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch(
-                bankAccountId,
-                parameter.toDto(),
+    // --- ADMIN : Types ---
+
+    override suspend fun adminGetAllTypes(): NetworkResult<List<Type>> =
+        safeApiCall { typeApi.bankAdminTypesGet() }.map { it.toEntity() }
+
+    override suspend fun adminGetTypeById(id: Int): NetworkResult<Type> =
+        safeApiCall { typeApi.bankAdminTypesIdGet(id) }.map { it.toEntity() }
+
+    override suspend fun adminCreateType(type: Type): NetworkResult<Type> =
+        safeApiCall { typeApi.bankAdminTypesPost(type.toDto()) }.map { it.toEntity() }
+
+    // --- ADMIN : Co-titulaires (Pivot) ---
+
+    override suspend fun adminAddCoHolder(pivot: BankAccountPivot): NetworkResult<Unit> =
+        safeApiCall { bankAccountPivotApi.bankBankAccountsPivotPost(pivot.toDto()) }
+
+    override suspend fun adminRemoveCoHolder(pivot: BankAccountPivot): NetworkResult<Unit> =
+        safeApiCall { bankAccountPivotApi.bankBankAccountsPivotDelete(pivot.toDto()) }
+
+    override suspend fun adminRemoveAllCoHoldersByBankAccount(bankAccountId: String): NetworkResult<Unit> =
+        safeApiCall {
+            bankAccountPivotApi.bankBankAccountsPivotBankAccountBankAccountIdDelete(
+                bankAccountId
             )
         }
-        if (paramResult is NetworkResult.Error) return NetworkResult.Error(paramResult.code, paramResult.message)
-        if (paramResult is NetworkResult.Exception) return NetworkResult.Exception(paramResult.throwable)
-        // Recharge le détail mis à jour
-        return safeApiCall { bankAccountApi.bankAdminBankAccountsIdGet(bankAccountId) }
-            .map { it.toEntity() }
-    }
 
-    // --- CLIENT ---
+    override suspend fun adminRemoveAllBankAccountsByAccount(accountId: String): NetworkResult<Unit> =
+        safeApiCall { bankAccountPivotApi.bankBankAccountsPivotAccountAccountIdDelete(accountId) }
+
+    override suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>> =
+        safeApiCall {
+            bankAccountPivotApi.bankBankAccountsPivotBankAccountBankAccountIdGet(
+                bankAccountId
+            )
+        }.map { it.toEntity() }
+
+    // --- CLIENT : Mes Comptes ---
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =
-        safeApiCall { bankAccountApi.bankMyBankAccountsGet(typeId) }
-            .map { it.toEntity() }
+        safeApiCall { bankAccountApi.bankMyBankAccountsGet(typeId) }.map { it.toEntity() }
 
     override suspend fun getMyBankAccountById(id: String): NetworkResult<BankAccountDetail> =
-        safeApiCall { bankAccountApi.bankMyBankAccountsIdGet(id) }
-            .map { it.toEntity() }
+        safeApiCall { bankAccountApi.bankMyBankAccountsIdGet(id) }.map { it.toEntity() }
 
-    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<Int>> =
+    override suspend fun getMyBankAccountCoHolders(id: String): NetworkResult<List<String>> =
         safeApiCall { bankAccountApi.bankMyBankAccountsIdCoHoldersGet(id) }
-            .map { list -> list.mapNotNull { it.toIntOrNull() } }
+
+    override suspend fun getMyPivotsByAccountId(accountId: String): NetworkResult<List<BankAccountPivot>> =
+        safeApiCall { bankAccountPivotApi.bankBankAccountsPivotAccountAccountIdGet(accountId) }.map { it.toEntity() }
+
 }
-
-

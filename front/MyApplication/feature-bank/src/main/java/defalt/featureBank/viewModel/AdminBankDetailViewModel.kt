@@ -3,9 +3,12 @@ package defalt.featureBank.viewModel
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.BankAccountType
 import defalt.domain.entity.bank.State
+import defalt.domain.entity.bank.Type
 import defalt.featureBank.usecase.AdminDeleteBankAccountUseCase
 import defalt.featureBank.usecase.AdminGetBankAccountByIdUseCase
+import defalt.featureBank.usecase.AdminGetBankAccountTypesUseCase
 import defalt.featureBank.usecase.AdminUpdateBankAccountParamUseCase
 import defalt.featureBank.usecase.AdminUpdateBankAccountUseCase
 import defalt.ui.state.UiState
@@ -20,6 +23,7 @@ class AdminBankDetailViewModel(
     private val deleteBankAccount: AdminDeleteBankAccountUseCase,
     private val updateBankAccountParam: AdminUpdateBankAccountParamUseCase,
     private val updateBankAccount: AdminUpdateBankAccountUseCase,
+    private val getBankAccountTypes: AdminGetBankAccountTypesUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<BankAccountDetail>>(UiState.Loading)
@@ -28,22 +32,36 @@ class AdminBankDetailViewModel(
     private val _actionState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val actionState: StateFlow<UiState<Unit>> = _actionState.asStateFlow()
 
-    fun load(id: String) = launchWithUiState(stateFlow = _uiState, transform = { it }) {
-        getBankAccountById(id)
-    }
+    // Liste des types chargés depuis l'API
+    private val _typesState = MutableStateFlow<UiState<List<Type>>>(UiState.Loading)
+    val typesState: StateFlow<UiState<List<Type>>> = _typesState.asStateFlow()
 
-    fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
-        val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
+    fun load(id: String) {
         launchWithUiState(stateFlow = _uiState, transform = { it }) {
-            updateBankAccount(id, typeId, param).also {
-                if (it is NetworkResult.Success) _actionState.value = UiState.Success(Unit)
-            }
+            getBankAccountById(id)
+        }
+        launchWithUiState(stateFlow = _typesState, transform = { it }) {
+            getBankAccountTypes()
         }
     }
 
-    fun update(id: String, overdraftLimit: Double) = launchWithUiState(_actionState) {
-        updateBankAccountParam(id, BankAccountParameter(overdraftLimit = overdraftLimit))
-            .also { if (it is NetworkResult.Success) load(id) }
+    /**
+     * Met à jour le type ET les paramètres (découvert + état) en une seule action.
+     * Utilise _actionState pour ne pas écraser les données affichées dans _uiState.
+     * Une fois réussi, recharge le détail pour refléter les nouvelles valeurs.
+     */
+    fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
+        val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
+        launchWithUiState(stateFlow = _actionState) {
+            val result = updateBankAccount(id, typeId, param)
+            if (result is NetworkResult.Success) {
+                // Recharger le détail pour mettre à jour l'affichage
+                launchWithUiState(stateFlow = _uiState, transform = { it }) {
+                    getBankAccountById(id)
+                }
+            }
+            result.map { Unit }
+        }
     }
 
     fun delete(id: String, onSuccess: () -> Unit) = launchWithUiState(_actionState) {

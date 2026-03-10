@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.featureOffer.viewModel.AdminCreateOfferViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoCard

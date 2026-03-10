@@ -2,9 +2,6 @@ package defalt.network.fake
 
 import defalt.domain.datasource.offer.IOfferRemoteDataSource
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersIdPutRequest
-import defalt.domain.entity.offer.OffersIdStatePatchRequest
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.utils.NetworkResult
 
 class FakeOfferRemoteDataSource : IOfferRemoteDataSource {

@@ -30,20 +30,23 @@ class AccountRemoteDataSource(
 
     // --- COMPTES ---
 
+    override suspend fun activateAccount(id: String): NetworkResult<Boolean> =
+        safeApiCall { api.accountsActivateIdPut(id) }
+
+    override suspend fun deactivateAccount(id: String): NetworkResult<Boolean> =
+        safeApiCall { api.accountsDeactivateIdPut(id) }
+
     override suspend fun getAccounts(): NetworkResult<List<Account>> =
         safeApiCall { api.accountsGet() }.map { it.toEntity() }
 
     override suspend fun getAccountById(id: String): NetworkResult<Account> =
         safeApiCall { api.accountsIdGet(id) }.map { it.toEntity() }
 
+    override suspend fun closeAccount(id: String): NetworkResult<Boolean> =
+        safeApiCall { api.accountsIdPut(id) }
+
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> =
         safeApiCall { api.accountsPost(accountRegister.toDto()) }.map { it.toEntity() }
-
-    override suspend fun activateAccount(id: String): NetworkResult<Boolean> =
-        safeApiCall { api.accountsActivateIdPut(id) }
-
-    override suspend fun deactivateAccount(id: String): NetworkResult<Boolean> =
-        safeApiCall { api.accountsDeactivateIdPut(id) }
 
     // --- AUTHENTIFICATION ---
 
@@ -53,7 +56,6 @@ class AccountRemoteDataSource(
             val token = result.data.jwt
             apiClient.bearerToken = token
             session.token = token
-            // Récupérer le vrai id et le rôle depuis le token
             val validateResult = safeApiCall { api.accountsValidatePost(result.data.toDto()) }.map { it.toEntity() }
             if (validateResult is NetworkResult.Success) {
                 session.accountId = validateResult.data.id
@@ -75,6 +77,9 @@ class AccountRemoteDataSource(
     override suspend fun getRoleById(id: Int): NetworkResult<Role> =
         safeApiCall { roleApi.rolesIdGet(id) }.map { it.toEntity() }
 
+    override suspend fun getRoleByName(name: String): NetworkResult<Role> =
+        safeApiCall { roleApi.rolesNameNameGet(name) }.map { it.toEntity() }
+
     override suspend fun getAccountRole(accountId: String): NetworkResult<Role> =
         safeApiCall { api.accountsRoleIdGet(accountId) }.map { it.toEntity() }
 
@@ -89,15 +94,9 @@ class AccountRemoteDataSource(
     override suspend fun getPersonalInformationByAccountId(accountId: String): NetworkResult<PersonalInformation> =
         safeApiCall { api.accountsPersonalInformationIdGet(accountId) }.map { it.toEntity() }
 
-    override suspend fun createPersonalInformation(
-        personalInformationRegister: PersonalInformationRegister,
-    ): NetworkResult<PersonalInformation> =
-        safeApiCall {
-            personalInformationApi.personalInformationPost(personalInformationRegister.toDto())
-        }.map { it.toEntity() }
+    override suspend fun createPersonalInformation(personalInformationRegister: PersonalInformationRegister): NetworkResult<PersonalInformation> =
+        safeApiCall { personalInformationApi.personalInformationPost(personalInformationRegister.toDto()) }.map { it.toEntity() }
 
     override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> =
-        safeApiCall {
-            personalInformationApi.personalInformationIdPut(id, personalInformation.toDto())
-        }.map { it.toEntity() }
+        safeApiCall { personalInformationApi.personalInformationIdPut(id, personalInformation.toDto()) }.map { it.toEntity() }
 }

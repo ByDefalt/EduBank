@@ -1,25 +1,33 @@
 package defalt.network.utils
 
 import defalt.utils.NetworkResult
+import defalt.utils.logger.ConsoleLogger
+import defalt.utils.logger.LogLevel
 import org.json.JSONObject
 import retrofit2.Response
 
 suspend fun <T> safeApiCall(
     call: suspend () -> Response<T>,
 ): NetworkResult<T> {
+    val logger = ConsoleLogger(LogLevel.DEBUG)
     return try {
         val response = call()
+
         if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
+                logger.debug(body.toString())
                 NetworkResult.Success(body)
             } else {
+                logger.debug("Empty body")
                 NetworkResult.Error(response.code(), "Empty body")
             }
         } else {
+            logger.debug(response.errorBody()?.string() ?: "Unknown error")
             NetworkResult.Error(response.code(), parseErrorMessage(response))
         }
     } catch (e: Throwable) {
+        logger.debug(e.toString())
         NetworkResult.Exception(e)
     }
 }

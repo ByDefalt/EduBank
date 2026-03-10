@@ -7,9 +7,10 @@ import defalt.utils.NetworkResult
 import java.time.OffsetDateTime
 
 interface IOperationRepository {
+
     // --- OPÉRATIONS ---
     suspend fun getOperations(
-        accountSourceId: String? = null,
+        accountId: String? = null,
         state: OperationState? = null,
         dateFrom: OffsetDateTime? = null,
         dateTo: OffsetDateTime? = null,
@@ -17,7 +18,9 @@ interface IOperationRepository {
     suspend fun getOperationById(id: Int): NetworkResult<Operation>
     suspend fun createOperation(operation: Operation): NetworkResult<Operation>
     suspend fun cancelOperation(id: Int): NetworkResult<Operation>
-    suspend fun updateOperationState(id: Int, state: String): NetworkResult<Operation>
+
+    /** Met à jour l'état d'une opération (Admin) */
+    suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation>
 
     // --- BÉNÉFICIAIRES ---
     suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>>

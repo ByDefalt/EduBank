@@ -1,13 +1,13 @@
 package defalt.domain.repository.service
 
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersIdPutRequest
-import defalt.domain.entity.offer.OffersIdStatePatchRequest
-import defalt.domain.entity.offer.OffersPostRequest
+import defalt.domain.entity.offer.OfferInput
 import defalt.utils.NetworkResult
 
 interface IOfferRepository {
+
     // --- PUBLIC ---
+    /** Récupère uniquement les offres dont l'état est "active" */
     suspend fun getActiveOffers(): NetworkResult<List<Offer>>
 
     // --- ADMIN & CLIENT ---
@@ -15,8 +15,7 @@ interface IOfferRepository {
     suspend fun getOfferById(id: Int): NetworkResult<Offer>
 
     // --- ADMIN ---
-    suspend fun createOffer(request: OffersPostRequest): NetworkResult<Offer>
-    suspend fun updateOffer(id: Int, request: OffersIdPutRequest): NetworkResult<Offer>
-    suspend fun patchOfferState(id: Int, request: OffersIdStatePatchRequest): NetworkResult<Offer>
+    suspend fun createOffer(offerInput: OfferInput): NetworkResult<Offer>
+    suspend fun updateOffer(id: Int, offerInput: OfferInput): NetworkResult<Offer>
     suspend fun deleteOffer(id: Int): NetworkResult<Unit>
 }

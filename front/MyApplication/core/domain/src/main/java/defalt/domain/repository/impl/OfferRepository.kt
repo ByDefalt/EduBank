@@ -2,9 +2,7 @@ package defalt.domain.repository.impl
 
 import defalt.domain.datasource.offer.IOfferRemoteDataSource
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersIdPutRequest
-import defalt.domain.entity.offer.OffersIdStatePatchRequest
-import defalt.domain.entity.offer.OffersPostRequest
+import defalt.domain.entity.offer.OfferInput
 import defalt.domain.repository.service.IOfferRepository
 import defalt.utils.NetworkResult
 
@@ -27,14 +25,11 @@ class OfferRepository(
 
     // --- ADMIN ---
 
-    override suspend fun createOffer(request: OffersPostRequest): NetworkResult<Offer> =
-        remoteDataSource.createOffer(request)
+    override suspend fun createOffer(offerInput: OfferInput): NetworkResult<Offer> =
+        remoteDataSource.createOffer(offerInput)
 
-    override suspend fun updateOffer(id: Int, request: OffersIdPutRequest): NetworkResult<Offer> =
-        remoteDataSource.updateOffer(id, request)
-
-    override suspend fun patchOfferState(id: Int, request: OffersIdStatePatchRequest): NetworkResult<Offer> =
-        remoteDataSource.patchOfferState(id, request)
+    override suspend fun updateOffer(id: Int, offerInput: OfferInput): NetworkResult<Offer> =
+        remoteDataSource.updateOffer(id, offerInput)
 
     override suspend fun deleteOffer(id: Int): NetworkResult<Unit> =
         remoteDataSource.deleteOffer(id)

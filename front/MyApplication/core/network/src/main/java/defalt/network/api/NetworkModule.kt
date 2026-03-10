@@ -11,8 +11,13 @@ import defalt.network.api.offer.service.OfferApi
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.infrastructure.ApiClient
+import defalt.network.infrastructure.Serializer
 import defalt.network.utils.createService
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import org.koin.dsl.module
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val networkModule = module {
 

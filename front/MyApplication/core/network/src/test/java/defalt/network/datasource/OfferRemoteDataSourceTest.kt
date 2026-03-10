@@ -1,9 +1,6 @@
 package defalt.network.datasource.offer
 
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersIdPutRequest
-import defalt.domain.entity.offer.OffersIdStatePatchRequest
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.network.api.offer.service.OfferApi
 import defalt.utils.NetworkResult
@@ -192,7 +189,9 @@ class OfferRemoteDataSourceTest {
 
     @Test fun `patchOfferState retourne l offre modifiee`() = runTest {
         val patched = fakeOfferDto.copy(state = OfferDto.State.INACTIVE)
-        coEvery { offerApi.offersIdStatePatch(1, any()) } returns Response.success(patched)
+        // La méthode patchOfferState fait désormais un GET puis un PUT
+        coEvery { offerApi.offersIdGet(1) } returns Response.success(fakeOfferDto)
+        coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(patched)
 
         val request = OffersIdStatePatchRequest(state = OffersIdStatePatchRequest.State.INACTIVE)
         val result = dataSource.patchOfferState(1, request)
@@ -202,7 +201,9 @@ class OfferRemoteDataSourceTest {
     }
 
     @Test fun `patchOfferState propage Error`() = runTest {
-        coEvery { offerApi.offersIdStatePatch(any(), any()) } returns
+        // simulate get ok but put fails
+        coEvery { offerApi.offersIdGet(any()) } returns Response.success(fakeOfferDto)
+        coEvery { offerApi.offersIdPut(any(), any()) } returns
             Response.error(400, "invalid".toResponseBody())
 
         val request = OffersIdStatePatchRequest(state = OffersIdStatePatchRequest.State.ACTIVE)
@@ -230,4 +231,3 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.deleteOffer(1) is NetworkResult.Exception)
     }
 }
-

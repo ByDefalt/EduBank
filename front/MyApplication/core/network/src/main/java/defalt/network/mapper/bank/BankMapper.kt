@@ -4,12 +4,14 @@ import defalt.domain.entity.bank.BankAccount as BankAccountEntity
 import defalt.domain.entity.bank.BankAccountCreateRequest as BankAccountCreateRequestEntity
 import defalt.domain.entity.bank.BankAccountDetail as BankAccountDetailEntity
 import defalt.domain.entity.bank.BankAccountParameter as BankAccountParameterEntity
+import defalt.domain.entity.bank.BankAccountPivot as BankAccountPivotEntity
 import defalt.domain.entity.bank.State as StateEntity
 import defalt.domain.entity.bank.Type as TypeEntity
 import defalt.network.api.bank.model.BankAccount as BankAccountDto
 import defalt.network.api.bank.model.BankAccountCreateRequest as BankAccountCreateRequestDto
 import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailDto
 import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
+import defalt.network.api.bank.model.BankAccountPivot as BankAccountPivotDto
 import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
 
@@ -118,4 +120,25 @@ fun TypeEntity.toDto(): TypeDto = TypeDto(
     name = this.name,
 )
 
+@JvmName("typeListToEntity")
+fun List<TypeDto>.toEntity(): List<TypeEntity> = this.map { it.toEntity() }
 
+@JvmName("typeListToDto")
+fun List<TypeEntity>.toDto(): List<TypeDto> = this.map { it.toDto() }
+
+
+fun BankAccountPivotDto.toEntity(): BankAccountPivotEntity = BankAccountPivotEntity(
+    bankAccountId = this.bankAccountId,
+    accountId = this.accountId
+)
+
+fun BankAccountPivotEntity.toDto(): BankAccountPivotDto = BankAccountPivotDto(
+    bankAccountId = this.bankAccountId,
+    accountId = this.accountId
+)
+
+@JvmName("bankAccountPivotListToEntity")
+fun List<BankAccountPivotDto>.toEntity(): List<BankAccountPivotEntity> = this.map { it.toEntity() }
+
+@JvmName("bankAccountPivotListToDto")
+fun List<BankAccountPivotEntity>.toDto(): List<BankAccountPivotDto> = this.map { it.toDto() }

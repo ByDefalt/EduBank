@@ -1,7 +1,6 @@
 package defalt.featureOffer.viewModel
 
 import androidx.lifecycle.ViewModel
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.featureOffer.usecase.CreateOfferUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState

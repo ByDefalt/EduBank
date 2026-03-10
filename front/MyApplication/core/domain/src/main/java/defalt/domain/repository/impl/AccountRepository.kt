@@ -35,6 +35,9 @@ class AccountRepository(
     override suspend fun deactivateAccount(id: String): NetworkResult<Boolean> =
         remoteDataSource.deactivateAccount(id)
 
+    override suspend fun closeAccount(id: String): NetworkResult<Boolean> =
+        remoteDataSource.closeAccount(id)
+
     // --- AUTHENTIFICATION ---
 
     override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> =
@@ -60,6 +63,9 @@ class AccountRepository(
 
     override suspend fun getRoleById(id: Int): NetworkResult<Role> =
         remoteDataSource.getRoleById(id)
+
+    override suspend fun getRoleByName(name: String): NetworkResult<Role> =
+        remoteDataSource.getRoleByName(name)
 
     override suspend fun getAccountRole(accountId: String): NetworkResult<Role> =
         remoteDataSource.getAccountRole(accountId)

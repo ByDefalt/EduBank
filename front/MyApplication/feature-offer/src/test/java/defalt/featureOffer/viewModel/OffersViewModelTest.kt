@@ -1,7 +1,6 @@
 package defalt.featureOffer.viewModel
 
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.domain.session.Session
 import defalt.featureOffer.usecase.CreateOfferUseCase
 import defalt.featureOffer.usecase.GetAllOffersUseCase

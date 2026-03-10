@@ -2,7 +2,6 @@ package defalt.featureOffer.viewModel
 
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersIdPutRequest
 import defalt.featureOffer.usecase.DeleteOfferUseCase
 import defalt.featureOffer.usecase.GetOfferByIdUseCase
 import defalt.featureOffer.usecase.UpdateOfferUseCase

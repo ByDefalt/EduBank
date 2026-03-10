@@ -2,6 +2,7 @@ package defalt.featureBank.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -19,14 +21,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.bank.BankAccountType
 import defalt.domain.entity.bank.State
 import defalt.featureBank.viewModel.AdminBankDetailViewModel
 import defalt.ui.component.ArkeoButton
@@ -39,9 +45,6 @@ import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
 
-// Types disponibles (id → label) — à terme récupérés depuis l'API
-private val BANK_TYPES = listOf(1 to "COMPTE CHÈQUES", 2 to "COMPTE ÉPARGNE", 3 to "COMPTE PROFESSIONNEL")
-
 @Composable
 fun AdminBankDetailScreen(
     id: String,
@@ -50,6 +53,7 @@ fun AdminBankDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val actionState by viewModel.actionState.collectAsStateWithLifecycle()
+    val typesState by viewModel.typesState.collectAsStateWithLifecycle()
 
     LaunchedEffect(id) { viewModel.load(id) }
 
@@ -64,10 +68,18 @@ fun AdminBankDetailScreen(
         ) { detail ->
             val isLoading = actionState is UiState.Loading
 
-            // États locaux initialisés depuis les données chargées
-            var overdraft by remember(detail) { mutableStateOf(detail.parameter?.overdraftLimit?.toString() ?: "0.0") }
-            var selectedTypeId by remember(detail) { mutableStateOf(detail.type?.id ?: 1) }
-            var selectedState by remember(detail) { mutableStateOf(detail.parameter?.state ?: State.ACTIVE) }
+            // États initialisés une seule fois à partir du detail chargé.
+            // rememberSaveable avec key = detail.id force la réinitialisation
+            // si on navigue vers un autre compte sans recréer le composable.
+            var overdraft by rememberSaveable(detail.id) {
+                mutableStateOf(detail.parameter?.overdraftLimit?.toString() ?: "0.0")
+            }
+            var selectedTypeId by rememberSaveable(detail.id) {
+                mutableIntStateOf(detail.type?.id ?: 1)
+            }
+            var selectedState by rememberSaveable(detail.id) {
+                mutableStateOf(detail.parameter?.state ?: State.ACTIVE)
+            }
 
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
@@ -79,16 +91,32 @@ fun AdminBankDetailScreen(
                     ArkeoLabelValue("IBAN", detail.iban ?: "-")
                     ArkeoLabelValue("Type actuel", detail.type?.name ?: "-")
                     ArkeoLabelValue("Solde", "%.2f €".format(detail.sold ?: 0.0))
+                    ArkeoLabelValue("Découvert autorisé", "%.2f €".format(detail.parameter?.overdraftLimit ?: 0.0))
                     ArkeoLabelValue("État actuel", detail.parameter?.state?.name ?: "-")
                 }
 
-                // ── Modification complète (UC11 + UC15) ───────────────────
+                // ── Modification complète ──────────────────────────────────
                 ArkeoCard(title = "MODIFIER LE COMPTE") {
-                    // Dropdown Type
-                    TypeDropdown(
-                        selectedTypeId = selectedTypeId,
-                        onTypeSelected = { selectedTypeId = it },
-                    )
+
+                    // Dropdown Type (données depuis l'API)
+                    when (val ts = typesState) {
+                        is UiState.Loading -> Box(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                            contentAlignment = Alignment.Center,
+                        ) { CircularProgressIndicator(color = CustomColor.ArkeoRed) }
+
+                        is UiState.Success -> TypeDropdown(
+                            types = ts.data,
+                            selectedTypeId = selectedTypeId,
+                            onTypeSelected = { selectedTypeId = it },
+                        )
+
+                        else -> TypeDropdown(
+                            types = emptyList(),
+                            selectedTypeId = selectedTypeId,
+                            onTypeSelected = { selectedTypeId = it },
+                        )
+                    }
 
                     // Dropdown État
                     StateDropdown(
@@ -109,10 +137,12 @@ fun AdminBankDetailScreen(
                         text = if (isLoading) "Enregistrement…" else "ENREGISTRER",
                         onClick = {
                             if (!isLoading) {
+                                // Tolérer la virgule comme séparateur décimal (FR locale)
+                                val normalized = overdraft.replace(',', '.')
                                 viewModel.updateFull(
                                     id = id,
                                     typeId = selectedTypeId,
-                                    overdraftLimit = overdraft.toDoubleOrNull() ?: 0.0,
+                                    overdraftLimit = normalized.toDoubleOrNull() ?: 0.0,
                                     state = selectedState,
                                 )
                             }
@@ -133,9 +163,14 @@ fun AdminBankDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun TypeDropdown(selectedTypeId: Int, onTypeSelected: (Int) -> Unit) {
+private fun TypeDropdown(
+    types: List<BankAccountType>,
+    selectedTypeId: Int,
+    onTypeSelected: (Int) -> Unit,
+) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedLabel = BANK_TYPES.find { it.first == selectedTypeId }?.second ?: "Type $selectedTypeId"
+    val selectedLabel = types.find { it.id == selectedTypeId }?.name ?: "Type $selectedTypeId"
+
     ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = !expanded }) {
         OutlinedTextField(
             value = selectedLabel,
@@ -143,11 +178,27 @@ private fun TypeDropdown(selectedTypeId: Int, onTypeSelected: (Int) -> Unit) {
             readOnly = true,
             label = { Text("Type de compte") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            BANK_TYPES.forEach { (id, label) ->
-                DropdownMenuItem(text = { Text(label) }, onClick = { onTypeSelected(id); expanded = false })
+            if (types.isEmpty()) {
+                DropdownMenuItem(
+                    text = { Text("Aucun type disponible") },
+                    onClick = { expanded = false },
+                    enabled = false,
+                )
+            } else {
+                types.forEach { type ->
+                    DropdownMenuItem(
+                        text = { Text(type.name) },
+                        onClick = {
+                            onTypeSelected(type.id)
+                            expanded = false
+                        },
+                    )
+                }
             }
         }
     }
@@ -164,11 +215,19 @@ private fun StateDropdown(selectedState: State, onStateSelected: (State) -> Unit
             readOnly = true,
             label = { Text("État du compte") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
-            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             State.entries.forEach { state ->
-                DropdownMenuItem(text = { Text(state.value) }, onClick = { onStateSelected(state); expanded = false })
+                DropdownMenuItem(
+                    text = { Text(state.value) },
+                    onClick = {
+                        onStateSelected(state)
+                        expanded = false
+                    },
+                )
             }
         }
     }

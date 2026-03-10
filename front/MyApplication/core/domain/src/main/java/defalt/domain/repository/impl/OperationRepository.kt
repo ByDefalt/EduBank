@@ -15,12 +15,12 @@ class OperationRepository(
     // --- OPÉRATIONS ---
 
     override suspend fun getOperations(
-        accountSourceId: String?,
+        accountId: String?,
         state: OperationState?,
         dateFrom: OffsetDateTime?,
         dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> =
-        remoteDataSource.getOperations(accountSourceId, state, dateFrom, dateTo)
+        remoteDataSource.getOperations(accountId, state, dateFrom, dateTo)
 
     override suspend fun getOperationById(id: Int): NetworkResult<Operation> =
         remoteDataSource.getOperationById(id)
@@ -31,7 +31,7 @@ class OperationRepository(
     override suspend fun cancelOperation(id: Int): NetworkResult<Operation> =
         remoteDataSource.cancelOperation(id)
 
-    override suspend fun updateOperationState(id: Int, state: String): NetworkResult<Operation> =
+    override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> =
         remoteDataSource.updateOperationState(id, state)
 
     // --- BÉNÉFICIAIRES ---

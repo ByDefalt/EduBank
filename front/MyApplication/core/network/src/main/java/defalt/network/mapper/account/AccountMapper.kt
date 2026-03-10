@@ -3,7 +3,6 @@ package defalt.network.mapper.account
 import defalt.domain.entity.account.Account as AccountEntity
 import defalt.domain.entity.account.AccountRegister as AccountRegisterEntity
 import defalt.domain.entity.account.AccountStateEnum as AccountStateEnumEntity
-import defalt.domain.entity.account.Error as ErrorEntity
 import defalt.domain.entity.account.PersonalInformation as PersonalInformationEntity
 import defalt.domain.entity.account.PersonalInformationRegister as PersonalInformationRegisterEntity
 import defalt.domain.entity.account.Role as RoleEntity
@@ -80,20 +79,6 @@ fun AccountRegisterDto.toEntity(): AccountRegisterEntity = AccountRegisterEntity
     personalInfo = this.personalInfo.toEntity(),
     role = this.role.toEntity(),
     password = this.password,
-)
-
-// ── Error ─────────────────────────────────────────────────────────────────────
-
-fun ErrorDto.toEntity(): ErrorEntity = ErrorEntity(
-    code = this.code,
-    message = this.message,
-    details = this.details,
-)
-
-fun ErrorEntity.toDto(): ErrorDto = ErrorDto(
-    code = this.code,
-    message = this.message,
-    details = this.details,
 )
 
 // ── PersonalInformation ───────────────────────────────────────────────────────

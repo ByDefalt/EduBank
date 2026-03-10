@@ -1,5 +1,7 @@
 package defalt.network.infrastructure
 
+import defalt.network.api.account.model.AccountStateEnum
+import defalt.network.api.operation.model.OperationState
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.net.URI
@@ -35,6 +37,9 @@ object Serializer {
             contextual(URI::class, URIAdapter)
             contextual(URL::class, URLAdapter)
             contextual(StringBuilder::class, StringBuilderAdapter)
+
+            contextual(OperationState::class, OperationState.serializer())
+            contextual(AccountStateEnum::class, AccountStateEnum.serializer())
 
             apply(kotlinxSerializationAdaptersConfiguration)
         }

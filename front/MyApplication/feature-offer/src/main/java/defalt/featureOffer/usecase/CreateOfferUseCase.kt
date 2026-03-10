@@ -1,7 +1,6 @@
 package defalt.featureOffer.usecase
 
 import defalt.domain.entity.offer.Offer
-import defalt.domain.entity.offer.OffersPostRequest
 import defalt.domain.repository.service.IOfferRepository
 import defalt.utils.NetworkResult
 import defalt.utils.logger.Logger
