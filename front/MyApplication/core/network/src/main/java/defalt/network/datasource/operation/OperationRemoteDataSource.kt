@@ -4,14 +4,17 @@ import defalt.domain.datasource.operation.IOperationRemoteDataSource
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
+import defalt.network.api.operation.model.BeneficiaryList
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
 import defalt.network.mapper.operation.toEntity
 import defalt.network.utils.safeApiCall
+import defalt.network.utils.safeApiCallList
 import defalt.utils.NetworkResult
 import defalt.utils.map
 import java.time.OffsetDateTime
+import kotlin.collections.emptyList
 
 class OperationRemoteDataSource(
     private val operationApi: OperationApi,
@@ -54,10 +57,10 @@ class OperationRemoteDataSource(
     // --- BÉNÉFICIAIRES ---
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
-        safeApiCall { beneficiaryApi.beneficiariesGet() }.map { it.toEntity() }
+        safeApiCallList(BeneficiaryList(data = emptyList())) { beneficiaryApi.beneficiariesGet() }.map { it.toEntity() }
 
     override suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>> =
-        safeApiCall { beneficiaryApi.beneficiariesAccountIdGet(accountId) }.map { it.toEntity() }
+        safeApiCallList(BeneficiaryList(data = emptyList())) { beneficiaryApi.beneficiariesAccountIdGet(accountId) }.map { it.toEntity() }
 
     override suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary> =
         safeApiCall { beneficiaryApi.beneficiariesPost(beneficiary.toDto()) }.map { it.toEntity() }

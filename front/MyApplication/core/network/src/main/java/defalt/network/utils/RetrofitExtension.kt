@@ -37,8 +37,8 @@ suspend fun <T> safeApiCall(
  * Un 404 est traité comme un succès avec liste vide plutôt qu'une erreur.
  */
 suspend fun <T> safeApiCallList(
-    call: suspend () -> Response<T>,
     emptyValue: T,
+    call: suspend () -> Response<T>,
 ): NetworkResult<T> {
     val result = safeApiCall(call)
     return if (result is NetworkResult.Error && result.code == 404) {
@@ -47,6 +47,7 @@ suspend fun <T> safeApiCallList(
         result
     }
 }
+
 
 private fun parseErrorMessage(response: Response<*>): String {
     val raw = response.errorBody()?.string()
