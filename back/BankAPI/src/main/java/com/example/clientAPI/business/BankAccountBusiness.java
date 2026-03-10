@@ -11,6 +11,8 @@ import com.example.clientAPI.repository.BankAccountPivotRepository;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountDetail;
 import dto.bankapi.BankAccountPivot;
+
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +51,7 @@ public class BankAccountBusiness {
     public BankAccountDetailEntity getBankAccountDetailById(String id) {
         BankAccountDetail dto = bankAccountRepository.getBankAccountDetailById(id);
         if (dto == null) {
-            throw new IllegalArgumentException("Compte bancaire non trouvé");
+            throw new NotFoundException("Compte bancaire non trouvé");
         }
         return BankAccountDetailMapper.toEntity(dto);
     }
@@ -81,7 +83,7 @@ public class BankAccountBusiness {
     public void deleteBankAccount(String id) {
         BankAccount bankAccount = bankAccountRepository.getBankAccountById(id);
         if (bankAccount == null) {
-            throw new IllegalArgumentException("Compte bancaire non trouvé");
+            throw new NotFoundException("Compte bancaire non trouvé");
         }
 
         bankAccountPivotRepository.deleteAllPivotsByBankAccount(id);
@@ -102,7 +104,7 @@ public class BankAccountBusiness {
     public BankAccountDetailEntity getMyBankAccountById(String userId, String bankAccountId) {
         BankAccountDetail dto = bankAccountRepository.getBankAccountDetailById(bankAccountId);
         if (dto == null) {
-            throw new IllegalArgumentException("Compte bancaire non trouvé");
+            throw new NotFoundException("Compte bancaire non trouvé");
         }
         return BankAccountDetailMapper.toEntity(dto);
     }

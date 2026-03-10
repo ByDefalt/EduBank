@@ -1,9 +1,13 @@
 package com.example.clientAPI.business;
 
 import com.example.clientAPI.entity.BankAccountPivotEntity;
+
 import com.example.clientAPI.mapper.BankAccountPivotMapper;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
+import com.example.clientAPI.repository.BankAccountRepository;
+import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountPivot;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +16,27 @@ import java.util.List;
 public class BankAccountPivotBusiness {
 
     private final BankAccountPivotRepository bankAccountPivotRepository;
+    private final BankAccountRepository bankAccountRepository;
 
-    public BankAccountPivotBusiness(BankAccountPivotRepository bankAccountPivotRepository) {
+    public BankAccountPivotBusiness(BankAccountPivotRepository bankAccountPivotRepository, BankAccountRepository bankAccountRepository) {
         this.bankAccountPivotRepository = bankAccountPivotRepository;
+        this.bankAccountRepository = bankAccountRepository;
     }
 
     public void createLink(BankAccountPivotEntity entity) {
+        BankAccount bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
+        if (bankAccount == null) {
+            throw new NotFoundException("Compte bancaire non trouvé");
+        }
         BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
         bankAccountPivotRepository.createPivot(dto);
     }
 
     public void deleteLink(BankAccountPivotEntity entity) {
+        BankAccount bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
+        if (bankAccount == null) {
+            throw new NotFoundException("Compte bancaire non trouvé");
+        }
         BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
         bankAccountPivotRepository.deletePivot(dto);
     }
@@ -46,6 +60,10 @@ public class BankAccountPivotBusiness {
     }
 
     public List<String> getCoHolderIds(String userId, String bankAccountId) {
+        BankAccount bankAccount = bankAccountRepository.getBankAccountById(bankAccountId);
+        if (bankAccount == null) {
+            throw new NotFoundException("Compte bancaire non trouvé");
+        }
         List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
         if (!accountIds.contains(userId)) {
             throw new SecurityException("Ce compte ne vous appartient pas");

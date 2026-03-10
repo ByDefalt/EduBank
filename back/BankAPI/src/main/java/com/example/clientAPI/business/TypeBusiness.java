@@ -4,6 +4,7 @@ import com.example.clientAPI.entity.TypesEntity;
 import com.example.clientAPI.mapper.TypeMapper;
 import com.example.clientAPI.repository.TypeRepository;
 import dto.bankapi.Type;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class TypeBusiness {
         Type dto = typeRepository.getTypeById(id);
 
         if (dto == null) {
-            throw new IllegalArgumentException("Type non trouvé");
+            throw new NotFoundException("Type non trouvé");
         }
 
         return TypeMapper.toEntity(dto);
