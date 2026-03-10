@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
 
 import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
-import defalt.network.api.operation.model.OperationFilter
 import defalt.network.api.operation.model.OperationList
 import defalt.network.api.operation.model.OperationState
 
@@ -17,18 +16,20 @@ interface OperationApi {
     /**
      * GET operations/account/{accountId}
      * Récupérer les opérations d&#39;un compte
-     * Retourne toutes les opérations liées à un compte source spécifique
+     * 
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountId ID du compte source
-     * @param operationFilter  (optional)
+     * @param accountId 
+     * @param state  (optional)
+     * @param dateFrom  (optional)
+     * @param dateTo  (optional)
      * @return [OperationList]
      */
     @GET("operations/account/{accountId}")
-    suspend fun operationsAccountAccountIdGet(@Path("accountId") accountId: kotlin.String, @Body operationFilter: OperationFilter? = null): Response<OperationList>
+    suspend fun operationsAccountAccountIdGet(@Path("accountId") accountId: kotlin.String, @Query("state") state: OperationState? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationList>
 
     /**
      * GET operations
@@ -38,11 +39,13 @@ interface OperationApi {
      *  - 200: Liste récupérée avec succès
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param operationFilter  (optional)
+     * @param state  (optional)
+     * @param dateFrom  (optional)
+     * @param dateTo  (optional)
      * @return [OperationList]
      */
     @GET("operations")
-    suspend fun operationsGet(@Body operationFilter: OperationFilter? = null): Response<OperationList>
+    suspend fun operationsGet(@Query("state") state: OperationState? = null, @Query("date_from") dateFrom: java.time.OffsetDateTime? = null, @Query("date_to") dateTo: java.time.OffsetDateTime? = null): Response<OperationList>
 
     /**
      * POST operations/{id}/cancel

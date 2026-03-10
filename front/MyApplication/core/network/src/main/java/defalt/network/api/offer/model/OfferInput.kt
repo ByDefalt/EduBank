@@ -32,7 +32,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class OffersPostRequest (
+data class OfferInput (
 
     @SerialName(value = "title")
     val title: kotlin.String,
@@ -41,7 +41,7 @@ data class OffersPostRequest (
     val description: kotlin.String,
 
     @SerialName(value = "state")
-    val state: OffersPostRequest.State,
+    val state: OfferInput.State,
 
     @Contextual @SerialName(value = "start_date")
     val startDate: java.time.LocalDate,

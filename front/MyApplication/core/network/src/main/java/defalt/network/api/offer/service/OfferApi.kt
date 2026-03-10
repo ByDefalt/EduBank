@@ -9,9 +9,7 @@ import kotlinx.serialization.Serializable
 
 import defalt.network.api.offer.model.Error
 import defalt.network.api.offer.model.Offer
-import defalt.network.api.offer.model.OffersIdPutRequest
-import defalt.network.api.offer.model.OffersIdStatePatchRequest
-import defalt.network.api.offer.model.OffersPostRequest
+import defalt.network.api.offer.model.OfferInput
 
 interface OfferApi {
     /**
@@ -95,29 +93,11 @@ interface OfferApi {
      *  - 403: Accès interdit - Permissions insuffisantes
      *
      * @param id 
-     * @param offersIdPutRequest 
+     * @param offerInput 
      * @return [Offer]
      */
     @PUT("offers/{id}")
-    suspend fun offersIdPut(@Path("id") id: kotlin.Int, @Body offersIdPutRequest: OffersIdPutRequest): Response<Offer>
-
-    /**
-     * PATCH offers/{id}/state
-     * Changer l&#39;état d&#39;une offre
-     * Use Case 12: Changer l&#39;état d&#39;une offre (Administrateur)
-     * Responses:
-     *  - 200: État modifié avec succès
-     *  - 404: Ressource non trouvée
-     *  - 400: Requête invalide
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
-     *  - 403: Accès interdit - Permissions insuffisantes
-     *
-     * @param id 
-     * @param offersIdStatePatchRequest 
-     * @return [Offer]
-     */
-    @PATCH("offers/{id}/state")
-    suspend fun offersIdStatePatch(@Path("id") id: kotlin.Int, @Body offersIdStatePatchRequest: OffersIdStatePatchRequest): Response<Offer>
+    suspend fun offersIdPut(@Path("id") id: kotlin.Int, @Body offerInput: OfferInput): Response<Offer>
 
     /**
      * POST offers
@@ -129,10 +109,10 @@ interface OfferApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param offersPostRequest 
+     * @param offerInput 
      * @return [Offer]
      */
     @POST("offers")
-    suspend fun offersPost(@Body offersPostRequest: OffersPostRequest): Response<Offer>
+    suspend fun offersPost(@Body offerInput: OfferInput): Response<Offer>
 
 }

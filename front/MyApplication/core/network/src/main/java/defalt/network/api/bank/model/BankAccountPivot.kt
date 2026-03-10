@@ -21,16 +21,20 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
 
 /**
- * 
+ * Lien compte-utilisateur (co-titulaire)
  *
- * @param sold 
+ * @param bankAccountId 
+ * @param accountId 
  */
 @Serializable
 
-data class BankAccountsIdBalanceGet200Response (
+data class BankAccountPivot (
 
-    @SerialName(value = "sold")
-    val sold: kotlin.Double? = null
+    @SerialName(value = "bank_account_id")
+    val bankAccountId: kotlin.String,
+
+    @SerialName(value = "account_id")
+    val accountId: kotlin.String
 
 ) {
 

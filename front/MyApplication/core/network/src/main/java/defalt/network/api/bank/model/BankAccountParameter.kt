@@ -15,6 +15,7 @@
 
 package defalt.network.api.bank.model
 
+import defalt.network.api.bank.model.State
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -23,38 +24,25 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id Identifiant des paramètres
- * @param overdraftLimit Limite de découvert autorisé
- * @param state État des paramètres
+ * @param id 
+ * @param overdraftLimit 
+ * @param state 
  */
 @Serializable
 
 data class BankAccountParameter (
 
-    /* Identifiant des paramètres */
     @SerialName(value = "id")
-    val id: kotlin.Int,
+    val id: kotlin.Int? = null,
 
-    /* Limite de découvert autorisé */
     @SerialName(value = "overdraft_limit")
-    val overdraftLimit: kotlin.Double,
+    val overdraftLimit: kotlin.Double? = null,
 
-    /* État des paramètres */
-    @SerialName(value = "state")
-    val state: BankAccountParameter.State
+    @Contextual @SerialName(value = "state")
+    val state: State? = null
 
 ) {
 
-    /**
-     * État des paramètres
-     *
-     * Values: ACTIVE,INACTIVE
-     */
-    @Serializable
-    enum class State(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive");
-    }
 
 }
 

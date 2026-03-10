@@ -7,16 +7,16 @@ import defalt.domain.entity.bank.BankAccountParameter as BankAccountParameterEnt
 import defalt.domain.entity.bank.State as StateEntity
 import defalt.domain.entity.bank.Type as TypeEntity
 import defalt.network.api.bank.model.BankAccount as BankAccountDto
-import defalt.network.api.bank.model.BankAccountDetails as BankAccountDetailsDto
+import defalt.network.api.bank.model.BankAccountCreateRequest as BankAccountCreateRequestDto
+import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailDto
 import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
-import defalt.network.api.bank.model.BankAccountsPostRequest as BankAccountsPostRequestDto
-import defalt.network.api.bank.model.ParametersIdPutRequest as ParametersIdPutRequestDto
+import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
 
 // ── BankAccount ───────────────────────────────────────────────────────────────
 
 fun BankAccountDto.toEntity(): BankAccountEntity = BankAccountEntity(
-    id = this.id.toString(),
+    id = this.id,
     parameterId = this.parameterId,
     typeId = this.typeId,
     sold = this.sold,
@@ -24,58 +24,56 @@ fun BankAccountDto.toEntity(): BankAccountEntity = BankAccountEntity(
 )
 
 fun BankAccountEntity.toDto(): BankAccountDto = BankAccountDto(
-    id = this.id?.toIntOrNull() ?: 0,
-    parameterId = this.parameterId ?: 0,
-    typeId = this.typeId ?: 0,
-    sold = this.sold ?: 0.0,
-    iban = this.iban ?: "",
+    id = this.id,
+    parameterId = this.parameterId,
+    typeId = this.typeId,
+    sold = this.sold,
+    iban = this.iban,
 )
 
 @JvmName("bankAccountListToEntity")
 fun List<BankAccountDto>.toEntity(): List<BankAccountEntity> = this.map { it.toEntity() }
 
-// ── BankAccountDetails → BankAccountDetail ───────────────────────────────────
+// ── BankAccountDetail ─────────────────────────────────────────────────────────
 
-fun BankAccountDetailsDto.toEntity(): BankAccountDetailEntity = BankAccountDetailEntity(
-    id = this.id.toString(),
+fun BankAccountDetailDto.toEntity(): BankAccountDetailEntity = BankAccountDetailEntity(
+    id = this.id,
     parameter = this.parameter?.toEntity(),
     type = this.type?.toEntity(),
     sold = this.sold,
     iban = this.iban,
 )
 
-fun BankAccountDetailEntity.toDto(): BankAccountDetailsDto = BankAccountDetailsDto(
-    id = this.id?.toIntOrNull() ?: 0,
-    parameterId = this.parameter?.id ?: 0,
-    typeId = this.type?.id ?: 0,
-    sold = this.sold ?: 0.0,
-    iban = this.iban ?: "",
+fun BankAccountDetailEntity.toDto(): BankAccountDetailDto = BankAccountDetailDto(
+    id = this.id,
     parameter = this.parameter?.toDto(),
     type = this.type?.toDto(),
+    sold = this.sold,
+    iban = this.iban,
 )
 
-@JvmName("bankAccountDetailsListToEntity")
-fun List<BankAccountDetailsDto>.toEntity(): List<BankAccountDetailEntity> = this.map { it.toEntity() }
+fun BankAccountDetailDto.toBankAccountEntity(): BankAccountEntity = BankAccountEntity(
+    id = this.id,
+    parameterId = this.parameter?.id,
+    typeId = this.type?.id,
+    sold = this.sold,
+    iban = this.iban,
+)
 
-@JvmName("bankAccountDetailsListToBankAccountEntity")
-fun List<BankAccountDetailsDto>.toBankAccountEntity(): List<BankAccountEntity> = this.map {
-    BankAccountEntity(
-        id = it.id.toString(),
-        parameterId = it.parameterId,
-        typeId = it.typeId,
-        sold = it.sold,
-        iban = it.iban,
-    )
-}
+@JvmName("bankAccountDetailListToEntity")
+fun List<BankAccountDetailDto>.toEntity(): List<BankAccountDetailEntity> = this.map { it.toEntity() }
+
+@JvmName("bankAccountDetailListToBankAccountEntity")
+fun List<BankAccountDetailDto>.toBankAccountEntity(): List<BankAccountEntity> = this.map { it.toBankAccountEntity() }
 
 // ── BankAccountCreateRequest ──────────────────────────────────────────────────
 
-fun BankAccountCreateRequestEntity.toDto(): BankAccountsPostRequestDto = BankAccountsPostRequestDto(
-    parameterId = 0, // sera géré côté serveur
+fun BankAccountCreateRequestEntity.toDto(): BankAccountCreateRequestDto = BankAccountCreateRequestDto(
     typeId = this.typeId,
-    sold = this.sold,
     iban = this.iban,
-    accountId = 0, // fourni séparément lors de l'appel
+    sold = this.sold,
+    overdraftLimit = this.overdraftLimit,
+    state = this.state?.toDto(),
 )
 
 // ── BankAccountParameter ──────────────────────────────────────────────────────
@@ -83,39 +81,29 @@ fun BankAccountCreateRequestEntity.toDto(): BankAccountsPostRequestDto = BankAcc
 fun BankAccountParameterDto.toEntity(): BankAccountParameterEntity = BankAccountParameterEntity(
     id = this.id,
     overdraftLimit = this.overdraftLimit,
-    state = this.state.toEntity(),
+    state = this.state?.toEntity(),
 )
 
 fun BankAccountParameterEntity.toDto(): BankAccountParameterDto = BankAccountParameterDto(
-    id = this.id ?: 0,
-    overdraftLimit = this.overdraftLimit ?: 0.0,
-    state = this.state?.toDto() ?: BankAccountParameterDto.State.ACTIVE,
-)
-
-fun BankAccountParameterEntity.toParametersIdPutRequestDto(): ParametersIdPutRequestDto = ParametersIdPutRequestDto(
+    id = this.id,
     overdraftLimit = this.overdraftLimit,
-    state = this.state?.toParameterState(),
+    state = this.state?.toDto(),
 )
 
-// ── BankAccountParameter.State ↔ StateEntity ─────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────────────────
 
-fun BankAccountParameterDto.State.toEntity(): StateEntity = when (this) {
-    BankAccountParameterDto.State.ACTIVE -> StateEntity.ACTIVE
-    BankAccountParameterDto.State.INACTIVE -> StateEntity.INACTIVE
+fun StateDto.toEntity(): StateEntity = when (this) {
+    StateDto.ACTIVE -> StateEntity.ACTIVE
+    StateDto.INACTIVE -> StateEntity.INACTIVE
+    StateDto.BLOQUED -> StateEntity.BLOQUED
+    StateDto.CLOSED -> StateEntity.CLOSED
 }
 
-fun StateEntity.toDto(): BankAccountParameterDto.State = when (this) {
-    StateEntity.ACTIVE -> BankAccountParameterDto.State.ACTIVE
-    StateEntity.INACTIVE -> BankAccountParameterDto.State.INACTIVE
-    StateEntity.BLOQUED -> BankAccountParameterDto.State.INACTIVE
-    StateEntity.CLOSED -> BankAccountParameterDto.State.INACTIVE
-}
-
-fun StateEntity.toParameterState(): ParametersIdPutRequestDto.State = when (this) {
-    StateEntity.ACTIVE -> ParametersIdPutRequestDto.State.ACTIVE
-    StateEntity.INACTIVE -> ParametersIdPutRequestDto.State.INACTIVE
-    StateEntity.BLOQUED -> ParametersIdPutRequestDto.State.INACTIVE
-    StateEntity.CLOSED -> ParametersIdPutRequestDto.State.INACTIVE
+fun StateEntity.toDto(): StateDto = when (this) {
+    StateEntity.ACTIVE -> StateDto.ACTIVE
+    StateEntity.INACTIVE -> StateDto.INACTIVE
+    StateEntity.BLOQUED -> StateDto.BLOQUED
+    StateEntity.CLOSED -> StateDto.CLOSED
 }
 
 // ── Type ──────────────────────────────────────────────────────────────────────
@@ -126,6 +114,8 @@ fun TypeDto.toEntity(): TypeEntity = TypeEntity(
 )
 
 fun TypeEntity.toDto(): TypeDto = TypeDto(
-    id = this.id ?: 0,
-    name = this.name ?: "",
+    id = this.id,
+    name = this.name,
 )
+
+

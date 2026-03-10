@@ -23,20 +23,18 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id Identifiant du type
- * @param name Nom du type
+ * @param id 
+ * @param name 
  */
 @Serializable
 
 data class Type (
 
-    /* Identifiant du type */
     @SerialName(value = "id")
-    val id: kotlin.Int,
+    val id: kotlin.Int? = null,
 
-    /* Nom du type */
     @SerialName(value = "name")
-    val name: kotlin.String
+    val name: kotlin.String? = null
 
 ) {
 
