@@ -8,4 +8,12 @@ sealed class NetworkResult<out T> {
     ) : NetworkResult<Nothing>()
 
     data class Exception(val throwable: Throwable) : NetworkResult<Nothing>()
+
+    override fun toString(): String {
+        return when (this) {
+            is Success -> "Success[data=$data]"
+            is Error -> "Error[code=$code, message=$message]"
+            is Exception -> "Exception[throwable=$throwable]"
+        }
+    }
 }

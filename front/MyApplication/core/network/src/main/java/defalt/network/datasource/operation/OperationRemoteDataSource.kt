@@ -29,10 +29,10 @@ class OperationRemoteDataSource(
         val stateDto = state?.toDto()
         return if (accountSourceId != null) {
             safeApiCall { operationApi.operationsAccountAccountIdGet(accountSourceId, stateDto, dateFrom, dateTo) }
-                .map { it.data?.toEntity() ?: emptyList() }
+                .map { it.toEntity() }
         } else {
             safeApiCall { operationApi.operationsGet(stateDto, dateFrom, dateTo) }
-                .map { it.data?.toEntity() ?: emptyList() }
+                .map { it.toEntity() }
         }
     }
 
@@ -56,11 +56,11 @@ class OperationRemoteDataSource(
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
         safeApiCall { beneficiaryApi.beneficiariesGet() }
-            .map { it.data?.toEntity() ?: emptyList() }
+            .map { it.toEntity() }
 
     override suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>> =
         safeApiCall { beneficiaryApi.beneficiariesAccountIdGet(accountId) }
-            .map { it.data?.toEntity() ?: emptyList() }
+            .map { it.toEntity() }
 
     override suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary> =
         safeApiCall { beneficiaryApi.beneficiariesPost(beneficiary.toDto()) }

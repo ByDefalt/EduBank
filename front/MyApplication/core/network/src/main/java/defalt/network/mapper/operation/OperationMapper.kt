@@ -4,7 +4,9 @@ import defalt.domain.entity.operation.Beneficiary as BeneficiaryEntity
 import defalt.domain.entity.operation.Operation as OperationEntity
 import defalt.domain.entity.operation.OperationState as OperationStateEntity
 import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
+import defalt.network.api.operation.model.BeneficiaryList as BeneficiaryListDto
 import defalt.network.api.operation.model.Operation as OperationDto
+import defalt.network.api.operation.model.OperationList as OperationListDto
 import defalt.network.api.operation.model.OperationState as OperationStateDto
 
 // ── Beneficiary ───────────────────────────────────────────────────────────────
@@ -25,6 +27,8 @@ fun BeneficiaryEntity.toDto(): BeneficiaryDto = BeneficiaryDto(
 
 @JvmName("beneficiaryListToEntity")
 fun List<BeneficiaryDto>.toEntity(): List<BeneficiaryEntity> = this.map { it.toEntity() }
+
+fun BeneficiaryListDto.toEntity(): List<BeneficiaryEntity> = this.data?.toEntity() ?: emptyList()
 
 // ── Operation ─────────────────────────────────────────────────────────────────
 
@@ -49,6 +53,8 @@ fun OperationEntity.toDto(): OperationDto = OperationDto(
 )
 
 fun List<OperationDto>.toEntity(): List<OperationEntity> = this.map { it.toEntity() }
+
+fun OperationListDto.toEntity(): List<OperationEntity> = this.data?.toEntity() ?: emptyList()
 
 // ── OperationState (enum) ─────────────────────────────────────────────────────
 

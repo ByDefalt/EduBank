@@ -1,6 +1,7 @@
 package defalt.network.utils
 
 import defalt.utils.NetworkResult
+import org.json.JSONObject
 import retrofit2.Response
 
 suspend fun <T> safeApiCall(
@@ -16,10 +17,14 @@ suspend fun <T> safeApiCall(
                 NetworkResult.Error(response.code(), "Empty body")
             }
         } else {
-            NetworkResult.Error(
-                response.code(),
-                response.errorBody()?.string() ?: "Unknown error",
-            )
+            val raw = response.errorBody()?.string()
+            val message = when {
+                response.code() >= 500 -> "Une erreur serveur s'est produite. Réessayez plus tard."
+                else -> raw?.let {
+                    runCatching { JSONObject(it).getString("message") }.getOrNull()
+                } ?: raw ?: "Unknown error"
+            }
+            NetworkResult.Error(response.code(), message)
         }
     } catch (e: Throwable) {
         NetworkResult.Exception(e)
