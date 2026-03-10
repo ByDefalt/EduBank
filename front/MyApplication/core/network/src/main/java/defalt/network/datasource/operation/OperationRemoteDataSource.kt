@@ -8,10 +8,14 @@ import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
 import defalt.network.mapper.operation.toEntity
+import defalt.network.api.operation.model.BeneficiaryList
 import defalt.network.utils.safeApiCall
+import defalt.network.utils.safeApiCallList
 import defalt.utils.NetworkResult
 import defalt.utils.map
 import java.time.OffsetDateTime
+
+private val emptyBeneficiaryList = BeneficiaryList(data = emptyList())
 
 class OperationRemoteDataSource(
     private val operationApi: OperationApi,
@@ -55,11 +59,11 @@ class OperationRemoteDataSource(
     // --- BÉNÉFICIAIRES ---
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
-        safeApiCall { beneficiaryApi.beneficiariesGet() }
+        safeApiCallList({ beneficiaryApi.beneficiariesGet() }, emptyBeneficiaryList)
             .map { it.toEntity() }
 
     override suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>> =
-        safeApiCall { beneficiaryApi.beneficiariesAccountIdGet(accountId) }
+        safeApiCallList({ beneficiaryApi.beneficiariesAccountIdGet(accountId) }, emptyBeneficiaryList)
             .map { it.toEntity() }
 
     override suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary> =

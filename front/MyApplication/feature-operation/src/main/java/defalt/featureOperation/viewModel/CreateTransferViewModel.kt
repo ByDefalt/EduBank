@@ -33,7 +33,11 @@ data class DebitStepData(
 data class ReceiverStepData(
     val accounts: List<BankAccount>,
     val beneficiaries: List<Beneficiary>,
-)
+    val sourceAccountId: String? = null,
+) {
+    val filteredAccounts: List<BankAccount>
+        get() = accounts.filter { it.id != sourceAccountId }
+}
 
 // ── ViewModel partagé pour tout le wizard de création de virement ─────────────
 
@@ -77,6 +81,7 @@ class CreateTransferViewModel(
 
     fun selectSourceAccount(account: BankAccount) {
         _form.update { it.copy(sourceAccount = account) }
+        loadReceiverData()
     }
 
     // ── Étape 2 : destinataire ────────────────────────────────────────────────
@@ -84,7 +89,6 @@ class CreateTransferViewModel(
     fun retryReceiver() = loadReceiverData()
 
     private fun loadReceiverData() {
-        // Lance les deux appels et combine les résultats
         launchWithUiState(
             stateFlow = _receiverUiState,
             transform = { it },
@@ -111,6 +115,7 @@ class CreateTransferViewModel(
                 ReceiverStepData(
                     accounts = accountsResult.data,
                     beneficiaries = beneficiariesResult.data,
+                    sourceAccountId = _form.value.sourceAccount?.id,
                 ),
             )
         }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -199,13 +200,19 @@ internal fun CreateTransferReceiverContent(
                             Spacer(modifier = Modifier.height(4.dp))
                         }
 
-                        items(data.accounts, key = { it.id ?: "" }) { account ->
-                            ReceiverAccountCard(
-                                account = account,
-                                label = typeNames[account.typeId] ?: "COMPTE",
-                                onClick = { onAccountSelected(account) },
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
+                        if (data.filteredAccounts.isEmpty()) {
+                            item {
+                                EmptyListMessage(message = "Aucun autre compte disponible pour ce virement.")
+                            }
+                        } else {
+                            items(data.filteredAccounts, key = { it.id ?: "" }) { account ->
+                                ReceiverAccountCard(
+                                    account = account,
+                                    label = typeNames[account.typeId] ?: "COMPTE",
+                                    onClick = { onAccountSelected(account) },
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                            }
                         }
                     } else {
                         // ── Onglet Bénéficiaire ──────────────────────────────
@@ -220,12 +227,18 @@ internal fun CreateTransferReceiverContent(
                             Spacer(modifier = Modifier.height(4.dp))
                         }
 
-                        items(data.beneficiaries, key = { it.id ?: it.name }) { beneficiary ->
-                            ReceiverBeneficiaryCard(
-                                beneficiary = beneficiary,
-                                onClick = { onBeneficiarySelected(beneficiary) },
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
+                        if (data.beneficiaries.isEmpty()) {
+                            item {
+                                EmptyListMessage(message = "Aucun bénéficiaire enregistré.\nAjoutez-en un depuis la liste des bénéficiaires.")
+                            }
+                        } else {
+                            items(data.beneficiaries, key = { it.id ?: it.name }) { beneficiary ->
+                                ReceiverBeneficiaryCard(
+                                    beneficiary = beneficiary,
+                                    onClick = { onBeneficiarySelected(beneficiary) },
+                                )
+                                Spacer(modifier = Modifier.height(6.dp))
+                            }
                         }
                     }
 
@@ -344,6 +357,32 @@ private fun ReceiverBeneficiaryCard(
                 modifier = Modifier.size(24.dp),
             )
         }
+    }
+}
+
+// ── Message liste vide ────────────────────────────────────────────────────────
+
+@Composable
+private fun EmptyListMessage(message: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Default.Info,
+            contentDescription = null,
+            tint = TextSecondary,
+            modifier = Modifier.size(36.dp),
+        )
+        Text(
+            text = message,
+            color = TextSecondary,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

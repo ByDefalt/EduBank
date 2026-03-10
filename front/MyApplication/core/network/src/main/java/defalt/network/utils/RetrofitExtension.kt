@@ -17,16 +17,35 @@ suspend fun <T> safeApiCall(
                 NetworkResult.Error(response.code(), "Empty body")
             }
         } else {
-            val raw = response.errorBody()?.string()
-            val message = when {
-                response.code() >= 500 -> "Une erreur serveur s'est produite. Réessayez plus tard."
-                else -> raw?.let {
-                    runCatching { JSONObject(it).getString("message") }.getOrNull()
-                } ?: raw ?: "Unknown error"
-            }
-            NetworkResult.Error(response.code(), message)
+            NetworkResult.Error(response.code(), parseErrorMessage(response))
         }
     } catch (e: Throwable) {
         NetworkResult.Exception(e)
+    }
+}
+
+/**
+ * Variante pour les endpoints retournant une liste.
+ * Un 404 est traité comme un succès avec liste vide plutôt qu'une erreur.
+ */
+suspend fun <T> safeApiCallList(
+    call: suspend () -> Response<T>,
+    emptyValue: T,
+): NetworkResult<T> {
+    val result = safeApiCall(call)
+    return if (result is NetworkResult.Error && result.code == 404) {
+        NetworkResult.Success(emptyValue)
+    } else {
+        result
+    }
+}
+
+private fun parseErrorMessage(response: Response<*>): String {
+    val raw = response.errorBody()?.string()
+    return when {
+        response.code() >= 500 -> "Une erreur serveur s'est produite. Réessayez plus tard."
+        else -> raw?.let {
+            runCatching { JSONObject(it).getString("message") }.getOrNull()
+        } ?: raw ?: "Unknown error"
     }
 }
