@@ -20,8 +20,8 @@ class GetAccountDetailsAndOperation(
     private val session: Session,
     private val logger: Logger,
 ) {
-    suspend operator fun invoke(): NetworkResult<AccountDetailsAndOperation> {
-        val detailResult = bankRepository.getMyBankAccountById(session.accountId!!)
+    suspend operator fun invoke(bankAccountId: String): NetworkResult<AccountDetailsAndOperation> {
+        val detailResult = bankRepository.getMyBankAccountById(bankAccountId)
         if (detailResult is NetworkResult.Error) {
             logger.error("GetAccountDetailsAndOperation - Erreur détail compte ${session.accountId} : ${detailResult.message}")
             return NetworkResult.Error(detailResult.code, detailResult.message)

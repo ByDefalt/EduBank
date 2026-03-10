@@ -31,18 +31,15 @@ class AccountDetailsViewModel(
 
     fun retry() = loadData()
 
-    private fun loadData() = launchWithUiState(stateFlow = _uiState, transform = { it }) {
-        getAccountDetailsAndOperation().let { result ->
-            when (result) {
-                is defalt.utils.NetworkResult.Success -> defalt.utils.NetworkResult.Success(
-                    AccountDetailsData(
-                        account = result.data.accountDetail,
-                        operations = result.data.operations,
-                    ),
-                )
-                is defalt.utils.NetworkResult.Error -> result
-                is defalt.utils.NetworkResult.Exception -> result
-            }
-        }
+    private fun loadData() = launchWithUiState(
+        stateFlow = _uiState,
+        transform = { result ->
+            AccountDetailsData(
+                account = result.accountDetail,
+                operations = result.operations,
+            )
+        },
+    ) {
+        getAccountDetailsAndOperation(currentAccountId)
     }
 }
