@@ -8,6 +8,7 @@ import com.example.clientAPI.repository.BankAccountRepository;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountParameter;
 import dto.bankapi.State;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 
@@ -41,7 +42,7 @@ public class BankAccountParameterBusiness {
     public void updateParametersByBankAccountId(String bankAccountId, BankAccountParameterEntity parameterEntity) {
         BankAccount bankAccount = bankAccountRepository.getBankAccountById(bankAccountId);
         if (bankAccount == null) {
-            throw new IllegalArgumentException("Compte bancaire non trouvé");
+            throw new NotFoundException("Compte bancaire non trouvé");
         }
 
         if (parameterEntity.getOverdraftLimit() != null && parameterEntity.getOverdraftLimit() < 0) {

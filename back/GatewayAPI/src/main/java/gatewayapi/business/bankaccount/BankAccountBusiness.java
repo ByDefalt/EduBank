@@ -3,6 +3,7 @@ package gatewayapi.business.bankaccount;
 import dto.bankapiswagger.*;
 import gatewayapi.repository.bankaccount.BankAccountRepository;
 import gatewayapi.repository.bankaccount.BankAccountPivotRepository;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,6 +64,11 @@ public class BankAccountBusiness {
 
     private void checkOwnership(String userId, String bankAccountId) {
         List<BankAccountPivot> pivots = bankAccountPivotRepository.getPivotsByBankAccount(bankAccountId);
+
+        if (pivots.isEmpty()) {
+            throw new NotFoundException("Compte bancaire non trouvé");
+        }
+
         boolean owns = pivots.stream()
                 .anyMatch(pivot -> userId.equals(pivot.getAccountId()));
         if (!owns) {
