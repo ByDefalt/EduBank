@@ -8,9 +8,10 @@ import defalt.domain.entity.offer.OffersPostRequest
 import defalt.network.api.offer.service.OfferApi
 import defalt.network.mapper.offer.toDto
 import defalt.network.mapper.offer.toEntity
-import defalt.network.utils.safeApiCall
+import defalt.network.mapper.offer.toOfferInputDto
 import defalt.utils.NetworkResult
 import defalt.utils.map
+import defalt.network.utils.safeApiCall
 
 class OfferRemoteDataSource(
     private val offerApi: OfferApi,
@@ -50,10 +51,19 @@ class OfferRemoteDataSource(
         safeApiCall { offerApi.offersIdPut(id, request.toDto()) }
             .map { it.toEntity() }
 
-    override suspend fun patchOfferState(id: Int, request: OffersIdStatePatchRequest): NetworkResult<Offer> =
-        safeApiCall { offerApi.offersIdStatePatch(id, request.toDto()) }
+    override suspend fun patchOfferState(id: Int, request: OffersIdStatePatchRequest): NetworkResult<Offer> {
+        // L'API ne dispose plus d'un endpoint PATCH state ; on récupère l'offre courante puis on fait un PUT
+        val existingResult = safeApiCall { offerApi.offersIdGet(id) }
+        if (existingResult is NetworkResult.Error) return NetworkResult.Error(existingResult.code, existingResult.message)
+        if (existingResult is NetworkResult.Exception) return NetworkResult.Exception(existingResult.throwable)
+        val existing = (existingResult as NetworkResult.Success).data.toEntity()
+        val body = request.toOfferInputDto(existing)
+        return safeApiCall { offerApi.offersIdPut(id, body) }
             .map { it.toEntity() }
+    }
 
     override suspend fun deleteOffer(id: Int): NetworkResult<Unit> =
         safeApiCall { offerApi.offersIdDelete(id) }
 }
+
+

@@ -4,7 +4,6 @@ import defalt.domain.datasource.operation.IOperationRemoteDataSource
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
-import defalt.network.api.operation.model.OperationFilter
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
@@ -28,16 +27,11 @@ class OperationRemoteDataSource(
         dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> {
         val stateDto = state?.toDto()
-        val filter = OperationFilter(
-            state = stateDto,
-            dateFrom = dateFrom,
-            dateTo = dateTo,
-        )
         return if (accountSourceId != null) {
-            safeApiCall { operationApi.operationsAccountAccountIdGet(accountSourceId, filter) }
+            safeApiCall { operationApi.operationsAccountAccountIdGet(accountSourceId, stateDto, dateFrom, dateTo) }
                 .map { it.data?.toEntity() ?: emptyList() }
         } else {
-            safeApiCall { operationApi.operationsGet(filter) }
+            safeApiCall { operationApi.operationsGet(stateDto, dateFrom, dateTo) }
                 .map { it.data?.toEntity() ?: emptyList() }
         }
     }
@@ -79,3 +73,5 @@ class OperationRemoteDataSource(
     override suspend fun deleteBeneficiary(id: Int): NetworkResult<Unit> =
         safeApiCall { beneficiaryApi.beneficiariesIdDelete(id) }
 }
+
+
