@@ -103,4 +103,3 @@ class SafeApiCallTest {
         assertTrue(result is NetworkResult.Exception)
     }
 }
-

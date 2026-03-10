@@ -23,8 +23,13 @@ class BankRepositoryTest {
     private lateinit var repository: BankRepository
 
     private val fakeAccount = BankAccount(id = "bank-001", sold = 1000.0, iban = "FR76...", typeId = 1)
-    private val fakeDetail = BankAccountDetail(id = "bank-001", sold = 1000.0, iban = "FR76...",
-        type = Type(1, "CHEQUES"), parameter = BankAccountParameter(1, 500.0, State.ACTIVE))
+    private val fakeDetail = BankAccountDetail(
+        id = "bank-001",
+        sold = 1000.0,
+        iban = "FR76...",
+        type = Type(1, "CHEQUES"),
+        parameter = BankAccountParameter(1, 500.0, State.ACTIVE),
+    )
 
     @Before fun setUp() { repository = BankRepository(dataSource) }
 

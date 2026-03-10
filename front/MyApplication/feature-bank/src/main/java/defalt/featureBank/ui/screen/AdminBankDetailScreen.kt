@@ -32,8 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.Type as BankAccountType
 import defalt.domain.entity.bank.State
+import defalt.domain.entity.bank.Type as BankAccountType
 import defalt.featureBank.viewModel.AdminBankDetailViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoCard
@@ -97,7 +97,6 @@ fun AdminBankDetailScreen(
 
                 // ── Modification complète ──────────────────────────────────
                 ArkeoCard(title = "MODIFIER LE COMPTE") {
-
                     // Dropdown Type (données depuis l'API)
                     when (val ts = typesState) {
                         is UiState.Loading -> Box(

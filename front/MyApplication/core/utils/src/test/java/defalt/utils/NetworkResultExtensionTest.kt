@@ -103,4 +103,3 @@ class NetworkResultExtensionTest {
         assertEquals(403, (mapped as NetworkResult.Error).code)
     }
 }
-

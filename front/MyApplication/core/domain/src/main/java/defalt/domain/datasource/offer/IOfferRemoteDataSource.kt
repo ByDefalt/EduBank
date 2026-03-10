@@ -22,7 +22,7 @@ interface IOfferRemoteDataSource {
      */
     suspend fun getOffers(
         state: Offer.State? = null,
-        activeOnly: Boolean? = null
+        activeOnly: Boolean? = null,
     ): NetworkResult<List<Offer>>
 
     /**
@@ -30,7 +30,6 @@ interface IOfferRemoteDataSource {
      * Correspond à GET offers/{id}
      */
     suspend fun getOfferById(id: Int): NetworkResult<Offer>
-
 
     // --- GESTION (Admin uniquement) ---
 

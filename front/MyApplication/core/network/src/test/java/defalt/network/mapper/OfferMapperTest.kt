@@ -16,11 +16,15 @@ class OfferMapperTest {
     // ── Offer.State enum ─────────────────────────────────────────────────────
 
     @Test fun `OfferDto State ACTIVE to entity`() = assertEquals(OfferEntity.State.ACTIVE, OfferDto.State.ACTIVE.toEntity())
+
     @Test fun `OfferDto State INACTIVE to entity`() = assertEquals(OfferEntity.State.INACTIVE, OfferDto.State.INACTIVE.toEntity())
+
     @Test fun `OfferDto State EXPIRED to entity`() = assertEquals(OfferEntity.State.EXPIRED, OfferDto.State.EXPIRED.toEntity())
 
     @Test fun `OfferEntity State ACTIVE to dto`() = assertEquals(OfferDto.State.ACTIVE, OfferEntity.State.ACTIVE.toDto())
+
     @Test fun `OfferEntity State INACTIVE to dto`() = assertEquals(OfferDto.State.INACTIVE, OfferEntity.State.INACTIVE.toDto())
+
     @Test fun `OfferEntity State EXPIRED to dto`() = assertEquals(OfferDto.State.EXPIRED, OfferEntity.State.EXPIRED.toDto())
 
     @Test fun `roundtrip Offer State entity-dto-entity`() {
@@ -30,8 +34,15 @@ class OfferMapperTest {
     // ── Offer ────────────────────────────────────────────────────────────────
 
     @Test fun `OfferDto toEntity maps all fields`() {
-        val dto = OfferDto(id = 1, title = "Titre", description = "Desc",
-            state = OfferDto.State.ACTIVE, startDate = today, endDate = nextMonth, picturePath = "/img.png")
+        val dto = OfferDto(
+            id = 1,
+            title = "Titre",
+            description = "Desc",
+            state = OfferDto.State.ACTIVE,
+            startDate = today,
+            endDate = nextMonth,
+            picturePath = "/img.png",
+        )
         val entity = dto.toEntity()
         assertEquals(1, entity.id)
         assertEquals("Titre", entity.title)
@@ -43,22 +54,42 @@ class OfferMapperTest {
     }
 
     @Test fun `OfferDto toEntity with null picturePath`() {
-        val dto = OfferDto(id = 1, title = "T", description = "D",
-            state = OfferDto.State.INACTIVE, startDate = today, endDate = nextMonth, picturePath = null)
+        val dto = OfferDto(
+            id = 1,
+            title = "T",
+            description = "D",
+            state = OfferDto.State.INACTIVE,
+            startDate = today,
+            endDate = nextMonth,
+            picturePath = null,
+        )
         assertNull(dto.toEntity().picturePath)
     }
 
     @Test fun `OfferEntity toDto maps all fields`() {
-        val entity = OfferEntity(id = 2, title = "Test", description = "D",
-            state = OfferEntity.State.EXPIRED, startDate = today, endDate = nextMonth)
+        val entity = OfferEntity(
+            id = 2,
+            title = "Test",
+            description = "D",
+            state = OfferEntity.State.EXPIRED,
+            startDate = today,
+            endDate = nextMonth,
+        )
         val dto = entity.toDto()
         assertEquals(2, dto.id)
         assertEquals(OfferDto.State.EXPIRED, dto.state)
     }
 
     @Test fun `roundtrip Offer dto-entity-dto`() {
-        val dto = OfferDto(id = 1, title = "T", description = "D",
-            state = OfferDto.State.ACTIVE, startDate = today, endDate = nextMonth, picturePath = null)
+        val dto = OfferDto(
+            id = 1,
+            title = "T",
+            description = "D",
+            state = OfferDto.State.ACTIVE,
+            startDate = today,
+            endDate = nextMonth,
+            picturePath = null,
+        )
         assertEquals(dto, dto.toEntity().toDto())
     }
 
@@ -77,9 +108,12 @@ class OfferMapperTest {
 
     @Test fun `OffersPostRequestEntity toDto maps all fields`() {
         val entity = OffersPostRequestEntity(
-            title = "Titre", description = "Desc",
+            title = "Titre",
+            description = "Desc",
             state = OffersPostRequestEntity.State.ACTIVE,
-            startDate = today, endDate = nextMonth, picturePath = null,
+            startDate = today,
+            endDate = nextMonth,
+            picturePath = null,
         )
         val dto = entity.toDto()
         // dto is OfferInputDto
@@ -102,9 +136,12 @@ class OfferMapperTest {
 
     @Test fun `OffersIdPutRequestEntity toDto maps all fields`() {
         val entity = OffersIdPutRequestEntity(
-            title = "Nouveau", description = "Desc",
+            title = "Nouveau",
+            description = "Desc",
             state = OffersIdPutRequestEntity.State.ACTIVE,
-            startDate = today, endDate = nextMonth, picturePath = null,
+            startDate = today,
+            endDate = nextMonth,
+            picturePath = null,
         )
         val dto = entity.toDto()
         assertEquals("Nouveau", dto.title)

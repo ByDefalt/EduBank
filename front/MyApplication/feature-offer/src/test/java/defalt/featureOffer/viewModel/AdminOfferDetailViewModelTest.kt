@@ -98,4 +98,3 @@ class AdminOfferDetailViewModelTest {
         assertTrue(!called)
     }
 }
-

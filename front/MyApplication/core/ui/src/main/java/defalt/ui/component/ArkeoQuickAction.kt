@@ -39,4 +39,3 @@ fun ArkeoQuickAction(
         Text(text = label, fontSize = 11.sp, color = CustomColor.TextSecondary)
     }
 }
-

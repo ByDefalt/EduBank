@@ -27,8 +27,8 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -223,7 +223,6 @@ internal fun AccountDetailsContent(
         }
     }
 }
-
 
 @Composable
 private fun AccountSummaryCard(account: BankAccountDetail) {
@@ -420,7 +419,6 @@ private fun OperationRow(operation: Operation, showFullLabel: Boolean) {
         )
     }
 }
-
 
 private fun formatAmount(value: Double?): String =
     String.format(Locale.FRANCE, "%.2f €", value)

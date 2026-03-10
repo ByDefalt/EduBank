@@ -106,8 +106,12 @@ class AccountMapperTest {
 
     @Test fun `PersonalInformationDto toEntity maps all fields`() {
         val dto = PersonalInformationDto(
-            id = 1, firstname = "Alice", lastname = "Dupont",
-            email = "alice@mail.fr", address = "1 rue X", phoneNumber = "0600000000",
+            id = 1,
+            firstname = "Alice",
+            lastname = "Dupont",
+            email = "alice@mail.fr",
+            address = "1 rue X",
+            phoneNumber = "0600000000",
         )
         val entity = dto.toEntity()
         assertEquals(1, entity.id)
@@ -120,8 +124,12 @@ class AccountMapperTest {
 
     @Test fun `PersonalInformationEntity toDto maps all fields`() {
         val entity = PersonalInformationEntity(
-            id = 1, firstname = "Alice", lastname = "Dupont",
-            email = "alice@mail.fr", address = "1 rue X", phoneNumber = "0600000000",
+            id = 1,
+            firstname = "Alice",
+            lastname = "Dupont",
+            email = "alice@mail.fr",
+            address = "1 rue X",
+            phoneNumber = "0600000000",
         )
         val dto = entity.toDto()
         assertEquals("Alice", dto.firstname)
@@ -130,8 +138,12 @@ class AccountMapperTest {
 
     @Test fun `roundtrip PersonalInformation dto-entity-dto`() {
         val dto = PersonalInformationDto(
-            id = 2, firstname = "Bob", lastname = "Martin",
-            email = "bob@mail.fr", address = "2 rue Y", phoneNumber = "0700000000",
+            id = 2,
+            firstname = "Bob",
+            lastname = "Martin",
+            email = "bob@mail.fr",
+            address = "2 rue Y",
+            phoneNumber = "0700000000",
         )
         assertEquals(dto, dto.toEntity().toDto())
     }
@@ -148,8 +160,11 @@ class AccountMapperTest {
 
     @Test fun `PersonalInformationRegisterEntity toDto roundtrip`() {
         val entity = PersonalInformationRegisterEntity(
-            firstname = "Alice", lastname = "Dupont",
-            email = "alice@mail.fr", address = "1 rue", phoneNumber = "06",
+            firstname = "Alice",
+            lastname = "Dupont",
+            email = "alice@mail.fr",
+            address = "1 rue",
+            phoneNumber = "06",
         )
         val dto = entity.toDto()
         assertEquals("Alice", dto.firstname)
@@ -228,8 +243,11 @@ class AccountMapperTest {
     @Test fun `AccountRegisterEntity toDto maps all fields`() {
         val entity = AccountRegisterEntity(
             personalInfo = PersonalInformationRegisterEntity(
-                firstname = "Alice", lastname = "Dupont",
-                email = "alice@mail.fr", address = "1 rue", phoneNumber = "06",
+                firstname = "Alice",
+                lastname = "Dupont",
+                email = "alice@mail.fr",
+                address = "1 rue",
+                phoneNumber = "06",
             ),
             role = RoleEnumEntity.CUSTOMER,
             password = "Password1!",
@@ -242,8 +260,11 @@ class AccountMapperTest {
     @Test fun `roundtrip AccountRegister entity-dto-entity`() {
         val entity = AccountRegisterEntity(
             personalInfo = PersonalInformationRegisterEntity(
-                firstname = "Bob", lastname = "Martin",
-                email = "bob@mail.fr", address = "2 rue", phoneNumber = "07",
+                firstname = "Bob",
+                lastname = "Martin",
+                email = "bob@mail.fr",
+                address = "2 rue",
+                phoneNumber = "07",
             ),
             role = RoleEnumEntity.ADMIN,
             password = "Admin1!",
@@ -251,4 +272,3 @@ class AccountMapperTest {
         assertEquals(entity, entity.toDto().toEntity())
     }
 }
-

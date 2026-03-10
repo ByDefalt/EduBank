@@ -27,12 +27,10 @@ interface IBankRemoteDataSource {
     /** [ADMIN] Récupère les détails complets d'un compte bancaire */
     suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail>
 
-
     // --- ADMIN : Paramètres (BankAccountParameterApi) ---
 
     /** [ADMIN] Met à jour les paramètres (découvert, état) d'un compte bancaire */
     suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit>
-
 
     // --- ADMIN : Types de compte (TypeApi) ---
 
@@ -44,7 +42,6 @@ interface IBankRemoteDataSource {
 
     /** [ADMIN] Crée un nouveau type de compte */
     suspend fun adminCreateType(type: Type): NetworkResult<Type>
-
 
     // --- ADMIN : Co-titulaires / Pivot (BankAccountPivotApi) ---
 
@@ -62,7 +59,6 @@ interface IBankRemoteDataSource {
 
     /** [ADMIN] Récupère la liste des liens pivots (co-titulaires) d'un compte bancaire */
     suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>>
-
 
     // --- CLIENT : Mes Comptes (BankAccountApi & PivotApi) ---
 

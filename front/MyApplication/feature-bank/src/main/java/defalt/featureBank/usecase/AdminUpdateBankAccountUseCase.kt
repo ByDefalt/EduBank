@@ -1,6 +1,5 @@
 package defalt.featureBank.usecase
 
-import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
 import defalt.domain.repository.service.IBankRepository
 import defalt.utils.NetworkResult

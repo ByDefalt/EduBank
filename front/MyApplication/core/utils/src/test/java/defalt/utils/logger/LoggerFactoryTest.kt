@@ -47,4 +47,3 @@ class LoggerFactoryTest {
         assertTrue(a !== b)
     }
 }
-

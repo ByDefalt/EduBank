@@ -83,8 +83,13 @@ class OperationMapperTest {
 
     @Test fun `OperationDto toEntity maps all fields`() {
         val dto = OperationDto(
-            id = 1, accountSourceId = "acc-001", label = "Virement",
-            state = OperationStateDto.PENDING, ibanTarget = "FR76...", amount = 100.0, date = now,
+            id = 1,
+            accountSourceId = "acc-001",
+            label = "Virement",
+            state = OperationStateDto.PENDING,
+            ibanTarget = "FR76...",
+            amount = 100.0,
+            date = now,
         )
         val entity = dto.toEntity()
         assertEquals(1, entity.id)
@@ -98,8 +103,13 @@ class OperationMapperTest {
 
     @Test fun `OperationEntity toDto maps all fields`() {
         val entity = OperationEntity(
-            id = 2, accountSourceId = "acc-002", label = "Prelevement",
-            state = OperationStateEntity.COMPLETED, ibanTarget = "FR76...2", amount = 50.0, date = now,
+            id = 2,
+            accountSourceId = "acc-002",
+            label = "Prelevement",
+            state = OperationStateEntity.COMPLETED,
+            ibanTarget = "FR76...2",
+            amount = 50.0,
+            date = now,
         )
         val dto = entity.toDto()
         assertEquals(2, dto.id)
@@ -109,8 +119,13 @@ class OperationMapperTest {
 
     @Test fun `roundtrip Operation dto-entity-dto`() {
         val dto = OperationDto(
-            id = 3, accountSourceId = "acc-003", label = "Retrait",
-            state = OperationStateDto.FAILED, ibanTarget = "FR76...3", amount = 200.0, date = now,
+            id = 3,
+            accountSourceId = "acc-003",
+            label = "Retrait",
+            state = OperationStateDto.FAILED,
+            ibanTarget = "FR76...3",
+            amount = 200.0,
+            date = now,
         )
         assertEquals(dto, dto.toEntity().toDto())
     }
@@ -127,10 +142,16 @@ class OperationMapperTest {
 
     @Test fun `roundtrip all OperationState values in Operation`() {
         OperationStateDto.entries.forEach { state ->
-            val dto = OperationDto(id = 1, accountSourceId = "a", label = "L",
-                state = state, ibanTarget = "FR76...", amount = 0.0, date = now)
+            val dto = OperationDto(
+                id = 1,
+                accountSourceId = "a",
+                label = "L",
+                state = state,
+                ibanTarget = "FR76...",
+                amount = 0.0,
+                date = now,
+            )
             assertEquals(state, dto.toEntity().toDto().state)
         }
     }
 }
-

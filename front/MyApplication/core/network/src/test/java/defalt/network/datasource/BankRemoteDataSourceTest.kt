@@ -29,7 +29,11 @@ class BankRemoteDataSourceTest {
     private lateinit var dataSource: BankRemoteDataSource
 
     private val fakeBankAccountDto = BankAccountDto(
-        id = "1", parameterId = 1, typeId = 1, sold = 1000.0, iban = "FR76...",
+        id = "1",
+        parameterId = 1,
+        typeId = 1,
+        sold = 1000.0,
+        iban = "FR76...",
     )
     private val fakeDetailsDto = BankAccountDetailsDto(
         id = "1",

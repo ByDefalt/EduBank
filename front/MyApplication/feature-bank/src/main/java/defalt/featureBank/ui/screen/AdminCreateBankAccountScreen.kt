@@ -98,92 +98,91 @@ private fun CreateForm(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         ArkeoCard(title = "NOUVEAU COMPTE") {
-
-                // Sélection du titulaire
-                ExposedDropdownMenuBox(expanded = accountExpanded, onExpandedChange = { accountExpanded = !accountExpanded }) {
-                    OutlinedTextField(
-                        value = selectedAccount?.id ?: "Sélectionner un compte",
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Titulaire (ID compte)") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(accountExpanded) },
-                        modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                    )
-                    ExposedDropdownMenu(expanded = accountExpanded, onDismissRequest = { accountExpanded = false }) {
-                        accounts.forEach { acc ->
-                            DropdownMenuItem(
-                                text = { Text(acc.id ?: "-") },
-                                onClick = { selectedAccount = acc; accountExpanded = false },
-                            )
-                        }
+            // Sélection du titulaire
+            ExposedDropdownMenuBox(expanded = accountExpanded, onExpandedChange = { accountExpanded = !accountExpanded }) {
+                OutlinedTextField(
+                    value = selectedAccount?.id ?: "Sélectionner un compte",
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Titulaire (ID compte)") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(accountExpanded) },
+                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                )
+                ExposedDropdownMenu(expanded = accountExpanded, onDismissRequest = { accountExpanded = false }) {
+                    accounts.forEach { acc ->
+                        DropdownMenuItem(
+                            text = { Text(acc.id ?: "-") },
+                            onClick = { selectedAccount = acc; accountExpanded = false },
+                        )
                     }
                 }
+            }
 
-                // IBAN
+            // IBAN
+            OutlinedTextField(
+                value = iban,
+                onValueChange = { iban = it },
+                label = { Text("IBAN") },
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            // Type de compte
+            ExposedDropdownMenuBox(expanded = typeExpanded, onExpandedChange = { typeExpanded = !typeExpanded }) {
                 OutlinedTextField(
-                    value = iban,
-                    onValueChange = { iban = it },
-                    label = { Text("IBAN") },
-                    modifier = Modifier.fillMaxWidth(),
+                    value = BANK_TYPES_CREATE.find { it.first == selectedTypeId }?.second ?: "Type $selectedTypeId",
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Type de compte") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(typeExpanded) },
+                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
-
-                // Type de compte
-                ExposedDropdownMenuBox(expanded = typeExpanded, onExpandedChange = { typeExpanded = !typeExpanded }) {
-                    OutlinedTextField(
-                        value = BANK_TYPES_CREATE.find { it.first == selectedTypeId }?.second ?: "Type $selectedTypeId",
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Type de compte") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(typeExpanded) },
-                        modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                    )
-                    ExposedDropdownMenu(expanded = typeExpanded, onDismissRequest = { typeExpanded = false }) {
-                        BANK_TYPES_CREATE.forEach { (id, label) ->
-                            DropdownMenuItem(text = { Text(label) }, onClick = { selectedTypeId = id; typeExpanded = false })
-                        }
+                ExposedDropdownMenu(expanded = typeExpanded, onDismissRequest = { typeExpanded = false }) {
+                    BANK_TYPES_CREATE.forEach { (id, label) ->
+                        DropdownMenuItem(text = { Text(label) }, onClick = { selectedTypeId = id; typeExpanded = false })
                     }
                 }
+            }
 
-                // Solde initial
+            // Solde initial
+            OutlinedTextField(
+                value = sold,
+                onValueChange = { sold = it },
+                label = { Text("Solde initial (€)") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            // Découvert autorisé
+            OutlinedTextField(
+                value = overdraft,
+                onValueChange = { overdraft = it },
+                label = { Text("Découvert autorisé (€)") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            // État initial
+            ExposedDropdownMenuBox(expanded = stateExpanded, onExpandedChange = { stateExpanded = !stateExpanded }) {
                 OutlinedTextField(
-                    value = sold,
-                    onValueChange = { sold = it },
-                    label = { Text("Solde initial (€)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
+                    value = selectedState.value,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("État initial") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(stateExpanded) },
+                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
-
-                // Découvert autorisé
-                OutlinedTextField(
-                    value = overdraft,
-                    onValueChange = { overdraft = it },
-                    label = { Text("Découvert autorisé (€)") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-
-                // État initial
-                ExposedDropdownMenuBox(expanded = stateExpanded, onExpandedChange = { stateExpanded = !stateExpanded }) {
-                    OutlinedTextField(
-                        value = selectedState.value,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("État initial") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(stateExpanded) },
-                        modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
-                    )
-                    ExposedDropdownMenu(expanded = stateExpanded, onDismissRequest = { stateExpanded = false }) {
-                        State.entries.forEach { state ->
-                            DropdownMenuItem(text = { Text(state.value) }, onClick = { selectedState = state; stateExpanded = false })
-                        }
+                ExposedDropdownMenu(expanded = stateExpanded, onDismissRequest = { stateExpanded = false }) {
+                    State.entries.forEach { state ->
+                        DropdownMenuItem(text = { Text(state.value) }, onClick = { selectedState = state; stateExpanded = false })
                     }
                 }
+            }
 
-                ArkeoButton(
-                    text = if (isLoading) "Création…" else "CRÉER LE COMPTE",
-                    onClick = {
-                        if (!isLoading && selectedAccount != null && iban.isNotBlank()) {
-                            selectedAccount!!.id?.let { onSubmit(it, iban, selectedTypeId, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState) }
+            ArkeoButton(
+                text = if (isLoading) "Création…" else "CRÉER LE COMPTE",
+                onClick = {
+                    if (!isLoading && selectedAccount != null && iban.isNotBlank()) {
+                        selectedAccount!!.id?.let { onSubmit(it, iban, selectedTypeId, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState) }
                     }
                 },
             )

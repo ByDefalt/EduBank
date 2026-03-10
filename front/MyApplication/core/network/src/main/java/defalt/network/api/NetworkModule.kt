@@ -6,18 +6,14 @@ import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
 import defalt.network.api.bank.service.BankAccountApi
 import defalt.network.api.bank.service.BankAccountParameterApi
+import defalt.network.api.bank.service.BankAccountPivotApi
 import defalt.network.api.bank.service.TypeApi
 import defalt.network.api.offer.service.OfferApi
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.infrastructure.ApiClient
-import defalt.network.infrastructure.Serializer
 import defalt.network.utils.createService
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import org.koin.dsl.module
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
 
 val networkModule = module {
 
@@ -28,10 +24,14 @@ val networkModule = module {
     single { get<ApiClient>().createService<AccountApi>() }
     single { get<ApiClient>().createService<PersonalInformationApi>() }
     single { get<ApiClient>().createService<RoleApi>() }
+
     single { get<ApiClient>().createService<BankAccountApi>() }
     single { get<ApiClient>().createService<BankAccountParameterApi>() }
+    single { get<ApiClient>().createService<BankAccountPivotApi>() }
     single { get<ApiClient>().createService<TypeApi>() }
+
     single { get<ApiClient>().createService<OfferApi>() }
+
     single { get<ApiClient>().createService<BeneficiaryApi>() }
     single { get<ApiClient>().createService<OperationApi>() }
 }

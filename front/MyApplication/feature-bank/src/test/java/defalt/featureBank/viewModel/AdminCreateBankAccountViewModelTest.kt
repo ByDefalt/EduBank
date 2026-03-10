@@ -89,4 +89,3 @@ class AdminCreateBankAccountViewModelTest {
         assertTrue(viewModel.createState.value is UiState.Error)
     }
 }
-

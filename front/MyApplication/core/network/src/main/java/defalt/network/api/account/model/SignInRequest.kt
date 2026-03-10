@@ -10,34 +10,27 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.account.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param id 
- * @param password 
+ *
+ * @param id
+ * @param password
  */
 @Serializable
-
-data class SignInRequest (
+data class SignInRequest(
 
     @SerialName(value = "id")
     val id: kotlin.String,
 
     @SerialName(value = "password")
-    val password: kotlin.String
+    val password: kotlin.String,
 
-) {
-
-
-}
-
+)

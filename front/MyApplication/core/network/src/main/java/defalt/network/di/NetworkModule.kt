@@ -5,5 +5,4 @@ import defalt.network.datasource.dataSourcesModule
 
 /** Module racine de core:network — APIs + DataSources */
 
-
 val coreNetworkModule = listOf(networkModule, dataSourcesModule)

@@ -76,4 +76,3 @@ class BeneficiariesViewModelTest {
         assertTrue((vm.uiState.value as UiState.Success).data.isEmpty())
     }
 }
-

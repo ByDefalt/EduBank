@@ -1,8 +1,16 @@
 package defalt.network.datasource.bank
 
 import defalt.domain.datasource.bank.IBankRemoteDataSource
-import defalt.domain.entity.bank.*
-import defalt.network.api.bank.service.*
+import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountCreateRequest
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.BankAccountParameter
+import defalt.domain.entity.bank.BankAccountPivot
+import defalt.domain.entity.bank.Type
+import defalt.network.api.bank.service.BankAccountApi
+import defalt.network.api.bank.service.BankAccountParameterApi
+import defalt.network.api.bank.service.BankAccountPivotApi
+import defalt.network.api.bank.service.TypeApi
 import defalt.network.mapper.bank.toDto
 import defalt.network.mapper.bank.toEntity
 import defalt.network.utils.safeApiCall
@@ -13,7 +21,7 @@ class BankRemoteDataSource(
     private val bankAccountApi: BankAccountApi,
     private val bankAccountParameterApi: BankAccountParameterApi,
     private val bankAccountPivotApi: BankAccountPivotApi,
-    private val typeApi: TypeApi
+    private val typeApi: TypeApi,
 ) : IBankRemoteDataSource {
 
     // --- ADMIN : Comptes bancaires ---
@@ -23,12 +31,12 @@ class BankRemoteDataSource(
 
     override suspend fun adminCreateBankAccount(
         accountId: String,
-        request: BankAccountCreateRequest
+        request: BankAccountCreateRequest,
     ): NetworkResult<BankAccountDetail> =
         safeApiCall {
             bankAccountApi.bankAdminAccountsAccountIdBankAccountsPost(
                 accountId,
-                request.toDto()
+                request.toDto(),
             )
         }.map { it.toEntity() }
 
@@ -43,12 +51,12 @@ class BankRemoteDataSource(
 
     override suspend fun adminUpdateBankAccountParameters(
         bankAccountId: String,
-        parameter: BankAccountParameter
+        parameter: BankAccountParameter,
     ): NetworkResult<Unit> =
         safeApiCall {
             bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch(
                 bankAccountId,
-                parameter.toDto()
+                parameter.toDto(),
             )
         }
 
@@ -74,7 +82,7 @@ class BankRemoteDataSource(
     override suspend fun adminRemoveAllCoHoldersByBankAccount(bankAccountId: String): NetworkResult<Unit> =
         safeApiCall {
             bankAccountPivotApi.bankBankAccountsPivotBankAccountBankAccountIdDelete(
-                bankAccountId
+                bankAccountId,
             )
         }
 
@@ -84,7 +92,7 @@ class BankRemoteDataSource(
     override suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>> =
         safeApiCall {
             bankAccountPivotApi.bankBankAccountsPivotBankAccountBankAccountIdGet(
-                bankAccountId
+                bankAccountId,
             )
         }.map { it.toEntity() }
 
@@ -101,5 +109,4 @@ class BankRemoteDataSource(
 
     override suspend fun getMyPivotsByAccountId(accountId: String): NetworkResult<List<BankAccountPivot>> =
         safeApiCall { bankAccountPivotApi.bankBankAccountsPivotAccountAccountIdGet(accountId) }.map { it.toEntity() }
-
 }

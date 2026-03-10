@@ -15,7 +15,7 @@ import java.time.OffsetDateTime
 
 class OperationRemoteDataSource(
     private val operationApi: OperationApi,
-    private val beneficiaryApi: BeneficiaryApi
+    private val beneficiaryApi: BeneficiaryApi,
 ) : IOperationRemoteDataSource {
 
     // --- OPÉRATIONS ---
@@ -24,7 +24,7 @@ class OperationRemoteDataSource(
         accountId: String?,
         state: OperationState?,
         dateFrom: OffsetDateTime?,
-        dateTo: OffsetDateTime?
+        dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> {
         val stateDto = state?.let {
             // Conversion enum si nécessaire selon le Mapper

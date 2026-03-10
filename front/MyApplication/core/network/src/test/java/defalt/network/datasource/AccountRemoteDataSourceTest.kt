@@ -274,8 +274,11 @@ class AccountRemoteDataSourceTest {
         coEvery { personalInformationApi.personalInformationPost(any()) } returns Response.success(fakePersonalInfoDto)
 
         val request = PersonalInformationRegister(
-            firstname = "Alice", lastname = "Dupont",
-            email = "alice@mail.fr", address = "1 rue", phoneNumber = "06",
+            firstname = "Alice",
+            lastname = "Dupont",
+            email = "alice@mail.fr",
+            address = "1 rue",
+            phoneNumber = "06",
         )
         val result = dataSource.createPersonalInformation(request)
 
@@ -311,4 +314,3 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.updatePersonalInformation(1, pi) is NetworkResult.Error)
     }
 }
-

@@ -38,8 +38,13 @@ class CreateTransferViewModelTest {
         Beneficiary(id = 1, accountSourceId = "acc-001", ibanTarget = "FR76...3", name = "Alice"),
     )
     private val fakeOperation = Operation(
-        id = 1, accountSourceId = "acc-001", label = "Virement",
-        state = OperationState.PENDING, ibanTarget = "FR76...3", amount = 50.0, date = OffsetDateTime.now(),
+        id = 1,
+        accountSourceId = "acc-001",
+        label = "Virement",
+        state = OperationState.PENDING,
+        ibanTarget = "FR76...3",
+        amount = 50.0,
+        date = OffsetDateTime.now(),
     )
 
     @Before fun setUp() {
@@ -177,4 +182,3 @@ class CreateTransferViewModelTest {
         assertEquals("FR76...1", viewModel.form.value.receiverIban)
     }
 }
-

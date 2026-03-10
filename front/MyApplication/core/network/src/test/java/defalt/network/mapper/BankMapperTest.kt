@@ -9,8 +9,8 @@ import defalt.domain.entity.bank.Type as TypeEntity
 import defalt.network.api.bank.model.BankAccount as BankAccountDto
 import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailsDto
 import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
-import defalt.network.api.bank.model.Type as TypeDto
 import defalt.network.api.bank.model.State as StateDto
+import defalt.network.api.bank.model.Type as TypeDto
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

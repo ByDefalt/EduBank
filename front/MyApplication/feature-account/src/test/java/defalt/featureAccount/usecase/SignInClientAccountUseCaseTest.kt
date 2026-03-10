@@ -103,4 +103,3 @@ class SignInClientAccountUseCaseTest {
         assertEquals("MyPass!", captured?.password)
     }
 }
-

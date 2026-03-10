@@ -66,4 +66,3 @@ class LoginViewModelTest {
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 }
-

@@ -1,5 +1,6 @@
 package defalt.featureAccount.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,7 +58,6 @@ import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
-import android.widget.Toast
 
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
@@ -114,12 +114,11 @@ private fun AccountCreatedDialog(
                 fontSize = 18.sp,
                 color = CustomColor.TextPrimary,
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     colors = CardDefaults.cardColors(containerColor = CustomColor.BackgroundGray),

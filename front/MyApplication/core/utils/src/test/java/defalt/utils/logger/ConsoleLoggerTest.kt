@@ -90,4 +90,3 @@ class ConsoleLoggerTest {
         ConsoleLogger(LogLevel.TRACE).debug("a".repeat(10_000))
     }
 }
-

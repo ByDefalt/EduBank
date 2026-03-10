@@ -90,4 +90,3 @@ class AdminBankDetailViewModelTest {
         assertTrue(!called)
     }
 }
-

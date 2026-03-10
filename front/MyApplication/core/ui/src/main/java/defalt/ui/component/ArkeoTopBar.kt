@@ -56,4 +56,3 @@ fun ArkeoTopBar(
         Spacer(modifier = Modifier.size(48.dp))
     }
 }
-

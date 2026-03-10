@@ -72,4 +72,3 @@ class CreateTransferUseCaseTest {
         coVerify(exactly = 1) { repository.createOperation(any()) }
     }
 }
-

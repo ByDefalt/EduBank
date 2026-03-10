@@ -35,11 +35,19 @@ class OperationRemoteDataSourceTest {
     private val now = OffsetDateTime.now()
 
     private val fakeOperationDto = OperationDto(
-        id = 1, accountSourceId = "acc-001", label = "Virement",
-        state = OperationStateDto.PENDING, ibanTarget = "FR76...", amount = 100.0, date = now,
+        id = 1,
+        accountSourceId = "acc-001",
+        label = "Virement",
+        state = OperationStateDto.PENDING,
+        ibanTarget = "FR76...",
+        amount = 100.0,
+        date = now,
     )
     private val fakeBeneficiaryDto = BeneficiaryDto(
-        id = 1, accountSourceId = "acc-001", ibanTarget = "FR76...", name = "Alice",
+        id = 1,
+        accountSourceId = "acc-001",
+        ibanTarget = "FR76...",
+        name = "Alice",
     )
 
     @Before fun setUp() {
@@ -172,7 +180,8 @@ class OperationRemoteDataSourceTest {
 
         assertTrue(
             dataSource.updateBeneficiary(
-                1, Beneficiary(accountSourceId = "acc-001", ibanTarget = "FR76...", name = "Alice", id = 1),
+                1,
+                Beneficiary(accountSourceId = "acc-001", ibanTarget = "FR76...", name = "Alice", id = 1),
             ) is NetworkResult.Error,
         )
     }

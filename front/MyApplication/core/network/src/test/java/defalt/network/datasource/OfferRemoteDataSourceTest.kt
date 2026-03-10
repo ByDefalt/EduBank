@@ -25,8 +25,12 @@ class OfferRemoteDataSourceTest {
     private val nextMonth = today.plusMonths(1)
 
     private val fakeOfferDto = OfferDto(
-        id = 1, title = "Promo", description = "Desc",
-        state = OfferDto.State.ACTIVE, startDate = today, endDate = nextMonth,
+        id = 1,
+        title = "Promo",
+        description = "Desc",
+        state = OfferDto.State.ACTIVE,
+        startDate = today,
+        endDate = nextMonth,
     )
 
     @Before fun setUp() {
@@ -145,9 +149,11 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersPost(any()) } returns Response.success(fakeOfferDto)
 
         val request = OffersPostRequest(
-            title = "Promo", description = "Desc",
+            title = "Promo",
+            description = "Desc",
             state = OffersPostRequest.State.ACTIVE,
-            startDate = today, endDate = nextMonth,
+            startDate = today,
+            endDate = nextMonth,
         )
         val result = dataSource.createOffer(request)
 
@@ -159,8 +165,13 @@ class OfferRemoteDataSourceTest {
     @Test fun `createOffer propage Error 400`() = runTest {
         coEvery { offerApi.offersPost(any()) } returns Response.error(400, "invalid".toResponseBody())
 
-        val request = OffersPostRequest(title = "T", description = "D",
-            state = OffersPostRequest.State.ACTIVE, startDate = today, endDate = nextMonth)
+        val request = OffersPostRequest(
+            title = "T",
+            description = "D",
+            state = OffersPostRequest.State.ACTIVE,
+            startDate = today,
+            endDate = nextMonth,
+        )
         assertTrue(dataSource.createOffer(request) is NetworkResult.Error)
     }
 
@@ -170,8 +181,13 @@ class OfferRemoteDataSourceTest {
         val updated = fakeOfferDto.copy(title = "Promo Modif")
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(updated)
 
-        val request = OffersIdPutRequest(title = "Promo Modif", description = "Desc",
-            state = OffersIdPutRequest.State.ACTIVE, startDate = today, endDate = nextMonth)
+        val request = OffersIdPutRequest(
+            title = "Promo Modif",
+            description = "Desc",
+            state = OffersIdPutRequest.State.ACTIVE,
+            startDate = today,
+            endDate = nextMonth,
+        )
         val result = dataSource.updateOffer(1, request)
 
         assertTrue(result is NetworkResult.Success)

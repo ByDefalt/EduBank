@@ -47,7 +47,6 @@ interface IOperationRemoteDataSource {
      */
     suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation>
 
-
     // --- BÉNÉFICIAIRES (BeneficiaryApi) ---
 
     /**

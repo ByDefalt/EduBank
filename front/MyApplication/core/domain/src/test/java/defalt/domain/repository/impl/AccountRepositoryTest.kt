@@ -71,8 +71,11 @@ class AccountRepositoryTest {
     @Test fun `createAccount delegue`() = runTest {
         val req = AccountRegister(
             personalInfo = PersonalInformationRegister(
-                firstname = "Alice", lastname = "Dupont",
-                email = "alice@mail.fr", address = "1 rue", phoneNumber = "06",
+                firstname = "Alice",
+                lastname = "Dupont",
+                email = "alice@mail.fr",
+                address = "1 rue",
+                phoneNumber = "06",
             ),
             role = RoleEnum.CUSTOMER,
             password = "pass",
@@ -200,8 +203,13 @@ class AccountRepositoryTest {
     }
 
     @Test fun `createPersonalInformation delegue`() = runTest {
-        val req = PersonalInformationRegister(firstname = "Alice", lastname = "Dupont",
-            email = "alice@mail.fr", address = "1 rue", phoneNumber = "06")
+        val req = PersonalInformationRegister(
+            firstname = "Alice",
+            lastname = "Dupont",
+            email = "alice@mail.fr",
+            address = "1 rue",
+            phoneNumber = "06",
+        )
         coEvery { remote.createPersonalInformation(req) } returns NetworkResult.Success(fakePersonalInfo)
         val result = repository.createPersonalInformation(req)
         assertTrue(result is NetworkResult.Success)

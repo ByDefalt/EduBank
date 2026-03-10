@@ -157,4 +157,3 @@ class GetMyBeneficiariesUseCaseTest {
         assertTrue(useCase() is NetworkResult.Error)
     }
 }
-

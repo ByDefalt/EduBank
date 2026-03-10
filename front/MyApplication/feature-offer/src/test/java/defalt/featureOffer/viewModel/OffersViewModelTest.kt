@@ -133,9 +133,11 @@ class AdminCreateOfferViewModelTest {
         viewModel.create("Mon Titre", "Ma Desc", OffersPostRequest.State.ACTIVE, today, nextMonth)
 
         coVerify {
-            createOffer(match {
-                it.title == "Mon Titre" && it.description == "Ma Desc" && it.state == OffersPostRequest.State.ACTIVE
-            })
+            createOffer(
+                match {
+                    it.title == "Mon Titre" && it.description == "Ma Desc" && it.state == OffersPostRequest.State.ACTIVE
+                },
+            )
         }
     }
 
@@ -147,4 +149,3 @@ class AdminCreateOfferViewModelTest {
         coVerify { createOffer(match { it.state == OffersPostRequest.State.INACTIVE }) }
     }
 }
-

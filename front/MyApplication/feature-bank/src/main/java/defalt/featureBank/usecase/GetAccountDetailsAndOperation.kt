@@ -8,7 +8,6 @@ import defalt.domain.session.Session
 import defalt.utils.NetworkResult
 import defalt.utils.logger.Logger
 
-
 data class AccountDetailsAndOperation(
     val accountDetail: BankAccountDetail,
     val operations: List<Operation>,

@@ -36,4 +36,3 @@ fun ArkeoOutlinedButton(
         Text(text = text, fontWeight = FontWeight.Bold, color = CustomColor.ArkeoRed)
     }
 }
-

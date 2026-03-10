@@ -63,8 +63,13 @@ class OfferRepositoryTest {
     }
 
     @Test fun `createOffer delegue la requete`() = runTest {
-        val request = OffersPostRequest(title = "T", description = "D",
-            state = OffersPostRequest.State.ACTIVE, startDate = today, endDate = next)
+        val request = OffersPostRequest(
+            title = "T",
+            description = "D",
+            state = OffersPostRequest.State.ACTIVE,
+            startDate = today,
+            endDate = next,
+        )
         coEvery { dataSource.createOffer(request) } returns NetworkResult.Success(fakeOffer)
         val result = repository.createOffer(request)
         assertTrue(result is NetworkResult.Success)
@@ -72,8 +77,13 @@ class OfferRepositoryTest {
     }
 
     @Test fun `updateOffer delegue id et requete`() = runTest {
-        val request = OffersIdPutRequest(title = "T", description = "D",
-            state = OffersIdPutRequest.State.ACTIVE, startDate = today, endDate = next)
+        val request = OffersIdPutRequest(
+            title = "T",
+            description = "D",
+            state = OffersIdPutRequest.State.ACTIVE,
+            startDate = today,
+            endDate = next,
+        )
         coEvery { dataSource.updateOffer(1, request) } returns NetworkResult.Success(fakeOffer)
         val result = repository.updateOffer(1, request)
         assertTrue(result is NetworkResult.Success)

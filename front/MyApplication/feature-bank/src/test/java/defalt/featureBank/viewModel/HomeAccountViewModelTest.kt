@@ -67,4 +67,3 @@ class HomeAccountViewModelTest {
         assertTrue(vm.uiState.value is UiState.Success)
     }
 }
-

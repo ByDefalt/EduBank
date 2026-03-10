@@ -34,4 +34,3 @@ class MenuViewModelTest {
         assertNull(session.role)
     }
 }
-

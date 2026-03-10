@@ -13,4 +13,3 @@ class FakeLogger : Logger {
     override fun error(message: String, t: Throwable) = Unit
     override fun isLevelEnabled(level: LogLevel): Boolean = false
 }
-

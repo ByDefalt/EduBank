@@ -1,11 +1,9 @@
 package defalt.network.mapper.offer
 
 import defalt.domain.entity.offer.Offer as OfferEntity
-import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.domain.entity.offer.OfferInput as OfferInputEntity
+import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.network.api.offer.model.OfferInput as OfferInputDto
-import defalt.network.api.offer.model.Error as ErrorDto
-
 
 fun OfferDto.toEntity(): OfferEntity = OfferEntity(
     id = this.id,
@@ -74,4 +72,3 @@ fun OfferInputEntity.State.toDto(): OfferInputDto.State = when (this) {
     OfferInputEntity.State.INACTIVE -> OfferInputDto.State.INACTIVE
     OfferInputEntity.State.EXPIRED -> OfferInputDto.State.EXPIRED
 }
-

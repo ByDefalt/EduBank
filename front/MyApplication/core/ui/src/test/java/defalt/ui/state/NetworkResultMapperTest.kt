@@ -41,4 +41,3 @@ class NetworkResultMapperTest {
         assertTrue(uiState is UiState.Success)
     }
 }
-

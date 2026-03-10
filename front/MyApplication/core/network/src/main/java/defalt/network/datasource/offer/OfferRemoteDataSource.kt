@@ -11,7 +11,7 @@ import defalt.utils.NetworkResult
 import defalt.utils.map
 
 class OfferRemoteDataSource(
-    private val offerApi: OfferApi
+    private val offerApi: OfferApi,
 ) : IOfferRemoteDataSource {
 
     // --- PUBLIC / CLIENT ---

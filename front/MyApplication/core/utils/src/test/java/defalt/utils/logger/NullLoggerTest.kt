@@ -8,9 +8,13 @@ class NullLoggerTest {
     private val logger = NullLogger()
 
     @Test fun `trace ne lance pas d exception`() { logger.trace("test trace") }
+
     @Test fun `debug ne lance pas d exception`() { logger.debug("test debug") }
+
     @Test fun `info ne lance pas d exception`() { logger.info("test info") }
+
     @Test fun `warn ne lance pas d exception`() { logger.warn("test warn") }
+
     @Test fun `error message ne lance pas d exception`() { logger.error("test error") }
 
     @Test fun `error message et throwable ne lance pas d exception`() {

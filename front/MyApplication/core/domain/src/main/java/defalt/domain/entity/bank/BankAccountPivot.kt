@@ -1,14 +1,9 @@
 package defalt.domain.entity.bank
 
-
-data class BankAccountPivot (
+data class BankAccountPivot(
 
     val bankAccountId: String,
 
-    val accountId: String
+    val accountId: String,
 
-) {
-
-
-}
-
+)

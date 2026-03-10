@@ -82,4 +82,3 @@ class DeactivateAccountUseCaseTest {
         assertTrue(useCase("acc-001") is NetworkResult.Exception)
     }
 }
-

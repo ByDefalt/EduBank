@@ -187,4 +187,3 @@ class DeleteOfferUseCaseTest {
         assertTrue(useCase(1) is NetworkResult.Exception)
     }
 }
-

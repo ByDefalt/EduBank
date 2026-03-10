@@ -1,5 +1,6 @@
 package defalt.featureOperation.viewModel
 
+import defalt.domain.entity.operation.Beneficiary
 import defalt.featureOperation.usecase.AddBeneficiary
 import defalt.testing.MainDispatcherRule
 import defalt.ui.state.UiState
@@ -7,7 +8,6 @@ import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import defalt.domain.entity.operation.Beneficiary
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -60,4 +60,3 @@ class AddBeneficiaryViewModelTest {
         coVerify(exactly = 1) { addBeneficiary("Charlie", "FR76...3") }
     }
 }
-

@@ -62,4 +62,3 @@ class UpdatePersonalInfoUseCaseTest {
         assertEquals(1, slot.captured.id)
     }
 }
-

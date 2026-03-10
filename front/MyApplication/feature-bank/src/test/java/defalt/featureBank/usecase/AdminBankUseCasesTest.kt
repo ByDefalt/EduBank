@@ -163,4 +163,3 @@ class AdminCreateBankAccountUseCaseTest {
         assertTrue(useCase(1, request) is NetworkResult.Exception)
     }
 }
-

@@ -61,4 +61,3 @@ class ListAccountViewModelTest {
         assertTrue(vm.uiState.value is UiState.Error)
     }
 }
-

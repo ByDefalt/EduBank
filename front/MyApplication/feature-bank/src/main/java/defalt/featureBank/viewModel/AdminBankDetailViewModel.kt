@@ -3,7 +3,6 @@ package defalt.featureBank.viewModel
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.BankAccountParameter
-import defalt.domain.entity.bank.Type as BankAccountType
 import defalt.domain.entity.bank.State
 import defalt.domain.entity.bank.Type
 import defalt.featureBank.usecase.AdminDeleteBankAccountUseCase

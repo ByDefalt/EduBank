@@ -50,4 +50,3 @@ class LogoutUseCaseTest {
         assertNull(emptySession.token)
     }
 }
-

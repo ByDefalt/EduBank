@@ -101,4 +101,3 @@ class EditBeneficiaryViewModelTest {
         assertTrue(viewModel.actionState.value is UiState.Idle)
     }
 }
-

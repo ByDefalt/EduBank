@@ -3,9 +3,9 @@ package defalt.network.serialization
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationState
 import defalt.network.infrastructure.Serializer
+import java.time.OffsetDateTime
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.time.OffsetDateTime
 
 class OperationSerializationTest {
 
@@ -20,7 +20,7 @@ class OperationSerializationTest {
             state = OperationState.COMPLETED,
             ibanTarget = "FR7630006000019876543210987",
             amount = 100.0,
-            date = OffsetDateTime.parse("2026-01-15T14:30:00Z")
+            date = OffsetDateTime.parse("2026-01-15T14:30:00Z"),
         )
 
         val serialized = json.encodeToString(Operation.serializer(), op)
@@ -29,4 +29,3 @@ class OperationSerializationTest {
         assertEquals(OperationState.COMPLETED, deserialized.state)
     }
 }
-

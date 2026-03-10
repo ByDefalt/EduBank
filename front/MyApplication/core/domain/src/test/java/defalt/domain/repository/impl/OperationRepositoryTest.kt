@@ -21,8 +21,15 @@ class OperationRepositoryTest {
     private lateinit var repository: OperationRepository
 
     private val now = OffsetDateTime.now()
-    private val fakeOp = Operation(id = 1, accountSourceId = "acc-001", label = "Virement",
-        state = OperationState.PENDING, ibanTarget = "FR76...", amount = 100.0, date = now)
+    private val fakeOp = Operation(
+        id = 1,
+        accountSourceId = "acc-001",
+        label = "Virement",
+        state = OperationState.PENDING,
+        ibanTarget = "FR76...",
+        amount = 100.0,
+        date = now,
+    )
     private val fakeBen = Beneficiary(accountSourceId = "acc-001", ibanTarget = "FR76...", name = "Alice", id = 1)
 
     @Before fun setUp() { repository = OperationRepository(dataSource) }
@@ -168,4 +175,3 @@ class OperationRepositoryTest {
         assertTrue(repository.deleteBeneficiary(1) is NetworkResult.Error)
     }
 }
-

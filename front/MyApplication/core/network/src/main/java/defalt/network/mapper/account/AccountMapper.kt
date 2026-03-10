@@ -13,7 +13,6 @@ import defalt.domain.entity.account.TokenResponse as TokenResponseEntity
 import defalt.network.api.account.model.Account as AccountDto
 import defalt.network.api.account.model.AccountRegister as AccountRegisterDto
 import defalt.network.api.account.model.AccountStateEnum as AccountStateEnumDto
-import defalt.network.api.account.model.Error as ErrorDto
 import defalt.network.api.account.model.PersonalInformation as PersonalInformationDto
 import defalt.network.api.account.model.PersonalInformationRegister as PersonalInformationRegisterDto
 import defalt.network.api.account.model.Role as RoleDto

@@ -126,15 +126,14 @@ fun List<TypeDto>.toEntity(): List<TypeEntity> = this.map { it.toEntity() }
 @JvmName("typeListToDto")
 fun List<TypeEntity>.toDto(): List<TypeDto> = this.map { it.toDto() }
 
-
 fun BankAccountPivotDto.toEntity(): BankAccountPivotEntity = BankAccountPivotEntity(
     bankAccountId = this.bankAccountId,
-    accountId = this.accountId
+    accountId = this.accountId,
 )
 
 fun BankAccountPivotEntity.toDto(): BankAccountPivotDto = BankAccountPivotDto(
     bankAccountId = this.bankAccountId,
-    accountId = this.accountId
+    accountId = this.accountId,
 )
 
 @JvmName("bankAccountPivotListToEntity")
