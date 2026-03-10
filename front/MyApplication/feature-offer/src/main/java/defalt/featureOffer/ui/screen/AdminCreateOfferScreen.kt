@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import defalt.domain.entity.offer.OfferInput
 import defalt.featureOffer.viewModel.AdminCreateOfferViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoCard
@@ -59,10 +60,10 @@ fun AdminCreateOfferScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CreateOfferForm(isLoading: Boolean, onCreate: (String, String, OffersPostRequest.State) -> Unit) {
+private fun CreateOfferForm(isLoading: Boolean, onCreate: (String, String, OfferInput.State) -> Unit) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var selectedState by remember { mutableStateOf(OffersPostRequest.State.ACTIVE) }
+    var selectedState by remember { mutableStateOf(OfferInput.State.ACTIVE) }
     var stateExpanded by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
@@ -80,7 +81,7 @@ private fun CreateOfferForm(isLoading: Boolean, onCreate: (String, String, Offer
                     modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
                 ExposedDropdownMenu(expanded = stateExpanded, onDismissRequest = { stateExpanded = false }) {
-                    listOf(OffersPostRequest.State.ACTIVE, OffersPostRequest.State.INACTIVE).forEach { s ->
+                    listOf(OfferInput.State.ACTIVE, OfferInput.State.INACTIVE).forEach { s ->
                         DropdownMenuItem(text = { Text(s.value) }, onClick = { selectedState = s; stateExpanded = false })
                     }
                 }

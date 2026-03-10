@@ -14,8 +14,8 @@ class AdminUpdateBankAccountUseCase(
         bankAccountId: String,
         typeId: Int,
         parameter: BankAccountParameter,
-    ): NetworkResult<BankAccountDetail> {
+    ): NetworkResult<Unit> {
         logger.debug("AdminUpdateBankAccountUseCase")
-        return repository.adminUpdateBankAccount(bankAccountId, typeId, parameter)
+        return repository.adminUpdateBankAccountParameters(bankAccountId, parameter)
     }
 }

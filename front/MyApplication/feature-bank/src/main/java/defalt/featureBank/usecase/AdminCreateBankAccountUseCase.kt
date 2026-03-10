@@ -10,7 +10,7 @@ class AdminCreateBankAccountUseCase(
     private val bankRepository: IBankRepository,
     private val logger: Logger,
 ) {
-    suspend operator fun invoke(accountId: Int, request: BankAccountCreateRequest): NetworkResult<BankAccountDetail> {
+    suspend operator fun invoke(accountId: String, request: BankAccountCreateRequest): NetworkResult<BankAccountDetail> {
         logger.debug("AdminCreateBankAccountUseCase")
         return bankRepository.adminCreateBankAccount(accountId, request)
     }

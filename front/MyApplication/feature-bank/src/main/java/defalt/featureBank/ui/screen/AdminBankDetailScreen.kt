@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccountType
+import defalt.domain.entity.bank.Type as BankAccountType
 import defalt.domain.entity.bank.State
 import defalt.featureBank.viewModel.AdminBankDetailViewModel
 import defalt.ui.component.ArkeoButton
@@ -192,9 +192,9 @@ private fun TypeDropdown(
             } else {
                 types.forEach { type ->
                     DropdownMenuItem(
-                        text = { Text(type.name) },
+                        text = { type.name?.let { Text(it) } },
                         onClick = {
-                            onTypeSelected(type.id)
+                            type.id?.let { onTypeSelected(it) }
                             expanded = false
                         },
                     )

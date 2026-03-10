@@ -34,7 +34,7 @@ class GetAccountDetailsAndOperation(
         val detail = (detailResult as NetworkResult.Success).data
 
         val operationsResult = operationRepository.getOperations(
-            accountSourceId = session.accountId,
+            accountId = session.accountId,
         )
 
         val operations = when (operationsResult) {

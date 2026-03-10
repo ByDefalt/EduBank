@@ -1,6 +1,7 @@
 package defalt.featureOffer.viewModel
 
 import androidx.lifecycle.ViewModel
+import defalt.domain.entity.offer.OfferInput
 import defalt.featureOffer.usecase.CreateOfferUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
@@ -16,8 +17,8 @@ class AdminCreateOfferViewModel(
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val uiState: StateFlow<UiState<Unit>> = _uiState.asStateFlow()
 
-    fun create(title: String, description: String, state: OffersPostRequest.State, startDate: LocalDate, endDate: LocalDate) {
-        val request = OffersPostRequest(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
+    fun create(title: String, description: String, state: OfferInput.State, startDate: LocalDate, endDate: LocalDate) {
+        val request = OfferInput(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
         launchWithUiState(_uiState) {
             createOffer(request)
         }

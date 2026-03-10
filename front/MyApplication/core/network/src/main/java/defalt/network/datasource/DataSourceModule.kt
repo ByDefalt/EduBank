@@ -15,7 +15,7 @@ val dataSourcesModule = module {
         AccountRemoteDataSource(get(), get(), get(), get(), get())
     }
     single<IBankRemoteDataSource> {
-        BankRemoteDataSource(get(), get())
+        BankRemoteDataSource(get(), get(), get(), get())
     }
     single<IOfferRemoteDataSource> {
         OfferRemoteDataSource(get())

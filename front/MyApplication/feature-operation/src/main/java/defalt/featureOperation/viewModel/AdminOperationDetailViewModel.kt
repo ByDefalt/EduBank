@@ -37,6 +37,6 @@ class AdminOperationDetailViewModel(
 
     // UC13/UC21 : Changer / mettre à jour l'état
     fun updateState(id: Int, state: OperationState) = launchWithUiState(_actionState) {
-        updateOperationState(id, state.value).also { if (it is NetworkResult.Success) load(id) }
+        updateOperationState(id, state).also { if (it is NetworkResult.Success) load(id) }
     }
 }

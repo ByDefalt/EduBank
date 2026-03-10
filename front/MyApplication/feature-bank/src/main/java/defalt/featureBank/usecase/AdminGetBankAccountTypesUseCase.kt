@@ -11,6 +11,6 @@ class AdminGetBankAccountTypesUseCase(
 ) {
     suspend operator fun invoke(): NetworkResult<List<Type>> {
         logger.debug("AdminGetBankAccountTypesUseCase")
-        return repository.get()
+        return repository.adminGetAllTypes()
     }
 }

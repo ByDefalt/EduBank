@@ -34,7 +34,7 @@ class AdminCreateBankAccountViewModel(
     }
 
     fun create(
-        accountId: Int,
+        accountId: String,
         iban: String,
         typeId: Int,
         sold: Double,

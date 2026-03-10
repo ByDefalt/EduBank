@@ -81,7 +81,7 @@ fun AdminCreateBankAccountScreen(
 private fun CreateForm(
     accounts: List<Account>,
     isLoading: Boolean,
-    onSubmit: (accountId: Int, iban: String, typeId: Int, sold: Double, overdraft: Double, state: State) -> Unit,
+    onSubmit: (accountId: String, iban: String, typeId: Int, sold: Double, overdraft: Double, state: State) -> Unit,
 ) {
     var iban by remember { mutableStateOf("") }
     var sold by remember { mutableStateOf("0.0") }
@@ -183,9 +183,7 @@ private fun CreateForm(
                     text = if (isLoading) "Création…" else "CRÉER LE COMPTE",
                     onClick = {
                         if (!isLoading && selectedAccount != null && iban.isNotBlank()) {
-                            // L'API prend un accountId Int — on extrait le numéro depuis l'id string "acc-XXXX"
-                            val numericId = selectedAccount!!.id?.filter { it.isDigit() }?.toIntOrNull() ?: 0
-                            onSubmit(numericId, iban, selectedTypeId, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState)
+                            selectedAccount!!.id?.let { onSubmit(it, iban, selectedTypeId, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState) }
                     }
                 },
             )

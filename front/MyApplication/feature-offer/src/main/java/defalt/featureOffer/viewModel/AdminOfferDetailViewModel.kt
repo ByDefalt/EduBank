@@ -2,6 +2,7 @@ package defalt.featureOffer.viewModel
 
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.featureOffer.usecase.DeleteOfferUseCase
 import defalt.featureOffer.usecase.GetOfferByIdUseCase
 import defalt.featureOffer.usecase.UpdateOfferUseCase
@@ -29,8 +30,8 @@ class AdminOfferDetailViewModel(
         getOfferById(id)
     }
 
-    fun save(id: Int, title: String, description: String, state: OffersIdPutRequest.State, startDate: LocalDate, endDate: LocalDate) {
-        val request = OffersIdPutRequest(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
+    fun save(id: Int, title: String, description: String, state: OfferInput.State, startDate: LocalDate, endDate: LocalDate) {
+        val request = OfferInput(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
         launchWithUiState(_actionState) {
             updateOffer(id, request).also { if (it is NetworkResult.Success) load(id) }
         }
