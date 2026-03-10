@@ -7,7 +7,7 @@ info:
     name: API Support
 
 servers:
-  - url: "http://localhost:8083/api/v1"
+  - url: "http://localhost:8080/api/v1"
 
 tags:
   - name: Operation
@@ -304,7 +304,7 @@ components:
     OperationState:
       type: string
       description: État de l'opération
-      enum: [pending, completed, failed, cancelled]
+      enum: [PENDING, COMPLETED, FAILED, CANCELLED]
       example: completed
 
     Operation:
