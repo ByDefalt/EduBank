@@ -16,17 +16,15 @@ java {
     }
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport)
-}
-
 tasks.jacocoTestReport {
-    dependsOn(tasks.test)
     reports {
         xml.required.set(true)
         html.required.set(true)
     }
+}
+
+tasks.check {
+    finalizedBy("jacocoTestReport")
 }
 
 repositories {
@@ -62,8 +60,10 @@ dependencies{
     implementation("com.h2database:h2:2.4.240")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("net.bytebuddy:byte-buddy-agent:1.17.7")
+
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
     implementation("io.jsonwebtoken:jjwt-api:0.13.0")
     implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
@@ -72,4 +72,8 @@ dependencies{
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    jvmArgs(
+        "-XX:+EnableDynamicAgentLoading",
+        "-Xshare:off"
+    )
 }
