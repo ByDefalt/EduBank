@@ -5,6 +5,7 @@ import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.State
 import defalt.featureBank.usecase.AdminCreateBankAccountUseCase
 import defalt.featureBank.usecase.AdminGetAllAccountsForBankUseCase
+import defalt.featureBank.usecase.AdminGetBankAccountTypesUseCase
 import defalt.testing.MainDispatcherRule
 import defalt.ui.state.UiState
 import defalt.utils.NetworkResult
@@ -23,6 +24,8 @@ class AdminCreateBankAccountViewModelTest {
 
     private val createBankAccount: AdminCreateBankAccountUseCase = mockk()
     private val getAllAccounts: AdminGetAllAccountsForBankUseCase = mockk()
+
+    private val getBankAccountTypes: AdminGetBankAccountTypesUseCase = mockk()
     private lateinit var viewModel: AdminCreateBankAccountViewModel
 
     private val fakeAccounts = listOf(
@@ -33,7 +36,7 @@ class AdminCreateBankAccountViewModelTest {
 
     @Before fun setUp() {
         coEvery { getAllAccounts() } returns NetworkResult.Success(fakeAccounts)
-        viewModel = AdminCreateBankAccountViewModel(createBankAccount, getAllAccounts)
+        viewModel = AdminCreateBankAccountViewModel(createBankAccount, getAllAccounts, getBankAccountTypes)
     }
 
     @Test fun `init charge les comptes en Success`() {
@@ -49,7 +52,7 @@ class AdminCreateBankAccountViewModelTest {
 
     @Test fun `accountsState passe en Error si useCase echoue`() {
         coEvery { getAllAccounts() } returns NetworkResult.Error(500, "Erreur")
-        val vm = AdminCreateBankAccountViewModel(createBankAccount, getAllAccounts)
+        val vm = AdminCreateBankAccountViewModel(createBankAccount, getAllAccounts, getBankAccountTypes)
         assertTrue(vm.accountsState.value is UiState.Error)
     }
 

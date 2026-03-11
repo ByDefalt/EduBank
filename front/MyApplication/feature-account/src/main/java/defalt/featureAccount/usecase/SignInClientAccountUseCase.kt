@@ -22,8 +22,14 @@ class SignInClientAccountUseCase(
         if(signInResult is NetworkResult.Success) {
             val validateResult = repository.validateToken(signInResult.data)
             if(validateResult is NetworkResult.Success){
+                // gérer le cas où le rôle renvoyé n'est pas un enum connu
+                val role = try {
+                    RoleEnum.valueOf(validateResult.data.role!!)
+                } catch (e: Exception) {
+                    RoleEnum.CUSTOMER
+                }
                 session.accountId = validateResult.data.id
-                session.role = RoleEnum.valueOf(validateResult.data.role!!)
+                session.role = role
                 session.token = signInResult.data.jwt
                 return NetworkResult.Success(session.role!!)
             }

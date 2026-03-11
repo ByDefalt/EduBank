@@ -50,13 +50,20 @@ class AdminBankDetailViewModel(
     fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
         val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
         launchWithUiState(stateFlow = _actionState) {
-            val result = updateBankAccount(id, typeId, param)
+            // Si typeId == 0 => mise à jour des seuls paramètres (pas de changement de type)
+            val result: NetworkResult<*> = if (typeId == 0) {
+                updateBankAccountParam(id, param)
+            } else {
+                updateBankAccount(id, typeId, param)
+            }
+
             if (result is NetworkResult.Success) {
                 onMutationSuccess?.invoke()
                 launchWithUiState(stateFlow = _uiState, transform = { it }) {
                     getBankAccountById(id)
                 }
             }
+            // map pour propager le résultat dans _actionState
             result.map { it }
         }
     }

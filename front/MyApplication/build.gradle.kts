@@ -76,85 +76,33 @@ tasks.register<JacocoReport>("jacocoFullReport") {
         }
     )
 }
-// ─── Rapport agrégé des résultats de tests ───────────────────────────────────
-// ─── Rapport agrégé des résultats de tests ───────────────────────────────────
-tasks.register("testFullReport") {
-    group = "Reporting"
-    description = "Agrège les résultats XML de tous les modules et affiche un résumé."
-
-    // Résoudre les chemins au moment de la configuration (pas dans doLast)
-    val xmlFiles = subprojects.flatMap { sub ->
-        listOf(
-            "test-results/testDebugUnitTest",
-            "test-results/testReleaseUnitTest",
-            "test-results/test",
-        ).map { sub.layout.buildDirectory.dir(it) }
-    }
-
-    // Rendre les inputs déclarés pour le config cache
-    inputs.files(xmlFiles).withPropertyName("testResultDirs").optional(true)
-
-    dependsOn(
-        subprojects.flatMap { sub ->
-            listOf(
-                sub.tasks.findByName("testDebugUnitTest"),
-                sub.tasks.findByName("test"),
-            ).filterNotNull()
-        }
-    )
-
-    doLast {
-        var total = 0; var passed = 0; var failed = 0; var skipped = 0; var errors = 0
-        val failedTests = mutableListOf<String>()
-
-        xmlFiles.forEach { dirProvider ->
-            val dir = dirProvider.get().asFile
-            if (dir.exists()) {
-                dir.walk().filter { it.name.startsWith("TEST-") && it.extension == "xml" }.forEach { xmlFile ->
-                    val root = groovy.xml.XmlParser().parse(xmlFile)
-                    val t = (root.attribute("tests")    as? String)?.toIntOrNull() ?: 0
-                    val f = (root.attribute("failures") as? String)?.toIntOrNull() ?: 0
-                    val e = (root.attribute("errors")   as? String)?.toIntOrNull() ?: 0
-                    val s = (root.attribute("skipped")  as? String)?.toIntOrNull() ?: 0
-                    total   += t; failed += f; errors += e; skipped += s
-
-                    // Lister les tests en échec
-                    if (f > 0 || e > 0) {
-                        (root["testcase"] as? groovy.util.NodeList)?.forEach { tc ->
-                            val node = tc as? groovy.util.Node ?: return@forEach
-                            val hasFailure = node.children().any { child ->
-                                child is groovy.util.Node && child.name() in listOf("failure", "error")
-                            }
-                            if (hasFailure) {
-                                val cls  = node.attribute("classname") as? String ?: "?"
-                                val name = node.attribute("name")      as? String ?: "?"
-                                failedTests.add("  ❌ $cls#$name")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        passed = total - failed - errors - skipped
-
-        println("""
-            ╔══════════════════════════════════╗
-            ║       TEST SUMMARY (ALL)         ║
-            ╠══════════════════════════════════╣
-            ║  Total    : $total
-            ║  ✅ Passed : $passed
-            ║  ❌ Failed : ${failed + errors}
-            ║  ⏭ Skipped: $skipped
-            ╚══════════════════════════════════╝
-        """.trimIndent())
-
-        if (failedTests.isNotEmpty()) {
-            println("\nTests en échec :")
-            failedTests.forEach { println(it) }
-        }
+// ─── Force ignoreFailures pour le rapport agrégé ──────────────────────────────
+gradle.taskGraph.whenReady {
+    if (hasTask(":testFullReport")) {
+        allTasks
+            .filterIsInstance<AbstractTestTask>()
+            .forEach { it.ignoreFailures = true }
     }
 }
+tasks.register<TestReport>("testFullReport") {
+    group = "Reporting"
+    description = "Génère le rapport de tests agrégé pour tous les modules."
+
+    val testTasks = subprojects.flatMap { sub ->
+        listOf(
+            sub.tasks.findByName("testDebugUnitTest"),
+            sub.tasks.findByName("test"),
+        ).filterNotNull()
+    }.filterIsInstance<AbstractTestTask>()  // ✅ cast pour accéder à binaryResultsDirectory
+
+    dependsOn(testTasks)
+
+    destinationDirectory.set(layout.buildDirectory.dir("reports/tests/full"))
+
+    // ✅ Pointe vers les résultats binaires de chaque tâche, pas les XML
+    testResults.setFrom(testTasks.map { it.binaryResultsDirectory })
+}
+
 // ─── Spotless ─────────────────────────────────────────────────────────────────
 spotless {
     kotlin {

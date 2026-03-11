@@ -1,5 +1,6 @@
 package defalt.featureOperation.usecase
 
+import defalt.domain.entity.account.RoleEnum
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.repository.service.IOperationRepository
 import defalt.domain.session.Session
@@ -20,7 +21,7 @@ import org.junit.Test
 class AddBeneficiaryUseCaseTest {
 
     private val repository: IOperationRepository = mockk()
-    private val session = Session(token = "tok", accountId = "acc-001", role = "CUSTOMER")
+    private val session = Session(token = "tok", accountId = "acc-001", role = RoleEnum.CUSTOMER)
     private val logger = FakeLogger()
     private lateinit var useCase: AddBeneficiary
 
@@ -126,7 +127,7 @@ class DeleteBeneficiaryUseCaseTest {
 class GetMyBeneficiariesUseCaseTest {
 
     private val repository: IOperationRepository = mockk()
-    private val session = Session(token = "tok", accountId = "acc-001", role = "CUSTOMER")
+    private val session = Session(token = "tok", accountId = "acc-001", role = RoleEnum.CUSTOMER)
     private val logger = FakeLogger()
     private lateinit var useCase: GetMyBeneficiaries
 
