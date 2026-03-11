@@ -158,7 +158,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OperationState'
+              $ref: '#/components/schemas/ChangeStateRequest'
       responses:
         '200':
           description: État modifié avec succès
@@ -386,6 +386,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Beneficiary'
+
+    ChangeStateRequest:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/OperationState'
+      required:
+        - state
 
     Error:
       type: object
