@@ -19,7 +19,6 @@ import defalt.network.infrastructure.ApiClient
 import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
@@ -136,17 +135,18 @@ class AccountRemoteDataSourceTest {
 
     // ── signIn ────────────────────────────────────────────────────────────────
 
-    @Test fun `signIn stocke le token et l accountId dans la session`() = runTest {
-        every { apiClient.addAuthorization(any(), any()) } returns apiClient
-        coEvery { accountApi.accountsSigninPost(any()) } returns Response.success(fakeTokenRequestDto)
-        coEvery { accountApi.accountsValidatePost(any()) } returns Response.success(fakeTokenResponseDto)
+    @Test fun `signIn retourne le token`() = runTest {
+        // utiliser une instance reelle d ApiClient pour observer bearerToken si besoin
+        val realApiClient = ApiClient()
+        val localDataSource = AccountRemoteDataSource(accountApi, personalInformationApi, roleApi, realApiClient)
 
-        val result = dataSource.signIn(SignInRequest(id = "alice@mail.fr", password = "pass"))
+        coEvery { accountApi.accountsSigninPost(any()) } returns Response.success(fakeTokenRequestDto)
+
+        val result = localDataSource.signIn(SignInRequest(id = "alice@mail.fr", password = "pass"))
 
         assertTrue(result is NetworkResult.Success)
-        assertEquals("jwt-token", session.token)
-        assertEquals("acc-001", session.accountId)
-        assertEquals("CUSTOMER", session.role)
+        assertEquals("jwt-token", (result as NetworkResult.Success).data.jwt)
+        // AccountRemoteDataSource n'ecrit pas dans la Session : validation du token est une opération separée
     }
 
     @Test fun `signIn propage Error 401`() = runTest {

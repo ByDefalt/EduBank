@@ -71,7 +71,8 @@ fun AdminHomeScreen(
             icon = Icons.Default.ChevronRight,
             title = "Déconnexion",
             subtitle = "Se déconnecter de l'application",
-            onClick = { adminHomeViewModel.logout(); onLogout.invoke() })
+            onClick = { adminHomeViewModel.logout(); onLogout.invoke() },
+        )
     }
 }
 

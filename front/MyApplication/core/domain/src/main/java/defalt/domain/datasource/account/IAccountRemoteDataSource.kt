@@ -58,5 +58,5 @@ interface IAccountRemoteDataSource {
 
     suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation>
 
-    fun insertTokenInHeaders(token: String) : NetworkResult<Boolean>
+    fun insertTokenInHeaders(token: String): NetworkResult<Boolean>
 }

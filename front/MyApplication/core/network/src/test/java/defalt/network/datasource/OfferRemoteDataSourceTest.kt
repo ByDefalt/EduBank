@@ -200,11 +200,12 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdPut(any(), any()) } returns Response.error(404, "not found".toResponseBody())
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
@@ -218,11 +219,12 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(patched)
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.INACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         val result = dataSource.updateOffer(1, request)
 
@@ -237,11 +239,12 @@ class OfferRemoteDataSourceTest {
             Response.error(400, "invalid".toResponseBody())
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }

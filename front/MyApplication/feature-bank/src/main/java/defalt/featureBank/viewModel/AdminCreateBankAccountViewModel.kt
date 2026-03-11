@@ -47,7 +47,6 @@ class AdminCreateBankAccountViewModel(
         getBankAccountTypes()
     }
 
-
     fun create(
         accountId: String,
         iban: String,

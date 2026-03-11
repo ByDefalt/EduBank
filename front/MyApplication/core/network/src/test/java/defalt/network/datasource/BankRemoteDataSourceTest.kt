@@ -31,8 +31,7 @@ class BankRemoteDataSourceTest {
 
     private val bankAccountPivotApi: BankAccountPivotApi = mockk()
 
-    private val bankAccountTypeApi : TypeApi = mockk()
-
+    private val bankAccountTypeApi: TypeApi = mockk()
 
     private lateinit var dataSource: BankRemoteDataSource
 

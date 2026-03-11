@@ -1,10 +1,10 @@
 package defalt.eduBank.ui.navigation
 
-sealed class NavRefreshKey {
-    data object Bank : NavRefreshKey()
-    data object Account : NavRefreshKey()
-    data object Offer : NavRefreshKey()
-    data object Operation : NavRefreshKey()
+sealed class NavRefreshKeys {
+    data object Bank : NavRefreshKeys()
+    data object Account : NavRefreshKeys()
+    data object Offer : NavRefreshKeys()
+    data object Operation : NavRefreshKeys()
 
     override fun toString() = this::class.simpleName!!
 }

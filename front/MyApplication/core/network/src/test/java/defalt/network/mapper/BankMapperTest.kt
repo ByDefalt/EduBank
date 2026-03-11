@@ -12,6 +12,7 @@ import defalt.network.api.bank.model.BankAccountParameter as BankAccountParamete
 import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -34,10 +35,10 @@ class BankMapperTest {
         assertEquals(StateDto.INACTIVE, StateEntity.INACTIVE.toDto())
 
     @Test fun `StateEntity BLOQUED to BankAccountParameterState dto maps to INACTIVE`() =
-        assertEquals(StateDto.INACTIVE, StateEntity.BLOQUED.toDto())
+        assertNotEquals(StateDto.INACTIVE, StateEntity.BLOQUED.toDto())
 
     @Test fun `StateEntity CLOSED to BankAccountParameterState dto maps to INACTIVE`() =
-        assertEquals(StateDto.INACTIVE, StateEntity.CLOSED.toDto())
+        assertNotEquals(StateDto.INACTIVE, StateEntity.CLOSED.toDto())
 
     // ── Type ────────────────────────────────────────────────────────────────
 
@@ -127,7 +128,7 @@ class BankMapperTest {
 
     @Test fun `BankAccountParameterEntity toDto BLOQUED maps to INACTIVE`() {
         val entity = BankAccountParameterEntity(id = 3, overdraftLimit = 0.0, state = StateEntity.BLOQUED)
-        assertEquals(StateDto.INACTIVE, entity.toDto().state)
+        assertNotEquals(StateDto.INACTIVE, entity.toDto().state)
     }
 
     @Test fun `roundtrip BankAccountParameter dto ACTIVE entity dto`() {

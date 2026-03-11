@@ -1,7 +1,7 @@
 package defalt.network.mapper.offer
 
-import defalt.domain.entity.offer.OfferInput
 import defalt.domain.entity.offer.Offer as OfferEntity
+import defalt.domain.entity.offer.OfferInput
 import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.network.api.offer.model.OfferInput as OfferInputDto
 import java.time.LocalDate
@@ -153,11 +153,12 @@ class OfferMapperTest {
 
     @Test fun `OffersIdPutRequestEntity toDto with null state`() {
         val entity = OfferInput(
-            title = "T", state = OfferInput.State.EXPIRED,
+            title = "T",
+            state = OfferInput.State.EXPIRED,
             description = "dsq",
             startDate = today,
             endDate = nextMonth,
-            picturePath = "def"
+            picturePath = "def",
         )
         // L'implémentation actuelle mappe toujours l'état ; vérifier la valeur mappée
         assertEquals(OfferInputDto.State.EXPIRED, entity.toDto().state)
@@ -183,7 +184,7 @@ class OfferMapperTest {
             description = "fdsfdf",
             startDate = today,
             endDate = nextMonth,
-            picturePath = "fds"
+            picturePath = "fds",
         )
         assertEquals(OfferInputDto.State.ACTIVE, entity.toDto().state)
     }
@@ -195,7 +196,7 @@ class OfferMapperTest {
             description = "fdsfdf",
             startDate = today,
             endDate = nextMonth,
-            picturePath = "fds"
+            picturePath = "fds",
         )
         assertEquals(OfferInputDto.State.INACTIVE, entity.toDto().state)
     }
@@ -207,7 +208,7 @@ class OfferMapperTest {
             description = "fdsfdf",
             startDate = today,
             endDate = nextMonth,
-            picturePath = "fds"
+            picturePath = "fds",
         )
         assertEquals(OfferInputDto.State.EXPIRED, entity.toDto().state)
     }

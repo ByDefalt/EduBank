@@ -40,6 +40,7 @@ class App : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun ArkeoApp(isPreview: Boolean) {
     val navController = rememberNavController()
@@ -69,7 +70,7 @@ fun ArkeoApp(isPreview: Boolean) {
                 // On affiche le NavHost seulement quand on sait où aller
                 ArkeoNavHost(
                     navController = navController,
-                    startDestination = startDestination ?: Routes.Core.Home
+                    startDestination = startDestination ?: Routes.Core.Home,
                 )
             } else {
                 // Splash / loading pendant la vérification
@@ -78,15 +79,17 @@ fun ArkeoApp(isPreview: Boolean) {
         }
     }
 }
+
 @Composable
 fun SplashScreen() {
     Box(
         modifier = Modifier.fillMaxSize().background(CustomColor.ArkeoRed),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(color = Color.White)
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewApp() {
