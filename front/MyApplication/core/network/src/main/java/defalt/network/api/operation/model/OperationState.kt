@@ -26,17 +26,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class OperationState(val value: kotlin.String) {
 
-    @SerialName(value = "pending")
-    PENDING("pending"),
+    @SerialName(value = "PENDING")
+    PENDING("PENDING"),
 
-    @SerialName(value = "completed")
-    COMPLETED("completed"),
+    @SerialName(value = "COMPLETED")
+    COMPLETED("COMPLETED"),
 
-    @SerialName(value = "failed")
-    FAILED("failed"),
+    @SerialName(value = "FAILED")
+    FAILED("FAILED"),
 
-    @SerialName(value = "cancelled")
-    CANCELLED("cancelled"),
+    @SerialName(value = "CANCELLED")
+    CANCELLED("CANCELLED"),
     ;
 
     /**
