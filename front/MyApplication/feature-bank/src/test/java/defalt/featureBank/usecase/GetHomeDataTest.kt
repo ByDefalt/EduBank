@@ -1,6 +1,7 @@
 package defalt.featureBank.usecase
 
 import defalt.domain.entity.account.PersonalInformation
+import defalt.domain.entity.account.RoleEnum
 import defalt.domain.entity.bank.BankAccount
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.repository.service.IAccountRepository
@@ -21,7 +22,7 @@ class GetHomeDataTest {
 
     private val bankRepository: IBankRepository = mockk()
     private val accountRepository: IAccountRepository = mockk()
-    private val session = Session(token = "tok", accountId = "acc-001", role = "CUSTOMER")
+    private val session = Session(token = "tok", accountId = "acc-001", role = RoleEnum.CUSTOMER)
     private val logger = FakeLogger()
     private lateinit var useCase: GetHomeData
 

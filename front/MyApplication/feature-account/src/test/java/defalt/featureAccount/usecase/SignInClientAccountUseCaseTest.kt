@@ -3,6 +3,7 @@ package defalt.featureAccount.usecase
 import defalt.domain.entity.account.RoleEnum
 import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
+import defalt.domain.entity.account.TokenResponse
 import defalt.domain.repository.service.IAccountRepository
 import defalt.domain.session.Session
 import defalt.testing.FakeLogger
@@ -29,16 +30,14 @@ class SignInClientAccountUseCaseTest {
     }
 
     private fun stubSignIn(role: String) {
-        coEvery { repository.signIn(any()) } answers {
-            session.token = "fake-token"
-            session.role = role
-            session.accountId = "acc-001"
-            NetworkResult.Success(TokenRequest(jwt = "fake-token"))
-        }
+        // signIn renvoie le token
+        coEvery { repository.signIn(any()) } returns NetworkResult.Success(TokenRequest(jwt = "fake-token"))
+        // validateToken renvoie l'id et le rôle en string
+        coEvery { repository.validateToken(any()) } returns NetworkResult.Success(TokenResponse(id = "acc-001", role = role))
     }
 
     @Test
-    fun `retourne CUSTOMER quand le rôle est CUSTOMER`() = runTest {
+    fun `retourne CUSTOMER quand le role est CUSTOMER`() = runTest {
         stubSignIn("CUSTOMER")
 
         val result = useCase("alice@mail.fr", "Password1!")
@@ -48,7 +47,7 @@ class SignInClientAccountUseCaseTest {
     }
 
     @Test
-    fun `retourne ADMIN quand le rôle est ADMIN`() = runTest {
+    fun `retourne ADMIN quand le role est ADMIN`() = runTest {
         stubSignIn("ADMIN")
 
         val result = useCase("admin@bank.fr", "Admin1234!")
@@ -58,7 +57,8 @@ class SignInClientAccountUseCaseTest {
     }
 
     @Test
-    fun `retourne CUSTOMER quand le rôle est inconnu`() = runTest {
+    fun `retourne CUSTOMER quand le role est inconnu`() = runTest {
+        // Si le rôle renvoyé n'est pas un enum valide, use case devrait retourner CUSTOMER par défaut
         stubSignIn("UNKNOWN")
 
         val result = useCase("x@y.fr", "pass")
@@ -68,7 +68,7 @@ class SignInClientAccountUseCaseTest {
     }
 
     @Test
-    fun `propage l erreur si signIn échoue`() = runTest {
+    fun `propage l erreur si signIn echoue`() = runTest {
         coEvery { repository.signIn(any()) } returns NetworkResult.Error(401, "Unauthorized")
 
         val result = useCase("bad@mail.fr", "wrong")
@@ -78,7 +78,7 @@ class SignInClientAccountUseCaseTest {
     }
 
     @Test
-    fun `propage l exception réseau`() = runTest {
+    fun `propage l exception reseau`() = runTest {
         val ex = RuntimeException("no internet")
         coEvery { repository.signIn(any()) } returns NetworkResult.Exception(ex)
 
@@ -93,9 +93,9 @@ class SignInClientAccountUseCaseTest {
         var captured: SignInRequest? = null
         coEvery { repository.signIn(any()) } answers {
             captured = firstArg()
-            session.role = "CUSTOMER"
             NetworkResult.Success(TokenRequest(jwt = "t"))
         }
+        coEvery { repository.validateToken(any()) } returns NetworkResult.Success(TokenResponse(id = "acc-001", role = "CUSTOMER"))
 
         useCase("alice@mail.fr", "MyPass!")
 

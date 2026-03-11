@@ -13,7 +13,6 @@ class GetMyBeneficiaries(
 ) {
     suspend operator fun invoke(): NetworkResult<List<Beneficiary>> {
         logger.debug("GetMyBeneficiaries")
-        logger.debug("TEST : ${operationRepository.getBeneficiariesByAccountId(session.accountId!!)}")
         return operationRepository.getBeneficiariesByAccountId(session.accountId!!)
     }
 }

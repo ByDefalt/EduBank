@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    jacoco
 }
 
 // Lecture de local.properties
@@ -15,7 +14,7 @@ val localProperties = Properties().apply {
 
 android {
     namespace = "defalt.network"
-    compileSdk { version = release(36) }
+    compileSdk = 36
     defaultConfig {
         minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
