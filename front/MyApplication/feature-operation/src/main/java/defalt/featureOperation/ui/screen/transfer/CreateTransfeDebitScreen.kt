@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import defalt.domain.entity.bank.BankAccount
 import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.featureOperation.viewModel.DebitStepData
 import defalt.featureOperation.viewModel.sampleTransferAccounts
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
@@ -53,18 +56,19 @@ private val TextSecondary = CustomColor.TextSecondary
 @Composable
 fun CreateTransferDebitScreen(
     onNext: () -> Unit = {},
+    onBack: () -> Unit = {},
     viewModel: CreateTransferViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.debitUiState.collectAsStateWithLifecycle()
-
-    CreateTransferDebitContent(
-        uiState = uiState,
-        onRetry = viewModel::retryDebit,
-        onAccountSelected = { account ->
-            viewModel.selectSourceAccount(account)
-            onNext()
-        },
-    )
+        CreateTransferDebitContent(
+            uiState = uiState,
+            onRetry = viewModel::retryDebit,
+            onAccountSelected = { account ->
+                viewModel.selectSourceAccount(account)
+                onNext()
+            },
+            onBack = onBack,
+        )
 }
 
 // ── Composable stateless (testable / previewable) ────────────────────────────
@@ -73,6 +77,7 @@ internal fun CreateTransferDebitContent(
     uiState: UiState<DebitStepData>,
     onRetry: () -> Unit = {},
     onAccountSelected: (BankAccount) -> Unit = {},
+    onBack: () -> Unit = {},
 ) {
     val typeNames = mapOf(
         1 to "COMPTE CHÈQUES",
@@ -86,24 +91,8 @@ internal fun CreateTransferDebitContent(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── Header ────────────────────────────────────────────────────────
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = "NOUVEAU VIREMENT",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    color = TextPrimary,
-                    textAlign = TextAlign.Center,
-                )
-            }
 
+            ArkeoTopBar(title = "NOUVEAUX VIREMENT", onBack = onBack)
             UiStateHandler(
                 uiState = uiState,
                 onRetry = onRetry,

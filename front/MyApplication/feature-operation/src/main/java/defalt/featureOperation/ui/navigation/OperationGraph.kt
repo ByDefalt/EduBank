@@ -68,8 +68,8 @@ fun NavGraphBuilder.operationGraph(
 
             composable<Routes.Operation.AddBeneficiaire> {
                 AddBeneficiaryScreen(
-                    onBack = { navController.popBackStack() },
-                    onSuccess = { navController.popBackStack() },
+                    onBack = onNavigateBack,
+                    onSuccess = onNavigateBack,
                 )
             }
 
@@ -77,8 +77,8 @@ fun NavGraphBuilder.operationGraph(
                 val route = entry.toRoute<Routes.Operation.EditBeneficiaire>()
                 EditBeneficiaryScreen(
                     id = route.id,
-                    onBack = { navController.popBackStack() },
-                    onSuccess = { navController.popBackStack() },
+                    onBack = onNavigateBack,
+                    onSuccess = onNavigateBack,
                 )
             }
         }
@@ -89,7 +89,7 @@ fun NavGraphBuilder.operationGraph(
         ) {
             composable<Routes.Operation.CreateTransfer.Debit> { entry ->
                 val vm = transferViewModel(navController, entry)
-                CreateTransferDebitScreen(viewModel = vm, onNext = onNavigateToTransferReceiver)
+                CreateTransferDebitScreen(viewModel = vm, onNext = onNavigateToTransferReceiver, onBack = onNavigateBack)
             }
             composable<Routes.Operation.CreateTransfer.Receiver> { entry ->
                 val vm = transferViewModel(navController, entry)
