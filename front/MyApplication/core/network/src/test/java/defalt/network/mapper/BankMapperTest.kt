@@ -1,9 +1,5 @@
 package defalt.network.mapper.bank
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
 import defalt.domain.entity.bank.BankAccount as BankAccountEntity
 import defalt.domain.entity.bank.BankAccountCreateRequest as BankAccountCreateRequestEntity
 import defalt.domain.entity.bank.BankAccountDetail as BankAccountDetailEntity
@@ -15,6 +11,10 @@ import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailsDto
 import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
 import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
 
 class BankMapperTest {
 

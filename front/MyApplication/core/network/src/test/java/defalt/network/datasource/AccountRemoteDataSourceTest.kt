@@ -6,6 +6,12 @@ import defalt.domain.entity.account.PersonalInformationRegister
 import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.session.Session
+import defalt.network.api.account.model.Account as AccountDto
+import defalt.network.api.account.model.AccountStateEnum as AccountStateEnumDto
+import defalt.network.api.account.model.PersonalInformation as PersonalInformationDto
+import defalt.network.api.account.model.Role as RoleDto
+import defalt.network.api.account.model.TokenRequest as TokenRequestDto
+import defalt.network.api.account.model.TokenResponse as TokenResponseDto
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
@@ -22,12 +28,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
-import defalt.network.api.account.model.Account as AccountDto
-import defalt.network.api.account.model.AccountStateEnum as AccountStateEnumDto
-import defalt.network.api.account.model.PersonalInformation as PersonalInformationDto
-import defalt.network.api.account.model.Role as RoleDto
-import defalt.network.api.account.model.TokenRequest as TokenRequestDto
-import defalt.network.api.account.model.TokenResponse as TokenResponseDto
 
 class AccountRemoteDataSourceTest {
 

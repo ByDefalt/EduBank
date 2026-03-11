@@ -1,14 +1,14 @@
 package defalt.network.mapper.operation
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import java.time.OffsetDateTime
 import defalt.domain.entity.operation.Beneficiary as BeneficiaryEntity
 import defalt.domain.entity.operation.Operation as OperationEntity
 import defalt.domain.entity.operation.OperationState as OperationStateEntity
 import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
 import defalt.network.api.operation.model.Operation as OperationDto
 import defalt.network.api.operation.model.OperationState as OperationStateDto
+import java.time.OffsetDateTime
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
 class OperationMapperTest {
 

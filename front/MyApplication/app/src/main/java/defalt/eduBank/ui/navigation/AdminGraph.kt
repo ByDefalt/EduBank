@@ -98,7 +98,7 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        composable<Routes.Admin.OfferList> {entry ->
+        composable<Routes.Admin.OfferList> { entry ->
             val shouldRefresh = entry.savedStateHandle
                 .getStateFlow(NavRefreshKeys.Offer.toString(), false)
                 .collectAsStateWithLifecycle()
@@ -125,7 +125,7 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        composable<Routes.Admin.OperationList> {entry ->
+        composable<Routes.Admin.OperationList> { entry ->
             val shouldRefresh = entry.savedStateHandle
                 .getStateFlow(NavRefreshKeys.Operation.toString(), false)
                 .collectAsStateWithLifecycle()

@@ -1,13 +1,13 @@
 package defalt.network.mapper.offer
 
+import defalt.domain.entity.offer.Offer as OfferEntity
 import defalt.domain.entity.offer.OfferInput
+import defalt.network.api.offer.model.Offer as OfferDto
+import defalt.network.api.offer.model.OfferInput as OfferInputDto
+import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.time.LocalDate
-import defalt.domain.entity.offer.Offer as OfferEntity
-import defalt.network.api.offer.model.Offer as OfferDto
-import defalt.network.api.offer.model.OfferInput as OfferInputDto
 
 class OfferMapperTest {
 

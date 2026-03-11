@@ -58,11 +58,11 @@ import defalt.ui.component.safeClick
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
-import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val LightGray = CustomColor.BackgroundGray

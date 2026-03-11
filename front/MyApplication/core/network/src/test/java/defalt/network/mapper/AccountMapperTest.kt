@@ -1,8 +1,5 @@
 package defalt.network.mapper.account
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
 import defalt.domain.entity.account.Account as AccountEntity
 import defalt.domain.entity.account.AccountRegister as AccountRegisterEntity
 import defalt.domain.entity.account.AccountStateEnum as AccountStateEnumEntity
@@ -18,6 +15,9 @@ import defalt.network.api.account.model.PersonalInformation as PersonalInformati
 import defalt.network.api.account.model.Role as RoleDto
 import defalt.network.api.account.model.RoleEnum as RoleEnumDto
 import defalt.network.api.account.model.TokenResponse as TokenResponseDto
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
 
 class AccountMapperTest {
 

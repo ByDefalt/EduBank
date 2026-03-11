@@ -3,9 +3,9 @@ package defalt.network.serialization
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationState
 import defalt.network.infrastructure.Serializer
+import java.time.OffsetDateTime
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.time.OffsetDateTime
 
 class OperationSerializationTest {
 

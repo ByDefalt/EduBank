@@ -38,8 +38,8 @@ import defalt.ui.component.ArkeoButton
 import defalt.ui.component.safeClick
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
-import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
+import org.koin.androidx.compose.koinViewModel
 
 // ── Composable stateful (prod) ───────────────────────────────────────────────
 @Composable
