@@ -39,6 +39,7 @@ fun AdminHomeScreen(
     onNavigateToBankAccounts: () -> Unit = {},
     onNavigateToOffers: () -> Unit = {},
     onNavigateToOperations: () -> Unit = {},
+    onLogout: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -60,6 +61,7 @@ fun AdminHomeScreen(
         AdminMenuCard(icon = Icons.Default.AccountBalance, title = "Comptes bancaires", subtitle = "Gérer les comptes bancaires", onClick = onNavigateToBankAccounts)
         AdminMenuCard(icon = Icons.Default.CardGiftcard, title = "Offres", subtitle = "Créer et gérer les offres", onClick = onNavigateToOffers)
         AdminMenuCard(icon = Icons.Default.SwapHoriz, title = "Opérations", subtitle = "Consulter et gérer les opérations", onClick = onNavigateToOperations)
+        AdminMenuCard(icon = Icons.Default.ChevronRight, title = "Déconnexion", subtitle = "Se déconnecter de l'application", onClick = onLogout)
     }
 }
 

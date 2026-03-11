@@ -46,7 +46,7 @@ class AccountRemoteDataSourceTest {
     private val fakeTokenRequestDto = TokenRequestDto(jwt = "jwt-token")
 
     @Before fun setUp() {
-        dataSource = AccountRemoteDataSource(accountApi, personalInformationApi, roleApi, apiClient, session)
+        dataSource = AccountRemoteDataSource(accountApi, personalInformationApi, roleApi, apiClient)
     }
 
     // ── getAccounts ──────────────────────────────────────────────────────────

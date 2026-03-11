@@ -19,11 +19,15 @@ class SignInClientAccountUseCase(
         if (signInResult is NetworkResult.Error) return NetworkResult.Error(signInResult.code, signInResult.message)
         if (signInResult is NetworkResult.Exception) return NetworkResult.Exception(signInResult.throwable)
 
-        val role = when (session.role?.uppercase()) {
-            RoleEnum.ADMIN.value -> RoleEnum.ADMIN
-            else -> RoleEnum.CUSTOMER
+        if(signInResult is NetworkResult.Success) {
+            val validateResult = repository.validateToken(signInResult.data)
+            if(validateResult is NetworkResult.Success){
+                session.accountId = validateResult.data.id
+                session.role = RoleEnum.valueOf(validateResult.data.role!!)
+                session.token = signInResult.data.jwt
+                return NetworkResult.Success(session.role!!)
+            }
         }
-
-        return NetworkResult.Success(role)
+        return NetworkResult.Error(401, "Unauthorized")
     }
 }

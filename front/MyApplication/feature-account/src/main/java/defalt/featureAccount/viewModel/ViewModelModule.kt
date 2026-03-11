@@ -7,6 +7,7 @@ val featureAccountViewModelModule = module {
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
     viewModel { MenuViewModel(get()) }
+    single { AuthViewModel(get()) }
 
     viewModel { AdminAccountListViewModel(get()) }
     viewModel { AdminAccountDetailViewModel(get(), get(), get(), get()) }

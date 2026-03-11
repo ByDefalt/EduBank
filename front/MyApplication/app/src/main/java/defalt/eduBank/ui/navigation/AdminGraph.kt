@@ -30,6 +30,7 @@ fun NavGraphBuilder.adminGraph(
     onNavigateToCreateOffer: () -> Unit,
     onNavigateToOperationDetail: (Int) -> Unit,
     onBack: () -> Unit,
+    onLogout: () -> Unit,
 ) {
     composable<Routes.Core.AdminHome> {
         AdminHomeScreen(
@@ -37,6 +38,7 @@ fun NavGraphBuilder.adminGraph(
             onNavigateToBankAccounts = onNavigateToBankAccounts,
             onNavigateToOffers = onNavigateToOffers,
             onNavigateToOperations = onNavigateToOperations,
+            onLogout = onLogout,
         )
     }
 

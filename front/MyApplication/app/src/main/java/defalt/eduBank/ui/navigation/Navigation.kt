@@ -12,10 +12,13 @@ import defalt.featureOperation.ui.navigation.operationGraph
 import defalt.ui.utils.Routes
 
 @Composable
-fun ArkeoNavHost(navController: NavHostController) {
+fun ArkeoNavHost(
+    navController: NavHostController,
+    startDestination: Routes = Routes.Core.Home,
+) {
     NavHost(
         navController = navController,
-        startDestination = Routes.Core.Home,
+        startDestination = startDestination,
     ) {
         homeGraph(
             onNavigateToLogin = { navController.navigate(Routes.Account.Login) },
@@ -82,6 +85,10 @@ fun ArkeoNavHost(navController: NavHostController) {
             onNavigateToCreateOffer = { navController.navigate(Routes.Admin.CreateOffer) },
             onNavigateToOperationDetail = { id -> navController.navigate(Routes.Admin.OperationDetail(id)) },
             onBack = { navController.popBackStack() },
+            onLogout = {
+                navController.navigate(Routes.Core.Home) {
+                    popUpTo(0) { inclusive = true }
+                }}
         )
         // ── Menu ───────────────────────────────────────────────────────────
         menuGraph(

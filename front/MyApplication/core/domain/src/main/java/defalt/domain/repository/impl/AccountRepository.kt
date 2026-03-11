@@ -86,4 +86,8 @@ class AccountRepository(
 
     override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> =
         remoteDataSource.updatePersonalInformation(id, personalInformation)
+
+    override fun insertTokenInHeaders(token: String): NetworkResult<Boolean> {
+        return remoteDataSource.insertTokenInHeaders(token)
+    }
 }

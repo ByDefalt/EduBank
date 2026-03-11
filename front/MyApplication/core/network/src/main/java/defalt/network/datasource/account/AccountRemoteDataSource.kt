@@ -9,7 +9,6 @@ import defalt.domain.entity.account.Role
 import defalt.domain.entity.account.SignInRequest
 import defalt.domain.entity.account.TokenRequest
 import defalt.domain.entity.account.TokenResponse
-import defalt.domain.session.Session
 import defalt.network.api.account.service.AccountApi
 import defalt.network.api.account.service.PersonalInformationApi
 import defalt.network.api.account.service.RoleApi
@@ -25,7 +24,6 @@ class AccountRemoteDataSource(
     private val personalInformationApi: PersonalInformationApi,
     private val roleApi: RoleApi,
     private val apiClient: ApiClient,
-    private val session: Session,
 ) : IAccountRemoteDataSource {
 
     // --- COMPTES ---
@@ -54,15 +52,9 @@ class AccountRemoteDataSource(
         val result = safeApiCall { api.accountsSigninPost(signInRequest.toDto()) }.map { it.toEntity() }
         if (result is NetworkResult.Success) {
             val token = result.data.jwt
-            apiClient.bearerToken = token
-            session.token = token
-            val validateResult = safeApiCall { api.accountsValidatePost(result.data.toDto()) }.map { it.toEntity() }
-            if (validateResult is NetworkResult.Success) {
-                session.accountId = validateResult.data.id
-                session.role = validateResult.data.role
-            }
+            this.insertTokenInHeaders(token)
+            println("token : $token")
         }
-        println("token : ${session.token}")
         return result
     }
 
@@ -99,4 +91,9 @@ class AccountRemoteDataSource(
 
     override suspend fun updatePersonalInformation(id: Int, personalInformation: PersonalInformation): NetworkResult<PersonalInformation> =
         safeApiCall { personalInformationApi.personalInformationIdPut(id, personalInformation.toDto()) }.map { it.toEntity() }
+
+    override fun insertTokenInHeaders(token: String): NetworkResult<Boolean> {
+        apiClient.bearerToken = token
+        return NetworkResult.Success(true)
+    }
 }
