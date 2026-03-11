@@ -14,22 +14,6 @@ tasks.jacocoTestReport {
         xml.required.set(true)
         html.required.set(true)
     }
-    classDirectories.setFrom(
-        files(classDirectories.files.map {
-            fileTree(it) {
-                exclude(
-                    // swagger
-                    "dto/accountapi/**",
-                    // http
-                    "accountapi/controller/**",
-                    "accountapi/interception/**",
-                    "accountapi/annotation/**",
-                    "accountapi/repository/**",
-                    "accountapi/AccountAPIApplication.class"
-                )
-            }
-        })
-    )
 }
 
 tasks.check {
