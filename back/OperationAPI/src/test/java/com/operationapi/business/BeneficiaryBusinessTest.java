@@ -71,9 +71,9 @@ class BeneficiaryBusinessTest {
     void testGetBeneficiariesByAccountIdNotFountException() {
         when(beneficiaryRepository.getBeneficiariesByAccountId("ACC-404")).thenReturn(Collections.emptyList());
 
-        NotFoundException ex = assertThrows(NotFoundException.class, () -> beneficiaryBusiness.getBeneficiariesByAccountId("ACC-404"));
+        BeneficiaryList beneficiaryList = beneficiaryBusiness.getBeneficiariesByAccountId("ACC-404");
 
-        assertEquals("404", ex.getCode());
+        assertEquals(0, beneficiaryList.getData().size());
     }
 
     @Test

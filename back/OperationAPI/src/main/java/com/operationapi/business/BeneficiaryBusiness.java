@@ -37,9 +37,6 @@ public class BeneficiaryBusiness {
         List<Beneficiary> beneficiaries = BeneficiaryMapper.toDto(beneficiaryEntities);
         BeneficiaryList beneficiaryList = new BeneficiaryList();
         beneficiaryList.setData(beneficiaries);
-        if (beneficiaryList.getData().isEmpty()) {
-            throw new NotFoundException("404", "Aucun bénéficiaire trouvé pour le compte " + accountId);
-        }
         return beneficiaryList;
     }
 
