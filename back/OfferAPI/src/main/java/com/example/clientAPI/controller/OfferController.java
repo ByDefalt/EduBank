@@ -46,9 +46,6 @@ public class OfferController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOfferById(@PathParam("id") int id) {
         Offer offer = offerBusiness.getOfferById(id);
-        if (offer == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         return Response.ok(offer).build();
     }
 
@@ -56,10 +53,7 @@ public class OfferController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createOffer(@HeaderParam("Authorization") String token, OfferInput dto) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-        Offer created = offerBusiness.createOffer(dto);
+        Offer created = offerBusiness.createOffer(token, dto);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
@@ -69,13 +63,7 @@ public class OfferController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateOffer(@HeaderParam("Authorization") String token,
                                 @PathParam("id") int id, OfferInput dto) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-        Offer updated = offerBusiness.updateOffer(id, dto);
-        if (updated == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        Offer updated = offerBusiness.updateOffer(token, id, dto);
         return Response.ok(updated).build();
     }
 
@@ -83,10 +71,7 @@ public class OfferController {
     @Path("/{id}")
     public Response deleteOffer(@HeaderParam("Authorization") String token,
                                 @PathParam("id") int id) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-        offerBusiness.deleteOffer(id);
+        offerBusiness.deleteOffer(token, id);
         return Response.noContent().build();
     }
 }
