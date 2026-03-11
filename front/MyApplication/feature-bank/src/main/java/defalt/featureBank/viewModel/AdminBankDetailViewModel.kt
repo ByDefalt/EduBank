@@ -32,9 +32,11 @@ class AdminBankDetailViewModel(
     private val _actionState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val actionState: StateFlow<UiState<Unit>> = _actionState.asStateFlow()
 
-    // Liste des types chargés depuis l'API
     private val _typesState = MutableStateFlow<UiState<List<Type>>>(UiState.Loading)
     val typesState: StateFlow<UiState<List<Type>>> = _typesState.asStateFlow()
+
+    // Posé par le screen via LaunchedEffect, appelé après chaque mutation réussie
+    var onMutationSuccess: (() -> Unit)? = null
 
     fun load(id: String) {
         launchWithUiState(stateFlow = _uiState, transform = { it }) {
@@ -45,17 +47,12 @@ class AdminBankDetailViewModel(
         }
     }
 
-    /**
-     * Met à jour le type ET les paramètres (découvert + état) en une seule action.
-     * Utilise _actionState pour ne pas écraser les données affichées dans _uiState.
-     * Une fois réussi, recharge le détail pour refléter les nouvelles valeurs.
-     */
     fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
         val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
         launchWithUiState(stateFlow = _actionState) {
             val result = updateBankAccount(id, typeId, param)
             if (result is NetworkResult.Success) {
-                // Recharger le détail pour mettre à jour l'affichage
+                onMutationSuccess?.invoke()
                 launchWithUiState(stateFlow = _uiState, transform = { it }) {
                     getBankAccountById(id)
                 }
@@ -65,6 +62,11 @@ class AdminBankDetailViewModel(
     }
 
     fun delete(id: String, onSuccess: () -> Unit) = launchWithUiState(_actionState) {
-        deleteBankAccount(id).also { if (it is NetworkResult.Success) onSuccess() }
+        deleteBankAccount(id).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                onSuccess()
+            }
+        }
     }
 }

@@ -49,6 +49,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminBankDetailScreen(
     id: String,
     onBack: () -> Unit = {},
+    onMutationSuccess: () -> Unit = {},
     viewModel: AdminBankDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -56,6 +57,9 @@ fun AdminBankDetailScreen(
     val typesState by viewModel.typesState.collectAsStateWithLifecycle()
 
     LaunchedEffect(id) { viewModel.load(id) }
+
+    // Branche le callback du graph vers le ViewModel
+    LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
 
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         ArkeoTopBar(title = "COMPTE BANCAIRE", onBack = onBack)
@@ -68,9 +72,6 @@ fun AdminBankDetailScreen(
         ) { detail ->
             val isLoading = actionState is UiState.Loading
 
-            // États initialisés une seule fois à partir du detail chargé.
-            // rememberSaveable avec key = detail.id force la réinitialisation
-            // si on navigue vers un autre compte sans recréer le composable.
             var overdraft by rememberSaveable(detail.id) {
                 mutableStateOf(detail.parameter?.overdraftLimit?.toString() ?: "0.0")
             }
@@ -97,7 +98,6 @@ fun AdminBankDetailScreen(
 
                 // ── Modification complète ──────────────────────────────────
                 ArkeoCard(title = "MODIFIER LE COMPTE") {
-                    // Dropdown Type (données depuis l'API)
                     when (val ts = typesState) {
                         is UiState.Loading -> Box(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -117,13 +117,11 @@ fun AdminBankDetailScreen(
                         )
                     }
 
-                    // Dropdown État
                     StateDropdown(
                         selectedState = selectedState,
                         onStateSelected = { selectedState = it },
                     )
 
-                    // Découvert autorisé
                     OutlinedTextField(
                         value = overdraft,
                         onValueChange = { overdraft = it },
@@ -136,7 +134,6 @@ fun AdminBankDetailScreen(
                         text = if (isLoading) "Enregistrement…" else "ENREGISTRER",
                         onClick = {
                             if (!isLoading) {
-                                // Tolérer la virgule comme séparateur décimal (FR locale)
                                 val normalized = overdraft.replace(',', '.')
                                 viewModel.updateFull(
                                     id = id,

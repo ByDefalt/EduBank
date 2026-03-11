@@ -22,6 +22,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,12 +42,22 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AdminBankListScreen(
+    shouldRefresh: Boolean = false,
+    onRefreshConsumed: () -> Unit = {},
     onBack: () -> Unit = {},
     onItemClick: (String) -> Unit = {},
     onCreateClick: () -> Unit = {},
     viewModel: AdminBankListViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.retry()
+            onRefreshConsumed()
+        }
+    }
+
     AdminBankListContent(
         uiState = uiState,
         onRetry = viewModel::retry,
@@ -68,7 +79,6 @@ internal fun AdminBankListContent(
         Column(modifier = Modifier.fillMaxSize()) {
             ArkeoTopBar(title = "COMPTES BANCAIRES", onBack = onBack)
 
-            // ── Liste ──────────────────────────────────────────────────────
             UiStateHandler(
                 uiState = uiState,
                 modifier = Modifier.weight(1f),
@@ -85,7 +95,6 @@ internal fun AdminBankListContent(
             }
         }
 
-        // ── FAB Créer ──────────────────────────────────────────────────────
         FloatingActionButton(
             onClick = onCreateClick,
             modifier = Modifier

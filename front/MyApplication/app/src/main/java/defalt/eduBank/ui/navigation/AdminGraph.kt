@@ -1,5 +1,7 @@
 package defalt.eduBank.ui.navigation
 
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -18,6 +20,7 @@ import defalt.featureAccount.ui.screen.AdminHomeScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.adminGraph(
+    navController: NavController,
     onNavigateToAccounts: () -> Unit,
     onNavigateToBankAccounts: () -> Unit,
     onNavigateToOffers: () -> Unit,
@@ -57,8 +60,14 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        composable<Routes.Admin.BankList> {
+        composable<Routes.Admin.BankList> { entry ->
+            val shouldRefresh = entry.savedStateHandle
+                .getStateFlow(NavRefreshKey.Bank.toString(), false)
+                .collectAsStateWithLifecycle()
+
             AdminBankListScreen(
+                shouldRefresh = shouldRefresh.value,
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKey.Bank.toString()] = false },
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToBankDetail,
                 onCreateClick = onNavigateToCreateBankAccount,
@@ -66,9 +75,14 @@ fun NavGraphBuilder.adminGraph(
         }
         composable<Routes.Admin.BankDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.BankDetail>().id
+            val previousEntry = navController.previousBackStackEntry
+
             AdminBankDetailScreen(
                 id = id,
                 onBack = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKey.Bank.toString(), true)
+                },
             )
         }
         composable<Routes.Admin.CreateBankAccount> {

@@ -18,6 +18,9 @@ suspend fun <T> safeApiCall(
             if (body != null) {
                 logger.debug(body.toString())
                 NetworkResult.Success(body)
+            } else if (response.code() == 204) {
+                logger.debug("No content")
+                NetworkResult.Success(Unit as T)
             } else {
                 logger.debug("Empty body")
                 NetworkResult.Error(response.code(), "Empty body")
