@@ -1,4 +1,4 @@
-package defalt.ui.screen
+package defalt.featureAccount.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

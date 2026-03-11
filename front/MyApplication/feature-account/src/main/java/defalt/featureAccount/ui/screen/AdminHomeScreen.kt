@@ -1,4 +1,4 @@
-package defalt.ui.screen
+package defalt.featureAccount.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import defalt.featureAccount.viewModel.AdminHomeViewModel
 import defalt.ui.utils.CustomColor
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AdminHomeScreen(
@@ -40,6 +42,7 @@ fun AdminHomeScreen(
     onNavigateToOffers: () -> Unit = {},
     onNavigateToOperations: () -> Unit = {},
     onLogout: () -> Unit = {},
+    adminHomeViewModel: AdminHomeViewModel = koinViewModel(),
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +52,10 @@ fun AdminHomeScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(Color.White).padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(16.dp),
             horizontalArrangement = Arrangement.Center,
         ) {
             Text("ADMINISTRATION", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = CustomColor.ArkeoRed)
@@ -61,20 +67,28 @@ fun AdminHomeScreen(
         AdminMenuCard(icon = Icons.Default.AccountBalance, title = "Comptes bancaires", subtitle = "Gérer les comptes bancaires", onClick = onNavigateToBankAccounts)
         AdminMenuCard(icon = Icons.Default.CardGiftcard, title = "Offres", subtitle = "Créer et gérer les offres", onClick = onNavigateToOffers)
         AdminMenuCard(icon = Icons.Default.SwapHoriz, title = "Opérations", subtitle = "Consulter et gérer les opérations", onClick = onNavigateToOperations)
-        AdminMenuCard(icon = Icons.Default.ChevronRight, title = "Déconnexion", subtitle = "Se déconnecter de l'application", onClick = onLogout)
+        AdminMenuCard(
+            icon = Icons.Default.ChevronRight,
+            title = "Déconnexion",
+            subtitle = "Se déconnecter de l'application",
+            onClick = { adminHomeViewModel.logout(); onLogout.invoke() })
     }
 }
 
 @Composable
 private fun AdminMenuCard(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(2.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {

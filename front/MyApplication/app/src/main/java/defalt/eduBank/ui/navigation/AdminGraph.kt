@@ -14,7 +14,7 @@ import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
 import defalt.featureOperation.ui.screen.AdminOperationDetailScreen
 import defalt.featureOperation.ui.screen.AdminOperationListScreen
-import defalt.ui.screen.AdminHomeScreen
+import defalt.featureAccount.ui.screen.AdminHomeScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.adminGraph(
