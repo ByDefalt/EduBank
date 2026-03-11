@@ -1,5 +1,6 @@
 package gatewayapi.repository.operation;
 
+import dto.operationapi.ChangeStateRequest;
 import dto.operationapi.Operation;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
@@ -31,7 +32,7 @@ public class OperationRepository {
         return this.operationClient.getOperationById(id);
     }
 
-    public Operation updateOperationState(Integer id, OperationState state) {
+    public Operation updateOperationState(Integer id, ChangeStateRequest state) {
         return this.operationClient.updateOperationState(id, state);
     }
 
