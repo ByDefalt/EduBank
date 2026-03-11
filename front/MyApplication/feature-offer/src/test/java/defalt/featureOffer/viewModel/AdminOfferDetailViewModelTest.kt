@@ -1,6 +1,7 @@
 package defalt.featureOffer.viewModel
 
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.featureOffer.usecase.DeleteOfferUseCase
 import defalt.featureOffer.usecase.GetOfferByIdUseCase
 import defalt.featureOffer.usecase.UpdateOfferUseCase
@@ -54,7 +55,7 @@ class AdminOfferDetailViewModelTest {
             id = 1,
             title = "Titre",
             description = "Desc",
-            state = OffersIdPutRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )
@@ -70,7 +71,7 @@ class AdminOfferDetailViewModelTest {
             id = 1,
             title = "Titre",
             description = "Desc",
-            state = OffersIdPutRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )

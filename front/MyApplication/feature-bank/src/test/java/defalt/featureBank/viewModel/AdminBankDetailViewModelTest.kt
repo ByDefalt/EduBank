@@ -4,6 +4,7 @@ import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.State
 import defalt.featureBank.usecase.AdminDeleteBankAccountUseCase
 import defalt.featureBank.usecase.AdminGetBankAccountByIdUseCase
+import defalt.featureBank.usecase.AdminGetBankAccountTypesUseCase
 import defalt.featureBank.usecase.AdminUpdateBankAccountParamUseCase
 import defalt.featureBank.usecase.AdminUpdateBankAccountUseCase
 import defalt.testing.MainDispatcherRule
@@ -26,12 +27,15 @@ class AdminBankDetailViewModelTest {
     private val deleteBankAccount: AdminDeleteBankAccountUseCase = mockk()
     private val updateBankAccountParam: AdminUpdateBankAccountParamUseCase = mockk()
     private val updateBankAccount: AdminUpdateBankAccountUseCase = mockk()
+
+    private val getBankAccountType: AdminGetBankAccountTypesUseCase = mockk()
+
     private lateinit var viewModel: AdminBankDetailViewModel
 
     private val fakeDetail = BankAccountDetail(id = "bank-001", sold = 1000.0, iban = "FR76...")
 
     @Before fun setUp() {
-        viewModel = AdminBankDetailViewModel(getBankAccountById, deleteBankAccount, updateBankAccountParam, updateBankAccount)
+        viewModel = AdminBankDetailViewModel(getBankAccountById, deleteBankAccount, updateBankAccountParam, updateBankAccount, getBankAccountType)
     }
 
     @Test fun `load charge le compte en Success`() {
@@ -57,19 +61,19 @@ class AdminBankDetailViewModelTest {
     @Test fun `update met a jour le parametre et recharge`() {
         coEvery { getBankAccountById("bank-001") } returns NetworkResult.Success(fakeDetail)
         coEvery { updateBankAccountParam("bank-001", any()) } returns NetworkResult.Success(Unit)
-        viewModel.update("bank-001", 500.0)
+        viewModel.updateFull("bank-001", 0, 500.0, State.ACTIVE)
         coVerify(exactly = 1) { updateBankAccountParam("bank-001", any()) }
         coVerify(exactly = 1) { getBankAccountById("bank-001") }
     }
 
     @Test fun `update passe actionState en Error si echec`() {
         coEvery { updateBankAccountParam("bank-001", any()) } returns NetworkResult.Error(400, "Invalide")
-        viewModel.update("bank-001", 500.0)
+        viewModel.updateFull("bank-001", 0, 500.0, State.ACTIVE)
         assertTrue(viewModel.actionState.value is UiState.Error)
     }
 
     @Test fun `updateFull met a jour le compte complet`() {
-        coEvery { updateBankAccount("bank-001", any(), any()) } returns NetworkResult.Success(fakeDetail)
+        coEvery { updateBankAccount("bank-001", any(), any()) } returns NetworkResult.Success(Unit)
         viewModel.updateFull("bank-001", 1, 500.0, State.ACTIVE)
         coVerify(exactly = 1) { updateBankAccount("bank-001", 1, any()) }
     }

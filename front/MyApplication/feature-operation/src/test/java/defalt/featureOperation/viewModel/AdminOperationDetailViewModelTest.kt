@@ -75,13 +75,13 @@ class AdminOperationDetailViewModelTest {
 
     @Test fun `updateState met a jour l etat et recharge`() {
         coEvery { getOperationById(1) } returns NetworkResult.Success(fakeOperation.copy(state = OperationState.COMPLETED))
-        coEvery { updateOperationState(1, OperationState.COMPLETED.value) } returns NetworkResult.Success(
+        coEvery { updateOperationState(1, OperationState.COMPLETED) } returns NetworkResult.Success(
             fakeOperation.copy(state = OperationState.COMPLETED),
         )
 
         viewModel.updateState(1, OperationState.COMPLETED)
 
-        coVerify(exactly = 1) { updateOperationState(1, OperationState.COMPLETED.value) }
+        coVerify(exactly = 1) { updateOperationState(1, OperationState.COMPLETED) }
         coVerify(exactly = 1) { getOperationById(1) }
     }
 

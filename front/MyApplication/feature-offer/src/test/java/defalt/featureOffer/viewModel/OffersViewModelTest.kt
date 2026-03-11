@@ -1,6 +1,7 @@
 package defalt.featureOffer.viewModel
 
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.domain.session.Session
 import defalt.featureOffer.usecase.CreateOfferUseCase
 import defalt.featureOffer.usecase.GetAllOffersUseCase
@@ -104,7 +105,7 @@ class AdminCreateOfferViewModelTest {
     @Test fun `create passe en Success`() {
         coEvery { createOffer(any()) } returns NetworkResult.Success(fakeOffer)
 
-        viewModel.create("Promo", "Desc", OffersPostRequest.State.ACTIVE, today, nextMonth)
+        viewModel.create("Promo", "Desc", OfferInput.State.ACTIVE, today, nextMonth)
 
         assertTrue(viewModel.uiState.value is UiState.Success)
         coVerify(exactly = 1) { createOffer(any()) }
@@ -113,7 +114,7 @@ class AdminCreateOfferViewModelTest {
     @Test fun `create passe en Error si useCase echoue`() {
         coEvery { createOffer(any()) } returns NetworkResult.Error(400, "Donnees invalides")
 
-        viewModel.create("X", "Y", OffersPostRequest.State.INACTIVE, today, nextMonth)
+        viewModel.create("X", "Y", OfferInput.State.INACTIVE, today, nextMonth)
 
         assertTrue(viewModel.uiState.value is UiState.Error)
         assertEquals("Donnees invalides", (viewModel.uiState.value as UiState.Error).message)
@@ -122,7 +123,7 @@ class AdminCreateOfferViewModelTest {
     @Test fun `create passe en Error si exception`() {
         coEvery { createOffer(any()) } returns NetworkResult.Exception(RuntimeException("crash"))
 
-        viewModel.create("X", "Y", OffersPostRequest.State.EXPIRED, today, nextMonth)
+        viewModel.create("X", "Y", OfferInput.State.EXPIRED, today, nextMonth)
 
         assertTrue(viewModel.uiState.value is UiState.Error)
     }
@@ -130,12 +131,12 @@ class AdminCreateOfferViewModelTest {
     @Test fun `create transmet les bons parametres`() {
         coEvery { createOffer(any()) } returns NetworkResult.Success(fakeOffer)
 
-        viewModel.create("Mon Titre", "Ma Desc", OffersPostRequest.State.ACTIVE, today, nextMonth)
+        viewModel.create("Mon Titre", "Ma Desc", OfferInput.State.ACTIVE, today, nextMonth)
 
         coVerify {
             createOffer(
                 match {
-                    it.title == "Mon Titre" && it.description == "Ma Desc" && it.state == OffersPostRequest.State.ACTIVE
+                    it.title == "Mon Titre" && it.description == "Ma Desc" && it.state == OfferInput.State.ACTIVE
                 },
             )
         }
@@ -144,8 +145,8 @@ class AdminCreateOfferViewModelTest {
     @Test fun `create avec etat INACTIVE transmet INACTIVE`() {
         coEvery { createOffer(any()) } returns NetworkResult.Success(fakeOffer)
 
-        viewModel.create("T", "D", OffersPostRequest.State.INACTIVE, today, nextMonth)
+        viewModel.create("T", "D", OfferInput.State.INACTIVE, today, nextMonth)
 
-        coVerify { createOffer(match { it.state == OffersPostRequest.State.INACTIVE }) }
+        coVerify { createOffer(match { it.state == OfferInput.State.INACTIVE }) }
     }
 }

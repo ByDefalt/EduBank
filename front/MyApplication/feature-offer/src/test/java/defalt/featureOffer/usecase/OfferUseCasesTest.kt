@@ -1,6 +1,7 @@
 package defalt.featureOffer.usecase
 
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.domain.repository.service.IOfferRepository
 import defalt.testing.FakeLogger
 import defalt.utils.NetworkResult
@@ -63,10 +64,10 @@ class CreateOfferUseCaseTest {
     @Before fun setUp() { useCase = CreateOfferUseCase(repository, logger) }
 
     @Test fun `cree une offre avec succes`() = runTest {
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "Titre",
             description = "Desc",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )
@@ -81,10 +82,10 @@ class CreateOfferUseCaseTest {
     }
 
     @Test fun `propage l erreur de creation`() = runTest {
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "Titre",
             description = "Desc",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )
@@ -97,10 +98,10 @@ class CreateOfferUseCaseTest {
     }
 
     @Test fun `propage l exception`() = runTest {
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "T",
             description = "D",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )
@@ -119,10 +120,10 @@ class UpdateOfferUseCaseTest {
     @Before fun setUp() { useCase = UpdateOfferUseCase(repository, logger) }
 
     @Test fun `met a jour l offre avec succes`() = runTest {
-        val request = OffersIdPutRequest(
+        val request = OfferInput(
             title = "Nouveau titre",
             description = "Desc",
-            state = OffersIdPutRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = LocalDate.now(),
             endDate = LocalDate.now().plusMonths(1),
         )
@@ -136,9 +137,12 @@ class UpdateOfferUseCaseTest {
     }
 
     @Test fun `propage l erreur de mise a jour`() = runTest {
-        val request = OffersIdPutRequest(
-            title = "Titre",
-            state = OffersIdPutRequest.State.INACTIVE,
+        val request = OfferInput(
+            title = "Nouveau titre",
+            description = "Desc",
+            state = OfferInput.State.ACTIVE,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
         )
         coEvery { repository.updateOffer(1, request) } returns NetworkResult.Error(404, "Non trouvee")
 
@@ -149,7 +153,13 @@ class UpdateOfferUseCaseTest {
     }
 
     @Test fun `propage l exception`() = runTest {
-        val request = OffersIdPutRequest(title = "T")
+        val request = OfferInput(
+            title = "Nouveau titre",
+            description = "Desc",
+            state = OfferInput.State.ACTIVE,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
+        )
         coEvery { repository.updateOffer(1, request) } returns NetworkResult.Exception(RuntimeException())
         assertTrue(useCase(1, request) is NetworkResult.Exception)
     }

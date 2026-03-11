@@ -9,6 +9,8 @@ import defalt.network.api.bank.model.BankAccountParameter as BankAccountParamete
 import defalt.network.api.bank.model.Type as TypeDto
 import defalt.network.api.bank.service.BankAccountApi
 import defalt.network.api.bank.service.BankAccountParameterApi
+import defalt.network.api.bank.service.BankAccountPivotApi
+import defalt.network.api.bank.service.TypeApi
 import defalt.network.datasource.bank.BankRemoteDataSource
 import defalt.utils.NetworkResult
 import io.mockk.coEvery
@@ -26,6 +28,12 @@ class BankRemoteDataSourceTest {
 
     private val bankAccountApi: BankAccountApi = mockk()
     private val bankAccountParameterApi: BankAccountParameterApi = mockk()
+
+    private val bankAccountPivotApi: BankAccountPivotApi = mockk()
+
+    private val bankAccountTypeApi : TypeApi = mockk()
+
+
     private lateinit var dataSource: BankRemoteDataSource
 
     private val fakeBankAccountDto = BankAccountDto(
@@ -44,7 +52,7 @@ class BankRemoteDataSourceTest {
     )
 
     @Before fun setUp() {
-        dataSource = BankRemoteDataSource(bankAccountApi, bankAccountParameterApi)
+        dataSource = BankRemoteDataSource(bankAccountApi, bankAccountParameterApi, bankAccountPivotApi, bankAccountTypeApi)
     }
 
     // ── adminGetAllBankAccounts ─────────────────────────────────────────────
@@ -117,7 +125,7 @@ class BankRemoteDataSourceTest {
             Response.success(fakeDetailsDto)
 
         val request = BankAccountCreateRequest(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 500.0, state = State.ACTIVE)
-        val result = dataSource.adminCreateBankAccount(1, request)
+        val result = dataSource.adminCreateBankAccount("1", request)
 
         assertTrue(result is NetworkResult.Success)
         assertEquals("1", (result as NetworkResult.Success).data.id)
@@ -129,7 +137,7 @@ class BankRemoteDataSourceTest {
             Response.error(409, "iban exists".toResponseBody())
 
         val request = BankAccountCreateRequest(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 0.0, state = State.ACTIVE)
-        val result = dataSource.adminCreateBankAccount(1, request)
+        val result = dataSource.adminCreateBankAccount("1", request)
 
         assertTrue(result is NetworkResult.Error)
         assertEquals(409, (result as NetworkResult.Error).code)
@@ -156,7 +164,7 @@ class BankRemoteDataSourceTest {
             Response.success(fakeDetailsDto)
 
         val param = BankAccountParameter(id = 1, overdraftLimit = 200.0, state = State.ACTIVE)
-        val result = dataSource.adminUpdateBankAccount("1", 1, param)
+        val result = dataSource.adminUpdateBankAccountParameters("1", param)
 
         assertTrue(result is NetworkResult.Success)
         coVerify(exactly = 1) { bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch("1", any()) }
@@ -168,7 +176,7 @@ class BankRemoteDataSourceTest {
             Response.error(400, "invalid".toResponseBody())
 
         val param = BankAccountParameter(id = 1, overdraftLimit = 200.0, state = State.ACTIVE)
-        val result = dataSource.adminUpdateBankAccount("1", 1, param)
+        val result = dataSource.adminUpdateBankAccountParameters("1", param)
 
         assertTrue(result is NetworkResult.Error)
         // Ne doit pas recharger le detail si les params echouent

@@ -111,7 +111,7 @@ class OperationRemoteDataSourceTest {
     @Test fun `updateOperationState appelle l api avec le bon etat`() = runTest {
         coEvery { operationApi.operationsIdStatePatch(1, any()) } returns Response.success(fakeOperationDto)
 
-        dataSource.updateOperationState(1, "COMPLETED")
+        dataSource.updateOperationState(1, OperationState.COMPLETED)
 
         coVerify(exactly = 1) { operationApi.operationsIdStatePatch(1, "\"COMPLETED\"") }
     }
@@ -120,7 +120,7 @@ class OperationRemoteDataSourceTest {
         coEvery { operationApi.operationsIdStatePatch(any(), any()) } returns
             Response.error(400, "invalid state".toResponseBody())
 
-        assertTrue(dataSource.updateOperationState(1, "INVALID") is NetworkResult.Error)
+        assertTrue(dataSource.updateOperationState(1, OperationState.FAILED) is NetworkResult.Error)
     }
 
     // ── createBeneficiary ───────────────────────────────────────────────────
