@@ -54,8 +54,8 @@ import defalt.ui.component.UiStateHandler
 import defalt.ui.component.safeClick
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
-import java.util.Locale
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary

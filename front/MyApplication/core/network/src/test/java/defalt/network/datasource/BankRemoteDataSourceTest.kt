@@ -3,10 +3,6 @@ package defalt.network.datasource
 import defalt.domain.entity.bank.BankAccountCreateRequest
 import defalt.domain.entity.bank.BankAccountParameter
 import defalt.domain.entity.bank.State
-import defalt.network.api.bank.model.BankAccount as BankAccountDto
-import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailsDto
-import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
-import defalt.network.api.bank.model.Type as TypeDto
 import defalt.network.api.bank.service.BankAccountApi
 import defalt.network.api.bank.service.BankAccountParameterApi
 import defalt.network.api.bank.service.BankAccountPivotApi
@@ -23,6 +19,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
+import defalt.network.api.bank.model.BankAccount as BankAccountDto
+import defalt.network.api.bank.model.BankAccountDetail as BankAccountDetailsDto
+import defalt.network.api.bank.model.BankAccountParameter as BankAccountParameterDto
+import defalt.network.api.bank.model.Type as TypeDto
 
 class BankRemoteDataSourceTest {
 

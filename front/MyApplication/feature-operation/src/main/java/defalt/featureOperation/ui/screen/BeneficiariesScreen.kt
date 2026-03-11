@@ -43,8 +43,8 @@ import defalt.ui.component.safeClick
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
-import java.text.Normalizer
 import org.koin.androidx.compose.koinViewModel
+import java.text.Normalizer
 
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary

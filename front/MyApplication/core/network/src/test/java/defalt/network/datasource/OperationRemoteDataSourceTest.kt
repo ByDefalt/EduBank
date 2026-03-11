@@ -2,16 +2,12 @@ package defalt.network.datasource.operation
 
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.OperationState
-import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
-import defalt.network.api.operation.model.Operation as OperationDto
-import defalt.network.api.operation.model.OperationState as OperationStateDto
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.OffsetDateTime
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
@@ -19,6 +15,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
+import java.time.OffsetDateTime
+import defalt.network.api.operation.model.Beneficiary as BeneficiaryDto
+import defalt.network.api.operation.model.Operation as OperationDto
+import defalt.network.api.operation.model.OperationState as OperationStateDto
 
 /**
  * Tests de OperationRemoteDataSource.

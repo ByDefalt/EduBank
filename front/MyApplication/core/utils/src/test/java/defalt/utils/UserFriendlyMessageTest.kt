@@ -1,11 +1,11 @@
 package defalt.utils
 
+import org.junit.Assert.assertTrue
+import org.junit.Test
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
-import org.junit.Assert.assertTrue
-import org.junit.Test
 
 class UserFriendlyMessageTest {
 
