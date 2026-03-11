@@ -99,6 +99,7 @@ fun ArkeoNavHost(
                     popUpTo(0) { inclusive = true }
                 }
             },
+            onBack = { navController.popBackStack() },
         )
     }
 }

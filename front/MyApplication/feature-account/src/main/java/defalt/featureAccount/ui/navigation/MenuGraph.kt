@@ -9,12 +9,14 @@ fun NavGraphBuilder.menuGraph(
     onNavigateToProfile: () -> Unit = {},
     onNavigateToOffers: () -> Unit = {},
     onLogout: () -> Unit = {},
+    onBack: () -> Unit = {},
 ) {
     composable<Routes.Core.Menu> {
         MenuScreen(
             onNavigateToProfile = onNavigateToProfile,
             onNavigateToOffers = onNavigateToOffers,
             onLogout = onLogout,
+            onBack = onBack,
         )
     }
 }

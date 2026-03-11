@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import defalt.featureAccount.viewModel.MenuViewModel
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
@@ -40,6 +41,7 @@ fun MenuScreen(
     onNavigateToProfile: () -> Unit = {},
     onNavigateToOffers: () -> Unit = {},
     onLogout: () -> Unit = {},
+    onBack: () -> Unit = {},
     viewModel: MenuViewModel = koinViewModel(),
 ) {
     MenuContent(
@@ -49,6 +51,7 @@ fun MenuScreen(
             viewModel.logout()
             onLogout()
         },
+        onBack = onBack,
     )
 }
 
@@ -57,6 +60,7 @@ private fun MenuContent(
     onNavigateToProfile: () -> Unit = {},
     onNavigateToOffers: () -> Unit = {},
     onLogout: () -> Unit = {},
+    onBack: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -64,20 +68,8 @@ private fun MenuContent(
             .background(CustomColor.BackgroundGray),
     ) {
         // En-tête
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White)
-                .padding(horizontal = 16.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = "Menu",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = CustomColor.TextPrimary,
-            )
-        }
+        ArkeoTopBar(title = "Menu", onBack = onBack)
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
