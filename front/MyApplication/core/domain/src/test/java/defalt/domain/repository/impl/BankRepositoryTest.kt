@@ -65,6 +65,7 @@ class BankRepositoryTest {
         coEvery { dataSource.adminGetBankAccountsByAccountId("1") } returns NetworkResult.Success(listOf(fakeAccount))
         val result = repository.adminGetBankAccountsByAccountId("1")
         assertTrue(result is NetworkResult.Success)
+        assertEquals(1, (result as NetworkResult.Success).data.size)
         coVerify(exactly = 1) { dataSource.adminGetBankAccountsByAccountId("1") }
     }
 
@@ -73,6 +74,7 @@ class BankRepositoryTest {
         coEvery { dataSource.adminCreateBankAccount("1", request) } returns NetworkResult.Success(fakeDetail)
         val result = repository.adminCreateBankAccount("1", request)
         assertTrue(result is NetworkResult.Success)
+        assertEquals("bank-001", (result as NetworkResult.Success).data.id)
         coVerify(exactly = 1) { dataSource.adminCreateBankAccount("1", request) }
     }
 
@@ -86,14 +88,6 @@ class BankRepositoryTest {
     @Test fun `adminUpdateBankAccountParameters delegue`() = runTest {
         val param = BankAccountParameter(1, 200.0, State.ACTIVE)
         coEvery { dataSource.adminUpdateBankAccountParameters("bank-001", param) } returns NetworkResult.Success(Unit)
-        assertTrue(repository.adminUpdateBankAccountParameters("bank-001", param) is NetworkResult.Success)
-        coVerify(exactly = 1) { dataSource.adminUpdateBankAccountParameters("bank-001", param) }
-    }
-
-    @Test fun `adminUpdateBankAccount delegue`() = runTest {
-        val param = BankAccountParameter(1, 200.0, State.ACTIVE)
-        coEvery { dataSource.adminUpdateBankAccountParameters("bank-001", param) } returns NetworkResult.Success(
-            Unit)
         assertTrue(repository.adminUpdateBankAccountParameters("bank-001", param) is NetworkResult.Success)
         coVerify(exactly = 1) { dataSource.adminUpdateBankAccountParameters("bank-001", param) }
     }

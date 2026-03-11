@@ -10,7 +10,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
-import net.bytebuddy.asm.Advice
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -23,8 +22,9 @@ class OfferRemoteDataSourceTest {
     private val offerApi: OfferApi = mockk()
     private lateinit var dataSource: OfferRemoteDataSource
 
-    private val today = LocalDate.now()
-    private val nextMonth = today.plusMonths(1)
+    // Dates fixes pour tests déterministes
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = LocalDate.parse("2025-02-01")
 
     private val fakeOfferDto = OfferDto(
         id = 1,
@@ -202,8 +202,8 @@ class OfferRemoteDataSourceTest {
         val request = OfferInput(
             title = "T", description = "D",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
             picturePath = "ffdfds"
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
@@ -220,8 +220,8 @@ class OfferRemoteDataSourceTest {
         val request = OfferInput(
             title = "T", description = "D",
             state = OfferInput.State.INACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
             picturePath = "ffdfds"
         )
         val result = dataSource.updateOffer(1, request)
@@ -239,8 +239,8 @@ class OfferRemoteDataSourceTest {
         val request = OfferInput(
             title = "T", description = "D",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
             picturePath = "ffdfds"
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)

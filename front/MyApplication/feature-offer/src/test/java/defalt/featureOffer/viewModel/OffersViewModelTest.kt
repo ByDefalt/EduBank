@@ -29,9 +29,14 @@ class OffersViewModelTest {
     private lateinit var session: Session
     private lateinit var viewModel: OffersViewModel
 
+    // Dates fixes pour tests déterministes
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = today.plusMonths(1)
+    private val nextMonth2: LocalDate = today.plusMonths(2)
+
     private val fakeOffers = listOf(
-        Offer(1, "Promo A", "Desc", Offer.State.ACTIVE, LocalDate.now(), LocalDate.now().plusMonths(1)),
-        Offer(2, "Promo B", "Desc", Offer.State.INACTIVE, LocalDate.now(), LocalDate.now().plusMonths(2)),
+        Offer(1, "Promo A", "Desc", Offer.State.ACTIVE, today, nextMonth),
+        Offer(2, "Promo B", "Desc", Offer.State.INACTIVE, today, nextMonth2),
     )
 
     @Before fun setUp() {
@@ -90,7 +95,8 @@ class AdminCreateOfferViewModelTest {
     private val createOffer: CreateOfferUseCase = mockk()
     private lateinit var viewModel: AdminCreateOfferViewModel
 
-    private val today = LocalDate.now()
+    // Utiliser les mêmes dates fixes
+    private val today = LocalDate.parse("2025-01-01")
     private val nextMonth = today.plusMonths(1)
     private val fakeOffer = Offer(1, "Promo", "Desc", Offer.State.ACTIVE, today, nextMonth)
 

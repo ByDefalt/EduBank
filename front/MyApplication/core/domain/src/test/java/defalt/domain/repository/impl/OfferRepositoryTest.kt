@@ -19,8 +19,9 @@ class OfferRepositoryTest {
     private val dataSource: IOfferRemoteDataSource = mockk()
     private lateinit var repository: OfferRepository
 
-    private val today = LocalDate.now()
-    private val next = today.plusMonths(1)
+    // Dates fixes pour tests déterministes
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val next: LocalDate = LocalDate.parse("2025-02-01")
     private val fakeOffer = Offer(1, "Promo", "Desc", Offer.State.ACTIVE, today, next)
 
     @Before fun setUp() { repository = OfferRepository(dataSource) }
@@ -96,8 +97,8 @@ class OfferRepositoryTest {
             state = OfferInput.State.INACTIVE,
             title = "tre",
             description = "gfdgfg",
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = LocalDate.parse("2025-01-01"),
+            endDate = LocalDate.parse("2025-02-01"),
             picturePath = "dfdsfds"
         )
         coEvery { dataSource.updateOffer(1, request) } returns NetworkResult.Success(fakeOffer)

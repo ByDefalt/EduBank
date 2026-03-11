@@ -22,9 +22,14 @@ class GetAllOffersUseCaseTest {
     private val logger = FakeLogger()
     private lateinit var useCase: GetAllOffersUseCase
 
+    // Dates fixes pour rendre les tests déterministes
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = today.plusMonths(1)
+    private val nextMonth2: LocalDate = today.plusMonths(2)
+
     private val fakeOffers = listOf(
-        Offer(1, "Offre 1", "Desc", Offer.State.ACTIVE, LocalDate.now(), LocalDate.now().plusMonths(1)),
-        Offer(2, "Offre 2", "Desc", Offer.State.INACTIVE, LocalDate.now(), LocalDate.now().plusMonths(2)),
+        Offer(1, "Offre 1", "Desc", Offer.State.ACTIVE, today, nextMonth),
+        Offer(2, "Offre 2", "Desc", Offer.State.INACTIVE, today, nextMonth2),
     )
 
     @Before fun setUp() { useCase = GetAllOffersUseCase(repository, logger) }
@@ -34,6 +39,8 @@ class GetAllOffersUseCaseTest {
         val result = useCase()
         assertTrue(result is NetworkResult.Success)
         assertEquals(2, (result as NetworkResult.Success).data.size)
+        // Vérifier la cohérence des titres (test utile)
+        assertEquals("Offre 1", result.data[0].title)
         coVerify(exactly = 1) { repository.getOffers() }
     }
 
@@ -61,6 +68,9 @@ class CreateOfferUseCaseTest {
     private val logger = FakeLogger()
     private lateinit var useCase: CreateOfferUseCase
 
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = today.plusMonths(1)
+
     @Before fun setUp() { useCase = CreateOfferUseCase(repository, logger) }
 
     @Test fun `cree une offre avec succes`() = runTest {
@@ -68,10 +78,10 @@ class CreateOfferUseCaseTest {
             title = "Titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
-        val offer = Offer(1, "Titre", "Desc", Offer.State.ACTIVE, LocalDate.now(), LocalDate.now().plusMonths(1))
+        val offer = Offer(1, "Titre", "Desc", Offer.State.ACTIVE, today, nextMonth)
         coEvery { repository.createOffer(request) } returns NetworkResult.Success(offer)
 
         val result = useCase(request)
@@ -86,8 +96,8 @@ class CreateOfferUseCaseTest {
             title = "Titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
         coEvery { repository.createOffer(request) } returns NetworkResult.Error(400, "Donnees invalides")
 
@@ -102,8 +112,8 @@ class CreateOfferUseCaseTest {
             title = "T",
             description = "D",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
         coEvery { repository.createOffer(request) } returns NetworkResult.Exception(RuntimeException("crash"))
         assertTrue(useCase(request) is NetworkResult.Exception)
@@ -117,6 +127,9 @@ class UpdateOfferUseCaseTest {
     private val logger = FakeLogger()
     private lateinit var useCase: UpdateOfferUseCase
 
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = today.plusMonths(1)
+
     @Before fun setUp() { useCase = UpdateOfferUseCase(repository, logger) }
 
     @Test fun `met a jour l offre avec succes`() = runTest {
@@ -124,10 +137,10 @@ class UpdateOfferUseCaseTest {
             title = "Nouveau titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
-        val offer = Offer(1, "Nouveau titre", "Desc", Offer.State.ACTIVE, LocalDate.now(), LocalDate.now().plusMonths(1))
+        val offer = Offer(1, "Nouveau titre", "Desc", Offer.State.ACTIVE, today, nextMonth)
         coEvery { repository.updateOffer(1, request) } returns NetworkResult.Success(offer)
 
         val result = useCase(1, request)
@@ -141,8 +154,8 @@ class UpdateOfferUseCaseTest {
             title = "Nouveau titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
         coEvery { repository.updateOffer(1, request) } returns NetworkResult.Error(404, "Non trouvee")
 
@@ -157,8 +170,8 @@ class UpdateOfferUseCaseTest {
             title = "Nouveau titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
         coEvery { repository.updateOffer(1, request) } returns NetworkResult.Exception(RuntimeException())
         assertTrue(useCase(1, request) is NetworkResult.Exception)

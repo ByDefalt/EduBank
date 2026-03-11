@@ -27,7 +27,11 @@ class AdminOfferDetailViewModelTest {
     private val deleteOffer: DeleteOfferUseCase = mockk()
     private lateinit var viewModel: AdminOfferDetailViewModel
 
-    private val fakeOffer = Offer(1, "Titre", "Desc", Offer.State.ACTIVE, LocalDate.now(), LocalDate.now().plusMonths(1))
+    // Dates fixes pour tests déterministes
+    private val today: LocalDate = LocalDate.parse("2025-01-01")
+    private val nextMonth: LocalDate = today.plusMonths(1)
+
+    private val fakeOffer = Offer(1, "Titre", "Desc", Offer.State.ACTIVE, today, nextMonth)
 
     @Before fun setUp() {
         viewModel = AdminOfferDetailViewModel(getOfferById, updateOffer, deleteOffer)
@@ -56,8 +60,8 @@ class AdminOfferDetailViewModelTest {
             title = "Titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
 
         coVerify(exactly = 1) { updateOffer(1, any()) }
@@ -72,8 +76,8 @@ class AdminOfferDetailViewModelTest {
             title = "Titre",
             description = "Desc",
             state = OfferInput.State.ACTIVE,
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now().plusMonths(1),
+            startDate = today,
+            endDate = nextMonth,
         )
 
         assertTrue(viewModel.actionState.value is UiState.Error)

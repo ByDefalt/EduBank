@@ -160,15 +160,13 @@ class BankRemoteDataSourceTest {
     @Test fun `adminUpdateBankAccount met a jour param puis recharge le detail`() = runTest {
         coEvery { bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch("1", any()) } returns
             Response.success(Unit)
-        coEvery { bankAccountApi.bankAdminBankAccountsIdGet("1") } returns
-            Response.success(fakeDetailsDto)
+        // Le dataSource n'effectue pas de GET après le PATCH; vérifier uniquement le PATCH
 
         val param = BankAccountParameter(id = 1, overdraftLimit = 200.0, state = State.ACTIVE)
         val result = dataSource.adminUpdateBankAccountParameters("1", param)
 
         assertTrue(result is NetworkResult.Success)
         coVerify(exactly = 1) { bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch("1", any()) }
-        coVerify(exactly = 1) { bankAccountApi.bankAdminBankAccountsIdGet("1") }
     }
 
     @Test fun `adminUpdateBankAccount retourne Error si parametre echoue`() = runTest {

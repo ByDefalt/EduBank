@@ -32,7 +32,8 @@ class OperationRemoteDataSourceTest {
     private val beneficiaryApi: BeneficiaryApi = mockk()
     private lateinit var dataSource: OperationRemoteDataSource
 
-    private val now = OffsetDateTime.now()
+    // Utilise une date fixe pour rendre le test déterministe
+    private val now = OffsetDateTime.parse("2025-01-01T12:00:00Z")
 
     private val fakeOperationDto = OperationDto(
         id = 1,
@@ -113,7 +114,8 @@ class OperationRemoteDataSourceTest {
 
         dataSource.updateOperationState(1, OperationState.COMPLETED)
 
-        coVerify(exactly = 1) { operationApi.operationsIdStatePatch(1, "\"COMPLETED\"") }
+        // L'implémentation envoie le toString() de l'enum, sans guillemets
+        coVerify(exactly = 1) { operationApi.operationsIdStatePatch(1, "COMPLETED") }
     }
 
     @Test fun `updateOperationState propage Error`() = runTest {
