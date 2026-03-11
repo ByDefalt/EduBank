@@ -26,17 +26,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class State(val value: kotlin.String) {
 
-    @SerialName(value = "active")
-    ACTIVE("active"),
+    @SerialName(value = "ACTIVE")
+    ACTIVE("ACTIVE"),
 
-    @SerialName(value = "inactive")
-    INACTIVE("inactive"),
+    @SerialName(value = "INACTIVE")
+    INACTIVE("INACTIVE"),
 
-    @SerialName(value = "bloqued")
-    BLOQUED("bloqued"),
+    @SerialName(value = "BLOQUED")
+    BLOQUED("BLOQUED"),
 
-    @SerialName(value = "closed")
-    CLOSED("closed"),
+    @SerialName(value = "CLOSED")
+    CLOSED("CLOSED"),
     ;
 
     /**
