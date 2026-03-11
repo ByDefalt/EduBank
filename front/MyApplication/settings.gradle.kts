@@ -37,3 +37,4 @@ include(":core:utils")
 
 include(":core:database")
 include(":core:testing")
+include(":core:testing-android")

@@ -58,6 +58,7 @@ android {
 
 dependencies {
     testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing-android"))
     implementation(project(":core:network"))
     implementation(project(":core:database"))
     implementation(project(":core:ui"))
