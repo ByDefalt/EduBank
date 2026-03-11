@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -9,7 +8,6 @@ plugins {
     jacoco
 }
 
-// ─── Exclusions JaCoCo partagées ─────────────────────────────────────────────
 val jacocoExcludes = listOf(
     // Android / Build
     "**/R.class", "**/R$*.class",
@@ -51,6 +49,7 @@ val jacocoExcludes = listOf(
     "**/*Directions*",
     "**/*Args*",
 
+    //Screen et UI
     "**/ui/**",
     "**/infrastructure/**",
     "**/eduBank/**",
@@ -123,17 +122,16 @@ tasks.register<TestReport>("testFullReport") {
     description = "Génère le rapport de tests agrégé pour tous les modules."
 
     val testTasks = subprojects.flatMap { sub ->
-        listOf(
+        listOfNotNull(
             sub.tasks.findByName("testDebugUnitTest"),
             sub.tasks.findByName("test"),
-        ).filterNotNull()
-    }.filterIsInstance<AbstractTestTask>()  // ✅ cast pour accéder à binaryResultsDirectory
+        )
+    }.filterIsInstance<AbstractTestTask>()
 
     dependsOn(testTasks)
 
     destinationDirectory.set(layout.buildDirectory.dir("reports/tests/full"))
 
-    // ✅ Pointe vers les résultats binaires de chaque tâche, pas les XML
     testResults.setFrom(testTasks.map { it.binaryResultsDirectory })
 }
 
