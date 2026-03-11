@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    jacoco
 }
 
 android {
@@ -35,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:testing"))
+    testImplementation(project(":core:testing"))
     implementation(project(":core:domain"))
     implementation(project(":core:utils"))
 
@@ -88,6 +87,5 @@ dependencies {
     androidTestApi(platform(libs.androidx.compose.bom))
     androidTestApi(libs.androidx.compose.ui.test.junit4)
 
-
-    api(libs.androidx.junit.ktx)
+    testApi(libs.androidx.junit.ktx)
 }
