@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,9 +48,18 @@ fun AdminOfferListScreen(
     onBack: () -> Unit = {},
     onItemClick: (Int) -> Unit = {},
     onCreateClick: () -> Unit = {},
+    onRefreshConsumed: () -> Unit = {},
+    shouldRefresh: Boolean = false,
     viewModel: OffersViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.retry()
+            onRefreshConsumed()
+        }
+    }
+
     AdminOfferListContent(uiState = uiState, onRetry = viewModel::retry, onBack = onBack, onItemClick = onItemClick, onCreateClick = onCreateClick)
 }
 

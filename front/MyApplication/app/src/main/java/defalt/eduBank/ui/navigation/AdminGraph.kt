@@ -46,10 +46,16 @@ fun NavGraphBuilder.adminGraph(
     }
 
     navigation<Routes.Admin>(startDestination = Routes.Admin.AccountList) {
-        composable<Routes.Admin.AccountList> {
+        composable<Routes.Admin.AccountList> { entry ->
+            val shouldRefresh = entry.savedStateHandle
+                .getStateFlow(NavRefreshKeys.Account.toString(), false)
+                .collectAsStateWithLifecycle()
+
             AdminAccountListScreen(
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToAccountDetail,
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Account.toString()] = false },
+                shouldRefresh = shouldRefresh.value,
             )
         }
         composable<Routes.Admin.AccountDetail> { entry ->
@@ -67,10 +73,10 @@ fun NavGraphBuilder.adminGraph(
 
             AdminBankListScreen(
                 shouldRefresh = shouldRefresh.value,
-                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Bank.toString()] = false },
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToBankDetail,
                 onCreateClick = onNavigateToCreateBankAccount,
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Bank.toString()] = false },
             )
         }
         composable<Routes.Admin.BankDetail> { entry ->
@@ -92,11 +98,17 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        composable<Routes.Admin.OfferList> {
+        composable<Routes.Admin.OfferList> {entry ->
+            val shouldRefresh = entry.savedStateHandle
+                .getStateFlow(NavRefreshKeys.Offer.toString(), false)
+                .collectAsStateWithLifecycle()
+
             AdminOfferListScreen(
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToOfferDetail,
                 onCreateClick = onNavigateToCreateOffer,
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Offer.toString()] = false },
+                shouldRefresh = shouldRefresh.value,
             )
         }
         composable<Routes.Admin.OfferDetail> { entry ->
@@ -113,10 +125,16 @@ fun NavGraphBuilder.adminGraph(
             )
         }
 
-        composable<Routes.Admin.OperationList> {
+        composable<Routes.Admin.OperationList> {entry ->
+            val shouldRefresh = entry.savedStateHandle
+                .getStateFlow(NavRefreshKeys.Operation.toString(), false)
+                .collectAsStateWithLifecycle()
+
             AdminOperationListScreen(
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToOperationDetail,
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Operation.toString()] = false },
+                shouldRefresh = shouldRefresh.value,
             )
         }
         composable<Routes.Admin.OperationDetail> { entry ->
