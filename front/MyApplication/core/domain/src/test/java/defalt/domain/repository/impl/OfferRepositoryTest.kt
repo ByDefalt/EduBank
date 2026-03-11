@@ -2,6 +2,7 @@ package defalt.domain.repository.impl
 
 import defalt.domain.datasource.offer.IOfferRemoteDataSource
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -63,10 +64,10 @@ class OfferRepositoryTest {
     }
 
     @Test fun `createOffer delegue la requete`() = runTest {
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "T",
             description = "D",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = next,
         )
@@ -77,10 +78,10 @@ class OfferRepositoryTest {
     }
 
     @Test fun `updateOffer delegue id et requete`() = runTest {
-        val request = OffersIdPutRequest(
+        val request = OfferInput(
             title = "T",
             description = "D",
-            state = OffersIdPutRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = next,
         )
@@ -91,11 +92,18 @@ class OfferRepositoryTest {
     }
 
     @Test fun `patchOfferState delegue id et requete`() = runTest {
-        val request = OffersIdStatePatchRequest(state = OffersIdStatePatchRequest.State.INACTIVE)
-        coEvery { dataSource.patchOfferState(1, request) } returns NetworkResult.Success(fakeOffer)
-        val result = repository.patchOfferState(1, request)
+        val request = OfferInput(
+            state = OfferInput.State.INACTIVE,
+            title = "tre",
+            description = "gfdgfg",
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
+            picturePath = "dfdsfds"
+        )
+        coEvery { dataSource.updateOffer(1, request) } returns NetworkResult.Success(fakeOffer)
+        val result = repository.updateOffer(1, request)
         assertTrue(result is NetworkResult.Success)
-        coVerify(exactly = 1) { dataSource.patchOfferState(1, request) }
+        coVerify(exactly = 1) { dataSource.updateOffer(1, request) }
     }
 
     @Test fun `deleteOffer delegue l id`() = runTest {

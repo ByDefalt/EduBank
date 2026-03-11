@@ -57,16 +57,16 @@ class AdminCreateBankAccountViewModelTest {
         var called = false
         coEvery { createBankAccount(any(), any()) } returns NetworkResult.Success(fakeDetail)
 
-        viewModel.create(1, "FR76...", 1, 0.0, 500.0, State.ACTIVE) { called = true }
+        viewModel.create("1", "FR76...", 1, 0.0, 500.0, State.ACTIVE) { called = true }
 
-        coVerify(exactly = 1) { createBankAccount(1, any()) }
+        coVerify(exactly = 1) { createBankAccount("1", any()) }
         assertTrue(called)
     }
 
     @Test fun `create passe createState en Error si echec`() {
         coEvery { createBankAccount(any(), any()) } returns NetworkResult.Error(400, "IBAN deja utilise")
 
-        viewModel.create(1, "FR76...", 1, 0.0, 500.0, State.ACTIVE) { }
+        viewModel.create("1", "FR76...", 1, 0.0, 500.0, State.ACTIVE) { }
 
         assertTrue(viewModel.createState.value is UiState.Error)
         assertEquals("IBAN deja utilise", (viewModel.createState.value as UiState.Error).message)
@@ -76,7 +76,7 @@ class AdminCreateBankAccountViewModelTest {
         var called = false
         coEvery { createBankAccount(any(), any()) } returns NetworkResult.Error(400, "Erreur")
 
-        viewModel.create(1, "FR76...", 1, 0.0, 500.0, State.ACTIVE) { called = true }
+        viewModel.create("1", "FR76...", 1, 0.0, 500.0, State.ACTIVE) { called = true }
 
         assertTrue(!called)
     }
@@ -84,7 +84,7 @@ class AdminCreateBankAccountViewModelTest {
     @Test fun `create passe createState en Error si exception`() {
         coEvery { createBankAccount(any(), any()) } returns NetworkResult.Exception(RuntimeException("crash"))
 
-        viewModel.create(1, "FR76...", 1, 0.0, 500.0, State.ACTIVE) { }
+        viewModel.create("1", "FR76...", 1, 0.0, 500.0, State.ACTIVE) { }
 
         assertTrue(viewModel.createState.value is UiState.Error)
     }

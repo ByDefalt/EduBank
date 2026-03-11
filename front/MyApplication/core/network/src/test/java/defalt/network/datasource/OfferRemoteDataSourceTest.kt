@@ -1,6 +1,7 @@
 package defalt.network.datasource.offer
 
 import defalt.domain.entity.offer.Offer
+import defalt.domain.entity.offer.OfferInput
 import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.network.api.offer.service.OfferApi
 import defalt.utils.NetworkResult
@@ -9,6 +10,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
+import net.bytebuddy.asm.Advice
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -148,10 +150,10 @@ class OfferRemoteDataSourceTest {
     @Test fun `createOffer retourne l offre creee`() = runTest {
         coEvery { offerApi.offersPost(any()) } returns Response.success(fakeOfferDto)
 
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "Promo",
             description = "Desc",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
         )
@@ -165,10 +167,10 @@ class OfferRemoteDataSourceTest {
     @Test fun `createOffer propage Error 400`() = runTest {
         coEvery { offerApi.offersPost(any()) } returns Response.error(400, "invalid".toResponseBody())
 
-        val request = OffersPostRequest(
+        val request = OfferInput(
             title = "T",
             description = "D",
-            state = OffersPostRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
         )
@@ -181,10 +183,10 @@ class OfferRemoteDataSourceTest {
         val updated = fakeOfferDto.copy(title = "Promo Modif")
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(updated)
 
-        val request = OffersIdPutRequest(
+        val request = OfferInput(
             title = "Promo Modif",
             description = "Desc",
-            state = OffersIdPutRequest.State.ACTIVE,
+            state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
         )
@@ -197,7 +199,13 @@ class OfferRemoteDataSourceTest {
     @Test fun `updateOffer propage Error 404`() = runTest {
         coEvery { offerApi.offersIdPut(any(), any()) } returns Response.error(404, "not found".toResponseBody())
 
-        val request = OffersIdPutRequest(title = "T", description = "D")
+        val request = OfferInput(
+            title = "T", description = "D",
+            state = OfferInput.State.ACTIVE,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
+            picturePath = "ffdfds"
+        )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
 
@@ -209,8 +217,14 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdGet(1) } returns Response.success(fakeOfferDto)
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(patched)
 
-        val request = OffersIdStatePatchRequest(state = OffersIdStatePatchRequest.State.INACTIVE)
-        val result = dataSource.patchOfferState(1, request)
+        val request = OfferInput(
+            title = "T", description = "D",
+            state = OfferInput.State.INACTIVE,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
+            picturePath = "ffdfds"
+        )
+        val result = dataSource.updateOffer(1, request)
 
         assertTrue(result is NetworkResult.Success)
         assertEquals(Offer.State.INACTIVE, (result as NetworkResult.Success).data.state)
@@ -222,8 +236,14 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdPut(any(), any()) } returns
             Response.error(400, "invalid".toResponseBody())
 
-        val request = OffersIdStatePatchRequest(state = OffersIdStatePatchRequest.State.ACTIVE)
-        assertTrue(dataSource.patchOfferState(1, request) is NetworkResult.Error)
+        val request = OfferInput(
+            title = "T", description = "D",
+            state = OfferInput.State.ACTIVE,
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now().plusMonths(1),
+            picturePath = "ffdfds"
+        )
+        assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
 
     // ── deleteOffer ──────────────────────────────────────────────────────────

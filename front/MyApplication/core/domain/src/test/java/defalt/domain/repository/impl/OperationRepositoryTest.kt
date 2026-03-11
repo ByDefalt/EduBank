@@ -104,10 +104,10 @@ class OperationRepositoryTest {
     // ── updateOperationState ──────────────────────────────────────────────────
 
     @Test fun `updateOperationState delegue id et state`() = runTest {
-        coEvery { dataSource.updateOperationState(1, "COMPLETED") } returns NetworkResult.Success(fakeOp)
-        val result = repository.updateOperationState(1, "COMPLETED")
+        coEvery { dataSource.updateOperationState(1, OperationState.COMPLETED) } returns NetworkResult.Success(fakeOp)
+        val result = repository.updateOperationState(1, OperationState.COMPLETED)
         assertTrue(result is NetworkResult.Success)
-        coVerify(exactly = 1) { dataSource.updateOperationState(1, "COMPLETED") }
+        coVerify(exactly = 1) { dataSource.updateOperationState(1, OperationState.COMPLETED) }
     }
 
     // ── getAllBeneficiaries ────────────────────────────────────────────────────

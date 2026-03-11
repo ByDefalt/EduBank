@@ -136,22 +136,22 @@ class AdminCreateBankAccountUseCaseTest {
 
     @Test fun `cree le compte bancaire en succes`() = runTest {
         val slot = slot<BankAccountCreateRequest>()
-        coEvery { repository.adminCreateBankAccount(1, capture(slot)) } returns NetworkResult.Success(fakeDetail)
+        coEvery { repository.adminCreateBankAccount("1", capture(slot)) } returns NetworkResult.Success(fakeDetail)
 
         val request = BankAccountCreateRequest(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 500.0, state = State.ACTIVE)
-        val result = useCase(1, request)
+        val result = useCase("1", request)
 
         assertTrue(result is NetworkResult.Success)
         assertEquals("FR76...", slot.captured.iban)
         assertEquals(1, slot.captured.typeId)
-        coVerify(exactly = 1) { repository.adminCreateBankAccount(1, any()) }
+        coVerify(exactly = 1) { repository.adminCreateBankAccount("1", any()) }
     }
 
     @Test fun `propage l erreur IBAN deja utilise`() = runTest {
         val request = BankAccountCreateRequest(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 500.0, state = State.ACTIVE)
         coEvery { repository.adminCreateBankAccount(any(), any()) } returns NetworkResult.Error(409, "IBAN deja utilise")
 
-        val result = useCase(1, request)
+        val result = useCase("1", request)
 
         assertTrue(result is NetworkResult.Error)
         assertEquals(409, (result as NetworkResult.Error).code)
@@ -160,6 +160,6 @@ class AdminCreateBankAccountUseCaseTest {
     @Test fun `propage l exception`() = runTest {
         val request = BankAccountCreateRequest(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 500.0, state = State.ACTIVE)
         coEvery { repository.adminCreateBankAccount(any(), any()) } returns NetworkResult.Exception(RuntimeException("crash"))
-        assertTrue(useCase(1, request) is NetworkResult.Exception)
+        assertTrue(useCase("1", request) is NetworkResult.Exception)
     }
 }
