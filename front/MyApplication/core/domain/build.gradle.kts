@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm")
-    jacoco
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -12,17 +11,7 @@ kotlin {
     }
 }
 
-tasks.test {
-    finalizedBy(tasks.jacocoTestReport)
-}
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-}
 
 dependencies {
     implementation(project(":core:utils"))

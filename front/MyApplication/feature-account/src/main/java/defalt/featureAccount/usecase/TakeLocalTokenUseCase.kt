@@ -13,9 +13,9 @@ class TakeLocalTokenUseCase(
 ) {
     suspend operator fun invoke(): NetworkResult<RoleEnum> {
         val tokenResponse = repository.getSavedToken()
-        if(tokenResponse is NetworkResult.Success){
+        if (tokenResponse is NetworkResult.Success) {
             val validateResult = repository.validateToken(tokenResponse.data)
-            if(validateResult is NetworkResult.Success){
+            if (validateResult is NetworkResult.Success) {
                 session.accountId = validateResult.data.id
                 session.role = RoleEnum.valueOf(validateResult.data.role!!)
                 session.token = tokenResponse.data.jwt

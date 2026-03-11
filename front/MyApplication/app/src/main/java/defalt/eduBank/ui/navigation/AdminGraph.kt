@@ -8,6 +8,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import defalt.featureAccount.ui.screen.AdminAccountDetailScreen
 import defalt.featureAccount.ui.screen.AdminAccountListScreen
+import defalt.featureAccount.ui.screen.AdminHomeScreen
 import defalt.featureBank.ui.screen.AdminBankDetailScreen
 import defalt.featureBank.ui.screen.AdminBankListScreen
 import defalt.featureBank.ui.screen.AdminCreateBankAccountScreen
@@ -16,7 +17,6 @@ import defalt.featureOffer.ui.screen.AdminOfferDetailScreen
 import defalt.featureOffer.ui.screen.AdminOfferListScreen
 import defalt.featureOperation.ui.screen.AdminOperationDetailScreen
 import defalt.featureOperation.ui.screen.AdminOperationListScreen
-import defalt.featureAccount.ui.screen.AdminHomeScreen
 import defalt.ui.utils.Routes
 
 fun NavGraphBuilder.adminGraph(
@@ -62,12 +62,12 @@ fun NavGraphBuilder.adminGraph(
 
         composable<Routes.Admin.BankList> { entry ->
             val shouldRefresh = entry.savedStateHandle
-                .getStateFlow(NavRefreshKey.Bank.toString(), false)
+                .getStateFlow(NavRefreshKeys.Bank.toString(), false)
                 .collectAsStateWithLifecycle()
 
             AdminBankListScreen(
                 shouldRefresh = shouldRefresh.value,
-                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKey.Bank.toString()] = false },
+                onRefreshConsumed = { entry.savedStateHandle[NavRefreshKeys.Bank.toString()] = false },
                 onBack = onNavigateToAdminHome,
                 onItemClick = onNavigateToBankDetail,
                 onCreateClick = onNavigateToCreateBankAccount,
@@ -81,7 +81,7 @@ fun NavGraphBuilder.adminGraph(
                 id = id,
                 onBack = onBack,
                 onMutationSuccess = {
-                    previousEntry?.savedStateHandle?.set(NavRefreshKey.Bank.toString(), true)
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Bank.toString(), true)
                 },
             )
         }

@@ -8,7 +8,7 @@ class LogoutUseCase(
     private val repository: IAccountRepository,
     private val session: Session,
 ) {
-    suspend operator fun invoke() : NetworkResult<Boolean> {
+    suspend operator fun invoke(): NetworkResult<Boolean> {
         session.token = null
         session.accountId = null
         session.role = null

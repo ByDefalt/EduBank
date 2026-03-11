@@ -13,8 +13,7 @@ class MenuViewModel(
     private val _uiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val uiState: MutableStateFlow<UiState<Unit>> = _uiState
 
-
-    fun logout() = launchWithUiState(_uiState){
+    fun logout() = launchWithUiState(_uiState) {
         logoutUseCase()
     }
 }

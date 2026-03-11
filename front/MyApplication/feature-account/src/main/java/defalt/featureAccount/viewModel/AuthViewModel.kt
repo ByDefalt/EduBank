@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class AuthViewModel(
-    private val takeLocalTokenUseCase : TakeLocalTokenUseCase
-) : ViewModel(){
+    private val takeLocalTokenUseCase: TakeLocalTokenUseCase,
+) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState<RoleEnum>>(UiState.Idle)
     val uiState: StateFlow<UiState<RoleEnum>> = _uiState.asStateFlow()
 
     fun connect() =
-        launchWithUiState(_uiState, transform = { it }){
+        launchWithUiState(_uiState, transform = { it }) {
             takeLocalTokenUseCase()
         }
 }

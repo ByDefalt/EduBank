@@ -1,6 +1,8 @@
 package com.example.clientAPI.controller;
 
 import com.example.clientAPI.business.OfferBusiness;
+import com.example.clientAPI.exception.NotFoundException;
+import com.example.clientAPI.exception.UnauthorizedException;
 import dto.offerapi.Offer;
 import dto.offerapi.OfferInput;
 import jakarta.ws.rs.core.Response;
@@ -27,7 +29,7 @@ class OfferControllerTest {
     private OfferController offerController;
 
     private static final String VALID_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.test";
-
+    private static final String INVALID_TOKEN = "InvalidToken";
 
     private Offer buildOffer(int id, String title) {
         Offer offer = new Offer();
@@ -51,7 +53,6 @@ class OfferControllerTest {
         input.setEndDate(LocalDate.of(2026, 6, 30));
         return input;
     }
-
 
     @Test
     void testGetAllOffersActiveOnly() {
@@ -97,7 +98,6 @@ class OfferControllerTest {
         assertTrue(body.isEmpty());
     }
 
-
     @Test
     void testGetActiveOffers() {
         Offer offer = buildOffer(1, "Active Offer");
@@ -110,7 +110,6 @@ class OfferControllerTest {
         List<Offer> body = (List<Offer>) response.getEntity();
         assertEquals(1, body.size());
     }
-
 
     @Test
     void testGetOfferById() {
@@ -127,19 +126,17 @@ class OfferControllerTest {
 
     @Test
     void testGetOfferByIdNotFound() {
-        when(offerBusiness.getOfferById(999)).thenReturn(null);
+        when(offerBusiness.getOfferById(999))
+                .thenThrow(new NotFoundException("OFFER_NOT_FOUND", "Offre introuvable avec l'id : 999"));
 
-        Response response = offerController.getOfferById(999);
-
-        assertEquals(404, response.getStatus());
+        assertThrows(NotFoundException.class, () -> offerController.getOfferById(999));
     }
-
 
     @Test
     void testCreateOffer() {
         OfferInput input = buildOfferInput();
         Offer created = buildOffer(10, "Nouvelle Offre");
-        when(offerBusiness.createOffer(input)).thenReturn(created);
+        when(offerBusiness.createOffer(VALID_TOKEN, input)).thenReturn(created);
 
         Response response = offerController.createOffer(VALID_TOKEN, input);
 
@@ -149,31 +146,19 @@ class OfferControllerTest {
     }
 
     @Test
-    void testCreateOfferUnauthorizedNull() {
-        OfferInput input = buildOfferInput();
+    void testCreateOfferUnauthorized() {
+        doThrow(new UnauthorizedException("UNAUTHORIZED", "Token manquant ou invalide"))
+                .when(offerBusiness).createOffer(INVALID_TOKEN, buildOfferInput());
 
-        Response response = offerController.createOffer(null, input);
-
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).createOffer(any());
+        assertThrows(UnauthorizedException.class,
+                () -> offerController.createOffer(INVALID_TOKEN, buildOfferInput()));
     }
-
-    @Test
-    void testCreateOfferUnauthorizedInvalidToken() {
-        OfferInput input = buildOfferInput();
-
-        Response response = offerController.createOffer("InvalidToken", input);
-
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).createOffer(any());
-    }
-
 
     @Test
     void testUpdateOffer() {
         OfferInput input = buildOfferInput();
         Offer updated = buildOffer(1, "Nouvelle Offre");
-        when(offerBusiness.updateOffer(1, input)).thenReturn(updated);
+        when(offerBusiness.updateOffer(VALID_TOKEN, 1, input)).thenReturn(updated);
 
         Response response = offerController.updateOffer(VALID_TOKEN, 1, input);
 
@@ -185,58 +170,49 @@ class OfferControllerTest {
     @Test
     void testUpdateOfferNotFound() {
         OfferInput input = buildOfferInput();
-        when(offerBusiness.updateOffer(999, input)).thenReturn(null);
+        when(offerBusiness.updateOffer(VALID_TOKEN, 999, input))
+                .thenThrow(new NotFoundException("OFFER_NOT_FOUND", "Offre introuvable avec l'id : 999"));
 
-        Response response = offerController.updateOffer(VALID_TOKEN, 999, input);
-
-        assertEquals(404, response.getStatus());
+        assertThrows(NotFoundException.class,
+                () -> offerController.updateOffer(VALID_TOKEN, 999, input));
     }
 
     @Test
-    void testUpdateOfferUnauthorizedNull() {
+    void testUpdateOfferUnauthorized() {
         OfferInput input = buildOfferInput();
+        doThrow(new UnauthorizedException("UNAUTHORIZED", "Token manquant ou invalide"))
+                .when(offerBusiness).updateOffer(INVALID_TOKEN, 1, input);
 
-        Response response = offerController.updateOffer(null, 1, input);
-
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).updateOffer(anyInt(), any());
+        assertThrows(UnauthorizedException.class,
+                () -> offerController.updateOffer(INVALID_TOKEN, 1, input));
     }
-
-    @Test
-    void testUpdateOfferUnauthorizedInvalidToken() {
-        OfferInput input = buildOfferInput();
-
-        Response response = offerController.updateOffer("BadToken", 1, input);
-
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).updateOffer(anyInt(), any());
-    }
-
 
     @Test
     void testDeleteOffer() {
-        doNothing().when(offerBusiness).deleteOffer(1);
+        doNothing().when(offerBusiness).deleteOffer(VALID_TOKEN, 1);
 
         Response response = offerController.deleteOffer(VALID_TOKEN, 1);
 
         assertEquals(204, response.getStatus());
-        verify(offerBusiness).deleteOffer(1);
+        verify(offerBusiness).deleteOffer(VALID_TOKEN, 1);
     }
 
     @Test
-    void testDeleteOfferUnauthorizedNull() {
-        Response response = offerController.deleteOffer(null, 1);
+    void testDeleteOfferNotFound() {
+        doThrow(new NotFoundException("OFFER_NOT_FOUND", "Offre introuvable avec l'id : 999"))
+                .when(offerBusiness).deleteOffer(VALID_TOKEN, 999);
 
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).deleteOffer(anyInt());
+        assertThrows(NotFoundException.class,
+                () -> offerController.deleteOffer(VALID_TOKEN, 999));
     }
 
     @Test
-    void testDeleteOfferUnauthorizedInvalidToken() {
-        Response response = offerController.deleteOffer("NoBearer", 1);
+    void testDeleteOfferUnauthorized() {
+        doThrow(new UnauthorizedException("UNAUTHORIZED", "Token manquant ou invalide"))
+                .when(offerBusiness).deleteOffer(INVALID_TOKEN, 1);
 
-        assertEquals(401, response.getStatus());
-        verify(offerBusiness, never()).deleteOffer(anyInt());
+        assertThrows(UnauthorizedException.class,
+                () -> offerController.deleteOffer(INVALID_TOKEN, 1));
     }
 }
 

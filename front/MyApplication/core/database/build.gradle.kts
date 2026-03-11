@@ -2,14 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    jacoco
 }
 
 android {
     namespace = "defalt.database"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26
@@ -41,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:testing"))
+    testImplementation(project(":core:testing"))
     implementation(project(":core:domain"))
     implementation(project(":core:utils"))
 

@@ -51,7 +51,6 @@ suspend fun <T> safeApiCallList(
     }
 }
 
-
 private fun parseErrorMessage(response: Response<*>): String {
     val raw = response.errorBody()?.string()
     return when {

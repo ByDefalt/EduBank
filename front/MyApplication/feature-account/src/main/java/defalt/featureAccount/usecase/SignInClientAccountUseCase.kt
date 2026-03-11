@@ -19,9 +19,9 @@ class SignInClientAccountUseCase(
         if (signInResult is NetworkResult.Error) return NetworkResult.Error(signInResult.code, signInResult.message)
         if (signInResult is NetworkResult.Exception) return NetworkResult.Exception(signInResult.throwable)
 
-        if(signInResult is NetworkResult.Success) {
+        if (signInResult is NetworkResult.Success) {
             val validateResult = repository.validateToken(signInResult.data)
-            if(validateResult is NetworkResult.Success){
+            if (validateResult is NetworkResult.Success) {
                 // gérer le cas où le rôle renvoyé n'est pas un enum connu
                 val role = try {
                     RoleEnum.valueOf(validateResult.data.role!!)

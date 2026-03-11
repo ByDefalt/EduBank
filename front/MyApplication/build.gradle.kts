@@ -1,4 +1,3 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -9,28 +8,63 @@ plugins {
     jacoco
 }
 
-// ─── Exclusions JaCoCo partagées ─────────────────────────────────────────────
 val jacocoExcludes = listOf(
+    // Android / Build
     "**/R.class", "**/R$*.class",
     "**/BuildConfig.*", "**/Manifest*.*",
     "android/**/*.*",
-    "**/*ComposableSingletons*", "**/*Preview*",
-    "**/di/**", "**/*Module*",
-    "**/*Test*.*", "**/test/**", "**/androidTest/**",
+
+    // Compose générés
+    "**/*ComposableSingletons*",
+    "**/*Preview*",
+    "**/*\$*Preview*",
+
+    // Lambdas et classes anonymes Kotlin/Compose
+    "**/*\$\$*",                          // lambdas inlinées $$inlined
+    "**/*\$Lambda*",                      // Function4, Lambda générés
+    "**/*\$inlined*",
+    "**/*\$sam\$*",
+    "**/*\$WhenMappings*",
+
+    // LazyDsl / Compose runtime internals
+    "**/LazyDsl*",
+    "**/ComposableLambda*",
+    "**/ComposedModifier*",
+    "**/SnapshotState*",
+    "**/remember*",
+
+    // DI
+    "**/di/**",
+    "**/*Module*",
+    "**/*_Factory*",
+    "**/*_HiltComponents*",
+    "**/*Hilt_*",
+
+    // Tests
+    "**/*Test*.*",
+    "**/test/**",
+    "**/androidTest/**",
+
+    // Navigation générés
+    "**/*Directions*",
+    "**/*Args*",
+
+    //Screen et UI
+    "**/ui/**",
+    "**/infrastructure/**",
+    "**/eduBank/**",
 )
 
-// ─── Rapport agrégé tous modules ─────────────────────────────────────────────
 tasks.register<JacocoReport>("jacocoFullReport") {
     group = "Reporting"
     description = "Génère le rapport de couverture JaCoCo agrégé pour tous les modules."
 
-    // Collect all subproject test tasks (Android + JVM)
     dependsOn(
         subprojects.flatMap { sub ->
-            listOf(
+            listOfNotNull(
                 sub.tasks.findByName("testDebugUnitTest"),
                 sub.tasks.findByName("test"),
-            ).filterNotNull()
+            )
         }
     )
 
@@ -41,8 +75,6 @@ tasks.register<JacocoReport>("jacocoFullReport") {
         xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/full/jacocoFullReport.xml"))
     }
 
-    // Modules Android : classes dans tmp/kotlin-classes/debug ET intermediates/javac/debug
-    // Modules JVM     : classes dans build/classes/kotlin/main
     classDirectories.setFrom(
         subprojects.flatMap { sub ->
             listOf(
@@ -66,17 +98,16 @@ tasks.register<JacocoReport>("jacocoFullReport") {
         subprojects.flatMap { sub ->
             fileTree(sub.layout.buildDirectory.get()) {
                 include(
-                    // modules Android
                     "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
                     "jacoco/testDebugUnitTest.exec",
-                    // modules JVM
                     "jacoco/test.exec",
                 )
             }.files
         }
     )
 }
-// ─── Force ignoreFailures pour le rapport agrégé ──────────────────────────────
+
+
 gradle.taskGraph.whenReady {
     if (hasTask(":testFullReport")) {
         allTasks
@@ -84,26 +115,27 @@ gradle.taskGraph.whenReady {
             .forEach { it.ignoreFailures = true }
     }
 }
+
+
 tasks.register<TestReport>("testFullReport") {
     group = "Reporting"
     description = "Génère le rapport de tests agrégé pour tous les modules."
 
     val testTasks = subprojects.flatMap { sub ->
-        listOf(
+        listOfNotNull(
             sub.tasks.findByName("testDebugUnitTest"),
             sub.tasks.findByName("test"),
-        ).filterNotNull()
-    }.filterIsInstance<AbstractTestTask>()  // ✅ cast pour accéder à binaryResultsDirectory
+        )
+    }.filterIsInstance<AbstractTestTask>()
 
     dependsOn(testTasks)
 
     destinationDirectory.set(layout.buildDirectory.dir("reports/tests/full"))
 
-    // ✅ Pointe vers les résultats binaires de chaque tâche, pas les XML
     testResults.setFrom(testTasks.map { it.binaryResultsDirectory })
 }
 
-// ─── Spotless ─────────────────────────────────────────────────────────────────
+
 spotless {
     kotlin {
         target("**/*.kt")

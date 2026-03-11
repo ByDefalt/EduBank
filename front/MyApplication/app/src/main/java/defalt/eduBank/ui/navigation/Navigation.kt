@@ -86,8 +86,8 @@ fun ArkeoNavHost(
             onNavigateToOperationDetail = { id ->
                 navController.navigate(
                     Routes.Admin.OperationDetail(
-                        id
-                    )
+                        id,
+                    ),
                 )
             },
             onBack = { navController.popBackStack() },
@@ -96,7 +96,7 @@ fun ArkeoNavHost(
                     popUpTo(0) { inclusive = true }
                 }
             },
-            navController = navController
+            navController = navController,
         )
         // ── Menu ───────────────────────────────────────────────────────────
         menuGraph(

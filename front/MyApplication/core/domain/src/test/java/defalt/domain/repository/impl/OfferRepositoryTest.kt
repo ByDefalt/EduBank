@@ -7,12 +7,12 @@ import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 class OfferRepositoryTest {
 
@@ -99,7 +99,7 @@ class OfferRepositoryTest {
             description = "gfdgfg",
             startDate = LocalDate.parse("2025-01-01"),
             endDate = LocalDate.parse("2025-02-01"),
-            picturePath = "dfdsfds"
+            picturePath = "dfdsfds",
         )
         coEvery { dataSource.updateOffer(1, request) } returns NetworkResult.Success(fakeOffer)
         val result = repository.updateOffer(1, request)

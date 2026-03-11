@@ -2,13 +2,11 @@ package defalt.network.datasource.offer
 
 import defalt.domain.entity.offer.Offer
 import defalt.domain.entity.offer.OfferInput
-import defalt.network.api.offer.model.Offer as OfferDto
 import defalt.network.api.offer.service.OfferApi
 import defalt.utils.NetworkResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
@@ -16,6 +14,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
+import java.time.LocalDate
+import defalt.network.api.offer.model.Offer as OfferDto
 
 class OfferRemoteDataSourceTest {
 
@@ -200,11 +200,12 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdPut(any(), any()) } returns Response.error(404, "not found".toResponseBody())
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
@@ -218,11 +219,12 @@ class OfferRemoteDataSourceTest {
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(patched)
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.INACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         val result = dataSource.updateOffer(1, request)
 
@@ -237,11 +239,12 @@ class OfferRemoteDataSourceTest {
             Response.error(400, "invalid".toResponseBody())
 
         val request = OfferInput(
-            title = "T", description = "D",
+            title = "T",
+            description = "D",
             state = OfferInput.State.ACTIVE,
             startDate = today,
             endDate = nextMonth,
-            picturePath = "ffdfds"
+            picturePath = "ffdfds",
         )
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
