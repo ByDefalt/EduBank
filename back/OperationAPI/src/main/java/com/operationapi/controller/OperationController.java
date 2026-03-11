@@ -1,6 +1,7 @@
 package com.operationapi.controller;
 
 import com.operationapi.business.OperationBusiness;
+import dto.operationapi.ChangeStateRequest;
 import dto.operationapi.Operation;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
@@ -54,8 +55,8 @@ public class OperationController {
     @Path("/{id}/state")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateStateOperation(@PathParam("id") Integer id, OperationState state) {
-        Operation operation = this.operationBusiness.updateStateOperation(id, state);
+    public Response updateStateOperation(@PathParam("id") Integer id, ChangeStateRequest state) {
+        Operation operation = this.operationBusiness.updateStateOperation(id, state.getState());
         return Response.ok(operation).build();
     }
 
