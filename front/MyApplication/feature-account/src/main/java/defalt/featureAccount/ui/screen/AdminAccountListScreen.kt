@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,9 +43,18 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminAccountListScreen(
     onBack: () -> Unit = {},
     onItemClick: (String) -> Unit = {},
+    onRefreshConsumed: () -> Unit = {},
+    shouldRefresh: Boolean = false,
     viewModel: AdminAccountListViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.retry()
+            onRefreshConsumed()
+        }
+    }
+
     AdminAccountListContent(uiState = uiState, onRetry = viewModel::retry, onBack = onBack, onItemClick = onItemClick)
 }
 

@@ -19,6 +19,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,10 +41,17 @@ import java.time.format.DateTimeFormatter
 fun AdminOperationListScreen(
     onBack: () -> Unit = {},
     onItemClick: (Int) -> Unit = {},
+    onRefreshConsumed: () -> Unit = {},
+    shouldRefresh: Boolean = false,
     viewModel: AdminOperationListViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.retry()
+            onRefreshConsumed()
+        }
+    }
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         ArkeoTopBar(title = "OPÉRATIONS", onBack = onBack)
 
