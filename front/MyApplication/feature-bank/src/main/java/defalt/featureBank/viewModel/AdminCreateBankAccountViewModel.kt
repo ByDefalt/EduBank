@@ -5,8 +5,10 @@ import defalt.domain.entity.account.Account
 import defalt.domain.entity.bank.BankAccountCreateRequest
 import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.bank.State
+import defalt.domain.entity.bank.Type
 import defalt.featureBank.usecase.AdminCreateBankAccountUseCase
 import defalt.featureBank.usecase.AdminGetAllAccountsForBankUseCase
+import defalt.featureBank.usecase.AdminGetBankAccountTypesUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import defalt.utils.NetworkResult
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class AdminCreateBankAccountViewModel(
     private val createBankAccount: AdminCreateBankAccountUseCase,
     private val getAllAccounts: AdminGetAllAccountsForBankUseCase,
+    private val getBankAccountTypes: AdminGetBankAccountTypesUseCase,
 ) : ViewModel() {
 
     private val _accountsState = MutableStateFlow<UiState<List<Account>>>(UiState.Loading)
@@ -25,13 +28,25 @@ class AdminCreateBankAccountViewModel(
     private val _createState = MutableStateFlow<UiState<BankAccountDetail>>(UiState.Idle)
     val createState: StateFlow<UiState<BankAccountDetail>> = _createState.asStateFlow()
 
-    init { loadAccounts() }
+    private val _type = MutableStateFlow<UiState<List<Type>>>(UiState.Loading)
+    val type: StateFlow<UiState<List<Type>>> = _type.asStateFlow()
+
+    init {
+        loadAccounts()
+        loadType()
+    }
 
     fun retryAccounts() = loadAccounts()
+    fun retryTypes() = loadType()
 
     private fun loadAccounts() = launchWithUiState(stateFlow = _accountsState, transform = { it }) {
         getAllAccounts()
     }
+
+    private fun loadType() = launchWithUiState(stateFlow = _type, transform = { it }) {
+        getBankAccountTypes()
+    }
+
 
     fun create(
         accountId: String,

@@ -24,7 +24,7 @@ class GetAllMyAccount(
                 allAccountsWithDetail.add(accountDetail.data)
             }
         }
-
+        logger.debug(allAccountsWithDetail.toString())
         return NetworkResult.Success(allAccountsWithDetail)
     }
 }

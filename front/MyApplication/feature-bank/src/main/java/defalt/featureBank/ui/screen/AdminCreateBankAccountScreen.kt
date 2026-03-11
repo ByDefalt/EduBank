@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.account.Account
 import defalt.domain.entity.bank.State
+import defalt.domain.entity.bank.Type
 import defalt.featureBank.viewModel.AdminCreateBankAccountViewModel
 import defalt.ui.component.ArkeoButton
 import defalt.ui.component.ArkeoCard
@@ -36,8 +37,6 @@ import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
 
-private val BANK_TYPES_CREATE = listOf(1 to "COMPTE CHÈQUES", 2 to "COMPTE ÉPARGNE", 3 to "COMPTE PROFESSIONNEL")
-
 @Composable
 fun AdminCreateBankAccountScreen(
     onBack: () -> Unit = {},
@@ -46,6 +45,7 @@ fun AdminCreateBankAccountScreen(
 ) {
     val accountsState by viewModel.accountsState.collectAsStateWithLifecycle()
     val createState by viewModel.createState.collectAsStateWithLifecycle()
+    val typesState by viewModel.type.collectAsStateWithLifecycle()
     val isLoading = createState is UiState.Loading
 
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
@@ -57,9 +57,12 @@ fun AdminCreateBankAccountScreen(
             loadingColor = CustomColor.ArkeoRed,
             errorColor = CustomColor.ArkeoRed,
         ) { accounts ->
+            // Passe la state des types au formulaire
             CreateForm(
                 accounts = accounts,
+                typesState = typesState,
                 isLoading = isLoading,
+                onRetryTypes = viewModel::retryTypes,
                 onSubmit = { accountId, iban, typeId, sold, overdraft, state ->
                     viewModel.create(
                         accountId = accountId,
@@ -80,18 +83,33 @@ fun AdminCreateBankAccountScreen(
 @Composable
 private fun CreateForm(
     accounts: List<Account>,
+    typesState: UiState<List<Type>>,
     isLoading: Boolean,
+    onRetryTypes: () -> Unit,
     onSubmit: (accountId: String, iban: String, typeId: Int, sold: Double, overdraft: Double, state: State) -> Unit,
 ) {
     var iban by remember { mutableStateOf("") }
     var sold by remember { mutableStateOf("0.0") }
     var overdraft by remember { mutableStateOf("0.0") }
-    var selectedTypeId by remember { mutableStateOf(1) }
+    var selectedTypeId by remember { mutableStateOf<Int?>(null) }
     var selectedState by remember { mutableStateOf(State.ACTIVE) }
     var selectedAccount by remember { mutableStateOf(accounts.firstOrNull()) }
     var accountExpanded by remember { mutableStateOf(false) }
     var typeExpanded by remember { mutableStateOf(false) }
     var stateExpanded by remember { mutableStateOf(false) }
+
+    // Prépare la liste des types par défaut si succès
+    val availableTypes = when (typesState) {
+        is UiState.Success -> typesState.data
+        is UiState.Loading -> emptyList()
+        is UiState.Error -> emptyList()
+        is UiState.Idle -> emptyList()
+    }
+
+    // Si aucun type sélectionné et qu'il y a des types disponibles, sélectionne le premier
+    if (selectedTypeId == null && availableTypes.isNotEmpty()) {
+        selectedTypeId = availableTypes.first().id
+    }
 
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
@@ -129,16 +147,30 @@ private fun CreateForm(
             // Type de compte
             ExposedDropdownMenuBox(expanded = typeExpanded, onExpandedChange = { typeExpanded = !typeExpanded }) {
                 OutlinedTextField(
-                    value = BANK_TYPES_CREATE.find { it.first == selectedTypeId }?.second ?: "Type $selectedTypeId",
+                    value = availableTypes.find { it.id == selectedTypeId }?.name ?: (selectedTypeId?.let { "Type $it" } ?: "Aucun type"),
                     onValueChange = {},
                     readOnly = true,
                     label = { Text("Type de compte") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(typeExpanded) },
                     modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
                 )
+
                 ExposedDropdownMenu(expanded = typeExpanded, onDismissRequest = { typeExpanded = false }) {
-                    BANK_TYPES_CREATE.forEach { (id, label) ->
-                        DropdownMenuItem(text = { Text(label) }, onClick = { selectedTypeId = id; typeExpanded = false })
+                    when (typesState) {
+                        is UiState.Loading -> {
+                            DropdownMenuItem(text = { Text("Chargement...") }, onClick = { /* no-op */ })
+                        }
+                        is UiState.Error -> {
+                            DropdownMenuItem(text = { Text("Erreur, réessayer") }, onClick = { onRetryTypes(); typeExpanded = false })
+                        }
+                        is UiState.Success -> {
+                            availableTypes.forEach { t ->
+                                DropdownMenuItem(text = { Text(t.name ?: "Type ${t.id}") }, onClick = { selectedTypeId = t.id; typeExpanded = false })
+                            }
+                        }
+                        is UiState.Idle -> {
+                            DropdownMenuItem(text = { Text("Aucun type") }, onClick = { /* no-op */ })
+                        }
                     }
                 }
             }
@@ -181,8 +213,8 @@ private fun CreateForm(
             ArkeoButton(
                 text = if (isLoading) "Création…" else "CRÉER LE COMPTE",
                 onClick = {
-                    if (!isLoading && selectedAccount != null && iban.isNotBlank()) {
-                        selectedAccount!!.id?.let { onSubmit(it, iban, selectedTypeId, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState) }
+                    if (!isLoading && selectedAccount != null && iban.isNotBlank() && selectedTypeId != null) {
+                        selectedAccount!!.id?.let { onSubmit(it, iban, selectedTypeId!!, sold.toDoubleOrNull() ?: 0.0, overdraft.toDoubleOrNull() ?: 0.0, selectedState) }
                     }
                 },
             )
