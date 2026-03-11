@@ -1,27 +1,29 @@
 package defalt.network.api.operation.service
 
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+import defalt.network.api.operation.model.ChangeStateRequest
+import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationList
 import defalt.network.api.operation.model.OperationState
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface OperationApi {
     /**
      * GET operations/account/{accountId}
      * Récupérer les opérations d&#39;un compte
-     *
+     * 
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountId
+     * @param accountId 
      * @param state  (optional)
      * @param dateFrom  (optional)
      * @param dateTo  (optional)
@@ -89,12 +91,12 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
-     * @param body
+     * @param id 
+     * @param changeStateRequest 
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
-    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body body: kotlin.String): Response<Operation>
+    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body changeStateRequest: ChangeStateRequest): Response<Operation>
 
     /**
      * POST operations
@@ -106,9 +108,10 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operation
+     * @param operation 
      * @return [Operation]
      */
     @POST("operations")
     suspend fun operationsPost(@Body operation: Operation): Response<Operation>
+
 }

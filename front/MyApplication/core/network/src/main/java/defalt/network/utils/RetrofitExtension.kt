@@ -20,6 +20,7 @@ suspend fun <T> safeApiCall(
                 NetworkResult.Success(body)
             } else if (response.code() == 204) {
                 logger.debug("No content")
+                @Suppress("UNCHECKED_CAST")
                 NetworkResult.Success(Unit as T)
             } else {
                 logger.debug("Empty body")

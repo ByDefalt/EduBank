@@ -5,6 +5,7 @@ import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.network.api.operation.model.BeneficiaryList
+import defalt.network.api.operation.model.ChangeStateRequest
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
@@ -51,7 +52,7 @@ class OperationRemoteDataSource(
         safeApiCall { operationApi.operationsIdCancelPost(id) }.map { it.toEntity() }
 
     override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> =
-        safeApiCall { operationApi.operationsIdStatePatch(id, state.toString()) }.map { it.toEntity() }
+        safeApiCall { operationApi.operationsIdStatePatch(id, ChangeStateRequest(state = state.toDto())) }.map { it.toEntity() }
 
     // --- BÉNÉFICIAIRES ---
 

@@ -55,7 +55,7 @@ fun ArkeoApp(isPreview: Boolean) {
     val startDestination = when {
         authState is UiState.Success && (authState as UiState.Success<*>).data == RoleEnum.ADMIN -> Routes.Core.AdminHome
         authState is UiState.Success && (authState as UiState.Success<*>).data == RoleEnum.CUSTOMER -> Routes.Bank
-        else -> null // pas encore résolu
+        else -> null
     }
 
     Box(
@@ -82,10 +82,10 @@ fun ArkeoApp(isPreview: Boolean) {
 @Composable
 fun SplashScreen() {
     Box(
-        modifier = Modifier.fillMaxSize().background(CustomColor.ArkeoRed),
+        modifier = Modifier.fillMaxSize().background(Color.White),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(color = Color.White)
+        CircularProgressIndicator(color = CustomColor.ArkeoRed)
     }
 }
 

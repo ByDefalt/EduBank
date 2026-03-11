@@ -1,17 +1,15 @@
 package defalt.network.api.offer.service
 
-import defalt.network.api.offer.model.Offer
-import defalt.network.api.offer.model.OfferInput
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.http.*
+import retrofit2.Response
+import okhttp3.RequestBody
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
-import retrofit2.http.Query
+
+import defalt.network.api.offer.model.Error
+import defalt.network.api.offer.model.Offer
+import defalt.network.api.offer.model.OfferInput
 
 interface OfferApi {
     /**
@@ -26,19 +24,15 @@ interface OfferApi {
     @GET("offers/active")
     suspend fun offersActiveGet(): Response<kotlin.collections.List<Offer>>
 
+
     /**
-     * enum for parameter state
-     */
+    * enum for parameter state
+    */
     @Serializable
     enum class StateOffersGet(val value: kotlin.String) {
-        @SerialName(value = "active")
-        ACTIVE("active"),
-
-        @SerialName(value = "inactive")
-        INACTIVE("inactive"),
-
-        @SerialName(value = "expired")
-        EXPIRED("expired"),
+        @SerialName(value = "active") ACTIVE("active"),
+        @SerialName(value = "inactive") INACTIVE("inactive"),
+        @SerialName(value = "expired") EXPIRED("expired")
     }
 
     /**
@@ -66,7 +60,7 @@ interface OfferApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
+     * @param id 
      * @return [Unit]
      */
     @DELETE("offers/{id}")
@@ -98,8 +92,8 @@ interface OfferApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id
-     * @param offerInput
+     * @param id 
+     * @param offerInput 
      * @return [Offer]
      */
     @PUT("offers/{id}")
@@ -115,9 +109,10 @@ interface OfferApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param offerInput
+     * @param offerInput 
      * @return [Offer]
      */
     @POST("offers")
     suspend fun offersPost(@Body offerInput: OfferInput): Response<Offer>
+
 }

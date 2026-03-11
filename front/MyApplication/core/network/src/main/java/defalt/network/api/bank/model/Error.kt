@@ -10,23 +10,26 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.bank.model
 
-import kotlinx.serialization.SerialName
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
+ * 
  *
- *
- * @param code
- * @param message
- * @param details
+ * @param code 
+ * @param message 
+ * @param details 
  */
 @Serializable
-data class Error(
+
+data class Error (
 
     @SerialName(value = "code")
     val code: kotlin.String? = null,
@@ -35,6 +38,10 @@ data class Error(
     val message: kotlin.String? = null,
 
     @SerialName(value = "details")
-    val details: kotlin.String? = null,
+    val details: kotlin.String? = null
 
-)
+) {
+
+
+}
+

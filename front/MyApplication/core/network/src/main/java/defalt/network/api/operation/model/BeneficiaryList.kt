@@ -10,23 +10,31 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
 package defalt.network.api.operation.model
 
-import kotlinx.serialization.SerialName
+import defalt.network.api.operation.model.Beneficiary
+
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Contextual
 
 /**
+ * 
  *
- *
- * @param `data`
+ * @param `data` 
  */
 @Serializable
-data class BeneficiaryList(
+
+data class BeneficiaryList (
 
     @SerialName(value = "data")
-    val `data`: kotlin.collections.List<Beneficiary>? = null,
+    val `data`: kotlin.collections.List<Beneficiary>? = null
 
-)
+) {
+
+
+}
+
