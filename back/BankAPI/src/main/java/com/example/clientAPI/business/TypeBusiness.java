@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 public class TypeBusiness {
 
@@ -27,11 +26,9 @@ public class TypeBusiness {
 
     public TypesEntity getTypeById(Integer id) {
         Type dto = typeRepository.getTypeById(id);
-
         if (dto == null) {
             throw new NotFoundException("Type non trouvé");
         }
-
         return TypeMapper.toEntity(dto);
     }
 

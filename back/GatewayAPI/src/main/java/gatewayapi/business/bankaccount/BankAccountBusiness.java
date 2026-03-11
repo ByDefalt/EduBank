@@ -3,7 +3,6 @@ package gatewayapi.business.bankaccount;
 import dto.bankapiswagger.*;
 import gatewayapi.repository.bankaccount.BankAccountRepository;
 import gatewayapi.repository.bankaccount.BankAccountPivotRepository;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +13,8 @@ public class BankAccountBusiness {
     private final BankAccountRepository bankAccountRepository;
     private final BankAccountPivotRepository bankAccountPivotRepository;
 
-    public BankAccountBusiness(BankAccountRepository bankAccountRepository, BankAccountPivotRepository bankAccountPivotRepository) {
+    public BankAccountBusiness(BankAccountRepository bankAccountRepository,
+                               BankAccountPivotRepository bankAccountPivotRepository) {
         this.bankAccountRepository = bankAccountRepository;
         this.bankAccountPivotRepository = bankAccountPivotRepository;
     }
@@ -51,28 +51,10 @@ public class BankAccountBusiness {
     }
 
     public BankAccountDetail getMyBankAccountById(String userId, String bankAccountId) {
-        checkOwnership(userId, bankAccountId);
         return bankAccountRepository.findMyBankAccountById(userId, bankAccountId);
     }
 
     public List<String> getMyCoHolders(String userId, String bankAccountId) {
-        checkOwnership(userId, bankAccountId);
         return bankAccountRepository.findMyCoHolders(userId, bankAccountId);
-    }
-
-    // ==================== PRIVATE ====================
-
-    private void checkOwnership(String userId, String bankAccountId) {
-        List<BankAccountPivot> pivots = bankAccountPivotRepository.getPivotsByBankAccount(bankAccountId);
-
-        if (pivots.isEmpty()) {
-            throw new NotFoundException("Compte bancaire non trouvé");
-        }
-
-        boolean owns = pivots.stream()
-                .anyMatch(pivot -> userId.equals(pivot.getAccountId()));
-        if (!owns) {
-            throw new SecurityException("Ce compte ne vous appartient pas");
-        }
     }
 }

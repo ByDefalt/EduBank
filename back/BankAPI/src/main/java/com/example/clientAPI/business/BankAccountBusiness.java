@@ -1,24 +1,22 @@
 package com.example.clientAPI.business;
 
-import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountDetailEntity;
+import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.mapper.BankAccountDetailMapper;
 import com.example.clientAPI.mapper.BankAccountMapper;
-import com.example.clientAPI.repository.BankAccountRepository;
 import com.example.clientAPI.repository.BankAccountParameterRepository;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
+import com.example.clientAPI.repository.BankAccountRepository;
 import dto.bankapi.BankAccount;
 import dto.bankapi.BankAccountDetail;
 import dto.bankapi.BankAccountPivot;
-
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Service
 public class BankAccountBusiness {
@@ -85,7 +83,6 @@ public class BankAccountBusiness {
         if (bankAccount == null) {
             throw new NotFoundException("Compte bancaire non trouvé");
         }
-
         bankAccountPivotRepository.deleteAllPivotsByBankAccount(id);
         bankAccountRepository.deleteBankAccount(id);
         bankAccountParameterRepository.deleteParameter(bankAccount.getParameterId());
@@ -106,11 +103,18 @@ public class BankAccountBusiness {
         if (dto == null) {
             throw new NotFoundException("Compte bancaire non trouvé");
         }
+        List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
+        if (!accountIds.contains(userId)) {
+            throw new SecurityException("Ce compte ne vous appartient pas");
+        }
         return BankAccountDetailMapper.toEntity(dto);
     }
 
     public List<String> getCoHolderIds(String userId, String bankAccountId) {
         List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
+        if (!accountIds.contains(userId)) {
+            throw new SecurityException("Ce compte ne vous appartient pas");
+        }
         return accountIds.stream()
                 .filter(accountId -> !accountId.equals(userId))
                 .toList();
