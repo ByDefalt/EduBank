@@ -135,7 +135,7 @@ internal fun HomeAccountContent(
                     item {
                         SectionRowCard(
                             title = "TOUTE MON ÉPARGNE",
-                            onClick = {},
+                            onClick = onNavigateToAccounts,
                         )
                     }
                     item { Spacer(modifier = Modifier.height(8.dp)) }
@@ -157,23 +157,14 @@ internal fun HomeAccountContent(
 
 @Composable
 private fun MainAccountCard(onNavigateToAccountDetails: (String) -> Unit = {}, account: BankAccountDetail) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val cardColor = if (isPressed) Color(0xFFF0F0F0) else Color.White
-
     val accountTypeName = account.type?.name ?: "COMPTE"
     val accountIban = account.iban ?: "—"
     val accountSold = account.sold ?: 0.0
     val overdraftLimit = account.parameter?.overdraftLimit
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-            ) { account.id?.let { onNavigateToAccountDetails(it) } },
-        colors = CardDefaults.cardColors(containerColor = cardColor),
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
@@ -197,8 +188,15 @@ private fun MainAccountCard(onNavigateToAccountDetails: (String) -> Unit = {}, a
             }
             Spacer(modifier = Modifier.height(12.dp))
 
+            val interactionSource = remember { MutableInteractionSource() }
+            val isPressed by interactionSource.collectIsPressedAsState()
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(
+                        interactionSource = interactionSource,
+                        indication = null,
+                    ) { account.id?.let { onNavigateToAccountDetails(it) } },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
@@ -206,13 +204,13 @@ private fun MainAccountCard(onNavigateToAccountDetails: (String) -> Unit = {}, a
                     text = formatAmount(accountSold),
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp,
-                    color = TextPrimary,
+                    color = if (isPressed) TextSecondary else TextPrimary,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = null,
-                    tint = ArkeoRed,
+                    tint = if (isPressed) TextSecondary else ArkeoRed,
                     modifier = Modifier.size(24.dp),
                 )
             }
