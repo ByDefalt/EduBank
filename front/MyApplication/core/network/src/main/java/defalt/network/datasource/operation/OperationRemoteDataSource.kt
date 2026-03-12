@@ -20,7 +20,7 @@ class OperationRemoteDataSource(
     private val beneficiaryApi: BeneficiaryApi,
 ) : IOperationRemoteDataSource {
 
-    // --- OPÉRATIONS ---
+
 
     override suspend fun getOperations(
         accountId: String?,
@@ -53,7 +53,7 @@ class OperationRemoteDataSource(
         return safeApiCall { operationApi.operationsIdStatePatch(id, state.toDto()) }.map { it.toEntity() }
     }
 
-    // --- BÉNÉFICIAIRES ---
+
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
         safeApiCallList(BeneficiaryList(data = emptyList())) { beneficiaryApi.beneficiariesGet() }.map { it.toEntity() }

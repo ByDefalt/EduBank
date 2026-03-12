@@ -49,7 +49,7 @@ private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
 private val TextSecondary = CustomColor.TextSecondary
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun CreateTransferDebitScreen(
     onNext: () -> Unit = {},
@@ -68,7 +68,7 @@ fun CreateTransferDebitScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun CreateTransferDebitContent(
     uiState: UiState<DebitStepData>,
@@ -76,7 +76,7 @@ internal fun CreateTransferDebitContent(
     onAccountSelected: (BankAccountDetail) -> Unit = {},
     onBack: () -> Unit = {},
 ) {
-    // Les labels sont maintenant fournis par BankAccountDetail.type?.name
+
 
     Box(
         modifier = Modifier
@@ -125,7 +125,7 @@ internal fun CreateTransferDebitContent(
     }
 }
 
-// ── Card compte à débiter ─────────────────────────────────────────────────────
+
 
 @Composable
 private fun DebitAccountCard(
@@ -184,7 +184,7 @@ private fun DebitAccountCard(
     }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 private fun maskIban(iban: String?): String {
     val last2 = iban?.takeLast(2) ?: "XX"

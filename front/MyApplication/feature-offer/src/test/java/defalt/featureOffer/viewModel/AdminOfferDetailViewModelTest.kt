@@ -27,7 +27,7 @@ class AdminOfferDetailViewModelTest {
     private val deleteOffer: DeleteOfferUseCase = mockk()
     private lateinit var viewModel: AdminOfferDetailViewModel
 
-    // Dates fixes pour tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val nextMonth: LocalDate = today.plusMonths(1)
 

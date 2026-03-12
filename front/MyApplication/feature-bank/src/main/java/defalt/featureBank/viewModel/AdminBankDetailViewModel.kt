@@ -35,7 +35,7 @@ class AdminBankDetailViewModel(
     private val _typesState = MutableStateFlow<UiState<List<Type>>>(UiState.Loading)
     val typesState: StateFlow<UiState<List<Type>>> = _typesState.asStateFlow()
 
-    // Posé par le screen via LaunchedEffect, appelé après chaque mutation réussie
+
     var onMutationSuccess: (() -> Unit)? = null
 
     fun load(id: String) {
@@ -50,7 +50,7 @@ class AdminBankDetailViewModel(
     fun updateFull(id: String, typeId: Int, overdraftLimit: Double, state: State) {
         val param = BankAccountParameter(overdraftLimit = overdraftLimit, state = state)
         launchWithUiState(stateFlow = _actionState) {
-            // Si typeId == 0 => mise à jour des seuls paramètres (pas de changement de type)
+
             val result: NetworkResult<*> = if (typeId == 0) {
                 updateBankAccountParam(id, param)
             } else {
@@ -63,7 +63,7 @@ class AdminBankDetailViewModel(
                     getBankAccountById(id)
                 }
             }
-            // map pour propager le résultat dans _actionState
+
             result.map { it }
         }
     }

@@ -15,7 +15,7 @@ import defalt.network.api.bank.model.BankAccountPivot as BankAccountPivotDto
 import defalt.network.api.bank.model.State as StateDto
 import defalt.network.api.bank.model.Type as TypeDto
 
-// ── BankAccount ───────────────────────────────────────────────────────────────
+
 
 fun BankAccountDto.toEntity(): BankAccountEntity = BankAccountEntity(
     id = this.id,
@@ -36,7 +36,7 @@ fun BankAccountEntity.toDto(): BankAccountDto = BankAccountDto(
 @JvmName("bankAccountListToEntity")
 fun List<BankAccountDto>.toEntity(): List<BankAccountEntity> = this.map { it.toEntity() }
 
-// ── BankAccountDetail ─────────────────────────────────────────────────────────
+
 
 fun BankAccountDetailDto.toEntity(): BankAccountDetailEntity = BankAccountDetailEntity(
     id = this.id,
@@ -68,7 +68,7 @@ fun List<BankAccountDetailDto>.toEntity(): List<BankAccountDetailEntity> = this.
 @JvmName("bankAccountDetailListToBankAccountEntity")
 fun List<BankAccountDetailDto>.toBankAccountEntity(): List<BankAccountEntity> = this.map { it.toBankAccountEntity() }
 
-// ── BankAccountCreateRequest ──────────────────────────────────────────────────
+
 
 fun BankAccountCreateRequestEntity.toDto(): BankAccountCreateRequestDto = BankAccountCreateRequestDto(
     typeId = this.typeId,
@@ -78,7 +78,7 @@ fun BankAccountCreateRequestEntity.toDto(): BankAccountCreateRequestDto = BankAc
     state = this.state?.toDto(),
 )
 
-// ── BankAccountParameter ──────────────────────────────────────────────────────
+
 
 fun BankAccountParameterDto.toEntity(): BankAccountParameterEntity = BankAccountParameterEntity(
     id = this.id,
@@ -92,7 +92,7 @@ fun BankAccountParameterEntity.toDto(): BankAccountParameterDto = BankAccountPar
     state = this.state?.toDto(),
 )
 
-// ── State ─────────────────────────────────────────────────────────────────────
+
 
 fun StateDto.toEntity(): StateEntity = when (this) {
     StateDto.ACTIVE -> StateEntity.ACTIVE
@@ -108,7 +108,7 @@ fun StateEntity.toDto(): StateDto = when (this) {
     StateEntity.CLOSED -> StateDto.CLOSED
 }
 
-// ── Type ──────────────────────────────────────────────────────────────────────
+
 
 fun TypeDto.toEntity(): TypeEntity = TypeEntity(
     id = this.id,

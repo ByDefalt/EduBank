@@ -12,7 +12,7 @@ import defalt.utils.NetworkResult
 
 interface IAccountRemoteDataSource {
 
-    // --- COMPTES (AccountApi) ---
+
 
     suspend fun activateAccount(id: String): NetworkResult<Boolean>
 
@@ -28,13 +28,13 @@ interface IAccountRemoteDataSource {
 
     suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account>
 
-    // --- AUTHENTIFICATION (AccountApi) ---
+
 
     suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest>
 
     suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse>
 
-    // --- RÔLES (RoleApi & AccountApi) ---
+
 
     suspend fun getRoles(): NetworkResult<List<Role>>
 
@@ -45,7 +45,7 @@ interface IAccountRemoteDataSource {
     /** Récupère le rôle spécifiquement lié à un compte */
     suspend fun getAccountRole(accountId: String): NetworkResult<Role>
 
-    // --- INFORMATIONS PERSONNELLES (PersonalInformationApi & AccountApi) ---
+
 
     suspend fun getPersonalInformations(): NetworkResult<List<PersonalInformation>>
 

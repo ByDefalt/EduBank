@@ -11,11 +11,11 @@ import org.junit.Test
 
 class OfferMapperTest {
 
-    // Dates fixes pour rendre les tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val nextMonth: LocalDate = LocalDate.parse("2025-02-01")
 
-    // ── Offer.State enum ─────────────────────────────────────────────────────
+
 
     @Test fun `OfferDto State ACTIVE to entity`() = assertEquals(OfferEntity.State.ACTIVE, OfferDto.State.ACTIVE.toEntity())
 
@@ -33,7 +33,7 @@ class OfferMapperTest {
         OfferEntity.State.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
     }
 
-    // ── Offer ────────────────────────────────────────────────────────────────
+
 
     @Test fun `OfferDto toEntity maps all fields`() {
         val dto = OfferDto(
@@ -106,7 +106,7 @@ class OfferMapperTest {
         assertEquals(2, entities[1].id)
     }
 
-    // ── OffersPostRequest ────────────────────────────────────────────────────
+
 
     @Test fun `OffersPostRequestEntity toDto maps all fields`() {
         val entity = OfferInput(
@@ -118,24 +118,24 @@ class OfferMapperTest {
             picturePath = null,
         )
         val dto = entity.toDto()
-        // dto is OfferInputDto
+
         assertEquals("Titre", dto.title)
         assertEquals(OfferInputDto.State.ACTIVE, dto.state)
         assertEquals(today, dto.startDate)
     }
 
     @Test fun `OffersPostRequest State mapping to OfferInput`() {
-        // Comparer via la fonction de mapping pour être logique
+
         assertEquals(OfferInputDto.State.ACTIVE, OfferInput.State.ACTIVE.toDto())
         assertEquals(OfferInputDto.State.INACTIVE, OfferInput.State.INACTIVE.toDto())
         assertEquals(OfferInputDto.State.EXPIRED, OfferInput.State.EXPIRED.toDto())
     }
 
     @Test fun `roundtrip OffersPostRequest entity-dto-entity removed`() {
-        // Roundtrip not supported: OfferInputDto has no toEntity() mapping. Test removed.
+
     }
 
-    // ── OffersIdPutRequest ───────────────────────────────────────────────────
+
 
     @Test fun `OffersIdPutRequestEntity toDto maps all fields`() {
         val entity = OfferInput(
@@ -160,7 +160,7 @@ class OfferMapperTest {
             endDate = nextMonth,
             picturePath = "def",
         )
-        // L'implémentation actuelle mappe toujours l'état ; vérifier la valeur mappée
+
         assertEquals(OfferInputDto.State.EXPIRED, entity.toDto().state)
     }
 
@@ -171,11 +171,11 @@ class OfferMapperTest {
     }
 
     @Test fun `roundtrip OffersIdPutRequest entity-dto-entity removed`() {
-        // Roundtrip not supported: OfferInputDto has no toEntity() mapping. Test removed.
+
     }
 
-    // ── OffersIdStatePatchRequest ────────────────────────────────────────────
-    // OffersIdStatePatchRequest.State est son propre enum, distinct de OffersIdPutRequest.State
+
+
 
     @Test fun `OffersIdStatePatchRequestEntity ACTIVE toDto`() {
         val entity = OfferInput(

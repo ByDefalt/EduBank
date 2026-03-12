@@ -39,7 +39,7 @@ import defalt.ui.component.ArkeoInput
 import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun LoginScreen(
     onBackToHome: () -> Unit,
@@ -60,9 +60,9 @@ fun LoginScreen(
     )
 }
 
-// alice.dupont@mail.fr
-// Alice1234!
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
+
+
 @Composable
 internal fun LoginContent(
     onLogin: (String, String) -> Unit = { _, _ -> },

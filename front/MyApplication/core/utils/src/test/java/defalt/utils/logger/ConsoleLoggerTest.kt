@@ -6,7 +6,7 @@ import org.junit.Test
 
 class ConsoleLoggerTest {
 
-    // ── Filtrage par niveau ────────────────────────────────────────────────
+
 
     @Test fun `niveau TRACE active tous les niveaux`() {
         val logger = ConsoleLogger(LogLevel.TRACE)
@@ -48,7 +48,7 @@ class ConsoleLoggerTest {
         assertTrue(logger.isLevelEnabled(LogLevel.INFO))
     }
 
-    // ── Appels ne levent pas d exception ──────────────────────────────────
+
 
     @Test fun `trace ne leve pas d exception avec niveau TRACE`() {
         ConsoleLogger(LogLevel.TRACE).trace("trace msg")

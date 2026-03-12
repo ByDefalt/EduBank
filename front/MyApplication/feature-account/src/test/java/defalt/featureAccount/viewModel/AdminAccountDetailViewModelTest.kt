@@ -69,7 +69,7 @@ class AdminAccountDetailViewModelTest {
         viewModel.activate("acc-001")
 
         coVerify(exactly = 1) { activateAccount("acc-001") }
-        coVerify(exactly = 1) { getAccountById("acc-001") } // reload
+        coVerify(exactly = 1) { getAccountById("acc-001") }
     }
 
     @Test
@@ -94,7 +94,7 @@ class AdminAccountDetailViewModelTest {
 
     @Test
     fun `updateInfo ne fait rien si uiState n est pas Success`() {
-        // uiState est Loading par défaut — updateInfo doit être ignoré
+
         viewModel.updateInfo("acc-001", fakeInfo)
 
         coVerify(exactly = 0) { updatePersonalInfo(any(), any()) }
@@ -119,6 +119,6 @@ class AdminAccountDetailViewModelTest {
         viewModel.load("acc-001")
         viewModel.updateInfo("acc-001", fakeInfo)
 
-        coVerify(exactly = 2) { getAccountById("acc-001") } // load + reload après update
+        coVerify(exactly = 2) { getAccountById("acc-001") }
     }
 }

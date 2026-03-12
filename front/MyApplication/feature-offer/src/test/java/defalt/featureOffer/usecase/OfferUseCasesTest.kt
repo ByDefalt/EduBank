@@ -15,14 +15,14 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-// ── GetAllOffersUseCase ──────────────────────────────────────────────────────
+
 
 class GetAllOffersUseCaseTest {
     private val repository: IOfferRepository = mockk()
     private val logger = FakeLogger()
     private lateinit var useCase: GetAllOffersUseCase
 
-    // Dates fixes pour rendre les tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val nextMonth: LocalDate = today.plusMonths(1)
     private val nextMonth2: LocalDate = today.plusMonths(2)
@@ -39,7 +39,7 @@ class GetAllOffersUseCaseTest {
         val result = useCase()
         assertTrue(result is NetworkResult.Success)
         assertEquals(2, (result as NetworkResult.Success).data.size)
-        // Vérifier la cohérence des titres (test utile)
+
         assertEquals("Offre 1", result.data[0].title)
         coVerify(exactly = 1) { repository.getOffers() }
     }
@@ -61,7 +61,7 @@ class GetAllOffersUseCaseTest {
     }
 }
 
-// ── CreateOfferUseCase ───────────────────────────────────────────────────────
+
 
 class CreateOfferUseCaseTest {
     private val repository: IOfferRepository = mockk()
@@ -120,7 +120,7 @@ class CreateOfferUseCaseTest {
     }
 }
 
-// ── UpdateOfferUseCase ───────────────────────────────────────────────────────
+
 
 class UpdateOfferUseCaseTest {
     private val repository: IOfferRepository = mockk()
@@ -178,7 +178,7 @@ class UpdateOfferUseCaseTest {
     }
 }
 
-// ── DeleteOfferUseCase ───────────────────────────────────────────────────────
+
 
 class DeleteOfferUseCaseTest {
     private val repository: IOfferRepository = mockk()

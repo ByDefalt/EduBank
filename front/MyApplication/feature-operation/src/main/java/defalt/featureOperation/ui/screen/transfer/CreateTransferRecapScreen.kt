@@ -42,7 +42,7 @@ import defalt.ui.utils.CustomColor
 import java.util.Locale
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun CreateTransferRecapScreen(
     onBack: () -> Unit = {},
@@ -52,7 +52,7 @@ fun CreateTransferRecapScreen(
 ) {
     val form by viewModel.form.collectAsStateWithLifecycle()
     val submitState by viewModel.submitUiState.collectAsStateWithLifecycle()
-    // Naviguer vers la suite dès que la soumission réussit
+
     LaunchedEffect(submitState) {
         if (submitState is UiState.Success) {
             viewModel.reset()
@@ -60,7 +60,7 @@ fun CreateTransferRecapScreen(
         }
     }
 
-    // Si erreur, afficher un dialog au même style que AccountCreatedDialog
+
     when (val state = submitState) {
         is UiState.Error -> {
             TransferErrorDialog(
@@ -72,7 +72,7 @@ fun CreateTransferRecapScreen(
             )
         }
         else -> {
-            // no-op
+
         }
     }
 
@@ -89,7 +89,7 @@ fun CreateTransferRecapScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun CreateTransferRecapContent(
     sourceAccountLabel: String = "",
@@ -110,7 +110,7 @@ internal fun CreateTransferRecapContent(
             .background(CustomColor.BackgroundGray)
             .verticalScroll(rememberScrollState()),
     ) {
-        // ── Header avec retour arrière ────────────────────────────────────
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,7 +136,7 @@ internal fun CreateTransferRecapContent(
             Spacer(modifier = Modifier.size(48.dp))
         }
 
-        // ── Carte récapitulatif ───────────────────────────────────────────
+
         Card(
             modifier = Modifier
                 .padding(16.dp)
@@ -155,19 +155,19 @@ internal fun CreateTransferRecapContent(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Compte à débiter
+
                 RecapRow(label = "Compte débité", value = sourceAccountLabel)
                 RecapRow(label = "IBAN source", value = sourceAccountIban)
 
                 RecapDivider()
 
-                // Destinataire
+
                 RecapRow(label = "Bénéficiaire", value = receiverName)
                 RecapRow(label = "IBAN destinataire", value = receiverIban)
 
                 RecapDivider()
 
-                // Montant & libellé
+
                 RecapRow(
                     label = "Montant",
                     value = String.format(Locale.FRANCE, "%.2f €", amount),
@@ -189,7 +189,7 @@ internal fun CreateTransferRecapContent(
     }
 }
 
-// ── Composants internes ───────────────────────────────────────────────────────
+
 
 @Composable
 private fun RecapRow(
@@ -244,7 +244,7 @@ fun CreateTransferRecapScreenPreview() {
     )
 }
 
-// ── Dialog d'erreur stylisé comme AccountCreatedDialog ───────────────
+
 @Composable
 private fun TransferErrorDialog(
     message: String,

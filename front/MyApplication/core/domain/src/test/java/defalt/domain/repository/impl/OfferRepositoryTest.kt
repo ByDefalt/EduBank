@@ -19,7 +19,7 @@ class OfferRepositoryTest {
     private val dataSource: IOfferRemoteDataSource = mockk()
     private lateinit var repository: OfferRepository
 
-    // Dates fixes pour tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val next: LocalDate = LocalDate.parse("2025-02-01")
     private val fakeOffer = Offer(1, "Promo", "Desc", Offer.State.ACTIVE, today, next)

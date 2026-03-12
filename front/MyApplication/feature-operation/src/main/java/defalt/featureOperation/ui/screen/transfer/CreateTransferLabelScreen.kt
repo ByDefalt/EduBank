@@ -40,7 +40,7 @@ import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun CreateTransferLabelScreen(
     onBack: () -> Unit = {},
@@ -57,7 +57,7 @@ fun CreateTransferLabelScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun CreateTransferLabelContent(
     label: String = "",
@@ -74,7 +74,7 @@ internal fun CreateTransferLabelContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        // ── Header avec retour arrière ────────────────────────────────────
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,7 +100,7 @@ internal fun CreateTransferLabelContent(
             Spacer(modifier = Modifier.size(48.dp))
         }
 
-        // ── Formulaire ────────────────────────────────────────────────────
+
         Card(
             modifier = Modifier
                 .padding(16.dp)

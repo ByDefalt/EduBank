@@ -67,12 +67,12 @@ private fun MenuContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        // En-tête
+
         ArkeoTopBar(title = "Menu", onBack = onBack)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Liste des boutons menu
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()

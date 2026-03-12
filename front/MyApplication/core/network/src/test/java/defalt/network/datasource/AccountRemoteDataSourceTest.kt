@@ -48,7 +48,7 @@ class AccountRemoteDataSourceTest {
         dataSource = AccountRemoteDataSource(accountApi, personalInformationApi, roleApi, apiClient)
     }
 
-    // ── getAccounts ──────────────────────────────────────────────────────────
+
 
     @Test fun `getAccounts retourne la liste en succes`() = runTest {
         coEvery { accountApi.accountsGet() } returns Response.success(listOf(fakeAccountDto))
@@ -78,7 +78,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getAccounts() is NetworkResult.Exception)
     }
 
-    // ── getAccountById ────────────────────────────────────────────────────────
+
 
     @Test fun `getAccountById retourne le compte en succes`() = runTest {
         coEvery { accountApi.accountsIdGet("acc-001") } returns Response.success(fakeAccountDto)
@@ -100,7 +100,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getAccountById("acc-001") is NetworkResult.Exception)
     }
 
-    // ── activateAccount ──────────────────────────────────────────────────────
+
 
     @Test fun `activateAccount retourne true en succes`() = runTest {
         coEvery { accountApi.accountsActivateIdPut("acc-001") } returns Response.success(true)
@@ -117,7 +117,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.activateAccount("acc-001") is NetworkResult.Error)
     }
 
-    // ── deactivateAccount ────────────────────────────────────────────────────
+
 
     @Test fun `deactivateAccount retourne true en succes`() = runTest {
         coEvery { accountApi.accountsDeactivateIdPut("acc-001") } returns Response.success(true)
@@ -133,10 +133,10 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.deactivateAccount("acc-001") is NetworkResult.Exception)
     }
 
-    // ── signIn ────────────────────────────────────────────────────────────────
+
 
     @Test fun `signIn retourne le token`() = runTest {
-        // utiliser une instance reelle d ApiClient pour observer bearerToken si besoin
+
         val realApiClient = ApiClient()
         val localDataSource = AccountRemoteDataSource(accountApi, personalInformationApi, roleApi, realApiClient)
 
@@ -146,7 +146,7 @@ class AccountRemoteDataSourceTest {
 
         assertTrue(result is NetworkResult.Success)
         assertEquals("jwt-token", (result as NetworkResult.Success).data.jwt)
-        // AccountRemoteDataSource n'ecrit pas dans la Session : validation du token est une opération separée
+
     }
 
     @Test fun `signIn propage Error 401`() = runTest {
@@ -163,7 +163,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.signIn(SignInRequest(id = "a@a.fr", password = "p")) is NetworkResult.Exception)
     }
 
-    // ── validateToken ─────────────────────────────────────────────────────────
+
 
     @Test fun `validateToken retourne le TokenResponse`() = runTest {
         coEvery { accountApi.accountsValidatePost(any()) } returns Response.success(fakeTokenResponseDto)
@@ -180,7 +180,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.validateToken(TokenRequest(jwt = "expired")) is NetworkResult.Error)
     }
 
-    // ── getRoles ─────────────────────────────────────────────────────────────
+
 
     @Test fun `getRoles retourne la liste en succes`() = runTest {
         coEvery { roleApi.rolesGet() } returns Response.success(listOf(fakeRoleDto))
@@ -197,7 +197,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getRoles() is NetworkResult.Error)
     }
 
-    // ── getRoleById ───────────────────────────────────────────────────────────
+
 
     @Test fun `getRoleById retourne le role en succes`() = runTest {
         coEvery { roleApi.rolesIdGet(2) } returns Response.success(fakeRoleDto)
@@ -213,7 +213,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getRoleById(1) is NetworkResult.Error)
     }
 
-    // ── getAccountRole ───────────────────────────────────────────────────────
+
 
     @Test fun `getAccountRole retourne le role du compte`() = runTest {
         coEvery { accountApi.accountsRoleIdGet("acc-001") } returns Response.success(fakeRoleDto)
@@ -224,7 +224,7 @@ class AccountRemoteDataSourceTest {
         assertEquals("CUSTOMER", (result as NetworkResult.Success).data.name)
     }
 
-    // ── getPersonalInformations ───────────────────────────────────────────────
+
 
     @Test fun `getPersonalInformations retourne la liste`() = runTest {
         coEvery { personalInformationApi.personalInformationGet() } returns Response.success(listOf(fakePersonalInfoDto))
@@ -241,7 +241,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getPersonalInformations() is NetworkResult.Error)
     }
 
-    // ── getPersonalInformationById ────────────────────────────────────────────
+
 
     @Test fun `getPersonalInformationById retourne les info`() = runTest {
         coEvery { personalInformationApi.personalInformationIdGet(1) } returns Response.success(fakePersonalInfoDto)
@@ -257,7 +257,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.getPersonalInformationById(1) is NetworkResult.Error)
     }
 
-    // ── getPersonalInformationByAccountId ──────────────────────────────────────
+
 
     @Test fun `getPersonalInformationByAccountId retourne les info`() = runTest {
         coEvery { accountApi.accountsPersonalInformationIdGet("acc-001") } returns Response.success(fakePersonalInfoDto)
@@ -268,7 +268,7 @@ class AccountRemoteDataSourceTest {
         assertEquals("Alice", (result as NetworkResult.Success).data.firstname)
     }
 
-    // ── createPersonalInformation ──────────────────────────────────────────────
+
 
     @Test fun `createPersonalInformation retourne les info creees`() = runTest {
         coEvery { personalInformationApi.personalInformationPost(any()) } returns Response.success(fakePersonalInfoDto)
@@ -294,7 +294,7 @@ class AccountRemoteDataSourceTest {
         assertTrue(dataSource.createPersonalInformation(request) is NetworkResult.Error)
     }
 
-    // ── updatePersonalInformation ──────────────────────────────────────────────
+
 
     @Test fun `updatePersonalInformation retourne les info mises a jour`() = runTest {
         val updated = fakePersonalInfoDto.copy(firstname = "Alicia")

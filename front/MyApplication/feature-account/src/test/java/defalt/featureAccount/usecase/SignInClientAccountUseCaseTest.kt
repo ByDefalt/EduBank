@@ -30,9 +30,9 @@ class SignInClientAccountUseCaseTest {
     }
 
     private fun stubSignIn(role: String) {
-        // signIn renvoie le token
+
         coEvery { repository.signIn(any()) } returns NetworkResult.Success(TokenRequest(jwt = "fake-token"))
-        // validateToken renvoie l'id et le rôle en string
+
         coEvery { repository.validateToken(any()) } returns NetworkResult.Success(TokenResponse(id = "acc-001", role = role))
     }
 
@@ -58,7 +58,7 @@ class SignInClientAccountUseCaseTest {
 
     @Test
     fun `retourne CUSTOMER quand le role est inconnu`() = runTest {
-        // Si le rôle renvoyé n'est pas un enum valide, use case devrait retourner CUSTOMER par défaut
+
         stubSignIn("UNKNOWN")
 
         val result = useCase("x@y.fr", "pass")

@@ -9,7 +9,7 @@ import defalt.network.api.operation.model.Operation as OperationDto
 import defalt.network.api.operation.model.OperationList as OperationListDto
 import defalt.network.api.operation.model.OperationState as OperationStateDto
 
-// ── Beneficiary ───────────────────────────────────────────────────────────────
+
 
 fun BeneficiaryDto.toEntity(): BeneficiaryEntity = BeneficiaryEntity(
     accountSourceId = this.accountSourceId,
@@ -30,7 +30,7 @@ fun List<BeneficiaryDto>.toEntity(): List<BeneficiaryEntity> = this.map { it.toE
 
 fun BeneficiaryListDto.toEntity(): List<BeneficiaryEntity> = this.data?.toEntity() ?: emptyList()
 
-// ── Operation ─────────────────────────────────────────────────────────────────
+
 
 fun OperationDto.toEntity(): OperationEntity = OperationEntity(
     id = this.id,
@@ -56,7 +56,7 @@ fun List<OperationDto>.toEntity(): List<OperationEntity> = this.map { it.toEntit
 
 fun OperationListDto.toEntity(): List<OperationEntity> = this.data?.toEntity() ?: emptyList()
 
-// ── OperationState (enum) ─────────────────────────────────────────────────────
+
 
 fun OperationStateDto.toEntity(): OperationStateEntity = when (this) {
     OperationStateDto.PENDING -> OperationStateEntity.PENDING

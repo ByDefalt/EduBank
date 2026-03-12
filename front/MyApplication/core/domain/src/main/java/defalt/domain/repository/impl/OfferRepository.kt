@@ -10,12 +10,12 @@ class OfferRepository(
     private val remoteDataSource: IOfferRemoteDataSource,
 ) : IOfferRepository {
 
-    // --- PUBLIC ---
+
 
     override suspend fun getActiveOffers(): NetworkResult<List<Offer>> =
         remoteDataSource.getActiveOffers()
 
-    // --- ADMIN & CLIENT ---
+
 
     override suspend fun getOffers(): NetworkResult<List<Offer>> =
         remoteDataSource.getOffers()
@@ -23,7 +23,7 @@ class OfferRepository(
     override suspend fun getOfferById(id: Int): NetworkResult<Offer> =
         remoteDataSource.getOfferById(id)
 
-    // --- ADMIN ---
+
 
     override suspend fun createOffer(offerInput: OfferInput): NetworkResult<Offer> =
         remoteDataSource.createOffer(offerInput)

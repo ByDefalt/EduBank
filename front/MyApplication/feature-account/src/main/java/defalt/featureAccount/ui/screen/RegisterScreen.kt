@@ -59,7 +59,7 @@ import defalt.ui.utils.CustomColor
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun RegisterScreen(
     onBackToHome: () -> Unit,
@@ -67,7 +67,7 @@ fun RegisterScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Affiche le dialog dès que la création est un succès
+
     if (uiState is UiState.Success) {
         val accountId = (uiState as UiState.Success).data.id ?: "—"
         AccountCreatedDialog(
@@ -86,7 +86,7 @@ fun RegisterScreen(
     )
 }
 
-// ── Dialog numéro de compte ──────────────────────────────────────────────────
+
 @Composable
 private fun AccountCreatedDialog(
     accountId: String,
@@ -96,7 +96,7 @@ private fun AccountCreatedDialog(
     val context = LocalContext.current
     var copied by remember { mutableStateOf(false) }
 
-    // Reset du feedback après un court délai
+
     LaunchedEffect(copied) {
         if (copied) {
             delay(1800)
@@ -157,7 +157,7 @@ private fun AccountCreatedDialog(
                             IconButton(onClick = {
                                 clipboard.setText(AnnotatedString(accountId))
                                 copied = true
-                                // Petit feedback système aussi
+
                                 Toast.makeText(context, "Numéro copié", Toast.LENGTH_SHORT).show()
                             }) {
                                 Icon(
@@ -187,7 +187,7 @@ private fun AccountCreatedDialog(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun RegisterContent(
     onRegister: (String, String, String, String, String, String) -> Unit = { _, _, _, _, _, _ -> },
@@ -207,7 +207,7 @@ internal fun RegisterContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        // Header
+
         Card(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(0.dp),
@@ -229,7 +229,7 @@ internal fun RegisterContent(
             }
         }
 
-        // Carte Formulaire Inscription
+
         Card(
             modifier = Modifier
                 .padding(16.dp)

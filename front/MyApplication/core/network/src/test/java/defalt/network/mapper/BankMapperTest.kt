@@ -18,9 +18,9 @@ import org.junit.Test
 
 class BankMapperTest {
 
-    // ── BankAccountParameter.State enum ────────────────────────────────────
-    // La State est maintenant une enum imbriquée dans BankAccountParameter (ACTIVE/INACTIVE)
-    // StateEntity.BLOQUED et CLOSED sont mappés vers INACTIVE côté DTO
+
+
+
 
     @Test fun `BankAccountParameterState ACTIVE to entity`() =
         assertEquals(StateEntity.ACTIVE, StateDto.ACTIVE.toEntity())
@@ -40,7 +40,7 @@ class BankMapperTest {
     @Test fun `StateEntity CLOSED to BankAccountParameterState dto maps to INACTIVE`() =
         assertNotEquals(StateDto.INACTIVE, StateEntity.CLOSED.toDto())
 
-    // ── Type ────────────────────────────────────────────────────────────────
+
 
     @Test fun `TypeDto toEntity maps fields`() {
         val dto = TypeDto(id = 1, name = "CHEQUES")
@@ -61,8 +61,8 @@ class BankMapperTest {
         assertEquals(dto, dto.toEntity().toDto())
     }
 
-    // ── BankAccount ──────────────────────────────────────────────────────────
-    // BankAccount.id est maintenant un String dans le DTO
+
+
 
     @Test fun `BankAccountDto toEntity maps all fields`() {
         val dto = BankAccountDto(id = "1", parameterId = 1, typeId = 2, sold = 500.0, iban = "FR76...")
@@ -90,8 +90,8 @@ class BankMapperTest {
         assertEquals("2", entities[1].id)
     }
 
-    // ── BankAccountCreateRequest ─────────────────────────────────────────────
-    // La conversion est sens unique Entity → BankAccountsPostRequest (pas de roundtrip)
+
+
 
     @Test fun `BankAccountCreateRequestEntity toDto maps typeId iban sold`() {
         val entity = BankAccountCreateRequestEntity(typeId = 1, iban = "FR76...", sold = 100.0, overdraftLimit = 500.0, state = StateEntity.ACTIVE)
@@ -103,12 +103,12 @@ class BankMapperTest {
 
     @Test fun `BankAccountCreateRequestEntity toDto with null state`() {
         val entity = BankAccountCreateRequestEntity(typeId = 1, iban = "FR76...", sold = 0.0, overdraftLimit = 0.0, state = null)
-        // toDto() retourne BankAccountsPostRequest qui n'a pas de champ state — pas d'assertion sur state
+
         val dto = entity.toDto()
         assertEquals(1, dto.typeId)
     }
 
-    // ── BankAccountParameter ─────────────────────────────────────────────────
+
 
     @Test fun `BankAccountParameterDto toEntity maps fields`() {
         val dto = BankAccountParameterDto(id = 1, overdraftLimit = 500.0, state = StateDto.ACTIVE)
@@ -141,7 +141,7 @@ class BankMapperTest {
         assertEquals(dto, dto.toEntity().toDto())
     }
 
-    // ── BankAccountDetails → BankAccountDetail ────────────────────────────────
+
 
     @Test fun `BankAccountDetailsDto toEntity maps all fields`() {
         val dto = BankAccountDetailsDto(

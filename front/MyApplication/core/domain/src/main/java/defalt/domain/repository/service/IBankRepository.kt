@@ -10,7 +10,7 @@ import defalt.utils.NetworkResult
 
 interface IBankRepository {
 
-    // --- ADMIN : Comptes bancaires ---
+
     /** [ADMIN] Liste les comptes bancaires rattachés à un ID utilisateur */
     suspend fun adminGetBankAccountsByAccountId(accountId: String): NetworkResult<List<BankAccount>>
 
@@ -26,11 +26,11 @@ interface IBankRepository {
     /** [ADMIN] Récupère les détails complets d'un compte bancaire */
     suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail>
 
-    // --- ADMIN : Paramètres ---
+
     /** [ADMIN] Met à jour les paramètres (découvert, état) d'un compte bancaire */
     suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit>
 
-    // --- ADMIN : Types de compte ---
+
     /** [ADMIN] Liste tous les types de comptes disponibles */
     suspend fun adminGetAllTypes(): NetworkResult<List<Type>>
 
@@ -40,7 +40,7 @@ interface IBankRepository {
     /** [ADMIN] Crée un nouveau type de compte */
     suspend fun adminCreateType(type: Type): NetworkResult<Type>
 
-    // --- ADMIN : Co-titulaires / Pivot ---
+
     /** [ADMIN] Ajoute un co-titulaire à un compte */
     suspend fun adminAddCoHolder(pivot: BankAccountPivot): NetworkResult<Unit>
 
@@ -56,7 +56,7 @@ interface IBankRepository {
     /** [ADMIN] Récupère la liste des liens pivots (co-titulaires) d'un compte bancaire */
     suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>>
 
-    // --- CLIENT : Mes Comptes ---
+
     /** [CLIENT] Récupère les comptes bancaires de l'utilisateur connecté (filtrage par type optionnel) */
     suspend fun getMyBankAccounts(typeId: Int? = null): NetworkResult<List<BankAccount>>
 

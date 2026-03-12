@@ -61,7 +61,7 @@ private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
 private val TextSecondary = CustomColor.TextSecondary
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun CreateTransferReceiverScreen(
     onBack: () -> Unit = {},
@@ -87,7 +87,7 @@ fun CreateTransferReceiverScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun CreateTransferReceiverContent(
     uiState: UiState<ReceiverStepData>,
@@ -98,7 +98,7 @@ internal fun CreateTransferReceiverContent(
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
-    // Les labels sont maintenant fournis par BankAccountDetail.type?.name
+
 
     Box(
         modifier = Modifier
@@ -106,7 +106,7 @@ internal fun CreateTransferReceiverContent(
             .background(CustomColor.BackgroundGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── Header avec retour arrière ────────────────────────────────────
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,7 +132,7 @@ internal fun CreateTransferReceiverContent(
                 Spacer(modifier = Modifier.size(48.dp))
             }
 
-            // Les tabs restent visibles même en loading/erreur
+
             SecondaryTabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = Color.White,
@@ -174,7 +174,7 @@ internal fun CreateTransferReceiverContent(
                 loadingColor = ArkeoRed,
                 errorColor = ArkeoRed,
             ) { data ->
-                // ── Contenu selon l'onglet ────────────────────────────────────
+
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -184,7 +184,7 @@ internal fun CreateTransferReceiverContent(
                     item { Spacer(modifier = Modifier.height(16.dp)) }
 
                     if (selectedTab == 0) {
-                        // ── Onglet Compte perso ──────────────────────────────
+
                         item {
                             Text(
                                 text = "Mes comptes",
@@ -211,7 +211,7 @@ internal fun CreateTransferReceiverContent(
                             }
                         }
                     } else {
-                        // ── Onglet Bénéficiaire ──────────────────────────────
+
                         item {
                             Text(
                                 text = "Mes bénéficiaires",
@@ -240,12 +240,12 @@ internal fun CreateTransferReceiverContent(
 
                     item { Spacer(modifier = Modifier.height(24.dp)) }
                 }
-            } // fin UiStateHandler
+            }
         }
     }
 }
 
-// ── Card compte perso ─────────────────────────────────────────────────────────
+
 
 @Composable
 private fun ReceiverAccountCard(
@@ -304,7 +304,7 @@ private fun ReceiverAccountCard(
     }
 }
 
-// ── Card bénéficiaire ─────────────────────────────────────────────────────────
+
 
 @Composable
 private fun ReceiverBeneficiaryCard(
@@ -356,7 +356,7 @@ private fun ReceiverBeneficiaryCard(
     }
 }
 
-// ── Message liste vide ────────────────────────────────────────────────────────
+
 
 @Composable
 private fun EmptyListMessage(message: String) {
@@ -382,7 +382,7 @@ private fun EmptyListMessage(message: String) {
     }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+
 
 private fun maskIbanReceiver(iban: String?): String {
     val last2 = iban?.takeLast(2) ?: "XX"

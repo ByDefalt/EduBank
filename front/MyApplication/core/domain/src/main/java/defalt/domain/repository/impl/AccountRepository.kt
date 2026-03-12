@@ -18,7 +18,7 @@ class AccountRepository(
     private val localDataSource: IAccountLocalDataSource,
 ) : IAccountRepository {
 
-    // --- COMPTES ---
+
 
     override suspend fun getAccounts(): NetworkResult<List<Account>> =
         remoteDataSource.getAccounts()
@@ -38,7 +38,7 @@ class AccountRepository(
     override suspend fun closeAccount(id: String): NetworkResult<Boolean> =
         remoteDataSource.closeAccount(id)
 
-    // --- AUTHENTIFICATION ---
+
 
     override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> =
         remoteDataSource.signIn(signInRequest).also { result ->
@@ -56,7 +56,7 @@ class AccountRepository(
     override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> =
         remoteDataSource.validateToken(tokenRequest)
 
-    // --- RÔLES ---
+
 
     override suspend fun getRoles(): NetworkResult<List<Role>> =
         remoteDataSource.getRoles()
@@ -70,7 +70,7 @@ class AccountRepository(
     override suspend fun getAccountRole(accountId: String): NetworkResult<Role> =
         remoteDataSource.getAccountRole(accountId)
 
-    // --- INFORMATIONS PERSONNELLES ---
+
 
     override suspend fun getPersonalInformations(): NetworkResult<List<PersonalInformation>> =
         remoteDataSource.getPersonalInformations()

@@ -41,7 +41,7 @@ import defalt.ui.component.safeClick
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun CreateTransferAmountScreen(
     onBack: () -> Unit = {},
@@ -61,7 +61,7 @@ fun CreateTransferAmountScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun CreateTransferAmountContent(
     amount: String = "",
@@ -78,7 +78,7 @@ internal fun CreateTransferAmountContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        // ── Header avec retour arrière ────────────────────────────────────
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,7 +104,7 @@ internal fun CreateTransferAmountContent(
             Spacer(modifier = Modifier.size(48.dp))
         }
 
-        // ── Formulaire ────────────────────────────────────────────────────
+
         Card(
             modifier = Modifier
                 .padding(16.dp)

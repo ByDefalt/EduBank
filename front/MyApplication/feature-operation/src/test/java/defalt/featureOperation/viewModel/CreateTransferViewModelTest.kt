@@ -54,7 +54,7 @@ class CreateTransferViewModelTest {
         viewModel = CreateTransferViewModel(getAllMyAccount, getMyBeneficiaries, createTransfer)
     }
 
-    // ── Init ────────────────────────────────────────────────────────────────
+
 
     @Test fun `init charge debitUiState en Success`() {
         assertTrue(viewModel.debitUiState.value is UiState.Success)
@@ -78,7 +78,7 @@ class CreateTransferViewModelTest {
         assertTrue(vm.receiverUiState.value is UiState.Error)
     }
 
-    // ── Form ────────────────────────────────────────────────────────────────
+
 
     @Test fun `formulaire initial est vide`() {
         assertNull(viewModel.form.value.sourceAccount)
@@ -98,23 +98,23 @@ class CreateTransferViewModelTest {
         assertEquals(fakeBankAccounts[1], viewModel.form.value.sourceAccount)
     }
 
-    // ── Retry ───────────────────────────────────────────────────────────────
+
 
     @Test fun `retryDebit recharge les comptes`() {
         viewModel.retryDebit()
-        coVerify(atLeast = 2) { getAllMyAccount() } // init + retry
+        coVerify(atLeast = 2) { getAllMyAccount() }
     }
 
     @Test fun `retryReceiver recharge les donnees`() {
         viewModel.retryReceiver()
-        // getAllMyAccount et getMyBeneficiaries appeles au moins 2 fois chacun
+
         coVerify(atLeast = 2) { getMyBeneficiaries() }
     }
 
-    // ── Submit ──────────────────────────────────────────────────────────────
+
 
     private fun fillFormAndSubmit(amount: Double = 50.0, label: String = "Virement") {
-        // sélectionner un compte source avant de soumettre (nouveau param requis)
+
         viewModel.selectSourceAccount(fakeBankAccounts[0])
         viewModel.selectReceiverBeneficiary(fakeBeneficiaries[0])
         viewModel.setAmount(amount.toString())

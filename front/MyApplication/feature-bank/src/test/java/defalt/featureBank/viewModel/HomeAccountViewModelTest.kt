@@ -40,7 +40,7 @@ class HomeAccountViewModelTest {
 
     @Test fun `retry recharge les donnees`() {
         viewModel.retry()
-        coVerify(exactly = 2) { getHomeData() } // init + retry
+        coVerify(exactly = 2) { getHomeData() }
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 

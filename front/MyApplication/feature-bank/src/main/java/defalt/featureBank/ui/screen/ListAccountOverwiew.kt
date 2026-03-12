@@ -51,7 +51,7 @@ private val LightGray = CustomColor.BackgroundGray
 private val TextPrimary = Color(0xFF1A1A1A)
 private val TextSecondary = Color(0xFF666666)
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun ListAccountOverviewScreen(
     onNavigateToHomeBank: () -> Unit = {},
@@ -72,7 +72,7 @@ fun ListAccountOverviewScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun ListAccountOverviewContent(
     uiState: UiState<List<BankAccountDetail>>,
@@ -88,7 +88,7 @@ internal fun ListAccountOverviewContent(
             .background(LightGray),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ── Header ───────────────────────────────────────────────────────
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,7 +114,7 @@ internal fun ListAccountOverviewContent(
             ) { accounts ->
                 val totalSold = accounts.sumOf { it.sold ?: 0.0 }
 
-                // ── Total solde ──────────────────────────────────────────────
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -131,7 +131,7 @@ internal fun ListAccountOverviewContent(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // ── Liste des comptes ────────────────────────────────────────
+
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
@@ -148,7 +148,7 @@ internal fun ListAccountOverviewContent(
                 }
             }
 
-            // ── Bottom Navigation ────────────────────────────────────────────
+
             BottomNavBar(
                 selectedRoute = Routes.Bank.ListAccount,
                 mapItems = mapOf(

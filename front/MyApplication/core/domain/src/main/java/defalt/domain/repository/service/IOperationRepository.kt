@@ -8,7 +8,7 @@ import java.time.OffsetDateTime
 
 interface IOperationRepository {
 
-    // --- OPÉRATIONS ---
+
     suspend fun getOperations(
         accountId: String? = null,
         state: OperationState? = null,
@@ -22,7 +22,7 @@ interface IOperationRepository {
     /** Met à jour l'état d'une opération (Admin) */
     suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation>
 
-    // --- BÉNÉFICIAIRES ---
+
     suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>>
     suspend fun getBeneficiariesByAccountId(accountId: String): NetworkResult<List<Beneficiary>>
     suspend fun createBeneficiary(beneficiary: Beneficiary): NetworkResult<Beneficiary>

@@ -51,7 +51,7 @@ fun NavGraphBuilder.operationGraph(
             )
         }
 
-        // ── Sous-graphe Bénéficiaires ──────────────────────────────────────────
+
         navigation<Routes.Operation.BeneficiaireGraph>(
             startDestination = Routes.Operation.Beneficiaire,
         ) {
@@ -98,7 +98,7 @@ fun NavGraphBuilder.operationGraph(
             }
         }
 
-        // ── Wizard création de virement ────────────────────────────────────────
+
         navigation<Routes.Operation.CreateTransfer>(
             startDestination = Routes.Operation.CreateTransfer.Debit,
         ) {

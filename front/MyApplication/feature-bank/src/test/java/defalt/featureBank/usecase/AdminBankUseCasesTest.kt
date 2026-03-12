@@ -17,7 +17,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-// ── AdminGetAllBankAccountsUseCase ───────────────────────────────────────────
+
 
 class AdminGetAllBankAccountsUseCaseTest {
 
@@ -57,7 +57,7 @@ class AdminGetAllBankAccountsUseCaseTest {
     }
 }
 
-// ── AdminGetBankAccountByIdUseCase ───────────────────────────────────────────
+
 
 class AdminGetBankAccountByIdUseCaseTest {
 
@@ -92,7 +92,7 @@ class AdminGetBankAccountByIdUseCaseTest {
     }
 }
 
-// ── AdminDeleteBankAccountUseCase ────────────────────────────────────────────
+
 
 class AdminDeleteBankAccountUseCaseTest {
 
@@ -122,7 +122,7 @@ class AdminDeleteBankAccountUseCaseTest {
     }
 }
 
-// ── AdminCreateBankAccountUseCase ────────────────────────────────────────────
+
 
 class AdminCreateBankAccountUseCaseTest {
 

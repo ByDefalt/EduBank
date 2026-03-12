@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-// ── UC8/UC13/UC20/UC21 : Détail + actions opération ─────────────────────────
+
 class AdminOperationDetailViewModel(
     private val getOperationById: GetOperationByIdUseCase,
     private val cancelOperation: CancelOperationUseCase,
@@ -32,7 +32,7 @@ class AdminOperationDetailViewModel(
         getOperationById(id)
     }
 
-    // UC20 : Annuler l'opération
+
     fun cancel(id: Int) = launchWithUiState(_actionState) {
         cancelOperation(id).also {
             if (it is NetworkResult.Success) {
@@ -42,7 +42,7 @@ class AdminOperationDetailViewModel(
         }
     }
 
-    // UC13/UC21 : Changer / mettre à jour l'état
+
     fun updateState(id: Int, state: OperationState) = launchWithUiState(_actionState) {
         updateOperationState(id, state).also {
             if (it is NetworkResult.Success) {

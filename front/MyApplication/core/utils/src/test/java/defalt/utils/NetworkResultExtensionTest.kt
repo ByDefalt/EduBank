@@ -7,7 +7,7 @@ import org.junit.Test
 
 class NetworkResultExtensionTest {
 
-    // ── map sur Success ────────────────────────────────────────────────────
+
 
     @Test fun `map Success transforme la valeur`() {
         val result: NetworkResult<Int> = NetworkResult.Success(5)
@@ -34,7 +34,7 @@ class NetworkResultExtensionTest {
         assertEquals("hello", (mapped as NetworkResult.Success).data)
     }
 
-    // ── map sur Error ──────────────────────────────────────────────────────
+
 
     @Test fun `map Error retourne le meme Error sans appeler transform`() {
         var called = false
@@ -62,7 +62,7 @@ class NetworkResultExtensionTest {
         assertSame(original, mapped)
     }
 
-    // ── map sur Exception ──────────────────────────────────────────────────
+
 
     @Test fun `map Exception retourne la meme Exception sans appeler transform`() {
         var called = false
@@ -88,7 +88,7 @@ class NetworkResultExtensionTest {
         assertSame(original, mapped)
     }
 
-    // ── Chaining ──────────────────────────────────────────────────────────
+
 
     @Test fun `map Success deux fois enchainees`() {
         val result: NetworkResult<Int> = NetworkResult.Success(3)

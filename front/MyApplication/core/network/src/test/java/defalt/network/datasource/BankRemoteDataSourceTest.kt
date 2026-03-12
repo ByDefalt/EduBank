@@ -54,7 +54,7 @@ class BankRemoteDataSourceTest {
         dataSource = BankRemoteDataSource(bankAccountApi, bankAccountParameterApi, bankAccountPivotApi, bankAccountTypeApi)
     }
 
-    // ── adminGetAllBankAccounts ─────────────────────────────────────────────
+
 
     @Test fun `adminGetAllBankAccounts retourne la liste en succes`() = runTest {
         coEvery { bankAccountApi.bankAdminBankAccountsGet() } returns
@@ -79,7 +79,7 @@ class BankRemoteDataSourceTest {
         assertTrue(dataSource.adminGetAllBankAccounts() is NetworkResult.Exception)
     }
 
-    // ── adminGetBankAccountById ─────────────────────────────────────────────
+
 
     @Test fun `adminGetBankAccountById retourne le detail en succes`() = runTest {
         coEvery { bankAccountApi.bankAdminBankAccountsIdGet("1") } returns
@@ -98,7 +98,7 @@ class BankRemoteDataSourceTest {
         assertTrue(dataSource.adminGetBankAccountById("1") is NetworkResult.Error)
     }
 
-    // ── adminDeleteBankAccount ──────────────────────────────────────────────
+
 
     @Test fun `adminDeleteBankAccount retourne Success Unit`() = runTest {
         coEvery { bankAccountApi.bankAdminBankAccountsIdDelete("1") } returns
@@ -117,7 +117,7 @@ class BankRemoteDataSourceTest {
         assertTrue(dataSource.adminDeleteBankAccount("1") is NetworkResult.Error)
     }
 
-    // ── adminCreateBankAccount ──────────────────────────────────────────────
+
 
     @Test fun `adminCreateBankAccount retourne le detail en succes`() = runTest {
         coEvery { bankAccountApi.bankAdminAccountsAccountIdBankAccountsPost(any(), any()) } returns
@@ -142,7 +142,7 @@ class BankRemoteDataSourceTest {
         assertEquals(409, (result as NetworkResult.Error).code)
     }
 
-    // ── adminUpdateBankAccountParameters ────────────────────────────────────
+
 
     @Test fun `adminUpdateBankAccountParameters retourne Success`() = runTest {
         coEvery { bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch("1", any()) } returns
@@ -154,12 +154,12 @@ class BankRemoteDataSourceTest {
         assertTrue(result is NetworkResult.Success)
     }
 
-    // ── adminUpdateBankAccount ───────────────────────────────────────────────
+
 
     @Test fun `adminUpdateBankAccount met a jour param puis recharge le detail`() = runTest {
         coEvery { bankAccountParameterApi.bankAdminBankAccountsBankAccountIdParametersPatch("1", any()) } returns
             Response.success(Unit)
-        // Le dataSource n'effectue pas de GET après le PATCH; vérifier uniquement le PATCH
+
 
         val param = BankAccountParameter(id = 1, overdraftLimit = 200.0, state = State.ACTIVE)
         val result = dataSource.adminUpdateBankAccountParameters("1", param)
@@ -176,11 +176,11 @@ class BankRemoteDataSourceTest {
         val result = dataSource.adminUpdateBankAccountParameters("1", param)
 
         assertTrue(result is NetworkResult.Error)
-        // Ne doit pas recharger le detail si les params echouent
+
         coVerify(exactly = 0) { bankAccountApi.bankAdminBankAccountsIdGet(any()) }
     }
 
-    // ── getMyBankAccounts ───────────────────────────────────────────────────
+
 
     @Test fun `getMyBankAccounts retourne la liste en succes`() = runTest {
         coEvery { bankAccountApi.bankMyBankAccountsGet(typeId = null) } returns
@@ -208,7 +208,7 @@ class BankRemoteDataSourceTest {
         assertTrue(dataSource.getMyBankAccounts(null) is NetworkResult.Error)
     }
 
-    // ── getMyBankAccountById ────────────────────────────────────────────────
+
 
     @Test fun `getMyBankAccountById retourne le detail`() = runTest {
         coEvery { bankAccountApi.bankMyBankAccountsIdGet("1") } returns

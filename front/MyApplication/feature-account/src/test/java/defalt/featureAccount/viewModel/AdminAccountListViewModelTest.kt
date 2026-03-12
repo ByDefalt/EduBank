@@ -47,7 +47,7 @@ class AdminAccountListViewModelTest {
 
         viewModel.retry()
 
-        coVerify(exactly = 2) { getAllAccounts() } // init + retry
+        coVerify(exactly = 2) { getAllAccounts() }
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 

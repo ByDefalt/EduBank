@@ -21,7 +21,7 @@ import defalt.network.api.account.model.SignInRequest as SignInRequestDto
 import defalt.network.api.account.model.TokenRequest as TokenRequestDto
 import defalt.network.api.account.model.TokenResponse as TokenResponseDto
 
-// ── AccountStateEnum ──────────────────────────────────────────────────────────
+
 
 fun AccountStateEnumDto.toEntity(): AccountStateEnumEntity = when (this) {
     AccountStateEnumDto.ACTIVE -> AccountStateEnumEntity.ACTIVE
@@ -35,7 +35,7 @@ fun AccountStateEnumEntity.toDto(): AccountStateEnumDto = when (this) {
     AccountStateEnumEntity.ENCLOSE -> AccountStateEnumDto.ENCLOSE
 }
 
-// ── RoleEnum ──────────────────────────────────────────────────────────────────
+
 
 fun RoleEnumDto.toEntity(): RoleEnumEntity = when (this) {
     RoleEnumDto.ADMIN -> RoleEnumEntity.ADMIN
@@ -47,7 +47,7 @@ fun RoleEnumEntity.toDto(): RoleEnumDto = when (this) {
     RoleEnumEntity.CUSTOMER -> RoleEnumDto.CUSTOMER
 }
 
-// ── Account ───────────────────────────────────────────────────────────────────
+
 
 fun AccountDto.toEntity(): AccountEntity = AccountEntity(
     id = this.id,
@@ -66,7 +66,7 @@ fun AccountEntity.toDto(): AccountDto = AccountDto(
 @JvmName("accountListToEntity")
 fun List<AccountDto>.toEntity(): List<AccountEntity> = this.map { it.toEntity() }
 
-// ── AccountRegister ───────────────────────────────────────────────────────────
+
 
 fun AccountRegisterEntity.toDto(): AccountRegisterDto = AccountRegisterDto(
     personalInfo = this.personalInfo.toDto(),
@@ -80,7 +80,7 @@ fun AccountRegisterDto.toEntity(): AccountRegisterEntity = AccountRegisterEntity
     password = this.password,
 )
 
-// ── PersonalInformation ───────────────────────────────────────────────────────
+
 
 fun PersonalInformationDto.toEntity(): PersonalInformationEntity = PersonalInformationEntity(
     id = this.id,
@@ -103,7 +103,7 @@ fun PersonalInformationEntity.toDto(): PersonalInformationDto = PersonalInformat
 @JvmName("personalInformationListToEntity")
 fun List<PersonalInformationDto>.toEntity(): List<PersonalInformationEntity> = this.map { it.toEntity() }
 
-// ── PersonalInformationRegister ───────────────────────────────────────────────
+
 
 fun PersonalInformationRegisterEntity.toDto(): PersonalInformationRegisterDto = PersonalInformationRegisterDto(
     firstname = this.firstname,
@@ -121,7 +121,7 @@ fun PersonalInformationRegisterDto.toEntity(): PersonalInformationRegisterEntity
     phoneNumber = this.phoneNumber,
 )
 
-// ── Role ──────────────────────────────────────────────────────────────────────
+
 
 fun RoleDto.toEntity(): RoleEntity = RoleEntity(
     id = this.id,
@@ -136,7 +136,7 @@ fun RoleEntity.toDto(): RoleDto = RoleDto(
 @JvmName("roleListToEntity")
 fun List<RoleDto>.toEntity(): List<RoleEntity> = this.map { it.toEntity() }
 
-// ── SignInRequest ─────────────────────────────────────────────────────────────
+
 
 fun SignInRequestEntity.toDto(): SignInRequestDto = SignInRequestDto(
     id = this.id,
@@ -148,13 +148,13 @@ fun SignInRequestDto.toEntity(): SignInRequestEntity = SignInRequestEntity(
     password = this.password,
 )
 
-// ── TokenRequest ──────────────────────────────────────────────────────────────
+
 
 fun TokenRequestEntity.toDto(): TokenRequestDto = TokenRequestDto(jwt = this.jwt)
 
 fun TokenRequestDto.toEntity(): TokenRequestEntity = TokenRequestEntity(jwt = this.jwt)
 
-// ── TokenResponse ─────────────────────────────────────────────────────────────
+
 
 fun TokenResponseDto.toEntity(): TokenResponseEntity = TokenResponseEntity(
     id = this.id,

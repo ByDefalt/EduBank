@@ -32,7 +32,7 @@ import defalt.ui.state.UiState
 import defalt.ui.utils.CustomColor
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun AddBeneficiaryScreen(
     onBack: () -> Unit = {},
@@ -52,7 +52,7 @@ fun AddBeneficiaryScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun AddBeneficiaryContent(
     isLoading: Boolean = false,

@@ -67,7 +67,7 @@ fun AdminOperationDetailScreen(
                 modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                // UC8 : Infos
+
                 ArkeoCard(title = "INFORMATIONS") {
                     ArkeoLabelValue("ID", operation.id.toString())
                     ArkeoLabelValue("Libellé", operation.label)
@@ -78,14 +78,14 @@ fun AdminOperationDetailScreen(
                     ArkeoLabelValue("État", operation.state.value)
                 }
 
-                // UC13/UC21 : Changer état
+
                 ChangeStateCard(
                     currentState = operation.state,
                     isLoading = isLoading,
                     onChangeState = { newState -> viewModel.updateState(id, newState) },
                 )
 
-                // UC20 : Annuler
+
                 if (operation.state == OperationState.PENDING) {
                     ArkeoOutlinedButton(
                         text = if (isLoading) "En cours…" else "ANNULER L'OPÉRATION",

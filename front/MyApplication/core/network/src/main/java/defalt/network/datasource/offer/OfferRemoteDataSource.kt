@@ -14,7 +14,7 @@ class OfferRemoteDataSource(
     private val offerApi: OfferApi,
 ) : IOfferRemoteDataSource {
 
-    // --- PUBLIC / CLIENT ---
+
 
     override suspend fun getActiveOffers(): NetworkResult<List<Offer>> =
         safeApiCall { offerApi.offersActiveGet() }.map { it.toEntity() }
@@ -26,7 +26,7 @@ class OfferRemoteDataSource(
     override suspend fun getOfferById(id: Int): NetworkResult<Offer> =
         safeApiCall { offerApi.offersIdGet(id) }.map { it.toEntity() }
 
-    // --- ADMIN ---
+
 
     override suspend fun createOffer(offerInput: OfferInput): NetworkResult<Offer> =
         safeApiCall { offerApi.offersPost(offerInput.toDto()) }.map { it.toEntity() }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-// ── UC5 : Liste des opérations ───────────────────────────────────────────────
+
 class AdminOperationListViewModel(
     private val getAllOperations: GetAllOperationsUseCase,
 ) : ViewModel() {

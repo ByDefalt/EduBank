@@ -66,13 +66,13 @@ fun ArkeoApp(isPreview: Boolean) {
             color = MaterialTheme.colorScheme.background,
         ) {
             if (startDestination != null || authState is UiState.Error || isPreview) {
-                // On affiche le NavHost seulement quand on sait où aller
+
                 ArkeoNavHost(
                     navController = navController,
                     startDestination = startDestination ?: Routes.Core.Home,
                 )
             } else {
-                // Splash / loading pendant la vérification
+
                 SplashScreen()
             }
         }

@@ -24,7 +24,7 @@ class BankRemoteDataSource(
     private val typeApi: TypeApi,
 ) : IBankRemoteDataSource {
 
-    // --- ADMIN : Comptes bancaires ---
+
 
     override suspend fun adminGetBankAccountsByAccountId(accountId: String): NetworkResult<List<BankAccount>> =
         safeApiCall { bankAccountApi.bankAdminAccountsAccountIdBankAccountsGet(accountId) }.map { it.toEntity() }
@@ -60,7 +60,7 @@ class BankRemoteDataSource(
             )
         }
 
-    // --- ADMIN : Types ---
+
 
     override suspend fun adminGetAllTypes(): NetworkResult<List<Type>> =
         safeApiCall { typeApi.bankAdminTypesGet() }.map { it.toEntity() }
@@ -71,7 +71,7 @@ class BankRemoteDataSource(
     override suspend fun adminCreateType(type: Type): NetworkResult<Type> =
         safeApiCall { typeApi.bankAdminTypesPost(type.toDto()) }.map { it.toEntity() }
 
-    // --- ADMIN : Co-titulaires (Pivot) ---
+
 
     override suspend fun adminAddCoHolder(pivot: BankAccountPivot): NetworkResult<Unit> =
         safeApiCall { bankAccountPivotApi.bankBankAccountsPivotPost(pivot.toDto()) }
@@ -96,7 +96,7 @@ class BankRemoteDataSource(
             )
         }.map { it.toEntity() }
 
-    // --- CLIENT : Mes Comptes ---
+
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =
         safeApiCall { bankAccountApi.bankMyBankAccountsGet(typeId) }.map { it.toEntity() }

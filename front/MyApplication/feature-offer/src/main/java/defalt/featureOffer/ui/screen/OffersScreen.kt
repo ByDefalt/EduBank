@@ -38,7 +38,7 @@ import defalt.ui.utils.Routes
 import java.time.LocalDate
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun OffersScreen(
     onBack: () -> Unit,
@@ -71,7 +71,7 @@ fun OffersScreen(
     }
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun OffersContent(
     uiState: UiState<List<Offer>>,
@@ -84,7 +84,7 @@ internal fun OffersContent(
             .fillMaxSize()
             .background(CustomColor.BackgroundGray),
     ) {
-        // Header
+
         ArkeoTopBar(title = "OFFRES", onBack = onBack)
 
         UiStateHandler(
@@ -93,7 +93,7 @@ internal fun OffersContent(
             loadingColor = CustomColor.ArkeoRed,
             errorColor = CustomColor.ArkeoRed,
         ) { offers ->
-            // Liste d'offres
+
             LazyColumn(
                 modifier = Modifier
                     .padding(16.dp),
@@ -139,7 +139,7 @@ internal fun OffersContent(
                     ArkeoButton(text = "Retour", onClick = onBack)
                 }
             }
-        } // fin UiStateHandler
+        }
     }
 }
 

@@ -50,7 +50,7 @@ import org.koin.androidx.compose.koinViewModel
 private val ArkeoRed = CustomColor.ArkeoRed
 private val TextPrimary = CustomColor.TextPrimary
 
-// utilitaire : normalise la première lettre -> supprime accents et renvoie A..Z ou '#'
+
 private fun initialOf(name: String): Char {
     if (name.isBlank()) return '#'
     val normalized = Normalizer.normalize(name.trim(), Normalizer.Form.NFD)
@@ -59,7 +59,7 @@ private fun initialOf(name: String): Char {
     return if (first in 'A'..'Z') first else '#'
 }
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun BeneficiariesScreen(
     onItemClick: (Beneficiary) -> Unit = {},
@@ -96,7 +96,7 @@ fun BeneficiariesScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun BeneficiariesContent(
     uiState: UiState<List<Beneficiary>>,
@@ -141,7 +141,7 @@ internal fun BeneficiariesContent(
                         .toSortedMap()
                 }
 
-                // Box pour superposer la liste et le bouton flottant
+
                 Box(modifier = Modifier.weight(1f)) {
                     LazyColumn(
                         modifier = Modifier
@@ -227,9 +227,9 @@ internal fun BeneficiariesContent(
                                 }
                             }
                         }
-                    } // fin LazyColumn
+                    }
 
-                    // Bouton flottant au-dessus de la BottomNavBar, visible uniquement en état Success
+
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -244,8 +244,8 @@ internal fun BeneficiariesContent(
                             onClick = onAddBeneficiary,
                         )
                     }
-                } // fin Box superposition
-            } // fin UiStateHandler
+                }
+            }
 
             BottomNavBar(
                 selectedRoute = Routes.Operation,
@@ -255,8 +255,8 @@ internal fun BeneficiariesContent(
                     Routes.Operation to safeNavigateTransfer,
                 ),
             )
-        } // fin Column
-    } // fin Box principal
+        }
+    }
 }
 
 private fun defaultData(): List<Beneficiary> = listOf(

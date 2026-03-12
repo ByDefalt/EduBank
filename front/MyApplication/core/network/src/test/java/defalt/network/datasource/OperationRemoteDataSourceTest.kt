@@ -32,7 +32,7 @@ class OperationRemoteDataSourceTest {
     private val beneficiaryApi: BeneficiaryApi = mockk()
     private lateinit var dataSource: OperationRemoteDataSource
 
-    // Utilise une date fixe pour rendre le test déterministe
+
     private val now = OffsetDateTime.parse("2025-01-01T12:00:00Z")
 
     private val fakeOperationDto = OperationDto(
@@ -55,7 +55,7 @@ class OperationRemoteDataSourceTest {
         dataSource = OperationRemoteDataSource(operationApi, beneficiaryApi)
     }
 
-    // ── getOperationById ────────────────────────────────────────────────────
+
 
     @Test fun `getOperationById retourne l operation en succes`() = runTest {
         coEvery { operationApi.operationsIdGet(1) } returns Response.success(fakeOperationDto)
@@ -83,7 +83,7 @@ class OperationRemoteDataSourceTest {
         assertTrue(dataSource.getOperationById(1) is NetworkResult.Exception)
     }
 
-    // ── cancelOperation ─────────────────────────────────────────────────────
+
 
     @Test fun `cancelOperation retourne l operation annulee`() = runTest {
         val cancelled = fakeOperationDto.copy(state = OperationStateDto.CANCELLED)
@@ -107,14 +107,14 @@ class OperationRemoteDataSourceTest {
         assertTrue(dataSource.cancelOperation(1) is NetworkResult.Exception)
     }
 
-    // ── updateOperationState ────────────────────────────────────────────────
+
 
     @Test fun `updateOperationState appelle l api avec le bon etat`() = runTest {
         coEvery { operationApi.operationsIdStatePatch(1, any()) } returns Response.success(fakeOperationDto)
 
         dataSource.updateOperationState(1, OperationState.COMPLETED)
 
-        // L'implémentation envoie le toString() de l'enum, sans guillemets
+
         coVerify(exactly = 1) { operationApi.operationsIdStatePatch(1, "COMPLETED") }
     }
 
@@ -125,7 +125,7 @@ class OperationRemoteDataSourceTest {
         assertTrue(dataSource.updateOperationState(1, OperationState.FAILED) is NetworkResult.Error)
     }
 
-    // ── createBeneficiary ───────────────────────────────────────────────────
+
 
     @Test fun `createBeneficiary retourne le beneficiaire cree`() = runTest {
         coEvery { beneficiaryApi.beneficiariesPost(any()) } returns Response.success(fakeBeneficiaryDto)
@@ -161,7 +161,7 @@ class OperationRemoteDataSourceTest {
         )
     }
 
-    // ── updateBeneficiary ───────────────────────────────────────────────────
+
 
     @Test fun `updateBeneficiary retourne le beneficiaire modifie`() = runTest {
         val updated = fakeBeneficiaryDto.copy(name = "Alice Modifie")
@@ -188,7 +188,7 @@ class OperationRemoteDataSourceTest {
         )
     }
 
-    // ── deleteBeneficiary ───────────────────────────────────────────────────
+
 
     @Test fun `deleteBeneficiary retourne Unit en succes`() = runTest {
         coEvery { beneficiaryApi.beneficiariesIdDelete(1) } returns Response.success(Unit)

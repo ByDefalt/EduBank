@@ -25,7 +25,7 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
     private val writer: PrintWriter
     private val fmt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    // Async queue + worker
+
     private val queue: BlockingQueue<String?> = LinkedBlockingQueue<String?>()
     private val worker: Thread
     private val running = AtomicBoolean(true)
@@ -40,11 +40,11 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
     init {
         this.writer = PrintWriter(FileWriter(filePath, true), true)
 
-        // worker thread writes queued messages to file
+
         this.worker = Thread(
             Runnable {
                 try {
-                    // loop until stopped and queue drained
+
                     while (running.get() || !queue.isEmpty()) {
                         try {
                             val line = queue.poll(500, TimeUnit.MILLISECONDS)
@@ -52,11 +52,11 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
                                 writer.println(line)
                             }
                         } catch (e: InterruptedException) {
-                            // re-check running flag
+
                         }
                     }
                 } finally {
-                    // Ensure writer is flushed even if worker exits unexpectedly
+
                     writer.flush()
                 }
             },
@@ -79,9 +79,9 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
     }
 
     private fun enqueue(s: String) {
-        if (!running.get()) return // ignore after close initiated
+        if (!running.get()) return
 
-        // best-effort: try to offer without blocking indefinitely
+
         queue.offer(s)
     }
 
@@ -112,7 +112,7 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
 
     override fun error(message: String, t: Throwable) {
         if (!enabled(LogLevel.ERROR)) return
-        // capture stack trace into string and enqueue as a single message
+
         val sw = StringWriter()
         t.printStackTrace(PrintWriter(sw))
         val combined = format(LogLevel.ERROR, message + "\n" + sw)
@@ -128,17 +128,17 @@ class FileLogger(private val level: LogLevel, filePath: String) : Logger, AutoCl
      */
     @Throws(Exception::class)
     override fun close() {
-        // signal stop
+
         running.set(false)
-        // interrupt worker in case it's waiting
+
         worker.interrupt()
         try {
-            // wait up to 2s for worker to finish
+
             worker.join(2000)
         } catch (e: InterruptedException) {
             Thread.currentThread().interrupt()
         }
-        // drain any remaining messages synchronously to ensure persistence
+
         var line: String?
         while ((queue.poll().also { line = it }) != null) {
             writer.println(line)

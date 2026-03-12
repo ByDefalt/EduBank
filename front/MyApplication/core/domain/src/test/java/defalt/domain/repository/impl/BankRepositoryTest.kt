@@ -33,7 +33,7 @@ class BankRepositoryTest {
 
     @Before fun setUp() { repository = BankRepository(dataSource) }
 
-    // ── admin ─────────────────────────────────────────────────────────────────
+
 
     @Test fun `adminGetAllBankAccounts delegue`() = runTest {
         coEvery { dataSource.adminGetAllBankAccounts() } returns NetworkResult.Success(listOf(fakeAccount))
@@ -92,7 +92,7 @@ class BankRepositoryTest {
         coVerify(exactly = 1) { dataSource.adminUpdateBankAccountParameters("bank-001", param) }
     }
 
-    // ── client ────────────────────────────────────────────────────────────────
+
 
     @Test fun `getMyBankAccounts delegue typeId null`() = runTest {
         coEvery { dataSource.getMyBankAccounts(null) } returns NetworkResult.Success(listOf(fakeAccount))

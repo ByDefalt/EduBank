@@ -22,7 +22,7 @@ class OfferRemoteDataSourceTest {
     private val offerApi: OfferApi = mockk()
     private lateinit var dataSource: OfferRemoteDataSource
 
-    // Dates fixes pour tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val nextMonth: LocalDate = LocalDate.parse("2025-02-01")
 
@@ -39,7 +39,7 @@ class OfferRemoteDataSourceTest {
         dataSource = OfferRemoteDataSource(offerApi)
     }
 
-    // ── getActiveOffers ──────────────────────────────────────────────────────
+
 
     @Test fun `getActiveOffers retourne la liste en succes`() = runTest {
         coEvery { offerApi.offersActiveGet() } returns Response.success(listOf(fakeOfferDto))
@@ -70,7 +70,7 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.getActiveOffers() is NetworkResult.Exception)
     }
 
-    // ── getOffers ───────────────────────────────────────────────────────────
+
 
     @Test fun `getOffers retourne la liste en succes`() = runTest {
         coEvery { offerApi.offersGet(any(), any()) } returns Response.success(listOf(fakeOfferDto))
@@ -123,7 +123,7 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.getOffers(null, null) is NetworkResult.Error)
     }
 
-    // ── getOfferById ────────────────────────────────────────────────────────
+
 
     @Test fun `getOfferById retourne l offre en succes`() = runTest {
         coEvery { offerApi.offersIdGet(1) } returns Response.success(fakeOfferDto)
@@ -145,7 +145,7 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.getOfferById(1) is NetworkResult.Exception)
     }
 
-    // ── createOffer ──────────────────────────────────────────────────────────
+
 
     @Test fun `createOffer retourne l offre creee`() = runTest {
         coEvery { offerApi.offersPost(any()) } returns Response.success(fakeOfferDto)
@@ -177,7 +177,7 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.createOffer(request) is NetworkResult.Error)
     }
 
-    // ── updateOffer ──────────────────────────────────────────────────────────
+
 
     @Test fun `updateOffer retourne l offre mise a jour`() = runTest {
         val updated = fakeOfferDto.copy(title = "Promo Modif")
@@ -210,11 +210,11 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
 
-    // ── patchOfferState ──────────────────────────────────────────────────────
+
 
     @Test fun `patchOfferState retourne l offre modifiee`() = runTest {
         val patched = fakeOfferDto.copy(state = OfferDto.State.INACTIVE)
-        // La méthode patchOfferState fait désormais un GET puis un PUT
+
         coEvery { offerApi.offersIdGet(1) } returns Response.success(fakeOfferDto)
         coEvery { offerApi.offersIdPut(1, any()) } returns Response.success(patched)
 
@@ -233,7 +233,7 @@ class OfferRemoteDataSourceTest {
     }
 
     @Test fun `patchOfferState propage Error`() = runTest {
-        // simulate get ok but put fails
+
         coEvery { offerApi.offersIdGet(any()) } returns Response.success(fakeOfferDto)
         coEvery { offerApi.offersIdPut(any(), any()) } returns
             Response.error(400, "invalid".toResponseBody())
@@ -249,7 +249,7 @@ class OfferRemoteDataSourceTest {
         assertTrue(dataSource.updateOffer(1, request) is NetworkResult.Error)
     }
 
-    // ── deleteOffer ──────────────────────────────────────────────────────────
+
 
     @Test fun `deleteOffer retourne Unit en succes`() = runTest {
         coEvery { offerApi.offersIdDelete(1) } returns Response.success(Unit)

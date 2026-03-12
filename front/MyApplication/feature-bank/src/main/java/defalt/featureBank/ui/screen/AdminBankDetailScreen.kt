@@ -55,7 +55,7 @@ fun AdminBankDetailScreen(
 
     LaunchedEffect(id) { viewModel.load(id) }
 
-    // Branche le callback du graph vers le ViewModel
+
     LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
 
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
@@ -83,7 +83,7 @@ fun AdminBankDetailScreen(
                 modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                // ── Infos ──────────────────────────────────────────────────
+
                 ArkeoCard(title = "INFORMATIONS") {
                     ArkeoLabelValue("ID", detail.id ?: "-")
                     ArkeoLabelValue("IBAN", detail.iban ?: "-")
@@ -93,7 +93,7 @@ fun AdminBankDetailScreen(
                     ArkeoLabelValue("État actuel", detail.parameter?.state?.name ?: "-")
                 }
 
-                // ── Modification complète ──────────────────────────────────
+
                 ArkeoCard(title = "MODIFIER LE COMPTE") {
                     StateDropdown(
                         selectedState = selectedState,
@@ -124,7 +124,7 @@ fun AdminBankDetailScreen(
                     )
                 }
 
-                // ── Suppression ───────────────────────────────────────────
+
                 ArkeoOutlinedButton(
                     text = "SUPPRIMER CE COMPTE",
                     onClick = { if (!isLoading) viewModel.delete(id, onBack) },

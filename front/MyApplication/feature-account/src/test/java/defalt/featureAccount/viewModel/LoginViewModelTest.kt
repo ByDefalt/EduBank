@@ -62,7 +62,7 @@ class LoginViewModelTest {
 
         viewModel.login("alice@mail.fr", "Password1!")
 
-        // Avec UnconfinedTestDispatcher, on observe directement Success
+
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 }

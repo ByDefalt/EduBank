@@ -71,7 +71,7 @@ private val TextSecondary = CustomColor.TextSecondary
 
 private const val LABEL_MAX_CHARS = 20
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun AccountDetailsScreen(
     accountId: String = "1",
@@ -99,7 +99,7 @@ fun AccountDetailsScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun AccountDetailsContent(
     uiState: UiState<AccountDetailsData>,
@@ -209,7 +209,7 @@ internal fun AccountDetailsContent(
 
                     item { Spacer(modifier = Modifier.height(8.dp)) }
                 }
-            } // fin UiStateHandler
+            }
 
             BottomNavBar(
                 selectedRoute = Routes.Bank.ListAccount,

@@ -14,7 +14,7 @@ class BankRepository(
     private val remoteDataSource: IBankRemoteDataSource,
 ) : IBankRepository {
 
-    // --- ADMIN : Comptes bancaires ---
+
 
     override suspend fun adminGetBankAccountsByAccountId(accountId: String): NetworkResult<List<BankAccount>> =
         remoteDataSource.adminGetBankAccountsByAccountId(accountId)
@@ -31,12 +31,12 @@ class BankRepository(
     override suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail> =
         remoteDataSource.adminGetBankAccountById(id)
 
-    // --- ADMIN : Paramètres ---
+
 
     override suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit> =
         remoteDataSource.adminUpdateBankAccountParameters(bankAccountId, parameter)
 
-    // --- ADMIN : Types de compte ---
+
 
     override suspend fun adminGetAllTypes(): NetworkResult<List<Type>> =
         remoteDataSource.adminGetAllTypes()
@@ -47,7 +47,7 @@ class BankRepository(
     override suspend fun adminCreateType(type: Type): NetworkResult<Type> =
         remoteDataSource.adminCreateType(type)
 
-    // --- ADMIN : Co-titulaires / Pivot ---
+
 
     override suspend fun adminAddCoHolder(pivot: BankAccountPivot): NetworkResult<Unit> =
         remoteDataSource.adminAddCoHolder(pivot)
@@ -64,7 +64,7 @@ class BankRepository(
     override suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>> =
         remoteDataSource.adminGetCoHoldersByBankAccount(bankAccountId)
 
-    // --- CLIENT : Mes Comptes ---
+
 
     override suspend fun getMyBankAccounts(typeId: Int?): NetworkResult<List<BankAccount>> =
         remoteDataSource.getMyBankAccounts(typeId)

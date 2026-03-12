@@ -12,7 +12,7 @@ import defalt.utils.NetworkResult
 
 interface IAccountRepository {
 
-    // --- COMPTES ---
+
     suspend fun getAccounts(): NetworkResult<List<Account>>
     suspend fun getAccountById(id: String): NetworkResult<Account>
     suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account>
@@ -22,19 +22,19 @@ interface IAccountRepository {
     /** Clôture un compte (changement d'état à ENCLOSE) */
     suspend fun closeAccount(id: String): NetworkResult<Boolean>
 
-    // --- AUTHENTIFICATION ---
+
     suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest>
     suspend fun signOut(): NetworkResult<Boolean>
     suspend fun getSavedToken(): NetworkResult<TokenRequest>
     suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse>
 
-    // --- RÔLES ---
+
     suspend fun getRoles(): NetworkResult<List<Role>>
     suspend fun getRoleById(id: Int): NetworkResult<Role>
     suspend fun getRoleByName(name: String): NetworkResult<Role>
     suspend fun getAccountRole(accountId: String): NetworkResult<Role>
 
-    // --- INFORMATIONS PERSONNELLES ---
+
     suspend fun getPersonalInformations(): NetworkResult<List<PersonalInformation>>
     suspend fun getPersonalInformationById(id: Int): NetworkResult<PersonalInformation>
     suspend fun getPersonalInformationByAccountId(accountId: String): NetworkResult<PersonalInformation>

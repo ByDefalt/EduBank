@@ -59,7 +59,7 @@ private val LightGray = CustomColor.BackgroundGray
 private val TextPrimary = CustomColor.TextPrimary
 private val TextSecondary = CustomColor.TextSecondary
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun HomeAccountScreen(
     onNavigateToAccounts: () -> Unit = {},
@@ -80,7 +80,7 @@ fun HomeAccountScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun HomeAccountContent(
     uiState: UiState<HomeData>,
@@ -140,7 +140,7 @@ internal fun HomeAccountContent(
                     }
                     item { Spacer(modifier = Modifier.height(8.dp)) }
                 }
-            } // fin UiStateHandler
+            }
 
             BottomNavBar(
                 selectedRoute = Routes.Bank.Home,

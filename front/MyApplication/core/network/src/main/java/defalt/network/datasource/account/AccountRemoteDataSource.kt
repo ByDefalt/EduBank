@@ -26,7 +26,7 @@ class AccountRemoteDataSource(
     private val apiClient: ApiClient,
 ) : IAccountRemoteDataSource {
 
-    // --- COMPTES ---
+
 
     override suspend fun activateAccount(id: String): NetworkResult<Boolean> =
         safeApiCall { api.accountsActivateIdPut(id) }
@@ -46,7 +46,7 @@ class AccountRemoteDataSource(
     override suspend fun createAccount(accountRegister: AccountRegister): NetworkResult<Account> =
         safeApiCall { api.accountsPost(accountRegister.toDto()) }.map { it.toEntity() }
 
-    // --- AUTHENTIFICATION ---
+
 
     override suspend fun signIn(signInRequest: SignInRequest): NetworkResult<TokenRequest> {
         val result = safeApiCall { api.accountsSigninPost(signInRequest.toDto()) }.map { it.toEntity() }
@@ -61,7 +61,7 @@ class AccountRemoteDataSource(
     override suspend fun validateToken(tokenRequest: TokenRequest): NetworkResult<TokenResponse> =
         safeApiCall { api.accountsValidatePost(tokenRequest.toDto()) }.map { it.toEntity() }
 
-    // --- RÔLES ---
+
 
     override suspend fun getRoles(): NetworkResult<List<Role>> =
         safeApiCall { roleApi.rolesGet() }.map { it.toEntity() }
@@ -75,7 +75,7 @@ class AccountRemoteDataSource(
     override suspend fun getAccountRole(accountId: String): NetworkResult<Role> =
         safeApiCall { api.accountsRoleIdGet(accountId) }.map { it.toEntity() }
 
-    // --- INFORMATIONS PERSONNELLES ---
+
 
     override suspend fun getPersonalInformations(): NetworkResult<List<PersonalInformation>> =
         safeApiCall { personalInformationApi.personalInformationGet() }.map { it.toEntity() }

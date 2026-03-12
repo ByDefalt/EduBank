@@ -48,7 +48,7 @@ fun TransferBottomSheet(
                 .fillMaxWidth()
                 .padding(bottom = 32.dp),
         ) {
-            // Titre
+
             Text(
                 text = "Virements",
                 fontWeight = FontWeight.Bold,
@@ -58,7 +58,7 @@ fun TransferBottomSheet(
 
             HorizontalDivider(color = Color(0xFFEEEEEE))
 
-            // Items
+
             BottomSheetItem(
                 icon = Icons.Default.SwapHoriz,
                 label = "Faire un virement",

@@ -44,13 +44,13 @@ class EditBeneficiaryViewModelTest {
     @Test fun `load passe en Error si beneficiaire non trouve`() {
         coEvery { getMyBeneficiaries() } returns NetworkResult.Success(listOf(fakeBenef2))
 
-        // id=1 n existe pas dans la liste
+
         try {
             viewModel.load(1)
         } catch (_: Exception) {
-            // NoSuchElementException attendue si l'id n'existe pas
+
         }
-        // on verifie qu'au minimum le useCase a ete appele
+
         coVerify(exactly = 1) { getMyBeneficiaries() }
     }
 

@@ -11,7 +11,7 @@ import retrofit2.Response
 
 class SafeApiCallTest {
 
-    // ── Succès ─────────────────────────────────────────────────────────────
+
 
     @Test fun `retourne Success quand body non null`() = runTest {
         val result = safeApiCall { Response.success("hello") }
@@ -34,7 +34,7 @@ class SafeApiCallTest {
         assertEquals(3, (result as NetworkResult.Success).data.size)
     }
 
-    // ── Body null ──────────────────────────────────────────────────────────
+
 
     @Test fun `retourne Error 200 Empty body si body null`() = runTest {
         val response = Response.success<String>(200, null)
@@ -45,7 +45,7 @@ class SafeApiCallTest {
         assertEquals("Empty body", error.message)
     }
 
-    // ── Erreurs HTTP ───────────────────────────────────────────────────────
+
 
     @Test fun `retourne Error 404 quand reponse HTTP 404`() = runTest {
         val response = Response.error<String>(404, "not found".toResponseBody())
@@ -75,7 +75,7 @@ class SafeApiCallTest {
         assertEquals(400, (result as NetworkResult.Error).code)
     }
 
-    // ── Exceptions ─────────────────────────────────────────────────────────
+
 
     @Test fun `retourne Exception quand appel leve une exception`() = runTest {
         val ex = RuntimeException("network crash")

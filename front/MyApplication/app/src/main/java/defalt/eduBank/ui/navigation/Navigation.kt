@@ -71,7 +71,7 @@ fun ArkeoNavHost(
                 navController.popBackStack(route = Routes.Operation.CreateTransfer, inclusive = true)
             },
         )
-        // ── Admin ──────────────────────────────────────────────────────────
+
         adminGraph(
             onNavigateToAccounts = { navController.navigate(Routes.Admin.AccountList) },
             onNavigateToBankAccounts = { navController.navigate(Routes.Admin.BankList) },
@@ -98,7 +98,7 @@ fun ArkeoNavHost(
             },
             navController = navController,
         )
-        // ── Menu ───────────────────────────────────────────────────────────
+
         menuGraph(
             onNavigateToProfile = { navController.navigate(Routes.Core.Profile) },
             onNavigateToOffers = { navController.navigate(Routes.Offer.List) },

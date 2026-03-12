@@ -6,7 +6,7 @@ import defalt.utils.NetworkResult
 
 interface IOfferRemoteDataSource {
 
-    // --- CONSULTATION (Public / Client / Admin) ---
+
 
     /**
      * Récupère uniquement les offres dont l'état est "active".
@@ -28,7 +28,7 @@ interface IOfferRemoteDataSource {
      */
     suspend fun getOfferById(id: Int): NetworkResult<Offer>
 
-    // --- GESTION (Admin uniquement) ---
+
 
     /**
      * Crée une nouvelle offre.

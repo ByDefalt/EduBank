@@ -16,7 +16,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-// ── AddBeneficiary ───────────────────────────────────────────────────────────
+
 
 class AddBeneficiaryUseCaseTest {
 
@@ -56,7 +56,7 @@ class AddBeneficiaryUseCaseTest {
     }
 }
 
-// ── EditBeneficiary ──────────────────────────────────────────────────────────
+
 
 class EditBeneficiaryUseCaseTest {
 
@@ -90,7 +90,7 @@ class EditBeneficiaryUseCaseTest {
     }
 }
 
-// ── DeleteBeneficiary ────────────────────────────────────────────────────────
+
 
 class DeleteBeneficiaryUseCaseTest {
 
@@ -122,7 +122,7 @@ class DeleteBeneficiaryUseCaseTest {
     }
 }
 
-// ── GetMyBeneficiaries ───────────────────────────────────────────────────────
+
 
 class GetMyBeneficiariesUseCaseTest {
 

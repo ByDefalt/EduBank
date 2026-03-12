@@ -14,7 +14,7 @@ class OperationMapperTest {
 
     private val now: OffsetDateTime = OffsetDateTime.now()
 
-    // ── OperationState enum ──────────────────────────────────────────────────
+
 
     @Test fun `OperationStateDto PENDING to entity`() =
         assertEquals(OperationStateEntity.PENDING, OperationStateDto.PENDING.toEntity())
@@ -44,7 +44,7 @@ class OperationMapperTest {
         OperationStateEntity.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
     }
 
-    // ── Beneficiary ──────────────────────────────────────────────────────────
+
 
     @Test fun `BeneficiaryDto toEntity maps all fields`() {
         val dto = BeneficiaryDto(id = 1, accountSourceId = "acc-001", ibanTarget = "FR76...", name = "Alice")
@@ -79,7 +79,7 @@ class OperationMapperTest {
         assertEquals("Bob", entities[1].name)
     }
 
-    // ── Operation ────────────────────────────────────────────────────────────
+
 
     @Test fun `OperationDto toEntity maps all fields`() {
         val dto = OperationDto(

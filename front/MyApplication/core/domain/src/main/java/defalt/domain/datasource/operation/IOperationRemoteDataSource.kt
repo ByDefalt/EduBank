@@ -8,7 +8,7 @@ import java.time.OffsetDateTime
 
 interface IOperationRemoteDataSource {
 
-    // --- OPÉRATIONS (OperationApi) ---
+
 
     /**
      * Récupère la liste des opérations avec filtres.
@@ -47,7 +47,7 @@ interface IOperationRemoteDataSource {
      */
     suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation>
 
-    // --- BÉNÉFICIAIRES (BeneficiaryApi) ---
+
 
     /**
      * Récupère la liste globale de tous les bénéficiaires.

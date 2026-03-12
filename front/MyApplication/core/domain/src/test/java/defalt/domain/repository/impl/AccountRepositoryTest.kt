@@ -36,7 +36,7 @@ class AccountRepositoryTest {
 
     @Before fun setUp() { repository = AccountRepository(remote, local) }
 
-    // ── getAccounts ───────────────────────────────────────────────────────────
+
 
     @Test fun `getAccounts delegue au remote`() = runTest {
         coEvery { remote.getAccounts() } returns NetworkResult.Success(listOf(fakeAccount))
@@ -51,7 +51,7 @@ class AccountRepositoryTest {
         assertTrue(repository.getAccounts() is NetworkResult.Error)
     }
 
-    // ── getAccountById ────────────────────────────────────────────────────────
+
 
     @Test fun `getAccountById delegue l id`() = runTest {
         coEvery { remote.getAccountById("acc-001") } returns NetworkResult.Success(fakeAccount)
@@ -66,7 +66,7 @@ class AccountRepositoryTest {
         assertTrue(repository.getAccountById("acc-001") is NetworkResult.Error)
     }
 
-    // ── createAccount ─────────────────────────────────────────────────────────
+
 
     @Test fun `createAccount delegue`() = runTest {
         val req = AccountRegister(
@@ -86,7 +86,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 1) { remote.createAccount(req) }
     }
 
-    // ── activateAccount / deactivateAccount ───────────────────────────────────
+
 
     @Test fun `activateAccount delegue`() = runTest {
         coEvery { remote.activateAccount("acc-001") } returns NetworkResult.Success(true)
@@ -100,7 +100,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 1) { remote.deactivateAccount("acc-001") }
     }
 
-    // ── signIn ────────────────────────────────────────────────────────────────
+
 
     @Test fun `signIn delegue et stocke le token localement`() = runTest {
         coEvery { remote.signIn(any()) } returns NetworkResult.Success(fakeToken)
@@ -123,7 +123,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 0) { local.registerToken(any()) }
     }
 
-    // ── signOut ───────────────────────────────────────────────────────────────
+
 
     @Test fun `signOut delegue au local`() = runTest {
         coEvery { local.unregisterToken(any()) } returns NetworkResult.Success(true)
@@ -131,7 +131,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 1) { local.unregisterToken(any()) }
     }
 
-    // ── getSavedToken ─────────────────────────────────────────────────────────
+
 
     @Test fun `getSavedToken delegue au local`() = runTest {
         coEvery { local.getToken() } returns NetworkResult.Success(fakeToken)
@@ -145,7 +145,7 @@ class AccountRepositoryTest {
         assertTrue(repository.getSavedToken() is NetworkResult.Error)
     }
 
-    // ── validateToken ─────────────────────────────────────────────────────────
+
 
     @Test fun `validateToken delegue au remote`() = runTest {
         coEvery { remote.validateToken(fakeToken) } returns NetworkResult.Success(fakeTokenResponse)
@@ -155,7 +155,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 1) { remote.validateToken(fakeToken) }
     }
 
-    // ── getRoles ──────────────────────────────────────────────────────────────
+
 
     @Test fun `getRoles delegue`() = runTest {
         coEvery { remote.getRoles() } returns NetworkResult.Success(listOf(fakeRole))
@@ -179,7 +179,7 @@ class AccountRepositoryTest {
         coVerify(exactly = 1) { remote.getAccountRole("acc-001") }
     }
 
-    // ── getPersonalInformations ────────────────────────────────────────────────
+
 
     @Test fun `getPersonalInformations delegue`() = runTest {
         coEvery { remote.getPersonalInformations() } returns NetworkResult.Success(listOf(fakePersonalInfo))

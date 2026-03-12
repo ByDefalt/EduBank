@@ -61,7 +61,7 @@ fun AdminCreateBankAccountScreen(
             loadingColor = CustomColor.ArkeoRed,
             errorColor = CustomColor.ArkeoRed,
         ) { accounts ->
-            // Passe la state des types au formulaire
+
             CreateForm(
                 accounts = accounts,
                 typesState = typesState,
@@ -102,7 +102,7 @@ private fun CreateForm(
     var typeExpanded by remember { mutableStateOf(false) }
     var stateExpanded by remember { mutableStateOf(false) }
 
-    // Prépare la liste des types par défaut si succès
+
     val availableTypes = when (typesState) {
         is UiState.Success -> typesState.data
         is UiState.Loading -> emptyList()
@@ -110,7 +110,7 @@ private fun CreateForm(
         is UiState.Idle -> emptyList()
     }
 
-    // Si aucun type sélectionné et qu'il y a des types disponibles, sélectionne le premier
+
     if (selectedTypeId == null && availableTypes.isNotEmpty()) {
         selectedTypeId = availableTypes.first().id
     }
@@ -120,7 +120,7 @@ private fun CreateForm(
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         ArkeoCard(title = "NOUVEAU COMPTE") {
-            // Sélection du titulaire
+
             ExposedDropdownMenuBox(expanded = accountExpanded, onExpandedChange = { accountExpanded = !accountExpanded }) {
                 OutlinedTextField(
                     value = selectedAccount?.id ?: "Sélectionner un compte",
@@ -140,7 +140,7 @@ private fun CreateForm(
                 }
             }
 
-            // IBAN
+
             OutlinedTextField(
                 value = iban,
                 onValueChange = { iban = it },
@@ -148,7 +148,7 @@ private fun CreateForm(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            // Type de compte
+
             ExposedDropdownMenuBox(expanded = typeExpanded, onExpandedChange = { typeExpanded = !typeExpanded }) {
                 OutlinedTextField(
                     value = availableTypes.find { it.id == selectedTypeId }?.name ?: (selectedTypeId?.let { "Type $it" } ?: "Aucun type"),
@@ -179,7 +179,7 @@ private fun CreateForm(
                 }
             }
 
-            // Solde initial
+
             OutlinedTextField(
                 value = sold,
                 onValueChange = { sold = it },
@@ -188,7 +188,7 @@ private fun CreateForm(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            // Découvert autorisé
+
             OutlinedTextField(
                 value = overdraft,
                 onValueChange = { overdraft = it },
@@ -197,7 +197,7 @@ private fun CreateForm(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            // État initial
+
             ExposedDropdownMenuBox(expanded = stateExpanded, onExpandedChange = { stateExpanded = !stateExpanded }) {
                 OutlinedTextField(
                     value = selectedState.value,

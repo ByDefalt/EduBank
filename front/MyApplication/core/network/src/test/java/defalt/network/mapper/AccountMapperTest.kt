@@ -21,7 +21,7 @@ import org.junit.Test
 
 class AccountMapperTest {
 
-    // ── AccountStateEnum ────────────────────────────────────────────────────
+
 
     @Test fun `AccountStateEnumDto ACTIVE to entity`() =
         assertEquals(AccountStateEnumEntity.ACTIVE, AccountStateEnumDto.ACTIVE.toEntity())
@@ -45,7 +45,7 @@ class AccountMapperTest {
         AccountStateEnumEntity.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
     }
 
-    // ── RoleEnum ────────────────────────────────────────────────────────────
+
 
     @Test fun `RoleEnumDto ADMIN to entity`() =
         assertEquals(RoleEnumEntity.ADMIN, RoleEnumDto.ADMIN.toEntity())
@@ -63,7 +63,7 @@ class AccountMapperTest {
         RoleEnumEntity.entries.forEach { e -> assertEquals(e, e.toDto().toEntity()) }
     }
 
-    // ── Account ────────────────────────────────────────────────────────────
+
 
     @Test fun `AccountDto toEntity maps all fields`() {
         val dto = AccountDto(id = "acc-1", personalInfoId = 10, roleId = 2, state = AccountStateEnumDto.ACTIVE)
@@ -102,7 +102,7 @@ class AccountMapperTest {
         assertEquals("acc-2", entities[1].id)
     }
 
-    // ── PersonalInformation ────────────────────────────────────────────────
+
 
     @Test fun `PersonalInformationDto toEntity maps all fields`() {
         val dto = PersonalInformationDto(
@@ -156,7 +156,7 @@ class AccountMapperTest {
         assertEquals(2, list.toEntity().size)
     }
 
-    // ── PersonalInformationRegister ────────────────────────────────────────
+
 
     @Test fun `PersonalInformationRegisterEntity toDto roundtrip`() {
         val entity = PersonalInformationRegisterEntity(
@@ -171,7 +171,7 @@ class AccountMapperTest {
         assertEquals(entity, dto.toEntity())
     }
 
-    // ── Role ───────────────────────────────────────────────────────────────
+
 
     @Test fun `RoleDto toEntity maps fields`() {
         val dto = RoleDto(id = 1, name = "ADMIN")
@@ -197,7 +197,7 @@ class AccountMapperTest {
         assertEquals(2, list.toEntity().size)
     }
 
-    // ── SignInRequest ──────────────────────────────────────────────────────
+
 
     @Test fun `SignInRequestEntity toDto maps fields`() {
         val entity = SignInRequestEntity(id = "alice@mail.fr", password = "pass")
@@ -211,7 +211,7 @@ class AccountMapperTest {
         assertEquals(entity, entity.toDto().toEntity())
     }
 
-    // ── TokenRequest ──────────────────────────────────────────────────────
+
 
     @Test fun `TokenRequestEntity toDto maps jwt`() {
         val entity = TokenRequestEntity(jwt = "my-jwt")
@@ -223,7 +223,7 @@ class AccountMapperTest {
         assertEquals(entity, entity.toDto().toEntity())
     }
 
-    // ── TokenResponse ──────────────────────────────────────────────────────
+
 
     @Test fun `TokenResponseDto toEntity maps id and role`() {
         val dto = TokenResponseDto(id = "acc-1", role = "ADMIN")
@@ -237,8 +237,8 @@ class AccountMapperTest {
         assertEquals(dto, dto.toEntity().toDto())
     }
 
-    // ── AccountRegister ────────────────────────────────────────────────────
-    // AccountRegister.role est de type RoleEnum (pas Role)
+
+
 
     @Test fun `AccountRegisterEntity toDto maps all fields`() {
         val entity = AccountRegisterEntity(

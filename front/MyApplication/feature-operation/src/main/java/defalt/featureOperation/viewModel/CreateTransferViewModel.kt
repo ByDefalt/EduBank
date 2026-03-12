@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-// ── État du formulaire (données accumulées au fil des étapes) ─────────────────
+
 
 data class CreateTransferForm(
     val sourceAccount: BankAccountDetail? = null,
@@ -25,7 +25,7 @@ data class CreateTransferForm(
     val label: String = "",
 )
 
-// ── États des listes chargées ─────────────────────────────────────────────────
+
 
 data class DebitStepData(
     val accounts: List<BankAccountDetail>,
@@ -40,7 +40,7 @@ data class ReceiverStepData(
         get() = accounts.filter { it.id != sourceAccountId }
 }
 
-// ── ViewModel partagé pour tout le wizard de création de virement ─────────────
+
 
 class CreateTransferViewModel(
     private val getAllMyAccount: GetAllMyAccount,
@@ -48,19 +48,19 @@ class CreateTransferViewModel(
     private val createTransfer: CreateTransfer,
 ) : ViewModel() {
 
-    // Données chargées – étape 1 : compte à débiter
+
     private val _debitUiState = MutableStateFlow<UiState<DebitStepData>>(UiState.Loading)
     val debitUiState: StateFlow<UiState<DebitStepData>> = _debitUiState.asStateFlow()
 
-    // Données chargées – étape 2 : destinataire
+
     private val _receiverUiState = MutableStateFlow<UiState<ReceiverStepData>>(UiState.Loading)
     val receiverUiState: StateFlow<UiState<ReceiverStepData>> = _receiverUiState.asStateFlow()
 
-    // État de la soumission finale
+
     private val _submitUiState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val submitUiState: StateFlow<UiState<Unit>> = _submitUiState.asStateFlow()
 
-    // Formulaire accumulé
+
     private val _form = MutableStateFlow(CreateTransferForm())
     val form: StateFlow<CreateTransferForm> = _form.asStateFlow()
 
@@ -69,7 +69,7 @@ class CreateTransferViewModel(
         loadReceiverData()
     }
 
-    // ── Étape 1 : compte à débiter ────────────────────────────────────────────
+
 
     fun retryDebit() = loadDebitAccounts()
 
@@ -85,7 +85,7 @@ class CreateTransferViewModel(
         loadReceiverData()
     }
 
-    // ── Étape 2 : destinataire ────────────────────────────────────────────────
+
 
     fun retryReceiver() = loadReceiverData()
 
@@ -144,19 +144,19 @@ class CreateTransferViewModel(
         }
     }
 
-    // ── Étape 3 : montant ─────────────────────────────────────────────────────
+
 
     fun setAmount(amount: String) {
         _form.update { it.copy(amount = amount) }
     }
 
-    // ── Étape 4 : libellé ─────────────────────────────────────────────────────
+
 
     fun setLabel(label: String) {
         _form.update { it.copy(label = label) }
     }
 
-    // ── Étape 5 : confirmation / soumission ───────────────────────────────────
+
 
     fun submitTransfer() = launchWithUiState(_submitUiState) {
         val f = _form.value
@@ -172,7 +172,7 @@ class CreateTransferViewModel(
         _submitUiState.update { UiState.Idle }
     }
 
-    // ── Réinitialisation du wizard ────────────────────────────────────────────
+
 
     fun reset() {
         _form.update { CreateTransferForm() }
@@ -180,7 +180,7 @@ class CreateTransferViewModel(
     }
 }
 
-// ── Données de prévisualisation ───────────────────────────────────────────────
+
 
 internal fun sampleTransferAccounts(): List<BankAccountDetail> = listOf(
     BankAccountDetail(id = "1", parameter = null, type = Type(id = 1, name = "COMPTE CHÈQUES"), sold = 1_679_138.00, iban = "FR7630006000011234567890140"),
@@ -194,4 +194,4 @@ internal fun sampleBeneficiaries2(): List<Beneficiary> = listOf(
     Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
 )
 
-// plus besoin de map de types: utiliser directement BankAccountDetail.type?.name
+

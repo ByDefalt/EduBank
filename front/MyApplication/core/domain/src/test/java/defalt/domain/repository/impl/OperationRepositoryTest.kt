@@ -20,7 +20,7 @@ class OperationRepositoryTest {
     private val dataSource: IOperationRemoteDataSource = mockk()
     private lateinit var repository: OperationRepository
 
-    // Utilise une date fixe pour éviter le flakiness des tests
+
     private val now: OffsetDateTime = OffsetDateTime.parse("2025-01-01T12:00:00Z")
     private val fakeOp = Operation(
         id = 1,
@@ -35,7 +35,7 @@ class OperationRepositoryTest {
 
     @Before fun setUp() { repository = OperationRepository(dataSource) }
 
-    // ── getOperations ─────────────────────────────────────────────────────────
+
 
     @Test fun `getOperations delegue tous les parametres`() = runTest {
         coEvery { dataSource.getOperations("acc-001", OperationState.PENDING, null, null) } returns
@@ -58,7 +58,7 @@ class OperationRepositoryTest {
         assertTrue(repository.getOperations(null, null, null, null) is NetworkResult.Error)
     }
 
-    // ── getOperationById ──────────────────────────────────────────────────────
+
 
     @Test fun `getOperationById delegue l id`() = runTest {
         coEvery { dataSource.getOperationById(1) } returns NetworkResult.Success(fakeOp)
@@ -73,7 +73,7 @@ class OperationRepositoryTest {
         assertTrue(repository.getOperationById(1) is NetworkResult.Error)
     }
 
-    // ── createOperation ───────────────────────────────────────────────────────
+
 
     @Test fun `createOperation delegue l operation`() = runTest {
         coEvery { dataSource.createOperation(fakeOp) } returns NetworkResult.Success(fakeOp)
@@ -89,7 +89,7 @@ class OperationRepositoryTest {
         assertTrue(repository.createOperation(fakeOp) is NetworkResult.Exception)
     }
 
-    // ── cancelOperation ───────────────────────────────────────────────────────
+
 
     @Test fun `cancelOperation delegue l id`() = runTest {
         val cancelled = fakeOp.copy(state = OperationState.CANCELLED)
@@ -105,7 +105,7 @@ class OperationRepositoryTest {
         assertTrue(repository.cancelOperation(1) is NetworkResult.Error)
     }
 
-    // ── updateOperationState ──────────────────────────────────────────────────
+
 
     @Test fun `updateOperationState delegue id et state`() = runTest {
         coEvery { dataSource.updateOperationState(1, OperationState.COMPLETED) } returns NetworkResult.Success(fakeOp)
@@ -114,7 +114,7 @@ class OperationRepositoryTest {
         coVerify(exactly = 1) { dataSource.updateOperationState(1, OperationState.COMPLETED) }
     }
 
-    // ── getAllBeneficiaries ────────────────────────────────────────────────────
+
 
     @Test fun `getAllBeneficiaries delegue`() = runTest {
         coEvery { dataSource.getAllBeneficiaries() } returns NetworkResult.Success(listOf(fakeBen))
@@ -130,7 +130,7 @@ class OperationRepositoryTest {
         assertTrue(repository.getAllBeneficiaries() is NetworkResult.Error)
     }
 
-    // ── getBeneficiariesByAccountId ────────────────────────────────────────────
+
 
     @Test fun `getBeneficiariesByAccountId delegue l accountId`() = runTest {
         coEvery { dataSource.getBeneficiariesByAccountId("acc-001") } returns NetworkResult.Success(listOf(fakeBen))
@@ -139,7 +139,7 @@ class OperationRepositoryTest {
         coVerify(exactly = 1) { dataSource.getBeneficiariesByAccountId("acc-001") }
     }
 
-    // ── createBeneficiary ─────────────────────────────────────────────────────
+
 
     @Test fun `createBeneficiary delegue`() = runTest {
         coEvery { dataSource.createBeneficiary(fakeBen) } returns NetworkResult.Success(fakeBen)
@@ -154,7 +154,7 @@ class OperationRepositoryTest {
         assertTrue(repository.createBeneficiary(fakeBen) is NetworkResult.Error)
     }
 
-    // ── updateBeneficiary ─────────────────────────────────────────────────----
+
 
     @Test fun `updateBeneficiary delegue id et beneficiary`() = runTest {
         val updated = fakeBen.copy(name = "Alice Modifie")
@@ -165,7 +165,7 @@ class OperationRepositoryTest {
         coVerify(exactly = 1) { dataSource.updateBeneficiary(1, updated) }
     }
 
-    // ── deleteBeneficiary ─────────────────────────────────────────────────----
+
 
     @Test fun `deleteBeneficiary delegue l id`() = runTest {
         coEvery { dataSource.deleteBeneficiary(1) } returns NetworkResult.Success(Unit)

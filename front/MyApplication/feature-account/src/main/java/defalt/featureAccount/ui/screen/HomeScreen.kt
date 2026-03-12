@@ -37,7 +37,7 @@ fun HomeScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        // En-tête Logo
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -53,7 +53,7 @@ fun HomeScreen(
             Text("ENTREPRISES & INSTITUTIONNELS", fontSize = 10.sp, fontWeight = FontWeight.Medium)
         }
 
-        // Zone Image "Pont"
+
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -92,7 +92,7 @@ fun HomeScreen(
             }
         }
 
-        // Zone Actions
+
         Column(
             modifier = Modifier.padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -101,7 +101,7 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Nouveau bouton vers l'écran Offres
+
             ArkeoButton(text = "Voir les offres", onClick = onNavigateToOffer)
 
             Spacer(modifier = Modifier.height(16.dp))

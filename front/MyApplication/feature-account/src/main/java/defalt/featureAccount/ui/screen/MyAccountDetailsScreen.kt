@@ -28,7 +28,7 @@ import defalt.ui.utils.CustomColor
 import defalt.ui.utils.Routes
 import org.koin.androidx.compose.koinViewModel
 
-// ── Composable stateful (prod) ───────────────────────────────────────────────
+
 @Composable
 fun MyAccountDetailsScreen(
     onBack: () -> Unit = {},
@@ -53,7 +53,7 @@ fun MyAccountDetailsScreen(
     )
 }
 
-// ── Composable stateless (testable / previewable) ────────────────────────────
+
 @Composable
 internal fun MyAccountDetailsContent(
     uiState: UiState<AccountWithInfo>,
@@ -109,7 +109,7 @@ internal fun MyAccountDetailsContent(
     }
 }
 
-// ── Carte d'informations ─────────────────────────────────────────────────────
+
 @Composable
 private fun InfoCard(data: AccountWithInfo) {
     ArkeoCard(title = "INFORMATIONS") {
@@ -123,7 +123,7 @@ private fun InfoCard(data: AccountWithInfo) {
     }
 }
 
-// ── Previews ─────────────────────────────────────────────────────────────────
+
 @Preview(showBackground = true, name = "State - Loading")
 @Composable
 private fun PreviewLoading() {

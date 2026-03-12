@@ -10,7 +10,7 @@ import defalt.utils.NetworkResult
 
 interface IBankRemoteDataSource {
 
-    // --- ADMIN : Comptes bancaires (BankAccountApi) ---
+
 
     /** [ADMIN] Liste les comptes bancaires rattachés à un ID utilisateur */
     suspend fun adminGetBankAccountsByAccountId(accountId: String): NetworkResult<List<BankAccount>>
@@ -27,12 +27,12 @@ interface IBankRemoteDataSource {
     /** [ADMIN] Récupère les détails complets d'un compte bancaire */
     suspend fun adminGetBankAccountById(id: String): NetworkResult<BankAccountDetail>
 
-    // --- ADMIN : Paramètres (BankAccountParameterApi) ---
+
 
     /** [ADMIN] Met à jour les paramètres (découvert, état) d'un compte bancaire */
     suspend fun adminUpdateBankAccountParameters(bankAccountId: String, parameter: BankAccountParameter): NetworkResult<Unit>
 
-    // --- ADMIN : Types de compte (TypeApi) ---
+
 
     /** [ADMIN] Liste tous les types de comptes disponibles */
     suspend fun adminGetAllTypes(): NetworkResult<List<Type>>
@@ -43,7 +43,7 @@ interface IBankRemoteDataSource {
     /** [ADMIN] Crée un nouveau type de compte */
     suspend fun adminCreateType(type: Type): NetworkResult<Type>
 
-    // --- ADMIN : Co-titulaires / Pivot (BankAccountPivotApi) ---
+
 
     /** [ADMIN] Ajoute un co-titulaire à un compte (crée un lien pivot) */
     suspend fun adminAddCoHolder(pivot: BankAccountPivot): NetworkResult<Unit>
@@ -60,7 +60,7 @@ interface IBankRemoteDataSource {
     /** [ADMIN] Récupère la liste des liens pivots (co-titulaires) d'un compte bancaire */
     suspend fun adminGetCoHoldersByBankAccount(bankAccountId: String): NetworkResult<List<BankAccountPivot>>
 
-    // --- CLIENT : Mes Comptes (BankAccountApi & PivotApi) ---
+
 
     /** [CLIENT] Récupère les comptes bancaires de l'utilisateur connecté (filtrage par type optionnel) */
     suspend fun getMyBankAccounts(typeId: Int? = null): NetworkResult<List<BankAccount>>

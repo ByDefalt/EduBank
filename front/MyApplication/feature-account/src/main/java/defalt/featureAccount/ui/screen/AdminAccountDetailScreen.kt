@@ -60,15 +60,15 @@ fun AdminAccountDetailScreen(
         ) { data ->
             val isLoading = actionState is UiState.Loading
             Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                // UC6 : Infos
+
                 InfoCard(data)
-                // UC14 : Formulaire MAJ infos personnelles
+
                 EditPersonalInfoCard(
                     info = data.personalInfo,
                     isLoading = isLoading,
                     onSave = { updated -> viewModel.updateInfo(id, updated) },
                 )
-                // UC10 : Changer état
+
                 ActionsCard(
                     isActive = data.account.state == AccountStateEnum.ACTIVE,
                     isLoading = isLoading,

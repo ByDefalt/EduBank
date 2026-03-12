@@ -19,7 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-// ── OffersViewModel ───────────────────────────────────────────────────────────
+
 
 class OffersViewModelTest {
 
@@ -29,7 +29,7 @@ class OffersViewModelTest {
     private lateinit var session: Session
     private lateinit var viewModel: OffersViewModel
 
-    // Dates fixes pour tests déterministes
+
     private val today: LocalDate = LocalDate.parse("2025-01-01")
     private val nextMonth: LocalDate = today.plusMonths(1)
     private val nextMonth2: LocalDate = today.plusMonths(2)
@@ -86,7 +86,7 @@ class OffersViewModelTest {
     }
 }
 
-// ── AdminCreateOfferViewModel ─────────────────────────────────────────────────
+
 
 class AdminCreateOfferViewModelTest {
 
@@ -95,7 +95,7 @@ class AdminCreateOfferViewModelTest {
     private val createOffer: CreateOfferUseCase = mockk()
     private lateinit var viewModel: AdminCreateOfferViewModel
 
-    // Utiliser les mêmes dates fixes
+
     private val today = LocalDate.parse("2025-01-01")
     private val nextMonth = today.plusMonths(1)
     private val fakeOffer = Offer(1, "Promo", "Desc", Offer.State.ACTIVE, today, nextMonth)
