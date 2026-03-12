@@ -4,7 +4,6 @@ import com.example.clientAPI.entity.OfferEntity;
 import com.example.clientAPI.entity.OfferInputEntity;
 import com.example.clientAPI.exception.FunctionalException;
 import com.example.clientAPI.exception.NotFoundException;
-import com.example.clientAPI.exception.UnauthorizedException;
 import com.example.clientAPI.mapper.OfferMapper;
 import com.example.clientAPI.repository.OfferRepository;
 import dto.offerapi.Offer;
@@ -35,22 +34,19 @@ class OfferBusinessTest {
     @InjectMocks
     private OfferBusiness offerBusiness;
 
-    private static final String VALID_TOKEN = "Bearer valid-token";
-    private static final String INVALID_TOKEN = "invalid-token";
-
-    private OfferEntity buildEntity(int id, String title, String state) {
+    private OfferEntity buildEntity(int id, String title) {
         return new OfferEntity(id, "/images/test.jpg", title,
-                "Description test", state,
+                "Description test", "active",
                 LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
     }
 
-    private Offer buildDto(int id, String title, Offer.StateEnum state) {
+    private Offer buildDto(int id, String title) {
         Offer dto = new Offer();
         dto.setId(id);
         dto.setPicturePath("/images/test.jpg");
         dto.setTitle(title);
         dto.setDescription("Description test");
-        dto.setState(state);
+        dto.setState(Offer.StateEnum.ACTIVE);
         dto.setStartDate(LocalDate.of(2026, 1, 1));
         dto.setEndDate(LocalDate.of(2026, 12, 31));
         return dto;
@@ -75,8 +71,8 @@ class OfferBusinessTest {
 
     @Test
     void testGetAllOffers() {
-        OfferEntity entity = buildEntity(1, "Offre 1", "active");
-        Offer dto = buildDto(1, "Offre 1", Offer.StateEnum.ACTIVE);
+        OfferEntity entity = buildEntity(1, "Offre 1");
+        Offer dto = buildDto(1, "Offre 1");
 
         when(offerRepository.getAllOffers()).thenReturn(List.of(entity));
         when(offerMapper.toDTOList(List.of(entity))).thenReturn(List.of(dto));
@@ -100,8 +96,8 @@ class OfferBusinessTest {
 
     @Test
     void testGetActiveOffers() {
-        OfferEntity entity = buildEntity(1, "Offre Active", "active");
-        Offer dto = buildDto(1, "Offre Active", Offer.StateEnum.ACTIVE);
+        OfferEntity entity = buildEntity(1, "Offre Active");
+        Offer dto = buildDto(1, "Offre Active");
 
         when(offerRepository.getActiveOffers()).thenReturn(List.of(entity));
         when(offerMapper.toDTOList(List.of(entity))).thenReturn(List.of(dto));
@@ -125,8 +121,8 @@ class OfferBusinessTest {
 
     @Test
     void testGetOfferById() {
-        OfferEntity entity = buildEntity(1, "Offre 1", "active");
-        Offer dto = buildDto(1, "Offre 1", Offer.StateEnum.ACTIVE);
+        OfferEntity entity = buildEntity(1, "Offre 1");
+        Offer dto = buildDto(1, "Offre 1");
 
         when(offerRepository.getOfferById(1)).thenReturn(entity);
         when(offerMapper.toDTO(entity)).thenReturn(dto);
@@ -153,14 +149,14 @@ class OfferBusinessTest {
     void testCreateOffer() {
         OfferInput inputDto = buildInputDto();
         OfferInputEntity inputEntity = buildInputEntity();
-        OfferEntity createdEntity = buildEntity(10, "Nouvelle Offre", "active");
-        Offer expectedDto = buildDto(10, "Nouvelle Offre", Offer.StateEnum.ACTIVE);
+        OfferEntity createdEntity = buildEntity(10, "Nouvelle Offre");
+        Offer expectedDto = buildDto(10, "Nouvelle Offre");
 
         when(offerMapper.toEntity(inputDto)).thenReturn(inputEntity);
         when(offerRepository.createOffer(inputEntity)).thenReturn(createdEntity);
         when(offerMapper.toDTO(createdEntity)).thenReturn(expectedDto);
 
-        Offer result = offerBusiness.createOffer(VALID_TOKEN, inputDto);
+        Offer result = offerBusiness.createOffer(inputDto);
 
         assertNotNull(result);
         assertEquals(10, result.getId());
@@ -169,25 +165,9 @@ class OfferBusinessTest {
     }
 
     @Test
-    void testCreateOfferUnauthorizedNullToken() {
-        UnauthorizedException ex = assertThrows(UnauthorizedException.class,
-                () -> offerBusiness.createOffer(null, buildInputDto()));
-
-        assertEquals("UNAUTHORIZED", ex.getCode());
-    }
-
-    @Test
-    void testCreateOfferUnauthorizedInvalidToken() {
-        UnauthorizedException ex = assertThrows(UnauthorizedException.class,
-                () -> offerBusiness.createOffer(INVALID_TOKEN, buildInputDto()));
-
-        assertEquals("UNAUTHORIZED", ex.getCode());
-    }
-
-    @Test
     void testCreateOfferNullBody() {
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.createOffer(VALID_TOKEN, null));
+                () -> offerBusiness.createOffer(null));
 
         assertEquals("INVALID_INPUT", ex.getCode());
     }
@@ -198,7 +178,7 @@ class OfferBusinessTest {
         input.setTitle("   ");
 
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.createOffer(VALID_TOKEN, input));
+                () -> offerBusiness.createOffer(input));
 
         assertEquals("INVALID_TITLE", ex.getCode());
     }
@@ -209,7 +189,7 @@ class OfferBusinessTest {
         input.setStartDate(null);
 
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.createOffer(VALID_TOKEN, input));
+                () -> offerBusiness.createOffer(input));
 
         assertEquals("INVALID_DATES", ex.getCode());
     }
@@ -220,7 +200,7 @@ class OfferBusinessTest {
         input.setEndDate(null);
 
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.createOffer(VALID_TOKEN, input));
+                () -> offerBusiness.createOffer(input));
 
         assertEquals("INVALID_DATES", ex.getCode());
     }
@@ -232,7 +212,7 @@ class OfferBusinessTest {
         input.setEndDate(LocalDate.of(2026, 3, 1));
 
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.createOffer(VALID_TOKEN, input));
+                () -> offerBusiness.createOffer(input));
 
         assertEquals("INVALID_DATE_RANGE", ex.getCode());
     }
@@ -241,15 +221,15 @@ class OfferBusinessTest {
     void testUpdateOffer() {
         OfferInput inputDto = buildInputDto();
         OfferInputEntity inputEntity = buildInputEntity();
-        OfferEntity updatedEntity = buildEntity(1, "Nouvelle Offre", "active");
-        Offer expectedDto = buildDto(1, "Nouvelle Offre", Offer.StateEnum.ACTIVE);
+        OfferEntity updatedEntity = buildEntity(1, "Nouvelle Offre");
+        Offer expectedDto = buildDto(1, "Nouvelle Offre");
 
-        when(offerRepository.getOfferById(1)).thenReturn(buildEntity(1, "Offre 1", "active"));
+        when(offerRepository.getOfferById(1)).thenReturn(buildEntity(1, "Offre 1"));
         when(offerMapper.toEntity(inputDto)).thenReturn(inputEntity);
         when(offerRepository.updateOffer(1, inputEntity)).thenReturn(updatedEntity);
         when(offerMapper.toDTO(updatedEntity)).thenReturn(expectedDto);
 
-        Offer result = offerBusiness.updateOffer(VALID_TOKEN, 1, inputDto);
+        Offer result = offerBusiness.updateOffer(1, inputDto);
 
         assertNotNull(result);
         assertEquals(1, result.getId());
@@ -262,18 +242,10 @@ class OfferBusinessTest {
         when(offerRepository.getOfferById(999)).thenThrow(new EmptyResultDataAccessException(1));
 
         NotFoundException ex = assertThrows(NotFoundException.class,
-                () -> offerBusiness.updateOffer(VALID_TOKEN, 999, buildInputDto()));
+                () -> offerBusiness.updateOffer(999, buildInputDto()));
 
         assertEquals("OFFER_NOT_FOUND", ex.getCode());
         assertTrue(ex.getMessage().contains("999"));
-    }
-
-    @Test
-    void testUpdateOfferUnauthorized() {
-        UnauthorizedException ex = assertThrows(UnauthorizedException.class,
-                () -> offerBusiness.updateOffer(INVALID_TOKEN, 1, buildInputDto()));
-
-        assertEquals("UNAUTHORIZED", ex.getCode());
     }
 
     @Test
@@ -282,17 +254,17 @@ class OfferBusinessTest {
         input.setTitle("");
 
         FunctionalException ex = assertThrows(FunctionalException.class,
-                () -> offerBusiness.updateOffer(VALID_TOKEN, 1, input));
+                () -> offerBusiness.updateOffer(1, input));
 
         assertEquals("INVALID_TITLE", ex.getCode());
     }
 
     @Test
     void testDeleteOffer() {
-        when(offerRepository.getOfferById(1)).thenReturn(buildEntity(1, "Offre 1", "active"));
+        when(offerRepository.getOfferById(1)).thenReturn(buildEntity(1, "Offre 1"));
         doNothing().when(offerRepository).deleteOffer(1);
 
-        offerBusiness.deleteOffer(VALID_TOKEN, 1);
+        offerBusiness.deleteOffer(1);
 
         verify(offerRepository).deleteOffer(1);
     }
@@ -302,17 +274,9 @@ class OfferBusinessTest {
         when(offerRepository.getOfferById(999)).thenThrow(new EmptyResultDataAccessException(1));
 
         NotFoundException ex = assertThrows(NotFoundException.class,
-                () -> offerBusiness.deleteOffer(VALID_TOKEN, 999));
+                () -> offerBusiness.deleteOffer(999));
 
         assertEquals("OFFER_NOT_FOUND", ex.getCode());
         assertTrue(ex.getMessage().contains("999"));
-    }
-
-    @Test
-    void testDeleteOfferUnauthorized() {
-        UnauthorizedException ex = assertThrows(UnauthorizedException.class,
-                () -> offerBusiness.deleteOffer(null, 1));
-
-        assertEquals("UNAUTHORIZED", ex.getCode());
     }
 }

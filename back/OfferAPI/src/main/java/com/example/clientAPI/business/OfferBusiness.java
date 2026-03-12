@@ -4,7 +4,6 @@ import com.example.clientAPI.entity.OfferEntity;
 import com.example.clientAPI.entity.OfferInputEntity;
 import com.example.clientAPI.exception.FunctionalException;
 import com.example.clientAPI.exception.NotFoundException;
-import com.example.clientAPI.exception.UnauthorizedException;
 import com.example.clientAPI.mapper.OfferMapper;
 import com.example.clientAPI.repository.OfferRepository;
 import dto.offerapi.Offer;
@@ -44,16 +43,14 @@ public class OfferBusiness {
         }
     }
 
-    public Offer createOffer(String token, OfferInput dto) {
-        checkAuthorization(token);
+    public Offer createOffer(OfferInput dto) {
         validateOfferInput(dto);
         OfferInputEntity inputEntity = offerMapper.toEntity(dto);
         OfferEntity entity = offerRepository.createOffer(inputEntity);
         return offerMapper.toDTO(entity);
     }
 
-    public Offer updateOffer(String token, int id, OfferInput dto) {
-        checkAuthorization(token);
+    public Offer updateOffer(int id, OfferInput dto) {
         validateOfferInput(dto);
         try {
             offerRepository.getOfferById(id);
@@ -65,20 +62,13 @@ public class OfferBusiness {
         return offerMapper.toDTO(entity);
     }
 
-    public void deleteOffer(String token, int id) {
-        checkAuthorization(token);
+    public void deleteOffer(int id) {
         try {
             offerRepository.getOfferById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("OFFER_NOT_FOUND", "Offre introuvable avec l'id : " + id);
         }
         offerRepository.deleteOffer(id);
-    }
-
-    private void checkAuthorization(String token) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            throw new UnauthorizedException("UNAUTHORIZED", "Token d'autorisation manquant ou invalide");
-        }
     }
 
     private void validateOfferInput(OfferInput dto) {
