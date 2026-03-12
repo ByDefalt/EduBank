@@ -23,7 +23,7 @@ public interface OperationClient {
     @Headers("Content-Type: application/json")
     Operation getOperationById(@Param("id") Integer id);
 
-    @RequestLine("PATCH /operations/{id}/state")
+    @RequestLine("PUT /operations/{id}/state")
     @Headers("Content-Type: application/json")
     Operation updateOperationState(@Param("id") Integer id, ChangeStateRequest state);
 
