@@ -39,6 +39,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminAccountDetailScreen(
     id: String,
     onBack: () -> Unit = {},
+    onMutationSuccess: () -> Unit = {},
     viewModel: AdminAccountDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

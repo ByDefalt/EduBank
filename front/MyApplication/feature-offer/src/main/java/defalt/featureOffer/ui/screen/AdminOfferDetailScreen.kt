@@ -42,6 +42,7 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminOfferDetailScreen(
     id: Int,
     onBack: () -> Unit = {},
+    onMutationSuccess: () -> Unit = {},
     viewModel: AdminOfferDetailViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
