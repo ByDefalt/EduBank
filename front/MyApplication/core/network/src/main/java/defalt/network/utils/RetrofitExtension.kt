@@ -37,10 +37,7 @@ suspend fun <T> safeApiCall(
     }
 }
 
-/**
- * Variante pour les endpoints retournant une liste.
- * Un 404 est traité comme un succès avec liste vide plutôt qu'une erreur.
- */
+@Deprecated("Use safeApiCall with proper error handling instead")
 suspend fun <T> safeApiCallList(
     emptyValue: T,
     call: suspend () -> Response<T>,

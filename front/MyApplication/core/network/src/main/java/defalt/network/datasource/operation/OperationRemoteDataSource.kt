@@ -47,13 +47,8 @@ class OperationRemoteDataSource(
         safeApiCall { operationApi.operationsIdCancelPost(id) }.map { it.toEntity() }
 
     override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> {
-        println("updateOperationState")
-        println("id: $id")
-        println("state: $state")
         return safeApiCall { operationApi.operationsIdStatePatch(id, state.toDto()) }.map { it.toEntity() }
     }
-
-
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
         safeApiCallList(BeneficiaryList(data = emptyList())) { beneficiaryApi.beneficiariesGet() }.map { it.toEntity() }

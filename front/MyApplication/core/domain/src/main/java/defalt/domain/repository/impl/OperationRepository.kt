@@ -12,8 +12,6 @@ class OperationRepository(
     private val remoteDataSource: IOperationRemoteDataSource,
 ) : IOperationRepository {
 
-
-
     override suspend fun getOperations(
         accountId: String?,
         state: OperationState?,
@@ -33,8 +31,6 @@ class OperationRepository(
 
     override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> =
         remoteDataSource.updateOperationState(id, state)
-
-
 
     override suspend fun getAllBeneficiaries(): NetworkResult<List<Beneficiary>> =
         remoteDataSource.getAllBeneficiaries()

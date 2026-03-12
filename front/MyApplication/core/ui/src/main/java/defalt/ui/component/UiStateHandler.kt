@@ -16,17 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import defalt.ui.state.UiState
 
-/**
- * Gère les états Loading / Error / Success de façon centralisée.
- * Le contenu Success est délégué via [onSuccess].
- *
- * Usage :
- * ```
- * UiStateHandler(uiState = uiState, onRetry = viewModel::retry) { accounts ->
- *     LazyColumn { ... }
- * }
- * ```
- */
+
 @Composable
 fun <T> UiStateHandler(
     uiState: UiState<T>,
