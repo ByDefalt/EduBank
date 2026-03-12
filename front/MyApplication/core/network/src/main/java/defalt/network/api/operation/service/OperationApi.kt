@@ -7,7 +7,6 @@ import okhttp3.RequestBody
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-import defalt.network.api.operation.model.ChangeStateRequest
 import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationList
@@ -82,8 +81,8 @@ interface OperationApi {
 
     /**
      * PATCH operations/{id}/state
-     * Changer l&#39;état d&#39;une opération
-     * Use Case 13 (Administrateur): Changer l&#39;état d&#39;une opération / Use Case 21 (Administrateur): Mettre à jour l&#39;état d&#39;une opération
+     * Changer l&#39;état d&#39;une opéation
+     * 
      * Responses:
      *  - 200: État modifié avec succès
      *  - 404: Ressource non trouvée
@@ -92,11 +91,11 @@ interface OperationApi {
      *  - 403: Accès interdit - Permissions insuffisantes
      *
      * @param id 
-     * @param changeStateRequest 
+     * @param state 
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
-    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Body changeStateRequest: ChangeStateRequest): Response<Operation>
+    suspend fun operationsIdStatePatch(@Path("id") id: kotlin.Int, @Query("state") state: OperationState): Response<Operation>
 
     /**
      * POST operations

@@ -20,14 +20,7 @@ class OfferRemoteDataSource(
         safeApiCall { offerApi.offersActiveGet() }.map { it.toEntity() }
 
     override suspend fun getOffers(state: Offer.State?, activeOnly: Boolean?): NetworkResult<List<Offer>> {
-        val stateDto = state?.let {
-            when (it) {
-                Offer.State.ACTIVE -> OfferApi.StateOffersGet.ACTIVE
-                Offer.State.INACTIVE -> OfferApi.StateOffersGet.INACTIVE
-                Offer.State.EXPIRED -> OfferApi.StateOffersGet.EXPIRED
-            }
-        }
-        return safeApiCall { offerApi.offersGet(stateDto, activeOnly) }.map { it.toEntity() }
+        return safeApiCall { offerApi.offersGet() }.map { it.toEntity() }
     }
 
     override suspend fun getOfferById(id: Int): NetworkResult<Offer> =

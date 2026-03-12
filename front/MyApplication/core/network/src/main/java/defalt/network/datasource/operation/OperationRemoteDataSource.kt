@@ -5,7 +5,6 @@ import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.network.api.operation.model.BeneficiaryList
-import defalt.network.api.operation.model.ChangeStateRequest
 import defalt.network.api.operation.service.BeneficiaryApi
 import defalt.network.api.operation.service.OperationApi
 import defalt.network.mapper.operation.toDto
@@ -29,10 +28,6 @@ class OperationRemoteDataSource(
         dateFrom: OffsetDateTime?,
         dateTo: OffsetDateTime?,
     ): NetworkResult<List<Operation>> {
-        val stateDto = state?.let {
-            // Conversion enum si nécessaire selon le Mapper
-            it.toString().lowercase()
-        }
         return if (accountId != null) {
             safeApiCall { operationApi.operationsAccountAccountIdGet(accountId, state?.toDto(), dateFrom, dateTo) }
                 .map { it.toEntity() }
@@ -51,8 +46,12 @@ class OperationRemoteDataSource(
     override suspend fun cancelOperation(id: Int): NetworkResult<Operation> =
         safeApiCall { operationApi.operationsIdCancelPost(id) }.map { it.toEntity() }
 
-    override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> =
-        safeApiCall { operationApi.operationsIdStatePatch(id, ChangeStateRequest(state = state.toDto())) }.map { it.toEntity() }
+    override suspend fun updateOperationState(id: Int, state: OperationState): NetworkResult<Operation> {
+        println("updateOperationState")
+        println("id: $id")
+        println("state: $state")
+        return safeApiCall { operationApi.operationsIdStatePatch(id, state.toDto()) }.map { it.toEntity() }
+    }
 
     // --- BÉNÉFICIAIRES ---
 
