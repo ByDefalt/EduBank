@@ -56,7 +56,7 @@ class OfferControllerTest {
         Offer offer = buildOffer(1, "Active Offer");
         when(offerBusiness.getActiveOffers()).thenReturn(List.of(offer));
 
-        Response response = offerController.getAllOffers(null, true);
+        Response response = offerController.getAllOffers();
 
         assertEquals(200, response.getStatus());
         @SuppressWarnings("unchecked")
@@ -66,28 +66,12 @@ class OfferControllerTest {
         verify(offerBusiness, never()).getAllOffers();
     }
 
-    @Test
-    void testGetAllOffersAll() {
-        Offer o1 = buildOffer(1, "Active");
-        Offer o2 = buildOffer(2, "Inactive");
-        o2.setState(Offer.StateEnum.INACTIVE);
-        when(offerBusiness.getAllOffers()).thenReturn(List.of(o1, o2));
-
-        Response response = offerController.getAllOffers(null, false);
-
-        assertEquals(200, response.getStatus());
-        @SuppressWarnings("unchecked")
-        List<Offer> body = (List<Offer>) response.getEntity();
-        assertEquals(2, body.size());
-        verify(offerBusiness).getAllOffers();
-        verify(offerBusiness, never()).getActiveOffers();
-    }
 
     @Test
     void testGetAllOffersEmpty() {
         when(offerBusiness.getActiveOffers()).thenReturn(Collections.emptyList());
 
-        Response response = offerController.getAllOffers(null, true);
+        Response response = offerController.getAllOffers();
 
         assertEquals(200, response.getStatus());
         @SuppressWarnings("unchecked")
