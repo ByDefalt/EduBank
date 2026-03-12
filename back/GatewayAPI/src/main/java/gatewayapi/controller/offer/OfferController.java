@@ -25,10 +25,10 @@ public class OfferController {
     }
 
     @GET
+    @AuthenticationRequired(RoleEnum.ADMIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllOffers(@Context ContainerRequestContext requestContext) {
-        String token = requestContext.getHeaderString("Authorization");
-        return feignExecutor.wrap(() -> offerBusiness.getAllOffers(token));
+    public Response getAllOffers() {
+        return feignExecutor.wrap(offerBusiness::getAllOffers);
     }
 
     @GET

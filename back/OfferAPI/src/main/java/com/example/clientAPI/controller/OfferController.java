@@ -22,13 +22,9 @@ public class OfferController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllOffers(@QueryParam("active_only") @DefaultValue("true") boolean activeOnly) {
+    public Response getAllOffers() {
         List<Offer> offers;
-        if (activeOnly) {
-            offers = offerBusiness.getActiveOffers();
-        } else {
-            offers = offerBusiness.getAllOffers();
-        }
+        offers = offerBusiness.getAllOffers();
         return Response.ok(offers).build();
     }
 

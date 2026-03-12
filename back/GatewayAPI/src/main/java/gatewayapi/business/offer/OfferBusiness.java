@@ -24,22 +24,8 @@ public class OfferBusiness {
         this.offerRepository = offerRepository;
     }
 
-    public List<Offer> getAllOffers(String token) {
-        String jwt = token.replace("Bearer ", "");
-        TokenRequest tokenRequest = new TokenRequest();
-        tokenRequest.setJwt(jwt);
-        try{
-            TokenResponse tokenResp = accountRepository.validateToken(tokenRequest);
-            if (tokenResp.getRole().equals(RoleEnum.ADMIN.name())){
-                return offerRepository.findAll();
-            }else{
-                return offerRepository.findActive();
-            }
-        }catch(SecurityException e){
-            return offerRepository.findActive();
-        }
-
-
+    public List<Offer> getAllOffers() {
+        return offerRepository.findAll();
     }
 
     public List<Offer> getActiveOffers() {

@@ -7,9 +7,7 @@ info:
     name: API Support
 
 servers:
-  - url: https://api.example.com/v1
-    description: Serveur de production
-  - url: https://localhost:8084/api/v1
+  - url: http://localhost:8080/api/v1
     description: Serveur de développement
 
 tags:
@@ -22,17 +20,7 @@ paths:
       tags:
         - Offer
       summary: Récupérer la liste des offres
-      description: |
-        Retourne toutes les offres si le token appartient à un ADMIN, sinon retourne uniquement les offres actives.
-        Le token est optionnel : sans token valide, seules les offres actives sont retournées.
-      parameters:
-        - name: Authorization
-          in: header
-          required: false
-          schema:
-            type: string
-            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          description: Token JWT Bearer (optionnel). Si présent et valide avec le rôle ADMIN, retourne toutes les offres.
+      description: "Voir la liste des offres (Administrateur)"
       responses:
         '200':
           description: Liste récupérée avec succès
