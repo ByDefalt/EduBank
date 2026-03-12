@@ -51,12 +51,11 @@ public class OperationController {
         return Response.ok(operations).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}/state")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateStateOperation(@PathParam("id") Integer id, ChangeStateRequest state) {
-        Operation operation = this.operationBusiness.updateStateOperation(id, state.getState());
+    public Response updateStateOperation(@PathParam("id") Integer id, @QueryParam("state") OperationState state) {
+        Operation operation = this.operationBusiness.updateStateOperation(id, state);
         return Response.ok(operation).build();
     }
 

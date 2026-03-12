@@ -1,5 +1,6 @@
 package com.example.clientAPI.repository;
 
+import com.example.clientAPI.entity.TypesEntity;
 import dto.bankapi.Type;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ class TypeRepositoryTest {
     @Autowired
     private TypeRepository typeRepository;
 
-    private Type buildType(String name) {
-        Type type = new Type();
+    private TypesEntity buildType(String name) {
+        TypesEntity type = new TypesEntity();
         type.setName(name);
         return type;
     }
@@ -29,9 +30,9 @@ class TypeRepositoryTest {
 
     @Test
     void testCreateType() {
-        Type type = buildType("Livret Jeune");
+        TypesEntity type = buildType("Livret Jeune");
 
-        Type created = typeRepository.createType(type);
+        TypesEntity created = typeRepository.createType(type);
 
         assertNotNull(created);
         assertEquals("Livret Jeune", created.getName());
@@ -42,7 +43,7 @@ class TypeRepositoryTest {
     @Test
     void testGetAllTypes() {
         // Le schema.sql de test initialise déjà des types (ex: "Compte Courant", "Livret A" etc.)
-        List<Type> result = typeRepository.getAllTypes();
+        List<TypesEntity> result = typeRepository.getAllTypes();
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -54,18 +55,18 @@ class TypeRepositoryTest {
 
         typeRepository.createType(buildType("Compte Pro"));
 
-        List<Type> result = typeRepository.getAllTypes();
+        List<TypesEntity> result = typeRepository.getAllTypes();
         assertEquals(sizeBefore + 1, result.size());
     }
 
     @Test
     void testGetTypeById() {
         // On récupère un type existant depuis l'initialisation du schema
-        List<Type> all = typeRepository.getAllTypes();
+        List<TypesEntity> all = typeRepository.getAllTypes();
         assertFalse(all.isEmpty());
         Integer existingId = all.get(0).getId();
 
-        Type found = typeRepository.getTypeById(existingId);
+        TypesEntity found = typeRepository.getTypeById(existingId);
 
         assertNotNull(found);
         assertEquals(existingId, found.getId());
@@ -74,7 +75,7 @@ class TypeRepositoryTest {
 
     @Test
     void testGetTypeByIdReturnsNullWhenNotFound() {
-        Type result = typeRepository.getTypeById(9999);
+        TypesEntity result = typeRepository.getTypeById(9999);
 
         assertNull(result);
     }
@@ -83,8 +84,8 @@ class TypeRepositoryTest {
     void testGetTypeByIdMatchesName() {
         typeRepository.createType(buildType("PEL Test"));
 
-        List<Type> all = typeRepository.getAllTypes();
-        Type pelType = all.stream()
+        List<TypesEntity> all = typeRepository.getAllTypes();
+        TypesEntity pelType = all.stream()
                 .filter(t -> "PEL Test".equals(t.getName()))
                 .findFirst()
                 .orElse(null);
@@ -92,7 +93,7 @@ class TypeRepositoryTest {
         assertNotNull(pelType);
         assertNotNull(pelType.getId());
 
-        Type found = typeRepository.getTypeById(pelType.getId());
+        TypesEntity found = typeRepository.getTypeById(pelType.getId());
         assertEquals("PEL Test", found.getName());
     }
 }

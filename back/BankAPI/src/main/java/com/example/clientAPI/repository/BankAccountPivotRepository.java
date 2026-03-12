@@ -1,6 +1,6 @@
 package com.example.clientAPI.repository;
 
-import dto.bankapi.BankAccountPivot;
+import com.example.clientAPI.entity.BankAccountPivotEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,8 @@ public class BankAccountPivotRepository {
                     "VALUES (:bank_account_id, :account_id)";
 
     private static final String SQL_DELETE_PIVOT =
-            "DELETE FROM BankAccountPivot WHERE bank_account_id = :bank_account_id AND account_id = :account_id";
+            "DELETE FROM BankAccountPivot " +
+                    "WHERE bank_account_id = :bank_account_id AND account_id = :account_id";
 
     private static final String SQL_DELETE_ALL_PIVOTS_BY_BANK_ACCOUNT =
             "DELETE FROM BankAccountPivot WHERE bank_account_id = :bank_account_id";
@@ -36,17 +37,17 @@ public class BankAccountPivotRepository {
     private static final String SQL_GET_BANK_ACCOUNTS_BY_ACCOUNT =
             "SELECT bank_account_id FROM BankAccountPivot WHERE account_id = :account_id";
 
-    public void createPivot(BankAccountPivot dto) {
+    public void createPivot(BankAccountPivotEntity entity) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", dto.getBankAccountId());
-        params.put("account_id", dto.getAccountId());
+        params.put("bank_account_id", entity.getBankAccountId());
+        params.put("account_id", entity.getAccountId());
         jdbcTemplate.update(SQL_INSERT_PIVOT, params);
     }
 
-    public void deletePivot(BankAccountPivot dto) {
+    public void deletePivot(BankAccountPivotEntity entity) {
         Map<String, Object> params = new HashMap<>();
-        params.put("bank_account_id", dto.getBankAccountId());
-        params.put("account_id", dto.getAccountId());
+        params.put("bank_account_id", entity.getBankAccountId());
+        params.put("account_id", entity.getAccountId());
         jdbcTemplate.update(SQL_DELETE_PIVOT, params);
     }
 
