@@ -29,7 +29,7 @@ public class OperationRepository {
     }
 
     public List<OperationEntity> getOperations(String accountId, OperationState state, OffsetDateTime dateFrom, OffsetDateTime dateTo) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM operation WHERE 1=1");
+        StringBuilder sqldd = new StringBuilder("SELECT * FROM operation WHERE 1=1");
         Map<String, Object> params = new HashMap<>();
 
         if (accountId != null && !accountId.isBlank()) {

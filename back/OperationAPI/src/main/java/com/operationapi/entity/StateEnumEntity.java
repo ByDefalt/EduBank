@@ -1,10 +1,10 @@
 package com.operationapi.entity;
 
 public enum StateEnumEntity {
-    PENDING("pending"),
-    COMPLETED("completed"),
-    FAILED("failed"),
-    CANCELLED("cancelled");
+    PENDING("PENDING"),
+    COMPLETED("COMPLETED"),
+    FAILED("FAILED"),
+    CANCELLED("CANCELLED");
 
     private final String value;
 

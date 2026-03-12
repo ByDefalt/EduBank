@@ -304,8 +304,8 @@ components:
     OperationState:
       type: string
       description: État de l'opération
-      enum: [pending, completed, failed, cancelled]
-      example: completed
+      enum: [PENDING, COMPLETED, FAILED, CANCELLED]
+      example: COMPLETED
 
     Operation:
       type: object
