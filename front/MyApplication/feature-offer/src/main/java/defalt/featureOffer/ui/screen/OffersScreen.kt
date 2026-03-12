@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import defalt.domain.entity.offer.Offer
 import defalt.featureOffer.viewModel.OffersViewModel
 import defalt.ui.component.ArkeoButton
+import defalt.ui.component.ArkeoTopBar
 import defalt.ui.component.BottomNavBar
 import defalt.ui.component.UiStateHandler
 import defalt.ui.state.UiState
@@ -84,20 +85,7 @@ internal fun OffersContent(
             .background(CustomColor.BackgroundGray),
     ) {
         // Header
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(CustomColor.ArkeoRed)
-                .padding(top = 48.dp, bottom = 24.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                "OFFRES",
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-            )
-        }
+        ArkeoTopBar(title = "OFFRES", onBack = onBack)
 
         UiStateHandler(
             uiState = uiState,
