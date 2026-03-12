@@ -7,9 +7,7 @@ info:
     name: API Support
 
 servers:
-  - url: https://api.example.com/v1
-    description: Serveur de production
-  - url: https://localhost:8084/api/v1
+  - url: http://localhost:8084/api/v1
     description: Serveur de développement
 
 tags:
@@ -23,19 +21,6 @@ paths:
         - Offer
       summary: Récupérer la liste des offres
       description: "Use Case: Visualiser les offres (Visiteur/Client), Voir la liste des offres (Administrateur)"
-      parameters:
-        - name: state
-          in: query
-          schema:
-            type: string
-            enum: [active, inactive, expired]
-          description: Filtrer par état
-        - name: active_only
-          in: query
-          schema:
-            type: boolean
-            default: true
-          description: Afficher uniquement les offres actives (pour visiteur/client)
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -45,8 +30,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Offer'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Offer
