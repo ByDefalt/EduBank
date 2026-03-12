@@ -22,20 +22,17 @@ paths:
       tags:
         - Offer
       summary: Récupérer la liste des offres
-      description: "Use Case: Visualiser les offres (Visiteur/Client), Voir la liste des offres (Administrateur)"
+      description: |
+        Retourne toutes les offres si le token appartient à un ADMIN, sinon retourne uniquement les offres actives.
+        Le token est optionnel : sans token valide, seules les offres actives sont retournées.
       parameters:
-        - name: state
-          in: query
+        - name: Authorization
+          in: header
+          required: false
           schema:
             type: string
-            enum: [active, inactive, expired]
-          description: Filtrer par état
-        - name: active_only
-          in: query
-          schema:
-            type: boolean
-            default: true
-          description: Afficher uniquement les offres actives (pour visiteur/client)
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          description: Token JWT Bearer (optionnel). Si présent et valide avec le rôle ADMIN, retourne toutes les offres.
       responses:
         '200':
           description: Liste récupérée avec succès
@@ -45,8 +42,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Offer'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
     post:
       tags:
         - Offer

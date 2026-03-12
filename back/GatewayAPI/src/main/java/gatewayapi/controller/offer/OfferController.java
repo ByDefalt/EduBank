@@ -6,6 +6,8 @@ import gatewayapi.annotation.AuthenticationRequired;
 import gatewayapi.business.offer.OfferBusiness;
 import gatewayapi.wrapper.FeignExecutor;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
@@ -24,8 +26,9 @@ public class OfferController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllOffers() {
-        return feignExecutor.wrap(offerBusiness::getAllOffers);
+    public Response getAllOffers(@Context ContainerRequestContext requestContext) {
+        String token = requestContext.getHeaderString("Authorization");
+        return feignExecutor.wrap(() -> offerBusiness.getAllOffers(token));
     }
 
     @GET
