@@ -10,10 +10,10 @@ import java.time.OffsetDateTime
 
 class CreateTransfer(
     private val operationRepository: IOperationRepository,
-    private val session: Session,
     private val logger: Logger,
 ) {
     suspend operator fun invoke(
+        accountSourceId: String,
         ibanTarget: String,
         amount: Double,
         label: String,
@@ -21,7 +21,7 @@ class CreateTransfer(
         logger.debug("CreateTransfer")
         val operation = Operation(
             id = 0,
-            accountSourceId = session.accountId!!,
+            accountSourceId = accountSourceId,
             label = label,
             state = OperationState.PENDING,
             ibanTarget = ibanTarget,

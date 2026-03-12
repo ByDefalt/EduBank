@@ -163,6 +163,7 @@ class CreateTransferViewModel(
             ibanTarget = f.receiverIban!!,
             amount = f.amount.toDouble(),
             label = f.label,
+            accountSourceId = f.sourceAccount!!.id!!,
         )
     }
 
