@@ -19,35 +19,32 @@ public class TypeBusiness {
         this.typeRepository = typeRepository;
     }
 
-    public List<TypesEntity> getAllTypes() {
-        List<Type> dtos = typeRepository.getAllTypes();
-        return dtos.stream().map(TypeMapper::toEntity).collect(Collectors.toList());
+    public List<Type> getAllTypes() {
+        List<TypesEntity> entities = typeRepository.getAllTypes();
+        return entities.stream().map(TypeMapper::toDto).collect(Collectors.toList());
     }
 
-    public TypesEntity getTypeById(Integer id) {
-        Type dto = typeRepository.getTypeById(id);
-        if (dto == null) {
+    public Type getTypeById(Integer id) {
+        TypesEntity entity = typeRepository.getTypeById(id);
+        if (entity == null) {
             throw new NotFoundException("Type non trouvé");
         }
-        return TypeMapper.toEntity(dto);
+        return TypeMapper.toDto(entity);
     }
 
-    public TypesEntity createType(TypesEntity entity) {
-        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
+    public Type createType(Type dto) {
+        if (dto.getName() == null || dto.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Le nom du type est obligatoire");
         }
-
-        List<Type> existingTypes = typeRepository.getAllTypes();
+        List<TypesEntity> existingTypes = typeRepository.getAllTypes();
         boolean exists = existingTypes.stream()
-                .anyMatch(t -> t.getName().equalsIgnoreCase(entity.getName().trim()));
+                .anyMatch(t -> t.getName().equalsIgnoreCase(dto.getName().trim()));
         if (exists) {
             throw new IllegalArgumentException("Ce type de compte existe déjà");
         }
-
-        entity.setName(entity.getName().trim());
-
-        Type dto = TypeMapper.toDto(entity);
-        Type created = typeRepository.createType(dto);
-        return TypeMapper.toEntity(created);
+        dto.setName(dto.getName().trim());
+        TypesEntity entity = TypeMapper.toEntity(dto);
+        TypesEntity created = typeRepository.createType(entity);
+        return TypeMapper.toDto(created);
     }
 }

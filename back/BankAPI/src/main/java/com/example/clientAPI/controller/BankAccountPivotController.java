@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Controller
 @Path("bank/bank-accounts-pivot")
 public class BankAccountPivotController {
@@ -25,7 +24,6 @@ public class BankAccountPivotController {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response createLink(BankAccountPivot requestDto) {
         BankAccountPivotEntity entity = BankAccountPivotMapper.toEntity(requestDto);
         bankAccountPivotBusiness.createLink(entity);

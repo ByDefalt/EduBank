@@ -1,5 +1,8 @@
 package com.example.clientAPI.repository;
 
+import com.example.clientAPI.entity.BankAccountEntity;
+import com.example.clientAPI.entity.BankAccountParameterEntity;
+import com.example.clientAPI.entity.BankAccountPivotEntity;
 import dto.bankapi.BankAccountPivot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +31,12 @@ class BankAccountPivotRepositoryTest {
 
     // Crée un paramètre + un compte bancaire réels pour satisfaire les FK
     private String createBankAccount(String id, String iban) {
-        dto.bankapi.BankAccountParameter param = new dto.bankapi.BankAccountParameter();
+        BankAccountParameterEntity param = new BankAccountParameterEntity();
         param.setOverdraftLimit(0.00);
         param.setState(dto.bankapi.State.ACTIVE);
-        dto.bankapi.BankAccountParameter created = bankAccountParameterRepository.createParameter(param);
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(param);
 
-        dto.bankapi.BankAccount ba = new dto.bankapi.BankAccount();
+        BankAccountEntity ba = new BankAccountEntity();
         ba.setId(id);
         ba.setParameterId(created.getId());
         ba.setTypeId(1);
@@ -43,8 +46,8 @@ class BankAccountPivotRepositoryTest {
         return id;
     }
 
-    private BankAccountPivot buildPivot(String bankAccountId, String accountId) {
-        BankAccountPivot pivot = new BankAccountPivot();
+    private BankAccountPivotEntity buildPivot(String bankAccountId, String accountId) {
+        BankAccountPivotEntity pivot = new BankAccountPivotEntity();
         pivot.setBankAccountId(bankAccountId);
         pivot.setAccountId(accountId);
         return pivot;
@@ -60,7 +63,7 @@ class BankAccountPivotRepositoryTest {
 
     @Test
     void testCreatePivot() {
-        BankAccountPivot pivot = buildPivot("BA-PIVOT-1", "ACC-001");
+        BankAccountPivotEntity pivot = buildPivot("BA-PIVOT-1", "ACC-001");
 
         bankAccountPivotRepository.createPivot(pivot);
 

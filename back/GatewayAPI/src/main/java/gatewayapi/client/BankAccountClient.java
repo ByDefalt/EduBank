@@ -19,6 +19,14 @@ public interface BankAccountClient {
     @Headers("Content-Type: application/json")
     BankAccountDetail getBankAccountById(@Param("id") String id);
 
+    @RequestLine("GET /bank/admin/bank-accounts/iban/{iban}")
+    @Headers("Content-Type: application/json")
+    BankAccount getBankAccountByIban(@Param("iban") String iban);
+
+    @RequestLine("PUT /bank/admin/bank-accounts/{id}")
+    @Headers("Content-Type: application/json")
+    BankAccount updateBankAccount(@Param("id") String id, BankAccount bankAccount);
+
     @RequestLine("DELETE /bank/admin/bank-accounts/{id}")
     @Headers("Content-Type: application/json")
     void deleteBankAccount(@Param("id") String id);
