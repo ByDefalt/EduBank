@@ -1,8 +1,6 @@
 package com.example.clientAPI.controller;
 
 import com.example.clientAPI.business.TypeBusiness;
-import com.example.clientAPI.entity.TypesEntity;
-import com.example.clientAPI.mapper.TypeMapper;
 import dto.bankapi.Type;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -10,8 +8,6 @@ import jakarta.ws.rs.core.Response;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Controller
 @Path("bank/admin/types")
@@ -26,10 +22,7 @@ public class TypeController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTypes() {
-        List<TypesEntity> entities = typeBusiness.getAllTypes();
-        List<Type> dtos = entities.stream()
-                .map(TypeMapper::toDto)
-                .collect(Collectors.toList());
+        List<Type> dtos = typeBusiness.getAllTypes();
         return Response.ok(dtos).build();
     }
 
@@ -37,8 +30,7 @@ public class TypeController {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTypeById(@PathParam("id") Integer id) {
-        TypesEntity entity = typeBusiness.getTypeById(id);
-        Type dto = TypeMapper.toDto(entity);
+        Type dto = typeBusiness.getTypeById(id);
         return Response.ok(dto).build();
     }
 
@@ -46,9 +38,7 @@ public class TypeController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createType(Type requestDto) {
-        TypesEntity entity = TypeMapper.toEntity(requestDto);
-        TypesEntity createdEntity = typeBusiness.createType(entity);
-        Type createdDto = TypeMapper.toDto(createdEntity);
+        Type createdDto = typeBusiness.createType(requestDto);
         return Response.status(Response.Status.CREATED).entity(createdDto).build();
     }
 }

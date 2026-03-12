@@ -1,5 +1,6 @@
 package com.example.clientAPI.repository;
 
+import com.example.clientAPI.entity.BankAccountParameterEntity;
 import dto.bankapi.BankAccountParameter;
 import dto.bankapi.State;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,8 @@ class BankAccountParameterRepositoryTest {
     @Autowired
     private BankAccountParameterRepository bankAccountParameterRepository;
 
-    private BankAccountParameter buildParameter(Double overdraftLimit, State state) {
-        BankAccountParameter param = new BankAccountParameter();
+    private BankAccountParameterEntity buildParameter(Double overdraftLimit, State state) {
+        BankAccountParameterEntity param = new BankAccountParameterEntity();
         param.setOverdraftLimit(overdraftLimit);
         param.setState(state);
         return param;
@@ -31,9 +32,9 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testCreateParameter() {
-        BankAccountParameter param = buildParameter(500.00, State.ACTIVE);
+        BankAccountParameterEntity param = buildParameter(500.00, State.ACTIVE);
 
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(param);
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(param);
 
         assertNotNull(created);
         assertNotNull(created.getId());
@@ -44,9 +45,9 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testCreateParameterWithZeroOverdraft() {
-        BankAccountParameter param = buildParameter(0.00, State.INACTIVE);
+        BankAccountParameterEntity param = buildParameter(0.00, State.INACTIVE);
 
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(param);
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(param);
 
         assertNotNull(created);
         assertEquals(0.00, created.getOverdraftLimit());
@@ -60,7 +61,7 @@ class BankAccountParameterRepositoryTest {
         bankAccountParameterRepository.createParameter(buildParameter(100.00, State.ACTIVE));
         bankAccountParameterRepository.createParameter(buildParameter(200.00, State.INACTIVE));
 
-        List<BankAccountParameter> result = bankAccountParameterRepository.getAllParameters();
+        List<BankAccountParameterEntity> result = bankAccountParameterRepository.getAllParameters();
 
         assertNotNull(result);
         assertTrue(result.size() >= 2);
@@ -70,14 +71,14 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testUpdateState() {
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(
                 buildParameter(300.00, State.ACTIVE));
         int id = created.getId();
 
         bankAccountParameterRepository.updateState(id, State.INACTIVE.toString());
 
-        List<BankAccountParameter> all = bankAccountParameterRepository.getAllParameters();
-        BankAccountParameter updated = all.stream()
+        List<BankAccountParameterEntity> all = bankAccountParameterRepository.getAllParameters();
+        BankAccountParameterEntity updated = all.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
@@ -88,14 +89,14 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testUpdateStateToBloqued() {
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(
                 buildParameter(400.00, State.ACTIVE));
         int id = created.getId();
 
         bankAccountParameterRepository.updateState(id, State.BLOQUED.toString());
 
-        List<BankAccountParameter> all = bankAccountParameterRepository.getAllParameters();
-        BankAccountParameter updated = all.stream()
+        List<BankAccountParameterEntity> all = bankAccountParameterRepository.getAllParameters();
+        BankAccountParameterEntity updated = all.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
@@ -106,14 +107,14 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testUpdateOverdraftLimit() {
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(
                 buildParameter(100.00, State.ACTIVE));
         int id = created.getId();
 
         bankAccountParameterRepository.updateOverdraftLimit(id, 2000.00);
 
-        List<BankAccountParameter> all = bankAccountParameterRepository.getAllParameters();
-        BankAccountParameter updated = all.stream()
+        List<BankAccountParameterEntity> all = bankAccountParameterRepository.getAllParameters();
+        BankAccountParameterEntity updated = all.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
                 .orElse(null);
@@ -126,13 +127,13 @@ class BankAccountParameterRepositoryTest {
 
     @Test
     void testDeleteParameter() {
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(
+        BankAccountParameterEntity created = bankAccountParameterRepository.createParameter(
                 buildParameter(500.00, State.ACTIVE));
         int id = created.getId();
 
         bankAccountParameterRepository.deleteParameter(id);
 
-        List<BankAccountParameter> all = bankAccountParameterRepository.getAllParameters();
+        List<BankAccountParameterEntity> all = bankAccountParameterRepository.getAllParameters();
         boolean exists = all.stream().anyMatch(p -> p.getId() == id);
 
         assertFalse(exists);

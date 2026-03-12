@@ -1,10 +1,9 @@
 package com.example.clientAPI.business;
 
+import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.repository.BankAccountParameterRepository;
 import com.example.clientAPI.repository.BankAccountRepository;
-import dto.bankapi.BankAccount;
-import dto.bankapi.BankAccountParameter;
 import dto.bankapi.State;
 import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;
@@ -38,8 +37,8 @@ class BankAccountParameterBusinessTest {
         return entity;
     }
 
-    private BankAccount validBankAccount() {
-        BankAccount ba = new BankAccount();
+    private BankAccountEntity validBankAccountEntity() {
+        BankAccountEntity ba = new BankAccountEntity();
         ba.setId("BA001");
         ba.setParameterId(1);
         ba.setTypeId(1);
@@ -52,11 +51,12 @@ class BankAccountParameterBusinessTest {
 
     @Test
     void testCreateParameterEntity() {
-        BankAccountParameter created = new BankAccountParameter();
+        BankAccountParameterEntity created = new BankAccountParameterEntity();
         created.setId(1);
         created.setOverdraftLimit(500.00);
         created.setState(State.ACTIVE);
-        when(bankAccountParameterRepository.createParameter(any())).thenReturn(created);
+        when(bankAccountParameterRepository.createParameter(any(BankAccountParameterEntity.class)))
+                .thenReturn(created);
 
         BankAccountParameterEntity result = bankAccountParameterBusiness.createParameterEntity(validParameterEntity());
 
@@ -72,15 +72,17 @@ class BankAccountParameterBusinessTest {
         entity.setState(State.ACTIVE);
         entity.setOverdraftLimit(null);
 
-        BankAccountParameter returned = new BankAccountParameter();
+        BankAccountParameterEntity returned = new BankAccountParameterEntity();
         returned.setId(2);
         returned.setOverdraftLimit(0.0);
         returned.setState(State.ACTIVE);
-        when(bankAccountParameterRepository.createParameter(any())).thenReturn(returned);
+        when(bankAccountParameterRepository.createParameter(any(BankAccountParameterEntity.class)))
+                .thenReturn(returned);
 
         bankAccountParameterBusiness.createParameterEntity(entity);
 
-        verify(bankAccountParameterRepository).createParameter(argThat(p -> p.getOverdraftLimit() == 0.0));
+        verify(bankAccountParameterRepository).createParameter(
+                argThat(e -> e.getOverdraftLimit() != null && e.getOverdraftLimit() == 0.0));
     }
 
     @Test
@@ -89,22 +91,24 @@ class BankAccountParameterBusinessTest {
         entity.setOverdraftLimit(100.00);
         entity.setState(null);
 
-        BankAccountParameter returned = new BankAccountParameter();
+        BankAccountParameterEntity returned = new BankAccountParameterEntity();
         returned.setId(3);
         returned.setOverdraftLimit(100.00);
         returned.setState(State.ACTIVE);
-        when(bankAccountParameterRepository.createParameter(any())).thenReturn(returned);
+        when(bankAccountParameterRepository.createParameter(any(BankAccountParameterEntity.class)))
+                .thenReturn(returned);
 
         bankAccountParameterBusiness.createParameterEntity(entity);
 
-        verify(bankAccountParameterRepository).createParameter(argThat(p -> State.ACTIVE.equals(p.getState())));
+        verify(bankAccountParameterRepository).createParameter(
+                argThat(e -> State.ACTIVE.equals(e.getState())));
     }
 
     // ==================== updateParametersByBankAccountId ====================
 
     @Test
     void testUpdateParametersByBankAccountIdUpdatesOverdraftLimit() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         BankAccountParameterEntity entity = new BankAccountParameterEntity();
         entity.setOverdraftLimit(1000.00);
@@ -117,7 +121,7 @@ class BankAccountParameterBusinessTest {
 
     @Test
     void testUpdateParametersByBankAccountIdUpdatesState() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         BankAccountParameterEntity entity = new BankAccountParameterEntity();
         entity.setState(State.INACTIVE);
@@ -130,7 +134,7 @@ class BankAccountParameterBusinessTest {
 
     @Test
     void testUpdateParametersByBankAccountIdUpdatesBoth() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         BankAccountParameterEntity entity = new BankAccountParameterEntity();
         entity.setOverdraftLimit(2000.00);
@@ -156,7 +160,7 @@ class BankAccountParameterBusinessTest {
 
     @Test
     void testUpdateParametersByBankAccountIdThrowsIllegalArgumentExceptionOnNegativeOverdraft() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         BankAccountParameterEntity entity = new BankAccountParameterEntity();
         entity.setOverdraftLimit(-100.00);

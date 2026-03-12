@@ -1,11 +1,9 @@
 package com.example.clientAPI.business;
 
+import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountParameterEntity;
-import com.example.clientAPI.mapper.BankAccountParameterMapper;
 import com.example.clientAPI.repository.BankAccountParameterRepository;
 import com.example.clientAPI.repository.BankAccountRepository;
-import dto.bankapi.BankAccount;
-import dto.bankapi.BankAccountParameter;
 import dto.bankapi.State;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,42 +22,33 @@ public class BankAccountParameterBusiness {
     }
 
     public BankAccountParameterEntity createParameterEntity(BankAccountParameterEntity parameterEntity) {
-        BankAccountParameter dto = BankAccountParameterMapper.toDto(parameterEntity);
-
-        if (dto.getOverdraftLimit() == null) {
-            dto.setOverdraftLimit(0.0);
+        if (parameterEntity.getOverdraftLimit() == null) {
+            parameterEntity.setOverdraftLimit(0.0);
         }
-        if (dto.getState() == null) {
-            dto.setState(State.ACTIVE);
+        if (parameterEntity.getState() == null) {
+            parameterEntity.setState(State.ACTIVE);
         }
-
-        BankAccountParameter created = bankAccountParameterRepository.createParameter(dto);
-        return BankAccountParameterMapper.toEntity(created);
+        return bankAccountParameterRepository.createParameter(parameterEntity);
     }
 
     public void updateParametersByBankAccountId(String bankAccountId, BankAccountParameterEntity parameterEntity) {
-        BankAccount bankAccount = bankAccountRepository.getBankAccountById(bankAccountId);
+        BankAccountEntity bankAccount = bankAccountRepository.getBankAccountById(bankAccountId);
         if (bankAccount == null) {
             throw new NotFoundException("Compte bancaire non trouvé");
         }
-
         if (parameterEntity.getOverdraftLimit() != null && parameterEntity.getOverdraftLimit() < 0) {
             throw new IllegalArgumentException("Le découvert autorisé ne peut pas être négatif");
         }
-
-        BankAccountParameter dto = BankAccountParameterMapper.toDto(parameterEntity);
-
-        if (dto.getOverdraftLimit() != null) {
+        if (parameterEntity.getOverdraftLimit() != null) {
             bankAccountParameterRepository.updateOverdraftLimit(
                     bankAccount.getParameterId(),
-                    dto.getOverdraftLimit()
+                    parameterEntity.getOverdraftLimit()
             );
         }
-
-        if (dto.getState() != null) {
+        if (parameterEntity.getState() != null) {
             bankAccountParameterRepository.updateState(
                     bankAccount.getParameterId(),
-                    dto.getState().toString()
+                    parameterEntity.getState().toString()
             );
         }
     }

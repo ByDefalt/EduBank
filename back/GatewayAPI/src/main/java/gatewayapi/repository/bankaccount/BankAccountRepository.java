@@ -25,6 +25,14 @@ public class BankAccountRepository {
         return bankAccountClient.getBankAccountById(id);
     }
 
+    public BankAccount findByIban(String iban) {
+        return bankAccountClient.getBankAccountByIban(iban);
+    }
+
+    public BankAccount update(String id, BankAccount bankAccount) {
+        return bankAccountClient.updateBankAccount(id, bankAccount);
+    }
+
     public void delete(String id) {
         bankAccountClient.deleteBankAccount(id);
     }

@@ -1,11 +1,9 @@
 package com.example.clientAPI.business;
 
+import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountPivotEntity;
-import com.example.clientAPI.mapper.BankAccountPivotMapper;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
 import com.example.clientAPI.repository.BankAccountRepository;
-import dto.bankapi.BankAccount;
-import dto.bankapi.BankAccountPivot;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -24,21 +22,19 @@ public class BankAccountPivotBusiness {
     }
 
     public void createLink(BankAccountPivotEntity entity) {
-        BankAccount bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
+        BankAccountEntity bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
         if (bankAccount == null) {
             throw new NotFoundException("Compte bancaire non trouvé");
         }
-        BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
-        bankAccountPivotRepository.createPivot(dto);
+        bankAccountPivotRepository.createPivot(entity);
     }
 
     public void deleteLink(BankAccountPivotEntity entity) {
-        BankAccount bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
+        BankAccountEntity bankAccount = bankAccountRepository.getBankAccountById(entity.getBankAccountId());
         if (bankAccount == null) {
             throw new NotFoundException("Compte bancaire non trouvé");
         }
-        BankAccountPivot dto = BankAccountPivotMapper.toDto(entity);
-        bankAccountPivotRepository.deletePivot(dto);
+        bankAccountPivotRepository.deletePivot(entity);
     }
 
     public void deleteAllByBankAccount(String bankAccountId) {
@@ -51,12 +47,21 @@ public class BankAccountPivotBusiness {
 
     public List<BankAccountPivotEntity> getLinksByBankAccount(String bankAccountId) {
         List<String> accountIds = bankAccountPivotRepository.getAccountsByBankAccount(bankAccountId);
-        return BankAccountPivotMapper.accountIdsToEntities(bankAccountId, accountIds);
+        return accountIds.stream().map(accountId -> {
+            BankAccountPivotEntity entity = new BankAccountPivotEntity();
+            entity.setBankAccountId(bankAccountId);
+            entity.setAccountId(accountId);
+            return entity;
+        }).toList();
     }
 
     public List<BankAccountPivotEntity> getLinksByAccount(String accountId) {
         List<String> bankAccountIds = bankAccountPivotRepository.getBankAccountsByAccount(accountId);
-        return BankAccountPivotMapper.bankAccountIdsToEntities(accountId, bankAccountIds);
+        return bankAccountIds.stream().map(bankAccountId -> {
+            BankAccountPivotEntity entity = new BankAccountPivotEntity();
+            entity.setBankAccountId(bankAccountId);
+            entity.setAccountId(accountId);
+            return entity;
+        }).toList();
     }
-
 }

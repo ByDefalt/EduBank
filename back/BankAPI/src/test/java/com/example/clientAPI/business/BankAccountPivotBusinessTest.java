@@ -1,10 +1,9 @@
 package com.example.clientAPI.business;
 
+import com.example.clientAPI.entity.BankAccountEntity;
 import com.example.clientAPI.entity.BankAccountPivotEntity;
 import com.example.clientAPI.repository.BankAccountPivotRepository;
 import com.example.clientAPI.repository.BankAccountRepository;
-import dto.bankapi.BankAccount;
-import dto.bankapi.BankAccountPivot;
 import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,8 +38,8 @@ class BankAccountPivotBusinessTest {
         return entity;
     }
 
-    private BankAccount validBankAccount() {
-        BankAccount ba = new BankAccount();
+    private BankAccountEntity validBankAccountEntity() {
+        BankAccountEntity ba = new BankAccountEntity();
         ba.setId("BA001");
         ba.setParameterId(1);
         ba.setTypeId(1);
@@ -53,11 +52,11 @@ class BankAccountPivotBusinessTest {
 
     @Test
     void testCreateLink() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         bankAccountPivotBusiness.createLink(buildEntity("BA001", "ACC-1"));
 
-        verify(bankAccountPivotRepository).createPivot(any(BankAccountPivot.class));
+        verify(bankAccountPivotRepository).createPivot(any(BankAccountPivotEntity.class));
     }
 
     @Test
@@ -77,11 +76,11 @@ class BankAccountPivotBusinessTest {
 
     @Test
     void testDeleteLink() {
-        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccount());
+        when(bankAccountRepository.getBankAccountById("BA001")).thenReturn(validBankAccountEntity());
 
         bankAccountPivotBusiness.deleteLink(buildEntity("BA001", "ACC-1"));
 
-        verify(bankAccountPivotRepository).deletePivot(any(BankAccountPivot.class));
+        verify(bankAccountPivotRepository).deletePivot(any(BankAccountPivotEntity.class));
     }
 
     @Test
@@ -166,5 +165,4 @@ class BankAccountPivotBusinessTest {
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
-
 }
