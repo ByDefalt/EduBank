@@ -1,7 +1,6 @@
 package gatewayapi.controller.operation;
 
 import dto.accountapi.RoleEnum;
-import dto.operationapi.ChangeStateRequest;
 import dto.operationapi.Operation;
 import dto.operationapi.OperationState;
 import gatewayapi.annotation.AuthenticationRequired;
@@ -57,10 +56,8 @@ public class OperationController {
 
     @PATCH
     @Path("/{id}/state")
-    @AuthenticationRequired(RoleEnum.ADMIN)
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateOperationState(@PathParam("id") Integer id, ChangeStateRequest state) {
+    public Response updateOperationState(@PathParam("id") Integer id, @QueryParam("state") OperationState state) {
         return feignExecutor.wrap(() -> operationBusiness.updateOperationState(id, state));
     }
 

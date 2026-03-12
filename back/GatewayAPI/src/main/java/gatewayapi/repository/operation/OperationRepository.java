@@ -32,7 +32,7 @@ public class OperationRepository {
         return this.operationClient.getOperationById(id);
     }
 
-    public Operation updateOperationState(Integer id, ChangeStateRequest state) {
+    public Operation updateOperationState(Integer id, OperationState state) {
         return this.operationClient.updateOperationState(id, state);
     }
 

@@ -32,7 +32,7 @@ public class OperationBusiness {
         return this.operationRepository.getOperationById(id);
     }
 
-    public Operation updateOperationState(Integer id, ChangeStateRequest state) {
+    public Operation updateOperationState(Integer id, OperationState state) {
         return this.operationRepository.updateOperationState(id, state);
     }
 

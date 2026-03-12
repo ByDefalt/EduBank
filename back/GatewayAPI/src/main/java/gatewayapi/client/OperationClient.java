@@ -25,7 +25,7 @@ public interface OperationClient {
 
     @RequestLine("PUT /operations/{id}/state")
     @Headers("Content-Type: application/json")
-    Operation updateOperationState(@Param("id") Integer id, ChangeStateRequest state);
+    Operation updateOperationState(@Param("id") Integer id, OperationState state);
 
     @RequestLine("POST /operations/{id}/cancel")
     @Headers("Content-Type: application/json")
