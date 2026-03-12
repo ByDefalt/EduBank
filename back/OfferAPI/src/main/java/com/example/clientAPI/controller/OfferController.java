@@ -23,7 +23,7 @@ public class OfferController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllOffers() {
-        List<Offer> offers = offerBusiness.getActiveOffers();
+        List<Offer> offers = offerBusiness.getAllOffers();
         return Response.ok(offers).build();
     }
 
