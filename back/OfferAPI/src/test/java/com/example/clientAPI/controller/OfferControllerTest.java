@@ -56,7 +56,7 @@ class OfferControllerTest {
         Offer offer = buildOffer(1, "Active Offer");
         when(offerBusiness.getActiveOffers()).thenReturn(List.of(offer));
 
-        Response response = offerController.getAllOffers();
+        Response response = offerController.getActiveOffers();
 
         assertEquals(200, response.getStatus());
         @SuppressWarnings("unchecked")
@@ -69,7 +69,7 @@ class OfferControllerTest {
 
     @Test
     void testGetAllOffersEmpty() {
-        when(offerBusiness.getActiveOffers()).thenReturn(Collections.emptyList());
+        when(offerBusiness.getAllOffers()).thenReturn(Collections.emptyList());
 
         Response response = offerController.getAllOffers();
 
