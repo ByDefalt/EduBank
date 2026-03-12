@@ -71,6 +71,9 @@ public class OperationBusiness {
         if (state == null) {
             throw new FunctionalException("400", "Le champ 'state' est obligatoire");
         }
+        if(state.equals(OperationState.CANCELLED)) {
+            return this.cancelOperation(id);
+        }
         OperationEntity existing = this.operationRepository.getOperationById(id);
         if (StateEnumEntity.CANCELLED.equals(existing.state())) {
             throw new FunctionalException("400", "Impossible de modifier l'état d'une opération annulée");
