@@ -20,8 +20,7 @@ interface IOfferRemoteDataSource {
      * @param state Filtre par état (active, inactive, expired)
      * @param activeOnly Filtre pour n'avoir que les offres actives
      */
-    suspend fun getOffers(
-    ): NetworkResult<List<Offer>>
+    suspend fun getOffers(): NetworkResult<List<Offer>>
 
     /**
      * Récupère le détail d'une offre spécifique par son ID.

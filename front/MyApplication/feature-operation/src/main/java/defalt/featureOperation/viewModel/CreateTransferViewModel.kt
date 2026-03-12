@@ -64,7 +64,6 @@ class CreateTransferViewModel(
     private val _form = MutableStateFlow(CreateTransferForm())
     val form: StateFlow<CreateTransferForm> = _form.asStateFlow()
 
-
     init {
         loadDebitAccounts()
         loadReceiverData()

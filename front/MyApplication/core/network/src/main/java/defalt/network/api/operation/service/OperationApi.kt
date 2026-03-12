@@ -1,28 +1,23 @@
 package defalt.network.api.operation.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-import defalt.network.api.operation.model.Error
 import defalt.network.api.operation.model.Operation
 import defalt.network.api.operation.model.OperationList
 import defalt.network.api.operation.model.OperationState
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.Response
+import retrofit2.http.*
 
 interface OperationApi {
     /**
      * GET operations/account/{accountId}
      * Récupérer les opérations d&#39;un compte
-     * 
+     *
      * Responses:
      *  - 200: Liste récupérée avec succès
      *  - 404: Ressource non trouvée
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param accountId 
+     * @param accountId
      * @param state  (optional)
      * @param dateFrom  (optional)
      * @param dateTo  (optional)
@@ -82,7 +77,7 @@ interface OperationApi {
     /**
      * PATCH operations/{id}/state
      * Changer l&#39;état d&#39;une opéation
-     * 
+     *
      * Responses:
      *  - 200: État modifié avec succès
      *  - 404: Ressource non trouvée
@@ -90,8 +85,8 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Accès interdit - Permissions insuffisantes
      *
-     * @param id 
-     * @param state 
+     * @param id
+     * @param state
      * @return [Operation]
      */
     @PATCH("operations/{id}/state")
@@ -107,10 +102,9 @@ interface OperationApi {
      *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *  - 403: Solde insuffisant ou limite de découvert dépassée
      *
-     * @param operation 
+     * @param operation
      * @return [Operation]
      */
     @POST("operations")
     suspend fun operationsPost(@Body operation: Operation): Response<Operation>
-
 }

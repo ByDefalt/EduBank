@@ -1,24 +1,19 @@
 package defalt.network.api.bank.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 import defalt.network.api.bank.model.BankAccountPivot
-import defalt.network.api.bank.model.Error
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.Response
+import retrofit2.http.*
 
 interface BankAccountPivotApi {
     /**
      * DELETE bank/bank-accounts-pivot/account/{accountId}
      * [ADMIN] Retirer tous les comptes d&#39;un user
-     * 
+     *
      * Responses:
      *  - 204: Tous les liens supprimés
      *
-     * @param accountId 
+     * @param accountId
      * @return [Unit]
      */
     @DELETE("bank/bank-accounts-pivot/account/{accountId}")
@@ -27,11 +22,11 @@ interface BankAccountPivotApi {
     /**
      * GET bank/bank-accounts-pivot/account/{accountId}
      * [CLIENT] Mes liens de comptes
-     * 
+     *
      * Responses:
      *  - 200: Liste des liens
      *
-     * @param accountId 
+     * @param accountId
      * @return [kotlin.collections.List<BankAccountPivot>]
      */
     @GET("bank/bank-accounts-pivot/account/{accountId}")
@@ -40,11 +35,11 @@ interface BankAccountPivotApi {
     /**
      * DELETE bank/bank-accounts-pivot/bank-account/{bankAccountId}
      * [ADMIN] Retirer tous les co-titulaires
-     * 
+     *
      * Responses:
      *  - 204: Tous les liens supprimés
      *
-     * @param bankAccountId 
+     * @param bankAccountId
      * @return [Unit]
      */
     @DELETE("bank/bank-accounts-pivot/bank-account/{bankAccountId}")
@@ -53,11 +48,11 @@ interface BankAccountPivotApi {
     /**
      * GET bank/bank-accounts-pivot/bank-account/{bankAccountId}
      * [ADMIN] Co-titulaires d&#39;un compte
-     * 
+     *
      * Responses:
      *  - 200: Liste des liens
      *
-     * @param bankAccountId 
+     * @param bankAccountId
      * @return [kotlin.collections.List<BankAccountPivot>]
      */
     @GET("bank/bank-accounts-pivot/bank-account/{bankAccountId}")
@@ -66,12 +61,12 @@ interface BankAccountPivotApi {
     /**
      * DELETE bank/bank-accounts-pivot
      * [ADMIN] Retirer un co-titulaire
-     * 
+     *
      * Responses:
      *  - 204: Lien supprimé
      *  - 404: Ressource non trouvée
      *
-     * @param bankAccountPivot 
+     * @param bankAccountPivot
      * @return [Unit]
      */
     @DELETE("bank/bank-accounts-pivot")
@@ -80,15 +75,14 @@ interface BankAccountPivotApi {
     /**
      * POST bank/bank-accounts-pivot
      * [ADMIN] Ajouter un co-titulaire
-     * 
+     *
      * Responses:
      *  - 201: Lien créé
      *  - 400: Requête invalide
      *
-     * @param bankAccountPivot 
+     * @param bankAccountPivot
      * @return [Unit]
      */
     @POST("bank/bank-accounts-pivot")
     suspend fun bankBankAccountsPivotPost(@Body bankAccountPivot: BankAccountPivot): Response<Unit>
-
 }

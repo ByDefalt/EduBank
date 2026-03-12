@@ -16,7 +16,7 @@ sealed class Routes {
 
         @Serializable
         object Menu : Routes()
-        
+
         @Serializable
         object Profile : Routes()
     }

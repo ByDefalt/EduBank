@@ -1,9 +1,9 @@
 package defalt.featureAccount.viewModel
 
 import androidx.lifecycle.ViewModel
+import defalt.domain.session.Session
 import defalt.featureAccount.usecase.AccountWithInfo
 import defalt.featureAccount.usecase.GetAccountByIdUseCase
-import defalt.domain.session.Session
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,4 +23,3 @@ class MyAccountDetailsViewModel(
         getAccountById(id)
     }
 }
-

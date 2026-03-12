@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
 import defalt.domain.session.Session
 import defalt.featureOffer.usecase.GetAllOffersActiveUseCase
-import defalt.featureOffer.usecase.GetAllOffersUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
 import kotlinx.coroutines.flow.MutableStateFlow

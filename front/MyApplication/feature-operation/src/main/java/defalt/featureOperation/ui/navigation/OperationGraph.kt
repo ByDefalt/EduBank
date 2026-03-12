@@ -2,6 +2,7 @@ package defalt.featureOperation.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -9,12 +10,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import defalt.eduBank.ui.navigation.NavRefreshKeys
 import defalt.featureOperation.ui.screen.AddBeneficiaryScreen
 import defalt.featureOperation.ui.screen.BeneficiariesScreen
 import defalt.featureOperation.ui.screen.EditBeneficiaryScreen
 import defalt.featureOperation.ui.screen.TransferBottomSheet
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.eduBank.ui.navigation.NavRefreshKeys
 import defalt.featureOperation.ui.screen.transfer.CreateTransferAmountScreen
 import defalt.featureOperation.ui.screen.transfer.CreateTransferDebitScreen
 import defalt.featureOperation.ui.screen.transfer.CreateTransferLabelScreen
@@ -23,7 +23,6 @@ import defalt.featureOperation.ui.screen.transfer.CreateTransferReceiverScreen
 import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.ui.utils.Routes
 import org.koin.androidx.compose.koinViewModel
-
 
 fun NavGraphBuilder.operationGraph(
     navController: NavController,
