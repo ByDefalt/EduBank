@@ -13,5 +13,6 @@ public class JerseyConfig extends ResourceConfig {
         packages("gatewayapi.client");
         packages("gatewayapi.wrapper");
         packages("gatewayapi.filter");
+        packages("gatewayapi.handlers");
     }
 }
