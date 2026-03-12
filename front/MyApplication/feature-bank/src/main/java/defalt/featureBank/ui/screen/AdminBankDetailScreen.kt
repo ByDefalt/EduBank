@@ -98,24 +98,6 @@ fun AdminBankDetailScreen(
 
                 // ── Modification complète ──────────────────────────────────
                 ArkeoCard(title = "MODIFIER LE COMPTE") {
-                    when (val ts = typesState) {
-                        is UiState.Loading -> Box(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            contentAlignment = Alignment.Center,
-                        ) { CircularProgressIndicator(color = CustomColor.ArkeoRed) }
-
-                        is UiState.Success -> TypeDropdown(
-                            types = ts.data,
-                            selectedTypeId = selectedTypeId,
-                            onTypeSelected = { selectedTypeId = it },
-                        )
-
-                        else -> TypeDropdown(
-                            types = emptyList(),
-                            selectedTypeId = selectedTypeId,
-                            onTypeSelected = { selectedTypeId = it },
-                        )
-                    }
 
                     StateDropdown(
                         selectedState = selectedState,

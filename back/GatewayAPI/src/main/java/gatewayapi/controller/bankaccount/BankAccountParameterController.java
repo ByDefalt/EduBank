@@ -24,7 +24,7 @@ public class BankAccountParameterController {
 
     // ==================== ADMIN ====================
 
-    @PATCH
+    @PUT
     @Path("/admin/bank-accounts/{bankAccountId}/parameters")
     @AuthenticationRequired(RoleEnum.ADMIN)
     @Consumes(MediaType.APPLICATION_JSON)

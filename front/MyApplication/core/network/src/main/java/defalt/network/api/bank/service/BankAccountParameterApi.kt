@@ -24,7 +24,7 @@ interface BankAccountParameterApi {
      * @param bankAccountParameter 
      * @return [Unit]
      */
-    @PATCH("bank/admin/bank-accounts/{bank_account_id}/parameters")
+    @PUT("bank/admin/bank-accounts/{bank_account_id}/parameters")
     suspend fun bankAdminBankAccountsBankAccountIdParametersPatch(@Path("bank_account_id") bankAccountId: kotlin.String, @Body bankAccountParameter: BankAccountParameter): Response<Unit>
 
 }
