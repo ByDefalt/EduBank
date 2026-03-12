@@ -8,4 +8,5 @@ val featureOfferUseCaseModule = module {
     single { CreateOfferUseCase(get(), get()) }
     single { UpdateOfferUseCase(get(), get()) }
     single { DeleteOfferUseCase(get(), get()) }
+    single { GetAllOffersActiveUseCase(get(), get()) }
 }

@@ -44,7 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
 import defalt.domain.entity.operation.Beneficiary
 import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.featureOperation.viewModel.ReceiverStepData
@@ -93,16 +93,12 @@ internal fun CreateTransferReceiverContent(
     uiState: UiState<ReceiverStepData>,
     onRetry: () -> Unit = {},
     onBack: () -> Unit = {},
-    onAccountSelected: (BankAccount) -> Unit = {},
+    onAccountSelected: (BankAccountDetail) -> Unit = {},
     onBeneficiarySelected: (Beneficiary) -> Unit = {},
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
-    val typeNames = mapOf(
-        1 to "COMPTE CHÈQUES",
-        2 to "COMPTE ÉPARGNE",
-        3 to "COMPTE PROFESSIONNEL",
-    )
+    // Les labels sont maintenant fournis par BankAccountDetail.type?.name
 
     Box(
         modifier = Modifier
@@ -208,7 +204,7 @@ internal fun CreateTransferReceiverContent(
                             items(data.filteredAccounts, key = { it.id ?: "" }) { account ->
                                 ReceiverAccountCard(
                                     account = account,
-                                    label = typeNames[account.typeId] ?: "COMPTE",
+                                    label = account.type?.name ?: "COMPTE",
                                     onClick = { onAccountSelected(account) },
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
@@ -253,7 +249,7 @@ internal fun CreateTransferReceiverContent(
 
 @Composable
 private fun ReceiverAccountCard(
-    account: BankAccount,
+    account: BankAccountDetail,
     label: String,
     onClick: () -> Unit,
 ) {

@@ -10,61 +10,54 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
 
-import defalt.network.api.operation.model.OperationState
-
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
- * 
+ *
  *
  * @param id Identifiant de l'opération
  * @param accountSourceId ID du compte bancaire source
  * @param label Libellé de l'opération
- * @param state 
+ * @param state
  * @param ibanTarget IBAN du compte destinataire
  * @param amount Montant de l'opération
  * @param date Date et heure de l'opération
  */
 @Serializable
+data class Operation(
 
-data class Operation (
-
-    /* Identifiant de l'opération */
+    // Identifiant de l'opération
     @SerialName(value = "id")
     val id: kotlin.Int,
 
-    /* ID du compte bancaire source */
+    // ID du compte bancaire source
     @SerialName(value = "account_source_id")
     val accountSourceId: kotlin.String,
 
-    /* Libellé de l'opération */
+    // Libellé de l'opération
     @SerialName(value = "label")
     val label: kotlin.String,
 
     @Contextual @SerialName(value = "state")
     val state: OperationState,
 
-    /* IBAN du compte destinataire */
+    // IBAN du compte destinataire
     @SerialName(value = "iban_target")
     val ibanTarget: kotlin.String,
 
-    /* Montant de l'opération */
+    // Montant de l'opération
     @SerialName(value = "amount")
     val amount: kotlin.Double,
 
-    /* Date et heure de l'opération */
+    // Date et heure de l'opération
     @Contextual @SerialName(value = "date")
-    val date: java.time.OffsetDateTime
+    val date: java.time.OffsetDateTime,
 
-) {
-
-
-}
-
+)

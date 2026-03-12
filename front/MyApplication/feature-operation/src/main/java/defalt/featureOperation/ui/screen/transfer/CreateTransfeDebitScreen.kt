@@ -34,7 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
 import defalt.featureOperation.viewModel.CreateTransferViewModel
 import defalt.featureOperation.viewModel.DebitStepData
 import defalt.featureOperation.viewModel.sampleTransferAccounts
@@ -73,14 +73,10 @@ fun CreateTransferDebitScreen(
 internal fun CreateTransferDebitContent(
     uiState: UiState<DebitStepData>,
     onRetry: () -> Unit = {},
-    onAccountSelected: (BankAccount) -> Unit = {},
+    onAccountSelected: (BankAccountDetail) -> Unit = {},
     onBack: () -> Unit = {},
 ) {
-    val typeNames = mapOf(
-        1 to "COMPTE CHÈQUES",
-        2 to "COMPTE ÉPARGNE",
-        3 to "COMPTE PROFESSIONNEL",
-    )
+    // Les labels sont maintenant fournis par BankAccountDetail.type?.name
 
     Box(
         modifier = Modifier
@@ -116,7 +112,7 @@ internal fun CreateTransferDebitContent(
                     items(data.accounts, key = { it.id ?: "" }) { account ->
                         DebitAccountCard(
                             account = account,
-                            label = typeNames[account.typeId] ?: "COMPTE",
+                            label = account.type?.name ?: "COMPTE",
                             onClick = { onAccountSelected(account) },
                         )
                         Spacer(modifier = Modifier.height(6.dp))
@@ -133,7 +129,7 @@ internal fun CreateTransferDebitContent(
 
 @Composable
 private fun DebitAccountCard(
-    account: BankAccount,
+    account: BankAccountDetail,
     label: String,
     onClick: () -> Unit,
 ) {

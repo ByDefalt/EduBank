@@ -10,29 +10,26 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.account.model
 
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param id 
- * @param firstname 
- * @param lastname 
- * @param email 
- * @param address 
- * @param phoneNumber 
+ *
+ * @param id
+ * @param firstname
+ * @param lastname
+ * @param email
+ * @param address
+ * @param phoneNumber
  */
 @Serializable
-
-data class PersonalInformation (
+data class PersonalInformation(
 
     @SerialName(value = "id")
     val id: kotlin.Int? = null,
@@ -50,10 +47,6 @@ data class PersonalInformation (
     val address: kotlin.String? = null,
 
     @SerialName(value = "phoneNumber")
-    val phoneNumber: kotlin.String? = null
+    val phoneNumber: kotlin.String? = null,
 
-) {
-
-
-}
-
+)

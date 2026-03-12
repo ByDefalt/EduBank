@@ -2,6 +2,7 @@ package defalt.featureOperation.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -9,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import defalt.eduBank.ui.navigation.NavRefreshKeys
 import defalt.featureOperation.ui.screen.AddBeneficiaryScreen
 import defalt.featureOperation.ui.screen.BeneficiariesScreen
 import defalt.featureOperation.ui.screen.EditBeneficiaryScreen
@@ -54,12 +56,17 @@ fun NavGraphBuilder.operationGraph(
             startDestination = Routes.Operation.Beneficiaire,
         ) {
             composable<Routes.Operation.Beneficiaire> {
+                val shouldRefresh = it.savedStateHandle
+                    .getStateFlow(NavRefreshKeys.Beneficiary.toString(), false)
+                    .collectAsStateWithLifecycle()
                 BeneficiariesScreen(
                     onItemClick = { beneficiary ->
                         navController.navigate(Routes.Operation.EditBeneficiaire(id = beneficiary.id!!))
                     },
                     onBack = onNavigateBack,
                     onAddBeneficiary = { navController.navigate(Routes.Operation.AddBeneficiaire) },
+                    shouldRefresh = shouldRefresh.value,
+                    onRefreshConsumed = { it.savedStateHandle[NavRefreshKeys.Beneficiary.toString()] = false },
                     onNavigateToHomeBank = onNavigateToHomeBank,
                     onNavigateToAccounts = onNavigateToAccounts,
                     onNavigateToTransfer = onNavigateToTransfer,
@@ -67,18 +74,26 @@ fun NavGraphBuilder.operationGraph(
             }
 
             composable<Routes.Operation.AddBeneficiaire> {
+                val previousEntry = remember { navController.previousBackStackEntry }
                 AddBeneficiaryScreen(
                     onBack = onNavigateBack,
-                    onSuccess = onNavigateBack,
+                    onSuccess = {
+                        previousEntry?.savedStateHandle?.set(NavRefreshKeys.Beneficiary.toString(), true)
+                        onNavigateBack()
+                    },
                 )
             }
 
             composable<Routes.Operation.EditBeneficiaire> { entry ->
                 val route = entry.toRoute<Routes.Operation.EditBeneficiaire>()
+                val previousEntry = remember { navController.previousBackStackEntry }
                 EditBeneficiaryScreen(
                     id = route.id,
                     onBack = onNavigateBack,
-                    onSuccess = onNavigateBack,
+                    onSuccess = {
+                        previousEntry?.savedStateHandle?.set(NavRefreshKeys.Beneficiary.toString(), true)
+                        onNavigateBack()
+                    },
                 )
             }
         }
@@ -109,6 +124,10 @@ fun NavGraphBuilder.operationGraph(
                     viewModel = vm,
                     onBack = onNavigateBack,
                     onSuccess = {
+                        onPopTransferWizard()
+                        onTransferSuccess()
+                    },
+                    onError = {
                         onPopTransferWizard()
                         onTransferSuccess()
                     },

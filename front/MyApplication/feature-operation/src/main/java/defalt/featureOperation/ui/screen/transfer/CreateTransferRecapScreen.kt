@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -46,11 +47,11 @@ import org.koin.androidx.compose.koinViewModel
 fun CreateTransferRecapScreen(
     onBack: () -> Unit = {},
     onSuccess: () -> Unit = {},
+    onError: () -> Unit = {},
     viewModel: CreateTransferViewModel = koinViewModel(),
 ) {
     val form by viewModel.form.collectAsStateWithLifecycle()
     val submitState by viewModel.submitUiState.collectAsStateWithLifecycle()
-
     // Naviguer vers la suite dès que la soumission réussit
     LaunchedEffect(submitState) {
         if (submitState is UiState.Success) {
@@ -59,14 +60,24 @@ fun CreateTransferRecapScreen(
         }
     }
 
-    val typeNames = mapOf(
-        1 to "COMPTE CHÈQUES",
-        2 to "COMPTE ÉPARGNE",
-        3 to "COMPTE PROFESSIONNEL",
-    )
+    // Si erreur, afficher un dialog au même style que AccountCreatedDialog
+    when (val state = submitState) {
+        is UiState.Error -> {
+            TransferErrorDialog(
+                message = state.message,
+                onConfirm = {
+                    viewModel.reset()
+                    onError()
+                },
+            )
+        }
+        else -> {
+            // no-op
+        }
+    }
 
     CreateTransferRecapContent(
-        sourceAccountLabel = typeNames[form.sourceAccount?.typeId] ?: "COMPTE",
+        sourceAccountLabel = form.sourceAccount?.type?.name ?: "COMPTE",
         sourceAccountIban = form.sourceAccount?.iban ?: "",
         receiverName = form.receiverName ?: "",
         receiverIban = form.receiverIban ?: "",
@@ -230,5 +241,57 @@ fun CreateTransferRecapScreenPreview() {
         receiverIban = "FR76 1234 5678 9012 3456 7890 123",
         amount = 250.00,
         label = "Remboursement loyer",
+    )
+}
+
+// ── Dialog d'erreur stylisé comme AccountCreatedDialog ───────────────
+@Composable
+private fun TransferErrorDialog(
+    message: String,
+    onConfirm: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = {},
+        containerColor = Color.White,
+        title = {
+            Text(
+                text = "Erreur lors de l'envoi",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                color = CustomColor.TextPrimary,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+        },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    colors = CardDefaults.cardColors(containerColor = CustomColor.BackgroundGray),
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Text(
+                            text = message,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
+                            color = CustomColor.TextPrimary,
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            ArkeoButton(
+                text = "OK",
+                onClick = onConfirm,
+            )
+        },
     )
 }

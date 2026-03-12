@@ -3,6 +3,7 @@ package defalt.eduBank.ui.navigation
 sealed class NavRefreshKeys {
     data object Bank : NavRefreshKeys()
     data object Account : NavRefreshKeys()
+    data object Beneficiary : NavRefreshKeys()
     data object Offer : NavRefreshKeys()
     data object Operation : NavRefreshKeys()
 

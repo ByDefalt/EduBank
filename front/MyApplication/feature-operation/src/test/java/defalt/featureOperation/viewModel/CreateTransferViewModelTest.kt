@@ -1,11 +1,12 @@
 package defalt.featureOperation.viewModel
 
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.Type
 import defalt.domain.entity.operation.Beneficiary
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.featureOperation.usecase.CreateTransfer
-import defalt.featureOperation.usecase.GetMyBankAccounts
+import defalt.featureOperation.usecase.GetAllMyAccount
 import defalt.featureOperation.usecase.GetMyBeneficiaries
 import defalt.testing.MainDispatcherRule
 import defalt.ui.state.UiState
@@ -25,14 +26,14 @@ class CreateTransferViewModelTest {
 
     @get:Rule val dispatcherRule = MainDispatcherRule()
 
-    private val getMyBankAccounts: GetMyBankAccounts = mockk()
+    private val getAllMyAccount: GetAllMyAccount = mockk()
     private val getMyBeneficiaries: GetMyBeneficiaries = mockk()
     private val createTransfer: CreateTransfer = mockk()
     private lateinit var viewModel: CreateTransferViewModel
 
     private val fakeBankAccounts = listOf(
-        BankAccount(id = "bank-001", parameterId = 1, typeId = 1, sold = 1000.0, iban = "FR76...1"),
-        BankAccount(id = "bank-002", parameterId = 2, typeId = 2, sold = 500.0, iban = "FR76...2"),
+        BankAccountDetail(id = "bank-001", parameter = null, type = Type(id = 1, name = "COMPTE CHÈQUES"), sold = 1000.0, iban = "FR76...1"),
+        BankAccountDetail(id = "bank-002", parameter = null, type = Type(id = 2, name = "COMPTE ÉPARGNE"), sold = 500.0, iban = "FR76...2"),
     )
     private val fakeBeneficiaries = listOf(
         Beneficiary(id = 1, accountSourceId = "acc-001", ibanTarget = "FR76...3", name = "Alice"),
@@ -48,9 +49,9 @@ class CreateTransferViewModelTest {
     )
 
     @Before fun setUp() {
-        coEvery { getMyBankAccounts() } returns NetworkResult.Success(fakeBankAccounts)
+        coEvery { getAllMyAccount() } returns NetworkResult.Success(fakeBankAccounts)
         coEvery { getMyBeneficiaries() } returns NetworkResult.Success(fakeBeneficiaries)
-        viewModel = CreateTransferViewModel(getMyBankAccounts, getMyBeneficiaries, createTransfer)
+        viewModel = CreateTransferViewModel(getAllMyAccount, getMyBeneficiaries, createTransfer)
     }
 
     // ── Init ────────────────────────────────────────────────────────────────
@@ -66,14 +67,14 @@ class CreateTransferViewModelTest {
     }
 
     @Test fun `debitUiState passe en Error si getMyBankAccounts echoue`() {
-        coEvery { getMyBankAccounts() } returns NetworkResult.Error(500, "Erreur")
-        val vm = CreateTransferViewModel(getMyBankAccounts, getMyBeneficiaries, createTransfer)
+        coEvery { getAllMyAccount() } returns NetworkResult.Error(500, "Erreur")
+        val vm = CreateTransferViewModel(getAllMyAccount, getMyBeneficiaries, createTransfer)
         assertTrue(vm.debitUiState.value is UiState.Error)
     }
 
     @Test fun `receiverUiState passe en Error si getMyBeneficiaries echoue`() {
         coEvery { getMyBeneficiaries() } returns NetworkResult.Error(500, "Erreur")
-        val vm = CreateTransferViewModel(getMyBankAccounts, getMyBeneficiaries, createTransfer)
+        val vm = CreateTransferViewModel(getAllMyAccount, getMyBeneficiaries, createTransfer)
         assertTrue(vm.receiverUiState.value is UiState.Error)
     }
 
@@ -101,18 +102,20 @@ class CreateTransferViewModelTest {
 
     @Test fun `retryDebit recharge les comptes`() {
         viewModel.retryDebit()
-        coVerify(atLeast = 2) { getMyBankAccounts() } // init + retry
+        coVerify(atLeast = 2) { getAllMyAccount() } // init + retry
     }
 
     @Test fun `retryReceiver recharge les donnees`() {
         viewModel.retryReceiver()
-        // getMyBankAccounts et getMyBeneficiaries appeles au moins 2 fois chacun
+        // getAllMyAccount et getMyBeneficiaries appeles au moins 2 fois chacun
         coVerify(atLeast = 2) { getMyBeneficiaries() }
     }
 
     // ── Submit ──────────────────────────────────────────────────────────────
 
     private fun fillFormAndSubmit(amount: Double = 50.0, label: String = "Virement") {
+        // sélectionner un compte source avant de soumettre (nouveau param requis)
+        viewModel.selectSourceAccount(fakeBankAccounts[0])
         viewModel.selectReceiverBeneficiary(fakeBeneficiaries[0])
         viewModel.setAmount(amount.toString())
         viewModel.setLabel(label)
@@ -120,16 +123,16 @@ class CreateTransferViewModelTest {
     }
 
     @Test fun `submitTransfer passe en Success et appelle createTransfer`() {
-        coEvery { createTransfer("FR76...3", 50.0, "Virement") } returns NetworkResult.Success(fakeOperation)
+        coEvery { createTransfer(fakeBankAccounts[0].id!!, "FR76...3", 50.0, "Virement") } returns NetworkResult.Success(fakeOperation)
 
         fillFormAndSubmit(50.0, "Virement")
 
         assertTrue(viewModel.submitUiState.value is UiState.Success)
-        coVerify(exactly = 1) { createTransfer("FR76...3", 50.0, "Virement") }
+        coVerify(exactly = 1) { createTransfer(fakeBankAccounts[0].id!!, "FR76...3", 50.0, "Virement") }
     }
 
     @Test fun `submitTransfer passe en Error si createTransfer echoue`() {
-        coEvery { createTransfer(any(), any(), any()) } returns NetworkResult.Error(400, "Solde insuffisant")
+        coEvery { createTransfer(any(), any(), any(), any()) } returns NetworkResult.Error(400, "Solde insuffisant")
 
         fillFormAndSubmit(9999.0)
 
@@ -138,7 +141,7 @@ class CreateTransferViewModelTest {
     }
 
     @Test fun `submitTransfer passe en Error si exception reseau`() {
-        coEvery { createTransfer(any(), any(), any()) } returns NetworkResult.Exception(RuntimeException("crash"))
+        coEvery { createTransfer(any(), any(), any(), any()) } returns NetworkResult.Exception(RuntimeException("crash"))
 
         fillFormAndSubmit()
 
@@ -150,7 +153,7 @@ class CreateTransferViewModelTest {
     }
 
     @Test fun `reset remet le formulaire et submitUiState a Idle`() {
-        coEvery { createTransfer(any(), any(), any()) } returns NetworkResult.Success(fakeOperation)
+        coEvery { createTransfer(any(), any(), any(), any()) } returns NetworkResult.Success(fakeOperation)
         fillFormAndSubmit()
         assertTrue(viewModel.submitUiState.value is UiState.Success)
 

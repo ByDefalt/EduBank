@@ -19,7 +19,7 @@ class OfferRemoteDataSource(
     override suspend fun getActiveOffers(): NetworkResult<List<Offer>> =
         safeApiCall { offerApi.offersActiveGet() }.map { it.toEntity() }
 
-    override suspend fun getOffers(state: Offer.State?, activeOnly: Boolean?): NetworkResult<List<Offer>> {
+    override suspend fun getOffers(): NetworkResult<List<Offer>> {
         return safeApiCall { offerApi.offersGet() }.map { it.toEntity() }
     }
 

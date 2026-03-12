@@ -10,15 +10,13 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package defalt.network.api.operation.model
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-
 
 /**
  * État de l'opération
@@ -38,7 +36,8 @@ enum class OperationState(val value: kotlin.String) {
     FAILED("FAILED"),
 
     @SerialName(value = "CANCELLED")
-    CANCELLED("CANCELLED");
+    CANCELLED("CANCELLED"),
+    ;
 
     /**
      * Override [toString()] to avoid using the enum variable name as the value, and instead use
@@ -59,12 +58,10 @@ enum class OperationState(val value: kotlin.String) {
          * Returns a valid [OperationState] for [data], null otherwise.
          */
         fun decode(data: kotlin.Any?): OperationState? = data?.let {
-          val normalizedData = "$it".lowercase()
-          values().firstOrNull { value ->
-            it == value || normalizedData == "$value".lowercase()
-          }
+            val normalizedData = "$it".lowercase()
+            values().firstOrNull { value ->
+                it == value || normalizedData == "$value".lowercase()
+            }
         }
     }
 }
-
-

@@ -1,20 +1,15 @@
 package defalt.network.api.bank.service
 
-import defalt.network.infrastructure.CollectionFormats.*
-import retrofit2.http.*
-import retrofit2.Response
-import okhttp3.RequestBody
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
-import defalt.network.api.bank.model.Error
 import defalt.network.api.bank.model.Type
+import defalt.network.infrastructure.CollectionFormats.*
+import retrofit2.Response
+import retrofit2.http.*
 
 interface TypeApi {
     /**
      * GET bank/admin/types
      * [ADMIN] Liste des types
-     * 
+     *
      * Responses:
      *  - 200: Liste des types
      *
@@ -26,12 +21,12 @@ interface TypeApi {
     /**
      * GET bank/admin/types/{id}
      * [ADMIN] Récupérer un type
-     * 
+     *
      * Responses:
      *  - 200: Type trouvé
      *  - 404: Ressource non trouvée
      *
-     * @param id 
+     * @param id
      * @return [Type]
      */
     @GET("bank/admin/types/{id}")
@@ -40,15 +35,14 @@ interface TypeApi {
     /**
      * POST bank/admin/types
      * [ADMIN] Créer un type
-     * 
+     *
      * Responses:
      *  - 201: Type créé
      *  - 400: Requête invalide
      *
-     * @param type 
+     * @param type
      * @return [Type]
      */
     @POST("bank/admin/types")
     suspend fun bankAdminTypesPost(@Body type: Type): Response<Type>
-
 }

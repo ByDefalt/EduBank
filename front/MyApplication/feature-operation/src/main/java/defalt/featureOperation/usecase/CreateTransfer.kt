@@ -3,7 +3,6 @@ package defalt.featureOperation.usecase
 import defalt.domain.entity.operation.Operation
 import defalt.domain.entity.operation.OperationState
 import defalt.domain.repository.service.IOperationRepository
-import defalt.domain.session.Session
 import defalt.utils.NetworkResult
 import defalt.utils.logger.Logger
 import java.time.OffsetDateTime

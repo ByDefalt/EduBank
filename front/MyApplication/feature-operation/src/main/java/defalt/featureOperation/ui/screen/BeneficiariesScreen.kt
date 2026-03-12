@@ -21,6 +21,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -64,6 +65,8 @@ fun BeneficiariesScreen(
     onItemClick: (Beneficiary) -> Unit = {},
     onBack: () -> Unit = {},
     onAddBeneficiary: () -> Unit = {},
+    shouldRefresh: Boolean = false,
+    onRefreshConsumed: () -> Unit = {},
     onNavigateToHomeBank: () -> Unit = {},
     onNavigateToAccounts: () -> Unit = {},
     onNavigateToTransfer: () -> Unit = {},
@@ -71,6 +74,13 @@ fun BeneficiariesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val query by viewModel.query.collectAsStateWithLifecycle()
+
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            viewModel.retry()
+            onRefreshConsumed()
+        }
+    }
 
     BeneficiariesContent(
         uiState = uiState,

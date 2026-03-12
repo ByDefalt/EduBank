@@ -11,7 +11,7 @@ interface IOfferRepository {
     suspend fun getActiveOffers(): NetworkResult<List<Offer>>
 
     // --- ADMIN & CLIENT ---
-    suspend fun getOffers(state: Offer.State? = null, activeOnly: Boolean? = null): NetworkResult<List<Offer>>
+    suspend fun getOffers(): NetworkResult<List<Offer>>
     suspend fun getOfferById(id: Int): NetworkResult<Offer>
 
     // --- ADMIN ---
