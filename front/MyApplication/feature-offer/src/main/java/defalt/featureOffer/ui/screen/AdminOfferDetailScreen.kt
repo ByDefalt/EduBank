@@ -49,6 +49,8 @@ fun AdminOfferDetailScreen(
 
     LaunchedEffect(id) { viewModel.load(id) }
 
+    LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
+
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         ArkeoTopBar(title = "MODIFIER L'OFFRE", onBack = onBack)
 

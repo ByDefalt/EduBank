@@ -46,6 +46,8 @@ fun AdminAccountDetailScreen(
 
     LaunchedEffect(id) { viewModel.load(id) }
 
+    LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
+
     Column(modifier = Modifier.fillMaxSize().background(CustomColor.BackgroundGray)) {
         ArkeoTopBar(title = "DÉTAIL COMPTE", onBack = onBack)
 

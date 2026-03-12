@@ -26,6 +26,8 @@ class AdminOfferDetailViewModel(
     private val _actionState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val actionState: StateFlow<UiState<Unit>> = _actionState.asStateFlow()
 
+    var onMutationSuccess: (() -> Unit)? = null
+
     fun load(id: Int) = launchWithUiState(stateFlow = _uiState, transform = { it }) {
         getOfferById(id)
     }
@@ -33,11 +35,21 @@ class AdminOfferDetailViewModel(
     fun save(id: Int, title: String, description: String, state: OfferInput.State, startDate: LocalDate, endDate: LocalDate) {
         val request = OfferInput(title = title, description = description, state = state, startDate = startDate, endDate = endDate)
         launchWithUiState(_actionState) {
-            updateOffer(id, request).also { if (it is NetworkResult.Success) load(id) }
+            updateOffer(id, request).also {
+                if (it is NetworkResult.Success) {
+                    onMutationSuccess?.invoke()
+                    load(id)
+                }
+            }
         }
     }
 
     fun delete(id: Int, onSuccess: () -> Unit) = launchWithUiState(_actionState) {
-        deleteOffer(id).also { if (it is NetworkResult.Success) onSuccess() }
+        deleteOffer(id).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                onSuccess()
+            }
+        }
     }
 }

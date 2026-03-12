@@ -9,6 +9,7 @@ import defalt.featureAccount.usecase.GetAccountByIdUseCase
 import defalt.featureAccount.usecase.UpdatePersonalInfoUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
+import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,22 +27,39 @@ class AdminAccountDetailViewModel(
     private val _actionState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val actionState: StateFlow<UiState<Unit>> = _actionState.asStateFlow()
 
+    var onMutationSuccess: (() -> Unit)? = null
+
     fun load(id: String) = launchWithUiState(stateFlow = _uiState, transform = { it }) {
         getAccountById(id)
     }
 
     fun activate(id: String) = launchWithUiState(_actionState) {
-        activateAccount(id).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
+        activateAccount(id).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                load(id)
+            }
+        }
     }
 
     fun deactivate(id: String) = launchWithUiState(_actionState) {
-        deactivateAccount(id).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
+        deactivateAccount(id).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                load(id)
+            }
+        }
     }
 
     fun updateInfo(id: String, info: PersonalInformation) {
         val infoId = (_uiState.value as? UiState.Success)?.data?.personalInfo?.id ?: return
         launchWithUiState(_actionState) {
-            updatePersonalInfo(infoId, info).also { if (it is defalt.utils.NetworkResult.Success) load(id) }
+            updatePersonalInfo(infoId, info).also {
+                if (it is NetworkResult.Success) {
+                    onMutationSuccess?.invoke()
+                    load(id)
+                }
+            }
         }
     }
 }

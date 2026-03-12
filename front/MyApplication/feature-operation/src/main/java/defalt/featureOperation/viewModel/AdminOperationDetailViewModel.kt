@@ -26,17 +26,29 @@ class AdminOperationDetailViewModel(
     private val _actionState = MutableStateFlow<UiState<Unit>>(UiState.Idle)
     val actionState: StateFlow<UiState<Unit>> = _actionState.asStateFlow()
 
+    var onMutationSuccess: (() -> Unit)? = null
+
     fun load(id: Int) = launchWithUiState(stateFlow = _uiState, transform = { it }) {
         getOperationById(id)
     }
 
     // UC20 : Annuler l'opération
     fun cancel(id: Int) = launchWithUiState(_actionState) {
-        cancelOperation(id).also { if (it is NetworkResult.Success) load(id) }
+        cancelOperation(id).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                load(id)
+            }
+        }
     }
 
     // UC13/UC21 : Changer / mettre à jour l'état
     fun updateState(id: Int, state: OperationState) = launchWithUiState(_actionState) {
-        updateOperationState(id, state).also { if (it is NetworkResult.Success) load(id) }
+        updateOperationState(id, state).also {
+            if (it is NetworkResult.Success) {
+                onMutationSuccess?.invoke()
+                load(id)
+            }
+        }
     }
 }
