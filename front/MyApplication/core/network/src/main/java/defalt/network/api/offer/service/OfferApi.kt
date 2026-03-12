@@ -24,31 +24,18 @@ interface OfferApi {
     @GET("offers/active")
     suspend fun offersActiveGet(): Response<kotlin.collections.List<Offer>>
 
-
-    /**
-    * enum for parameter state
-    */
-    @Serializable
-    enum class StateOffersGet(val value: kotlin.String) {
-        @SerialName(value = "active") ACTIVE("active"),
-        @SerialName(value = "inactive") INACTIVE("inactive"),
-        @SerialName(value = "expired") EXPIRED("expired")
-    }
-
     /**
      * GET offers
      * Récupérer la liste des offres
-     * Use Case: Visualiser les offres (Visiteur/Client), Voir la liste des offres (Administrateur)
+     * Retourne toutes les offres si le token appartient à un ADMIN, sinon retourne uniquement les offres actives. Le token est optionnel : sans token valide, seules les offres actives sont retournées. 
      * Responses:
      *  - 200: Liste récupérée avec succès
-     *  - 401: Non autorisé - Token d'authentification manquant ou invalide
      *
-     * @param state Filtrer par état (optional)
-     * @param activeOnly Afficher uniquement les offres actives (pour visiteur/client) (optional, default to true)
+     * @param authorization Token JWT Bearer (optionnel). Si présent et valide avec le rôle ADMIN, retourne toutes les offres. (optional)
      * @return [kotlin.collections.List<Offer>]
      */
     @GET("offers")
-    suspend fun offersGet(@Query("state") state: StateOffersGet? = null, @Query("active_only") activeOnly: kotlin.Boolean? = true): Response<kotlin.collections.List<Offer>>
+    suspend fun offersGet(@Header("Authorization") authorization: kotlin.String? = null): Response<kotlin.collections.List<Offer>>
 
     /**
      * DELETE offers/{id}
