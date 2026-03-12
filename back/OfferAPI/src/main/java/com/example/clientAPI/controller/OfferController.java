@@ -52,8 +52,8 @@ public class OfferController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createOffer(@HeaderParam("Authorization") String token, OfferInput dto) {
-        Offer created = offerBusiness.createOffer(token, dto);
+    public Response createOffer(OfferInput dto) {
+        Offer created = offerBusiness.createOffer(dto);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
@@ -61,17 +61,15 @@ public class OfferController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateOffer(@HeaderParam("Authorization") String token,
-                                @PathParam("id") int id, OfferInput dto) {
-        Offer updated = offerBusiness.updateOffer(token, id, dto);
+    public Response updateOffer(@PathParam("id") int id, OfferInput dto) {
+        Offer updated = offerBusiness.updateOffer(id, dto);
         return Response.ok(updated).build();
     }
 
     @DELETE
     @Path("/{id}")
-    public Response deleteOffer(@HeaderParam("Authorization") String token,
-                                @PathParam("id") int id) {
-        offerBusiness.deleteOffer(token, id);
+    public Response deleteOffer(@PathParam("id") int id) {
+        offerBusiness.deleteOffer(id);
         return Response.noContent().build();
     }
 }

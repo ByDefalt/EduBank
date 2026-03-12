@@ -33,7 +33,7 @@ class GetAccountDetailsAndOperation(
         val detail = (detailResult as NetworkResult.Success).data
 
         val operationsResult = operationRepository.getOperations(
-            accountId = session.accountId,
+            accountId = bankAccountId,
         )
 
         val operations = when (operationsResult) {

@@ -142,7 +142,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
 
   /operations/{id}/state:
-    patch:
+    put:
       tags:
         - Operation
       summary: Changer l'état d'une opération
@@ -304,7 +304,7 @@ components:
     OperationState:
       type: string
       description: État de l'opération
-      enum: [pending, completed, failed, cancelled]
+      enum: [PENDING, COMPLETED, FAILED, CANCELLED]
       example: completed
 
     Operation:

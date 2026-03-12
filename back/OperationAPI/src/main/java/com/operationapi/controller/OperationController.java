@@ -51,7 +51,7 @@ public class OperationController {
         return Response.ok(operations).build();
     }
 
-    @PATCH
+    @PUT
     @Path("/{id}/state")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
