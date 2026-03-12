@@ -60,9 +60,13 @@ fun NavGraphBuilder.adminGraph(
         }
         composable<Routes.Admin.AccountDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.AccountDetail>().id
+            val previousEntry = navController.previousBackStackEntry
             AdminAccountDetailScreen(
                 id = id,
                 onBack = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Account.toString(), true)
+                },
             )
         }
 
@@ -113,9 +117,13 @@ fun NavGraphBuilder.adminGraph(
         }
         composable<Routes.Admin.OfferDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.OfferDetail>().id
+            val previousEntry = navController.previousBackStackEntry
             AdminOfferDetailScreen(
                 id = id,
                 onBack = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Offer.toString(), true)
+                },
             )
         }
         composable<Routes.Admin.CreateOffer> {
@@ -139,9 +147,13 @@ fun NavGraphBuilder.adminGraph(
         }
         composable<Routes.Admin.OperationDetail> { entry ->
             val id = entry.toRoute<Routes.Admin.OperationDetail>().id
+            val previousEntry = navController.previousBackStackEntry
             AdminOperationDetailScreen(
                 id = id,
                 onBack = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Operation.toString(), true)
+                },
             )
         }
     }
