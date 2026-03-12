@@ -12,4 +12,5 @@ val featureAccountViewModelModule = module {
     viewModel { AdminAccountListViewModel(get()) }
     viewModel { AdminAccountDetailViewModel(get(), get(), get(), get()) }
     viewModel { AdminHomeViewModel(get()) }
+    viewModel { MyAccountDetailsViewModel(get(), get()) }
 }

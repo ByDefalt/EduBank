@@ -100,7 +100,7 @@ fun ArkeoNavHost(
         )
         // ── Menu ───────────────────────────────────────────────────────────
         menuGraph(
-            onNavigateToProfile = { /* TODO : écran profil */ },
+            onNavigateToProfile = { navController.navigate(Routes.Core.Profile) },
             onNavigateToOffers = { navController.navigate(Routes.Offer.List) },
             onLogout = {
                 navController.navigate(Routes.Core.Home) {
@@ -108,6 +108,10 @@ fun ArkeoNavHost(
                 }
             },
             onBack = { navController.popBackStack() },
+            onNavigateToHomeBank = { navController.navigate(Routes.Bank.Home) },
+            onNavigateToAccounts = { navController.navigate(Routes.Bank.ListAccount) },
+            onNavigateToTransfer = { navController.navigate(Routes.Operation) },
+            onNavigateToMenu = { navController.navigate(Routes.Core.Menu) },
         )
     }
 }
