@@ -5,6 +5,7 @@ import com.example.clientAPI.entity.BankAccountParameterEntity;
 import com.example.clientAPI.repository.BankAccountParameterRepository;
 import com.example.clientAPI.repository.BankAccountRepository;
 import dto.bankapi.State;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class BankAccountParameterBusiness {
         }
         return bankAccountParameterRepository.createParameter(parameterEntity);
     }
-
+    @Transactional
     public void updateParametersByBankAccountId(String bankAccountId, BankAccountParameterEntity parameterEntity) {
         BankAccountEntity bankAccount = bankAccountRepository.getBankAccountById(bankAccountId);
         if (bankAccount == null) {

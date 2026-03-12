@@ -39,7 +39,7 @@ public interface BankAccountClient {
     @Headers("Content-Type: application/json")
     BankAccountDetail createBankAccount(@Param("accountId") String accountId, BankAccountCreateRequest request);
 
-    @RequestLine("PATCH /bank/admin/bank-accounts/{bankAccountId}/parameters")
+    @RequestLine("PUT /bank/admin/bank-accounts/{bankAccountId}/parameters")
     @Headers("Content-Type: application/json")
     void updateParameters(@Param("bankAccountId") String bankAccountId, BankAccountParameter parameters);
 

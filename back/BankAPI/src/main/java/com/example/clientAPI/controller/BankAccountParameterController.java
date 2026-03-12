@@ -22,7 +22,7 @@ public class BankAccountParameterController {
         this.bankAccountParameterBusiness = bankAccountParameterBusiness;
     }
 
-    @PATCH
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateParameters(

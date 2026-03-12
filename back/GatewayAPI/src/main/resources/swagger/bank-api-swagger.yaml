@@ -237,7 +237,7 @@ paths:
   # ==================== PARAMETERS ====================
 
   /bank/admin/bank-accounts/{bank_account_id}/parameters:
-    patch:
+    put:
       tags: [BankAccountParameter]
       summary: "[ADMIN] Mettre à jour les paramètres"
       security:
