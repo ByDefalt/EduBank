@@ -1,6 +1,5 @@
 package gatewayapi.business.operation;
 
-import dto.operationapi.ChangeStateRequest;
 import dto.operationapi.Operation;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
