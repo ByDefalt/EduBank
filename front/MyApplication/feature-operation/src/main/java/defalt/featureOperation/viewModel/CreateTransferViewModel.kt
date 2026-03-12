@@ -9,6 +9,7 @@ import defalt.featureOperation.usecase.GetAllMyAccount
 import defalt.featureOperation.usecase.GetMyBeneficiaries
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
+import defalt.utils.NetworkResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -95,24 +96,24 @@ class CreateTransferViewModel(
             transform = { it },
         ) {
             val accountsResult = getAllMyAccount()
-            if (accountsResult is defalt.utils.NetworkResult.Error) {
-                return@launchWithUiState defalt.utils.NetworkResult.Error(accountsResult.code, accountsResult.message)
+            if (accountsResult is NetworkResult.Error) {
+                return@launchWithUiState NetworkResult.Error(accountsResult.code, accountsResult.message)
             }
-            if (accountsResult is defalt.utils.NetworkResult.Exception) {
-                return@launchWithUiState defalt.utils.NetworkResult.Exception(accountsResult.throwable)
+            if (accountsResult is NetworkResult.Exception) {
+                return@launchWithUiState NetworkResult.Exception(accountsResult.throwable)
             }
-            accountsResult as defalt.utils.NetworkResult.Success
+            accountsResult as NetworkResult.Success
 
             val beneficiariesResult = getMyBeneficiaries()
-            if (beneficiariesResult is defalt.utils.NetworkResult.Error) {
-                return@launchWithUiState defalt.utils.NetworkResult.Error(beneficiariesResult.code, beneficiariesResult.message)
+            if (beneficiariesResult is NetworkResult.Error) {
+                return@launchWithUiState NetworkResult.Error(beneficiariesResult.code, beneficiariesResult.message)
             }
-            if (beneficiariesResult is defalt.utils.NetworkResult.Exception) {
-                return@launchWithUiState defalt.utils.NetworkResult.Exception(beneficiariesResult.throwable)
+            if (beneficiariesResult is NetworkResult.Exception) {
+                return@launchWithUiState NetworkResult.Exception(beneficiariesResult.throwable)
             }
-            beneficiariesResult as defalt.utils.NetworkResult.Success
+            beneficiariesResult as NetworkResult.Success
 
-            defalt.utils.NetworkResult.Success(
+            NetworkResult.Success(
                 ReceiverStepData(
                     accounts = accountsResult.data,
                     beneficiaries = beneficiariesResult.data,
