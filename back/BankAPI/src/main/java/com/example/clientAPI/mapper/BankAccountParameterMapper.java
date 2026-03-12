@@ -5,7 +5,7 @@ import dto.bankapi.BankAccountParameter;
 
 public class BankAccountParameterMapper {
 
-    // DTO → Entity (BankAccountParameter)
+
     public static BankAccountParameterEntity toEntity(BankAccountParameter dto) {
         if (dto == null) return null;
 
@@ -17,7 +17,7 @@ public class BankAccountParameterMapper {
         return entity;
     }
 
-    // Entity → DTO (BankAccountParameter)
+
     public static BankAccountParameter toDto(BankAccountParameterEntity entity) {
         if (entity == null) return null;
 

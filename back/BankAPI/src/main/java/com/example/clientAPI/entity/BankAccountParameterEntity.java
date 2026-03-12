@@ -6,9 +6,7 @@ public class BankAccountParameterEntity {
 
     private Integer id;
     private Double overdraftLimit;
-    private State state; // active, inactive, bloqued, closed
-
-    // ----------------- Getters & Setters -----------------
+    private State state;
 
     public Integer getId() {
         return id;

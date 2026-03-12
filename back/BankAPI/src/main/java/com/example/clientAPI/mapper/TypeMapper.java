@@ -5,7 +5,7 @@ import dto.bankapi.Type;
 
 public class TypeMapper {
 
-    // DTO → Entity (Type)
+
     public static TypesEntity toEntity(Type dto) {
         if (dto == null) return null;
 
@@ -16,7 +16,7 @@ public class TypeMapper {
         return entity;
     }
 
-    // Entity → DTO (Type)
+
     public static Type toDto(TypesEntity entity) {
         if (entity == null) return null;
 

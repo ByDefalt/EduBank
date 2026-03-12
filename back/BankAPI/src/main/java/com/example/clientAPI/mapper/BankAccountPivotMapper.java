@@ -13,7 +13,7 @@ public class BankAccountPivotMapper {
 
         BankAccountPivotEntity entity = new BankAccountPivotEntity();
         entity.setBankAccountId(dto.getBankAccountId());
-        // Conversion Integer → String pour compatibilité avec le DTO existant
+
         entity.setAccountId(dto.getAccountId());
 
         return entity;
@@ -24,16 +24,13 @@ public class BankAccountPivotMapper {
 
         BankAccountPivot dto = new BankAccountPivot();
         dto.setBankAccountId(entity.getBankAccountId());
-        // Conversion String → Integer pour compatibilité avec le DTO existant
+
         dto.setAccountId(entity.getAccountId());
 
         return dto;
     }
 
-    /**
-     * Convertit List<String> (accountIds) en List<Entity>
-     * Utilisé quand on récupère les co-titulaires d'un compte
-     */
+
     public static List<BankAccountPivotEntity> accountIdsToEntities(String bankAccountId, List<String> accountIds) {
         if (accountIds == null) return List.of();
 
@@ -47,10 +44,7 @@ public class BankAccountPivotMapper {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Convertit List<String> (bankAccountIds) en List<Entity>
-     * Utilisé quand on récupère les comptes d'un utilisateur
-     */
+
     public static List<BankAccountPivotEntity> bankAccountIdsToEntities(String accountId, List<String> bankAccountIds) {
         if (bankAccountIds == null) return List.of();
 

@@ -5,7 +5,7 @@ public class TypesEntity {
     private Integer id;
     private String name;
 
-    // ----------------- Getters & Setters -----------------
+
 
     public Integer getId() {
         return id;
@@ -23,7 +23,7 @@ public class TypesEntity {
         this.name = name;
     }
 
-    // ----------------- toString -----------------
+
     @Override
     public String toString() {
         return "TypesEntity{" +

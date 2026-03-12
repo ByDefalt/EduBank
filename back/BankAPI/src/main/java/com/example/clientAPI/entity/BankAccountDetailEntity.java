@@ -8,7 +8,6 @@ public class BankAccountDetailEntity {
     private Double sold;
     private String iban;
 
-    // ==================== Constructors ====================
     public BankAccountDetailEntity() {}
 
     public BankAccountDetailEntity(String id, BankAccountParameterEntity parameter,
@@ -20,7 +19,6 @@ public class BankAccountDetailEntity {
         this.iban = iban;
     }
 
-    // ==================== Getters & Setters ====================
     public String getId() {
         return id;
     }

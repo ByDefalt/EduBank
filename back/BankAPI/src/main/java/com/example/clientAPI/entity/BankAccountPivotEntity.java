@@ -2,10 +2,10 @@ package com.example.clientAPI.entity;
 
 public class BankAccountPivotEntity {
 
-    private String bankAccountId;  // FK vers BankAccount
-    private String accountId;      // FK vers Account (VARCHAR(50))
+    private String bankAccountId;
+    private String accountId;
 
-    // ----------------- Getters & Setters -----------------
+
 
     public String getBankAccountId() {
         return bankAccountId;

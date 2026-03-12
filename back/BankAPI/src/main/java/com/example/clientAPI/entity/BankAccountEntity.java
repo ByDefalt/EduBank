@@ -8,8 +8,6 @@ public class BankAccountEntity {
     private Double sold;
     private String iban;
 
-    // ----------------- Getters & Setters -----------------
-
     public String getId() {
         return id;
     }
