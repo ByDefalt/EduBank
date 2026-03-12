@@ -68,7 +68,7 @@ public class OperationRepository {
         Map<String, Object> params = new HashMap<>();
         params.put("account_source_id", operation.accountSourceId());
         params.put("label", operation.label());
-        params.put("state", operation.state() != null ? operation.state().toString() : "pending");
+        params.put("state", operation.state() != null ? operation.state().toString() : "PENDING");
         params.put("iban_target", operation.ibanTarget());
         params.put("amount", operation.amount());
         params.put("date", operation.date() != null ? operation.date() : LocalDateTime.now());
