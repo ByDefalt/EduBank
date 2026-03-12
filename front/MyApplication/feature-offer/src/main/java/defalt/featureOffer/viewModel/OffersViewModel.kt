@@ -3,6 +3,7 @@ package defalt.featureOffer.viewModel
 import androidx.lifecycle.ViewModel
 import defalt.domain.entity.offer.Offer
 import defalt.domain.session.Session
+import defalt.featureOffer.usecase.GetAllOffersActiveUseCase
 import defalt.featureOffer.usecase.GetAllOffersUseCase
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class OffersViewModel(
-    private val getAllOffers: GetAllOffersUseCase,
+    private val getAllOffersActive: GetAllOffersActiveUseCase,
     private val session: Session,
 ) : ViewModel() {
 
@@ -25,6 +26,6 @@ class OffersViewModel(
     fun retry() = loadOffers()
 
     private fun loadOffers() = launchWithUiState(stateFlow = _uiState, transform = { it }) {
-        getAllOffers()
+        getAllOffersActive()
     }
 }

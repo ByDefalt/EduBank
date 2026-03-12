@@ -127,21 +127,6 @@ internal fun OffersContent(
                             modifier = Modifier.padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            // Image placeholder si picturePath present sinon carré coloré
-                            if (offer.picturePath != null) {
-                                Image(
-                                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
-                                    contentDescription = "offer image",
-                                    modifier = Modifier.size(64.dp),
-                                    contentScale = ContentScale.Crop,
-                                )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .size(64.dp)
-                                        .background(CustomColor.BridgeTeal),
-                                )
-                            }
 
                             Spacer(modifier = Modifier.padding(8.dp))
 
