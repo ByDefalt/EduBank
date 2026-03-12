@@ -35,7 +35,7 @@ interface OfferApi {
      * @return [kotlin.collections.List<Offer>]
      */
     @GET("offers")
-    suspend fun offersGet(@Header("Authorization") authorization: kotlin.String? = null): Response<kotlin.collections.List<Offer>>
+    suspend fun offersGet(): Response<kotlin.collections.List<Offer>>
 
     /**
      * DELETE offers/{id}

@@ -112,6 +112,10 @@ fun NavGraphBuilder.operationGraph(
                         onPopTransferWizard()
                         onTransferSuccess()
                     },
+                    onError = {
+                        onPopTransferWizard()
+                        onTransferSuccess()
+                    },
                 )
             }
         }

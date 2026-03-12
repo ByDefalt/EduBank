@@ -1,10 +1,11 @@
 package defalt.featureOperation.viewModel
 
 import androidx.lifecycle.ViewModel
-import defalt.domain.entity.bank.BankAccount
+import defalt.domain.entity.bank.BankAccountDetail
+import defalt.domain.entity.bank.Type
 import defalt.domain.entity.operation.Beneficiary
 import defalt.featureOperation.usecase.CreateTransfer
-import defalt.featureOperation.usecase.GetMyBankAccounts
+import defalt.featureOperation.usecase.GetAllMyAccount
 import defalt.featureOperation.usecase.GetMyBeneficiaries
 import defalt.ui.state.UiState
 import defalt.ui.state.launchWithUiState
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.update
 // ── État du formulaire (données accumulées au fil des étapes) ─────────────────
 
 data class CreateTransferForm(
-    val sourceAccount: BankAccount? = null,
+    val sourceAccount: BankAccountDetail? = null,
     val receiverId: String? = null,
     val receiverName: String? = null,
     val receiverIban: String? = null,
@@ -27,22 +28,22 @@ data class CreateTransferForm(
 // ── États des listes chargées ─────────────────────────────────────────────────
 
 data class DebitStepData(
-    val accounts: List<BankAccount>,
+    val accounts: List<BankAccountDetail>,
 )
 
 data class ReceiverStepData(
-    val accounts: List<BankAccount>,
+    val accounts: List<BankAccountDetail>,
     val beneficiaries: List<Beneficiary>,
     val sourceAccountId: String? = null,
 ) {
-    val filteredAccounts: List<BankAccount>
+    val filteredAccounts: List<BankAccountDetail>
         get() = accounts.filter { it.id != sourceAccountId }
 }
 
 // ── ViewModel partagé pour tout le wizard de création de virement ─────────────
 
 class CreateTransferViewModel(
-    private val getMyBankAccounts: GetMyBankAccounts,
+    private val getAllMyAccount: GetAllMyAccount,
     private val getMyBeneficiaries: GetMyBeneficiaries,
     private val createTransfer: CreateTransfer,
 ) : ViewModel() {
@@ -63,6 +64,7 @@ class CreateTransferViewModel(
     private val _form = MutableStateFlow(CreateTransferForm())
     val form: StateFlow<CreateTransferForm> = _form.asStateFlow()
 
+
     init {
         loadDebitAccounts()
         loadReceiverData()
@@ -76,10 +78,10 @@ class CreateTransferViewModel(
         stateFlow = _debitUiState,
         transform = { DebitStepData(accounts = it) },
     ) {
-        getMyBankAccounts()
+        getAllMyAccount()
     }
 
-    fun selectSourceAccount(account: BankAccount) {
+    fun selectSourceAccount(account: BankAccountDetail) {
         _form.update { it.copy(sourceAccount = account) }
         loadReceiverData()
     }
@@ -93,7 +95,7 @@ class CreateTransferViewModel(
             stateFlow = _receiverUiState,
             transform = { it },
         ) {
-            val accountsResult = getMyBankAccounts()
+            val accountsResult = getAllMyAccount()
             if (accountsResult is defalt.utils.NetworkResult.Error) {
                 return@launchWithUiState defalt.utils.NetworkResult.Error(accountsResult.code, accountsResult.message)
             }
@@ -122,11 +124,11 @@ class CreateTransferViewModel(
     }
 
     /** Sélection d'un compte interne comme destinataire. */
-    fun selectReceiverAccount(account: BankAccount) {
+    fun selectReceiverAccount(account: BankAccountDetail) {
         _form.update {
             it.copy(
                 receiverId = account.id,
-                receiverName = accountTypeLabel(account.typeId),
+                receiverName = account.type?.name ?: "COMPTE",
                 receiverIban = account.iban,
             )
         }
@@ -181,10 +183,10 @@ class CreateTransferViewModel(
 
 // ── Données de prévisualisation ───────────────────────────────────────────────
 
-internal fun sampleTransferAccounts(): List<BankAccount> = listOf(
-    BankAccount(id = "1", parameterId = 0, typeId = 1, sold = 1_679_138.00, iban = "FR7630006000011234567890140"),
-    BankAccount(id = "2", parameterId = 0, typeId = 2, sold = 775_854.79, iban = "FR7630006000013333333333340"),
-    BankAccount(id = "3", parameterId = 0, typeId = 3, sold = 1_080_899.08, iban = "FR7630006000014444444444440"),
+internal fun sampleTransferAccounts(): List<BankAccountDetail> = listOf(
+    BankAccountDetail(id = "1", parameter = null, type = Type(id = 1, name = "COMPTE CHÈQUES"), sold = 1_679_138.00, iban = "FR7630006000011234567890140"),
+    BankAccountDetail(id = "2", parameter = null, type = Type(id = 2, name = "COMPTE ÉPARGNE"), sold = 775_854.79, iban = "FR7630006000013333333333340"),
+    BankAccountDetail(id = "3", parameter = null, type = Type(id = 3, name = "COMPTE PROFESSIONNEL"), sold = 1_080_899.08, iban = "FR7630006000014444444444440"),
 )
 
 internal fun sampleBeneficiaries2(): List<Beneficiary> = listOf(
@@ -193,9 +195,4 @@ internal fun sampleBeneficiaries2(): List<Beneficiary> = listOf(
     Beneficiary(accountSourceId = "1", ibanTarget = "FR76 5555 6666 7777", name = "Bruno Martin", id = 3),
 )
 
-internal fun accountTypeLabel(typeId: Int?): String = when (typeId) {
-    1 -> "COMPTE CHÈQUES"
-    2 -> "COMPTE ÉPARGNE"
-    3 -> "COMPTE PROFESSIONNEL"
-    else -> "COMPTE"
-}
+// plus besoin de map de types: utiliser directement BankAccountDetail.type?.name

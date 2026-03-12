@@ -21,8 +21,6 @@ interface IOfferRemoteDataSource {
      * @param activeOnly Filtre pour n'avoir que les offres actives
      */
     suspend fun getOffers(
-        state: Offer.State? = null,
-        activeOnly: Boolean? = null,
     ): NetworkResult<List<Offer>>
 
     /**

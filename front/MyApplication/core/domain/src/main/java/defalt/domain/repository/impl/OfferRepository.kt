@@ -17,8 +17,8 @@ class OfferRepository(
 
     // --- ADMIN & CLIENT ---
 
-    override suspend fun getOffers(state: Offer.State?, activeOnly: Boolean?): NetworkResult<List<Offer>> =
-        remoteDataSource.getOffers(state, activeOnly)
+    override suspend fun getOffers(): NetworkResult<List<Offer>> =
+        remoteDataSource.getOffers()
 
     override suspend fun getOfferById(id: Int): NetworkResult<Offer> =
         remoteDataSource.getOfferById(id)
