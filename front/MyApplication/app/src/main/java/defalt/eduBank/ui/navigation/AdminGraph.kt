@@ -96,9 +96,13 @@ fun NavGraphBuilder.adminGraph(
             )
         }
         composable<Routes.Admin.CreateBankAccount> {
+            val previousEntry = navController.previousBackStackEntry
             AdminCreateBankAccountScreen(
                 onBack = onBack,
                 onSuccess = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Bank.toString(), true)
+                },
             )
         }
 
@@ -127,9 +131,13 @@ fun NavGraphBuilder.adminGraph(
             )
         }
         composable<Routes.Admin.CreateOffer> {
+            val previousEntry = navController.previousBackStackEntry
             AdminCreateOfferScreen(
                 onBack = onBack,
                 onSuccess = onBack,
+                onMutationSuccess = {
+                    previousEntry?.savedStateHandle?.set(NavRefreshKeys.Offer.toString(), true)
+                },
             )
         }
 

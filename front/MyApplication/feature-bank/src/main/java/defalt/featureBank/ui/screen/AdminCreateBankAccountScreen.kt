@@ -17,6 +17,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,8 +42,11 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminCreateBankAccountScreen(
     onBack: () -> Unit = {},
     onSuccess: () -> Unit = {},
+    onMutationSuccess: () -> Unit = {},
     viewModel: AdminCreateBankAccountViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
+
     val accountsState by viewModel.accountsState.collectAsStateWithLifecycle()
     val createState by viewModel.createState.collectAsStateWithLifecycle()
     val typesState by viewModel.type.collectAsStateWithLifecycle()

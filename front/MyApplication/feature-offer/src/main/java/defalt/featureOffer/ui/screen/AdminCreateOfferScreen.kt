@@ -38,8 +38,11 @@ import org.koin.androidx.compose.koinViewModel
 fun AdminCreateOfferScreen(
     onBack: () -> Unit = {},
     onSuccess: () -> Unit = {},
+    onMutationSuccess: () -> Unit = {},
     viewModel: AdminCreateOfferViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(Unit) { viewModel.onMutationSuccess = onMutationSuccess }
+
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState) {

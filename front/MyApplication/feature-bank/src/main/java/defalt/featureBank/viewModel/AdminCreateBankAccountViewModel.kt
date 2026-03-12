@@ -31,6 +31,8 @@ class AdminCreateBankAccountViewModel(
     private val _type = MutableStateFlow<UiState<List<Type>>>(UiState.Loading)
     val type: StateFlow<UiState<List<Type>>> = _type.asStateFlow()
 
+    var onMutationSuccess: (() -> Unit)? = null
+
     init {
         loadAccounts()
         loadType()
@@ -65,7 +67,10 @@ class AdminCreateBankAccountViewModel(
         )
         launchWithUiState(stateFlow = _createState, transform = { it }) {
             createBankAccount(accountId, request).also {
-                if (it is NetworkResult.Success) onSuccess()
+                if (it is NetworkResult.Success) {
+                    onMutationSuccess?.invoke()
+                    onSuccess()
+                }
             }
         }
     }
