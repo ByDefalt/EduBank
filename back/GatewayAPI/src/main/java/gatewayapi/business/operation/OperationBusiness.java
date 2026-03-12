@@ -6,6 +6,7 @@ import dto.operationapi.Operation;
 import dto.operationapi.OperationList;
 import dto.operationapi.OperationState;
 import feign.FeignException;
+import gatewayapi.exception.FunctionalException;
 import gatewayapi.mapper.BankAccountMapper;
 import gatewayapi.repository.bankaccount.BankAccountRepository;
 import gatewayapi.repository.operation.OperationRepository;
@@ -60,6 +61,7 @@ public class OperationBusiness {
 
             if(bankAccountSource.getSold() < -bankAccountSource.getParameter().getOverdraftLimit()) {
                 operation = this.operationRepository.updateOperationState(operation.getId(), OperationState.FAILED);
+                throw new FunctionalException("422", "Le compte source n'a pas assez de fonds pour effectuer l'opération.");
             } else {
                 this.bankAccountRepository.update(bankAccountSource.getId(), BankAccountMapper.toBankAccount(bankAccountSource));
                 this.bankAccountRepository.update(bankAccountTarget.getId(), bankAccountTarget);
@@ -67,7 +69,8 @@ public class OperationBusiness {
                 operation = this.operationRepository.updateOperationState(operation.getId(), OperationState.COMPLETED);
             }
         } catch (FeignException exception) {
-            operation = this.operationRepository.updateOperationState(operation.getId(), OperationState.FAILED);
+            this.operationRepository.updateOperationState(operation.getId(), OperationState.FAILED);
+            throw exception;
         }
 
         return operation;
