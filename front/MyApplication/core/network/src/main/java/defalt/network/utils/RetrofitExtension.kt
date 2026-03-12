@@ -27,8 +27,9 @@ suspend fun <T> safeApiCall(
                 NetworkResult.Error(response.code(), "Empty body")
             }
         } else {
-            logger.debug(response.errorBody()?.string() ?: "Unknown error")
-            NetworkResult.Error(response.code(), parseErrorMessage(response))
+            val rawError = response.errorBody()?.string()
+            logger.debug(rawError ?: "Unknown error")
+            NetworkResult.Error(response.code(), parseErrorMessage(rawError, response.code()))
         }
     } catch (e: Throwable) {
         logger.debug(e.toString())
@@ -52,10 +53,9 @@ suspend fun <T> safeApiCallList(
     }
 }
 
-private fun parseErrorMessage(response: Response<*>): String {
-    val raw = response.errorBody()?.string()
+private fun parseErrorMessage(raw: String?, code: Int): String {
     return when {
-        response.code() >= 500 -> "Une erreur serveur s'est produite. Réessayez plus tard."
+        code >= 500 -> "Une erreur serveur s'est produite. Réessayez plus tard."
         else -> raw?.let {
             runCatching { JSONObject(it).getString("message") }.getOrNull()
         } ?: raw ?: "Unknown error"

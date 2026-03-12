@@ -15,3 +15,4 @@ fun <T, R> NetworkResult<T>.toUiState(transform: (T) -> R): UiState<R> = when (t
     is NetworkResult.Error -> UiState.Error(message = message)
     is NetworkResult.Exception -> UiState.Error(message = throwable.toUserFriendlyMessage())
 }
+
